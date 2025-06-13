@@ -16,7 +16,7 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="w-full border-b border-border/40 bg-background z-50">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
           <Gamepad2 className="h-7 w-7 text-primary" />
