@@ -22,7 +22,7 @@ const AboutMe = () => {
               />
             </CardContent>
             <div className="p-6 bg-card rounded-b-lg">
-                <h3 className="font-headline text-2xl font-semibold text-primary">Your Name</h3>
+                <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Your Name</h3>
                 <p className="text-accent">Full-Stack Developer & UI/UX Enthusiast</p>
                 <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground">
                   <Download size={18} className="mr-2" />
@@ -33,7 +33,7 @@ const AboutMe = () => {
         </div>
 
         <div className="md:col-span-2">
-          <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-6">
+          <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-6 dark:text-foreground">
             About Me
           </h2>
           <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
@@ -50,7 +50,7 @@ const AboutMe = () => {
             <Card className="text-center bg-secondary/30">
               <CardHeader>
                 <Award size={32} className="mx-auto text-accent mb-2" />
-                <CardTitle className="text-lg font-headline text-primary">Experience</CardTitle>
+                <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-accent">3+ Years</p>
@@ -60,7 +60,7 @@ const AboutMe = () => {
             <Card className="text-center bg-secondary/30">
               <CardHeader>
                 <Briefcase size={32} className="mx-auto text-accent mb-2" />
-                <CardTitle className="text-lg font-headline text-primary">Projects</CardTitle>
+                <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Projects</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-accent">15+</p>
@@ -70,7 +70,7 @@ const AboutMe = () => {
              <Card className="text-center bg-secondary/30">
               <CardHeader>
                 <Coffee size={32} className="mx-auto text-accent mb-2" />
-                <CardTitle className="text-lg font-headline text-primary">Passion</CardTitle>
+                <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Passion</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-lg font-semibold text-accent">Innovation</p>
@@ -80,7 +80,7 @@ const AboutMe = () => {
           </div>
           
           <div>
-            <h3 className="font-headline text-2xl font-semibold text-primary mb-4">My Skills</h3>
+            <h3 className="font-headline text-2xl font-semibold text-primary mb-4 dark:text-foreground">My Skills</h3>
             <div className="flex flex-wrap gap-3">
               {skills.map((skill) => (
                 <span key={skill} className="bg-secondary text-secondary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
