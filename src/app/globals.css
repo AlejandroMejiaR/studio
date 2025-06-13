@@ -83,7 +83,7 @@ body {
     --destructive: 0 80% 65%;       /* More Saturated Red #F54D4D */
     --destructive-foreground: 0 0% 98%; /* Off-white */
 
-    --border: 225 20% 35%;         /* Indigo/Grey Border, slightly more visible #424866 */
+    --border: 0 0% 80%;         /* Light Gray Border, replaces Indigo/Grey #424866 */
     --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
     --ring: 270 70% 65%;           /* Ring color (matches accent) */
 
