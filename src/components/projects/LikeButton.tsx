@@ -76,10 +76,10 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
-        "flex items-center gap-2 transition-all duration-150 group", // Added group
+        "flex items-center gap-2 transition-all duration-150 group",
         isLiked
           ? "text-destructive border-destructive hover:bg-destructive/10" // Liked state
-          : "text-muted-foreground hover:text-destructive hover:border-primary" // Unliked state: hover text red, hover border primary
+          : "text-muted-foreground hover:border-primary hover:bg-background hover:text-muted-foreground" // Unliked state: only border changes color, background and text remain as non-hover
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
@@ -87,7 +87,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       <Heart
         size={16}
         className={cn(
-          isLiked ? "fill-destructive" : "fill-transparent group-hover:fill-destructive" // Icon: if not liked, fill red on group-hover
+          isLiked ? "fill-destructive" : "" // Icon: filled red if liked, otherwise default (stroke only, no fill change on hover for unliked)
         )}
       />
       <span>{likes}</span>
