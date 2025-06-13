@@ -79,7 +79,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
         "flex items-center gap-2 transition-all duration-150 group",
         isLiked
           ? "text-destructive border-destructive hover:bg-destructive/10" // Liked state
-          : "text-muted-foreground hover:border-primary hover:bg-background hover:text-muted-foreground" // Unliked state: only border changes color, background and text remain as non-hover
+          : "text-muted-foreground border-input hover:border-primary hover:bg-background hover:text-muted-foreground" // Unliked state: border changes, bg & text don't.
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
@@ -87,7 +87,10 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       <Heart
         size={16}
         className={cn(
-          isLiked ? "fill-destructive" : "" // Icon: filled red if liked, otherwise default (stroke only, no fill change on hover for unliked)
+          "transition-colors duration-150", // Smooth transition for color/fill changes
+          isLiked
+            ? "fill-destructive text-destructive" // Liked state: heart is filled and stroked red
+            : "text-muted-foreground fill-none group-hover:fill-destructive" // Unliked: gray stroke, no fill. On hover: gray stroke, red fill.
         )}
       />
       <span>{likes}</span>
@@ -96,3 +99,4 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
 };
 
 export default LikeButton;
+
