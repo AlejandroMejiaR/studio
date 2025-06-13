@@ -31,7 +31,12 @@ export default function HomePage() {
           <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
             <Link href="/#projects">View My Work</Link>
           </Button>
-          <Button size="lg" variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+          <Button 
+            size="lg" 
+            variant="outline" 
+            asChild 
+            className="border-primary text-primary dark:border-foreground dark:text-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground"
+          >
             <Link href="/#about">
               About Me <ArrowDown size={20} className="ml-2" />
             </Link>
