@@ -16,31 +16,42 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 md:py-32 text-center">
-        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
+      <section className="container mx-auto px-4 py-20 md:py-32">
+        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-center">
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
-        <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-10 min-h-[3em] sm:min-h-[2.5em]"> {/* Added min-h to prevent layout shift */}
-          <TypingAnimation
-            text={heroSubtitle}
-            speed={30} 
-            startDelay={1500} // Increased delay to start after headline animation
-          />
-        </p>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-          <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Link href="/#projects">View My Work</Link>
-          </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            asChild 
-            className="border-primary text-primary dark:border-foreground dark:text-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground"
-          >
-            <Link href="/#about">
-              About Me <ArrowDown size={20} className="ml-2" />
-            </Link>
-          </Button>
+        
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-center">
+          {/* Left Content Block */}
+          <div className="md:w-1/2 lg:w-3/5 text-center md:text-left">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em]">
+              <TypingAnimation
+                text={heroSubtitle}
+                speed={30} 
+                startDelay={1500} 
+              />
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Link href="/#projects">View My Work</Link>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                asChild 
+                className="border-primary text-primary dark:border-foreground dark:text-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-primary dark:hover:text-primary-foreground"
+              >
+                <Link href="/#about">
+                  About Me <ArrowDown size={20} className="ml-2" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Right 3D Model Placeholder */}
+          <div className="md:w-1/2 lg:w-2/5 h-64 md:h-96 bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-square">
+            <p className="text-center p-4">Future Home of an Awesome 3D Model!</p>
+          </div>
         </div>
       </section>
       
