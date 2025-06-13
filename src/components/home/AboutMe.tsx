@@ -47,7 +47,7 @@ const AboutMe = () => {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <Card className="text-center bg-secondary/30">
+            <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
                 <Award size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
@@ -57,7 +57,7 @@ const AboutMe = () => {
                 <p className="text-sm text-muted-foreground">Full-Stack Development</p>
               </CardContent>
             </Card>
-            <Card className="text-center bg-secondary/30">
+            <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
                 <Briefcase size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Projects</CardTitle>
@@ -67,7 +67,7 @@ const AboutMe = () => {
                 <p className="text-sm text-muted-foreground">Completed Successfully</p>
               </CardContent>
             </Card>
-             <Card className="text-center bg-secondary/30">
+             <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
                 <Coffee size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Passion</CardTitle>
