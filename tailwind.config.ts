@@ -104,18 +104,24 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0' },
         },
-        'slideInLeftWithTerminalBounce': {
+        'slideInLeftWithTerminalBounce': { // This one is kept if used elsewhere, or can be removed if not
           '0%': { opacity: '0', transform: 'translateX(-100%)' },
           '70%': { opacity: '1', transform: 'translateX(10px)' },
           '85%': { transform: 'translateX(-5px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
+        'letter-reveal-from-below': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '60%': { opacity: '1', transform: 'translateY(-5px)' }, // Slight overshoot for bounce
+          '100%': { opacity: '1', transform: 'translateY(0px)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'blink-cursor': 'blink-cursor 0.7s step-end infinite',
         'slideInLeftWithTerminalBounce': 'slideInLeftWithTerminalBounce 1s ease-out forwards',
+        'letter-reveal': 'letter-reveal-from-below 0.6s ease-out forwards',
       },
     },
   },
