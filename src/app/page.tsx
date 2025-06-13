@@ -39,7 +39,7 @@ export default function HomePage() {
                 size="lg" 
                 variant="outline" 
                 asChild 
-                className="border-primary text-primary dark:border-foreground dark:text-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-accent dark:hover:text-accent-foreground"
+                className="border-primary text-primary dark:border-foreground dark:text-foreground hover:bg-primary hover:text-primary-foreground dark:hover:bg-[hsl(270,60%,35%)] dark:hover:text-accent-foreground"
               >
                 <Link href="/#about">
                   About Me <ArrowDown size={20} className="ml-2" />
