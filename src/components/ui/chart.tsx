@@ -1,17 +1,29 @@
+
 "use client"
 
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import { BarChart, LineChart, PieChart, Activity, TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
 
 import { cn } from "@/lib/utils"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
 
+const DEFAULT_CHART_ICON_MAP: Record<string, LucideIcon> = {
+  bar: BarChart,
+  line: LineChart,
+  pie: PieChart,
+  activity: Activity,
+  trendingUp: TrendingUp,
+  trendingDown: TrendingDown,
+  default: Activity, // Default icon if not found
+};
+
 export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode
-    icon?: React.ComponentType
+    icon?: string // Changed from React.ComponentType to string
   } & (
     | { color?: string; theme?: never }
     | { color?: never; theme: Record<keyof typeof THEMES, string> }
@@ -189,6 +201,10 @@ const ChartTooltipContent = React.forwardRef<
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
             const indicatorColor = color || item.payload.fill || item.color
+            
+            const IconComponent = itemConfig?.icon
+              ? (DEFAULT_CHART_ICON_MAP[itemConfig.icon] || DEFAULT_CHART_ICON_MAP.default)
+              : null;
 
             return (
               <div
@@ -202,8 +218,8 @@ const ChartTooltipContent = React.forwardRef<
                   formatter(item.value, item.name, item, index, item.payload)
                 ) : (
                   <>
-                    {itemConfig?.icon ? (
-                      <itemConfig.icon />
+                    {IconComponent ? (
+                      <IconComponent />
                     ) : (
                       !hideIndicator && (
                         <div
@@ -288,6 +304,10 @@ const ChartLegendContent = React.forwardRef<
         {payload.map((item) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
+          
+          const IconComponent = itemConfig?.icon
+            ? (DEFAULT_CHART_ICON_MAP[itemConfig.icon] || DEFAULT_CHART_ICON_MAP.default)
+            : null;
 
           return (
             <div
@@ -296,8 +316,8 @@ const ChartLegendContent = React.forwardRef<
                 "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
               )}
             >
-              {itemConfig?.icon && !hideIcon ? (
-                <itemConfig.icon />
+              {IconComponent && !hideIcon ? (
+                <IconComponent />
               ) : (
                 <div
                   className="h-2 w-2 shrink-0 rounded-[2px]"
