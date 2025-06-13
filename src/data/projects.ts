@@ -53,6 +53,8 @@ export const projects: Project[] = [
     galleryImages: [
       'https://placehold.co/800x600/122624/F2F2F2.png?text=Gallery+2.1',
       'https://placehold.co/800x600/41A693/F2F2F2.png?text=Gallery+2.2',
+      'https://placehold.co/800x600/277365/FFFFFF.png?text=Gallery+2.3',
+      'https://placehold.co/800x600/194039/EEEEEE.png?text=Gallery+2.4',
     ],
     liveUrl: '#',
   },
@@ -73,6 +75,11 @@ export const projects: Project[] = [
       { title: 'Automated Data Cleaning', description: 'Preprocesses raw data for accurate analysis.', icon: 'Briefcase' },
       { title: 'Predictive Modeling', description: 'Utilizes ML algorithms for forecasting and trend analysis.', icon: 'Zap' },
       { title: 'Insightful Visualizations', description: 'Generates interactive charts and dashboards.', icon: 'BarChart3' },
+    ],
+    galleryImages: [
+      'https://placehold.co/800x600/122624/F2F2F2.png?text=Gallery+3.1',
+      'https://placehold.co/800x600/277365/F2F2F2.png?text=Gallery+3.2',
+      'https://placehold.co/800x600/41A693/FFFFFF.png?text=Gallery+3.3',
     ],
     repoUrl: '#',
   },
