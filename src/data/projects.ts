@@ -26,6 +26,8 @@ export const projects: Project[] = [
       'https://placehold.co/800x600/277365/F2F2F2.png?text=Gallery+1.1',
       'https://placehold.co/800x600/41A693/F2F2F2.png?text=Gallery+1.2',
       'https://placehold.co/800x600/194039/F2F2F2.png?text=Gallery+1.3',
+      'https://placehold.co/800x600/122624/FFFFFF.png?text=Gallery+1.4',
+      'https://placehold.co/800x600/277365/EEEEEE.png?text=Gallery+1.5',
     ],
     liveUrl: '#',
     repoUrl: '#',
