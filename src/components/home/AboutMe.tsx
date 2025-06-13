@@ -83,7 +83,7 @@ const AboutMe = () => {
             <h3 className="font-headline text-2xl font-semibold text-primary mb-4 dark:text-foreground">My Skills</h3>
             <div className="flex flex-wrap gap-3">
               {skills.map((skill) => (
-                <span key={skill} className="bg-secondary text-secondary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                <span key={skill} className="bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
                   {skill}
                 </span>
               ))}
