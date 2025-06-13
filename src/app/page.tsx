@@ -21,9 +21,9 @@ export default function HomePage() {
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
         
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start md:items-center">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-center md:justify-center">
           {/* Left Content Block */}
-          <div className="md:w-1/2 lg:w-3/5 text-center md:text-left">
+          <div className="md:max-w-lg text-center md:text-left">
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em]">
               <TypingAnimation
                 text={heroSubtitle}
@@ -49,7 +49,7 @@ export default function HomePage() {
           </div>
 
           {/* Right 3D Model Placeholder */}
-          <div className="md:w-1/2 lg:w-2/5 h-64 md:h-96 bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-square">
+          <div className="w-64 h-64 md:w-auto md:h-96 bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-square">
             <p className="text-center p-4">Future Home of an Awesome 3D Model!</p>
           </div>
         </div>
