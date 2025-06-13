@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Gamepad2 } from 'lucide-react'; // Changed Feather to Gamepad2
+import { Menu, Gamepad2 } from 'lucide-react';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,10 +16,10 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="w-full border-b border-border/40 bg-background z-50">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
-          <Gamepad2 className="h-7 w-7 text-primary" /> {/* Changed Feather to Gamepad2 */}
+          <Gamepad2 className="h-7 w-7 text-primary" />
           <span className="font-headline text-xl font-bold text-primary">Portfolio Ace</span>
         </Link>
         
@@ -49,7 +49,7 @@ const Navbar = () => {
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
                 <Link href="/" className="flex items-center gap-2 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Gamepad2 className="h-7 w-7 text-primary" /> {/* Changed Feather to Gamepad2 */}
+                  <Gamepad2 className="h-7 w-7 text-primary" />
                   <span className="font-headline text-xl font-bold text-primary">Portfolio Ace</span>
                 </Link>
                 <nav className="flex flex-col space-y-4">
