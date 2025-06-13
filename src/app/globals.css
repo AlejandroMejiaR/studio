@@ -9,7 +9,7 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 95%; /* Very light grey #F2F2F2 */
+    --background: 220 16% 93%; /* Light cool grey #EBEDF0 */
     --foreground: 175 38% 11%; /* Dark teal #122624 */
 
     --card: 0 0% 100%;
@@ -59,45 +59,45 @@ body {
   }
 
   .dark {
-    --background: 225 30% 15%;    /* Deep Indigo/Navy #1A2033 */
+    --background: 225 30% 12%;    /* Deepest Indigo/Navy #141A2B */
     --foreground: 0 0% 98%;       /* Off-white #FAFAFA */
 
-    --card: 225 30% 18%;           /* Slightly Lighter Indigo/Navy #20273D */
+    --card: 225 28% 17%;           /* Slightly Lighter Indigo/Navy #1D2338 - more vibrant */
     --card-foreground: 0 0% 98%;   /* Off-white */
 
-    --popover: 225 30% 18%;        /* Popover background */
+    --popover: 225 28% 17%;        /* Popover background */
     --popover-foreground: 0 0% 98%; /* Popover text */
 
-    --primary: 175 65% 45%;        /* Vibrant Teal #29B3A2 */
-    --primary-foreground: 0 0% 98%;/* Off-white for text on primary */
+    --primary: 185 75% 55%;        /* Vibrant Cyan-Teal #33D6E0 */
+    --primary-foreground: 225 30% 10%;/* Dark for text on vibrant primary */
 
-    --secondary: 170 70% 55%;      /* Brighter, slightly greener Teal #3DDBB9 */
-    --secondary-foreground: 0 0% 98%; /* Off-white */
+    --secondary: 200 80% 60%;      /* Bright Sky Blue #4DB3E6 */
+    --secondary-foreground: 225 30% 10%; /* Dark for text on vibrant secondary */
 
-    --muted: 225 15% 25%;          /* Desaturated Indigo/Grey #333645 */
-    --muted-foreground: 225 10% 65%;   /* Light Grey with Indigo hint #9DA2B2 */
+    --muted: 225 20% 25%;          /* Desaturated Indigo/Grey #33364D - darker */
+    --muted-foreground: 225 15% 70%;   /* Lighter Grey with Indigo hint #A3A8B8 */
 
-    --accent: 170 80% 50%;         /* Electric Teal/Cyan-Teal #29E6BF */
-    --accent-foreground: 0 0% 10%; /* Dark Grey for text on accent #1A1A1A */
+    --accent: 270 70% 65%;         /* Electric Purple #9A52E0 */
+    --accent-foreground: 0 0% 98%; /* Off-white for text on accent */
 
-    --destructive: 0 75% 60%;       /* Vibrant Red #EC4D4D */
+    --destructive: 0 80% 65%;       /* More Saturated Red #F54D4D */
     --destructive-foreground: 0 0% 98%; /* Off-white */
 
-    --border: 225 20% 30%;         /* Indigo/Grey Border #3D4259 */
-    --input: 225 25% 22%;          /* Darker Indigo for input backgrounds #2A3045 */
-    --ring: 170 80% 50%;           /* Ring color (matches accent) */
+    --border: 225 20% 35%;         /* Indigo/Grey Border, slightly more visible #424866 */
+    --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
+    --ring: 270 70% 65%;           /* Ring color (matches accent) */
 
-    --footer-background: 225 30% 10%; /* Very Dark Indigo #111522 */
-    --footer-foreground: 225 10% 75%;   /* Light Grey with Indigo hint for footer text #B8BCC7 */
+    --footer-background: 225 30% 8%; /* Very Dark Indigo, almost black #0D101A */
+    --footer-foreground: 225 15% 75%;   /* Light Grey with Indigo hint for footer text #B0B5C7 */
 
-    --sidebar-background: 225 25% 16%;    /* Dark Indigo for Sidebar #1E2333 */
+    --sidebar-background: 225 25% 14%;    /* Dark Indigo for Sidebar #1A1F2E */
     --sidebar-foreground: 0 0% 95%;       /* Sidebar Text #F2F2F2 */
-    --sidebar-primary: 175 65% 45%;        /* Sidebar Primary Element (matches main primary) */
-    --sidebar-primary-foreground: 0 0% 98%; /* Sidebar Primary Text */
-    --sidebar-accent: 225 25% 22%;         /* Sidebar Accent (hover/active) #2A3045 */
+    --sidebar-primary: 185 75% 55%;        /* Sidebar Primary Element (matches main primary) */
+    --sidebar-primary-foreground: 225 30% 10%; /* Sidebar Primary Text */
+    --sidebar-accent: 225 25% 20%;         /* Sidebar Accent (hover/active) #262C40 */
     --sidebar-accent-foreground: 0 0% 98%; /* Sidebar Accent Text */
-    --sidebar-border: 225 20% 25%;         /* Sidebar Border #33384C */
-    --sidebar-ring: 170 80% 50%;           /* Sidebar Ring (matches main accent) */
+    --sidebar-border: 225 20% 28%;         /* Sidebar Border #383D52 */
+    --sidebar-ring: 270 70% 65%;           /* Sidebar Ring (matches main accent) */
   }
 }
 
