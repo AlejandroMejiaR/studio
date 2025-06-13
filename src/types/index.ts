@@ -1,15 +1,17 @@
+
 export interface Project {
   id: string;
-  slug: string; 
+  slug: string;
   title: string;
   category: string;
-  date: string; 
+  date: string;
   shortDescription: string;
   problemStatement?: string;
   solutionOverview?: string;
-  keyFeatures?: { title: string; description: string; icon?: React.ElementType }[];
+  keyFeatures?: { title: string; description: string; icon?: string }[]; // Changed React.ElementType to string
   technologies: string[];
   thumbnailUrl: string;
+  dataAiHint?: string; // Added missing dataAiHint property
   bannerUrl: string;
   galleryImages?: string[];
   liveUrl?: string;

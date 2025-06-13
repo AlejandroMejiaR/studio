@@ -1,5 +1,7 @@
+
 import type { Project } from '@/types';
-import { Briefcase, Zap, BarChart3 } from 'lucide-react';
+// Lucide icons are no longer directly used here for keyFeatures,
+// they will be mapped in the client component.
 
 export const projects: Project[] = [
   {
@@ -16,9 +18,9 @@ export const projects: Project[] = [
     problemStatement: "Artists and designers needed a more engaging way to present their portfolios online, moving beyond static images and text. Traditional portfolio sites often lack interactivity and fail to convey the depth of creative projects.",
     solutionOverview: "Developed a web platform allowing users to create rich, interactive project showcases. Features include embedded videos, 3D model viewers, and custom animations, all managed through an intuitive dashboard.",
     keyFeatures: [
-      { title: 'Dynamic Content Embedding', description: 'Easily embed videos, audio, and interactive media.', icon: Briefcase },
-      { title: 'Real-time Collaboration', description: 'Allow team members to co-edit project showcases.', icon: Zap },
-      { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: BarChart3 },
+      { title: 'Dynamic Content Embedding', description: 'Easily embed videos, audio, and interactive media.', icon: 'Briefcase' },
+      { title: 'Real-time Collaboration', description: 'Allow team members to co-edit project showcases.', icon: 'Zap' },
+      { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: 'BarChart3' },
     ],
     galleryImages: [
       'https://placehold.co/800x600/277365/F2F2F2.png?text=Gallery+1.1',
@@ -42,9 +44,9 @@ export const projects: Project[] = [
     problemStatement: "Growing environmental concerns highlight the need for tools that empower individuals to make sustainable choices. Many people are unaware of their environmental impact or lack guidance on how to improve.",
     solutionOverview: "Designed and built a cross-platform mobile app that allows users to log activities, calculate their carbon footprint, and receive personalized tips for a greener lifestyle. Incorporated gamification and community features to encourage engagement.",
     keyFeatures: [
-      { title: 'Carbon Footprint Calculator', description: 'Accurately estimates CO2 emissions based on user input.', icon: Briefcase },
-      { title: 'Personalized Eco-Tips', description: 'Provides actionable advice tailored to user habits.', icon: Zap },
-      { title: 'Community Challenges', description: 'Engage with friends in friendly environmental competitions.', icon: BarChart3 },
+      { title: 'Carbon Footprint Calculator', description: 'Accurately estimates CO2 emissions based on user input.', icon: 'Briefcase' },
+      { title: 'Personalized Eco-Tips', description: 'Provides actionable advice tailored to user habits.', icon: 'Zap' },
+      { title: 'Community Challenges', description: 'Engage with friends in friendly environmental competitions.', icon: 'BarChart3' },
     ],
     galleryImages: [
       'https://placehold.co/800x600/122624/F2F2F2.png?text=Gallery+2.1',
@@ -66,9 +68,9 @@ export const projects: Project[] = [
     problemStatement: "Businesses accumulate vast amounts of data but often struggle to extract meaningful insights efficiently. Manual data analysis is time-consuming, error-prone, and requires specialized skills.",
     solutionOverview: "Developed an AI tool that automates data cleaning, analysis, and visualization. It uses machine learning models to identify trends, predict outcomes, and generate actionable reports, enabling data-driven decision-making.",
      keyFeatures: [
-      { title: 'Automated Data Cleaning', description: 'Preprocesses raw data for accurate analysis.', icon: Briefcase },
-      { title: 'Predictive Modeling', description: 'Utilizes ML algorithms for forecasting and trend analysis.', icon: Zap },
-      { title: 'Insightful Visualizations', description: 'Generates interactive charts and dashboards.', icon: BarChart3 },
+      { title: 'Automated Data Cleaning', description: 'Preprocesses raw data for accurate analysis.', icon: 'Briefcase' },
+      { title: 'Predictive Modeling', description: 'Utilizes ML algorithms for forecasting and trend analysis.', icon: 'Zap' },
+      { title: 'Insightful Visualizations', description: 'Generates interactive charts and dashboards.', icon: 'BarChart3' },
     ],
     repoUrl: '#',
   },

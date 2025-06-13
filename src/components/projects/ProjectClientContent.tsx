@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project } from '@/types';
@@ -6,14 +7,34 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, ExternalLink, CalendarDays, Tag, Lightbulb, Target, CheckCircle } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-
+import { 
+  Github, 
+  ExternalLink, 
+  CalendarDays, 
+  Tag, 
+  Lightbulb, 
+  Target, 
+  CheckCircle,
+  Briefcase, // Added for keyFeatures
+  Zap,        // Added for keyFeatures
+  BarChart3   // Added for keyFeatures
+} from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import type { ElementType } from 'react';
 
 interface ProjectClientContentProps {
   project: Project;
   initialLikes: number;
 }
+
+const iconMap: Record<string, ElementType> = {
+  Briefcase,
+  Zap,
+  BarChart3,
+  Lightbulb,
+  Target,
+  CheckCircle,
+};
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
   return (
@@ -115,15 +136,18 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
                 </AccordionTrigger>
                 <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2 space-y-4">
-                  {project.keyFeatures.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
-                      {feature.icon && <feature.icon className="h-6 w-6 text-accent mt-1 shrink-0" />}
-                      <div>
-                        <h4 className="font-semibold text-primary">{feature.title}</h4>
-                        <p className="text-sm">{feature.description}</p>
+                  {project.keyFeatures.map((feature, index) => {
+                    const IconComponent = feature.icon ? iconMap[feature.icon] : null;
+                    return (
+                      <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
+                        {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
+                        <div>
+                          <h4 className="font-semibold text-primary">{feature.title}</h4>
+                          <p className="text-sm">{feature.description}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </AccordionContent>
               </AccordionItem>
             )}
