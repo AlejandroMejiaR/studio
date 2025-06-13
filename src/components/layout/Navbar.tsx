@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2" prefetch={false}>
+        <Link href="/" className="flex items-center gap-2 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
           <Feather className="h-7 w-7 text-primary" />
           <span className="font-headline text-xl font-bold text-primary">Portfolio Ace</span>
         </Link>
@@ -30,7 +30,7 @@ const Navbar = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out"
               prefetch={false}
             >
               {link.label}
@@ -49,7 +49,7 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
-                <Link href="/" className="flex items-center gap-2 mb-8" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/" className="flex items-center gap-2 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}>
                   <Feather className="h-7 w-7 text-primary" />
                   <span className="font-headline text-xl font-bold text-primary">Portfolio Ace</span>
                 </Link>
@@ -58,7 +58,7 @@ const Navbar = () => {
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                      className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 ease-in-out"
                       onClick={() => setIsMobileMenuOpen(false)}
                       prefetch={false}
                     >
