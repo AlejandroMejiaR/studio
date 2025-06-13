@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -75,13 +76,20 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
-        "flex items-center gap-2 transition-all duration-150",
-        isLiked ? "text-destructive border-destructive hover:bg-destructive/10" : "text-muted-foreground hover:text-primary hover:border-primary"
+        "flex items-center gap-2 transition-all duration-150 group", // Added group
+        isLiked
+          ? "text-destructive border-destructive hover:bg-destructive/10" // Liked state
+          : "text-muted-foreground hover:text-destructive hover:border-primary" // Unliked state: hover text red, hover border primary
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
     >
-      <Heart size={16} className={cn(isLiked ? "fill-destructive" : "fill-transparent")} />
+      <Heart
+        size={16}
+        className={cn(
+          isLiked ? "fill-destructive" : "fill-transparent group-hover:fill-destructive" // Icon: if not liked, fill red on group-hover
+        )}
+      />
       <span>{likes}</span>
     </Button>
   );
