@@ -114,5 +114,8 @@ body {
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
   }
+  .dark h2 {
+    color: hsl(var(--foreground)); /* Make h2 white/off-white in dark mode */
+  }
 }
     
