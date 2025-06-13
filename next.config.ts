@@ -19,9 +19,18 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'storage.googleapis.com',
+        hostname: 'storage.googleapis.com', // Keep this if you might still use GCS for other things
         port: '',
-        pathname: '/gmp-prodx-firebase-studio-app-images-us-west1/**', // Made this path more specific
+        pathname: '/gmp-prodx-firebase-studio-app-images-us-west1/**',
+      },
+      {
+        protocol: 'https',
+        // IMPORTANT: Replace 'YOUR_SUPABASE_PROJECT_REF.supabase.co'
+        // with your actual Supabase project reference and domain.
+        // Example: 'abcdefghijk.supabase.co'
+        hostname: 'YOUR_SUPABASE_PROJECT_REF.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**', // Standard path for Supabase public storage
       },
     ],
   },
