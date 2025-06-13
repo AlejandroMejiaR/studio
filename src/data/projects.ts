@@ -23,7 +23,7 @@ export const projects: Project[] = [
       { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: 'BarChart3' },
     ],
     galleryImages: [
-      'https://placehold.co/800x600/277365/F2F2F2.png?text=Gallery+1.1',
+      'https://storage.googleapis.com/gmp-prodx-firebase-studio-app-images-us-west1/portfolio-ace/cyberpunk_street_club_d7b5.jpg', // Replaced image
       'https://placehold.co/800x600/41A693/F2F2F2.png?text=Gallery+1.2',
       'https://placehold.co/800x600/194039/F2F2F2.png?text=Gallery+1.3',
       'https://placehold.co/800x600/122624/FFFFFF.png?text=Gallery+1.4',
@@ -92,3 +92,4 @@ export const getProjectBySlug = (slug: string): Project | undefined => {
 export const getAllProjects = (): Project[] => {
   return projects;
 };
+
