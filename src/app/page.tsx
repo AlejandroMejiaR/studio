@@ -17,7 +17,7 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 md:py-32 text-center">
-        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-primary-foreground">
+        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
         <p className="text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-10 min-h-[3em] sm:min-h-[2.5em]"> {/* Added min-h to prevent layout shift */}
