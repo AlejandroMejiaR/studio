@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
         port: '',
-        pathname: '/**',
+        pathname: '/gmp-prodx-firebase-studio-app-images-us-west1/**', // Made this path more specific
       },
     ],
   },
