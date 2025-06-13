@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react'; // Added useState
+import { useState } from 'react';
 import type { Project } from '@/types';
 import LikeButton from './LikeButton';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,6 @@ import {
   Briefcase,
   Zap,
   BarChart3,
-  X as CloseIcon // Added X for close button if needed, though Dialog often has one
 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { ElementType } from 'react';
@@ -37,8 +36,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  // DialogClose, // DialogClose might not be needed if default close is sufficient
-  // DialogTrigger, // We will trigger programmatically
 } from "@/components/ui/dialog";
 
 
@@ -64,11 +61,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
     setSelectedImageUrl(imageUrl);
     setIsLightboxOpen(true);
   };
-
-  // const closeLightbox = () => {
-  //   setIsLightboxOpen(false);
-  //   setSelectedImageUrl(null);
-  // };
 
   return (
     <div className="space-y-12">
@@ -197,9 +189,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               <Carousel
                 opts={{
                   align: "start",
-                  loop: project.galleryImages.length > 1, // Loop only if more than one image
+                  loop: project.galleryImages.length > 1,
                 }}
-                className="w-full max-w-5xl mx-auto" // max-w to control overall width
+                className="w-full max-w-5xl mx-auto"
               >
                 <CarouselContent className="-ml-2 sm:-ml-4">
                   {project.galleryImages.map((src, index) => (
@@ -213,7 +205,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                           className="object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
                           data-ai-hint="project screenshot"
                           onClick={() => openLightbox(src)}
-                          priority={index < 3} // Prioritize loading for first few images
+                          priority={index < 3}
                         />
                       </div>
                     </CarouselItem>
@@ -230,15 +222,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           </div>
 
           {selectedImageUrl && (
-            <DialogContent className="max-w-4xl w-full p-2 sm:p-4 bg-background/95 dark:bg-background/90 backdrop-blur-md shadow-2xl rounded-lg">
-              <div className="relative aspect-video w-full h-auto">
+            <DialogContent className="max-w-5xl w-[90vw] p-2 sm:p-3 bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl rounded-lg">
+              <div className="relative w-full max-h-[85vh] min-h-[50vh] flex items-center justify-center">
                 <Image
                   src={selectedImageUrl}
                   alt="Enlarged project image"
                   fill
-                  className="object-contain rounded-md"
+                  className="object-contain rounded-md max-w-full max-h-full"
                 />
-                {/* The ShadCN Dialog component includes a default close button (X) */}
               </div>
             </DialogContent>
           )}
