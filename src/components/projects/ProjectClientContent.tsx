@@ -224,21 +224,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           </div>
 
           {selectedImageUrl && (
-            <DialogContent 
-              className={cn(
-                "fixed inset-2 sm:inset-4 md:inset-8 p-0", 
-                "max-w-none w-auto h-auto", 
-                "bg-transparent border-none shadow-none rounded-lg",
-                "flex items-center justify-center"
-              )}
-            >
+            <DialogContent className="max-w-5xl w-[90vw] p-2 sm:p-3 bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl rounded-lg">
               <DialogTitle className="sr-only">Enlarged project image</DialogTitle>
-              <div className="relative w-full h-full">
+              <div className="relative aspect-video w-full h-auto max-h-[80vh]"> {/* Adjusted for better large image display */}
                 <Image
                   src={selectedImageUrl}
                   alt="Enlarged project image"
                   fill
-                  className="object-contain rounded-lg"
+                  className="object-contain rounded-lg" 
                 />
               </div>
             </DialogContent>
