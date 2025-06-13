@@ -58,45 +58,45 @@ body {
   }
 
   .dark {
-    --background: 220 10% 15%;        /* Dark cool gray (was 175 38% 5%) */
-    --foreground: 220 10% 85%;        /* Light cool gray for text (was 0 0% 95%) */
+    --background: 175 38% 10%;        /* Very Dark Teal (e.g., #0f1a19) */
+    --foreground: 0 0% 98%;           /* Off-white (e.g., #fafafa) */
 
-    --card: 220 10% 20%;               /* Slightly lighter dark cool gray (was 175 38% 8%) */
-    --card-foreground: 220 10% 85%;   /* (was 0 0% 95%) */
+    --card: 175 38% 13%;               /* Dark Teal for cards (e.g., #152322) */
+    --card-foreground: 0 0% 98%;       /* Off-white */
 
-    --popover: 220 10% 18%;            /* (was 175 38% 8%) */
-    --popover-foreground: 220 10% 85%;/* (was 0 0% 95%) */
+    --popover: 175 38% 13%;            /* Dark Teal for popovers */
+    --popover-foreground: 0 0% 98%;   /* Off-white */
 
-    --primary: 169 49% 30%;            /* Medium teal - unchanged */
-    --primary-foreground: 0 0% 98%;    /* Unchanged */
+    --primary: 169 49% 30%;            /* Medium Teal (e.g., #277365) - for buttons */
+    --primary-foreground: 0 0% 98%;    /* Off-white */
 
-    --secondary: 169 43% 45%;          /* Light teal - unchanged */
-    --secondary-foreground: 175 38% 11%;/* Dark Teal - unchanged */
+    --secondary: 169 43% 45%;          /* Light Teal (e.g., #41A693) - for other buttons */
+    --secondary-foreground: 0 0% 98%;  /* Off-white - ensures readability */
 
-    --muted: 220 10% 25%;              /* (was 175 38% 15%) */
-    --muted-foreground: 220 10% 60%;   /* (was 0 0% 63.9%) */
+    --muted: 175 38% 18%;              /* Muted Dark Teal (e.g., #1e2f2d) */
+    --muted-foreground: 170 25% 75%;   /* Light Muted Teal/Greyish (e.g., #b2c2c0) */
 
-    --accent: 169 43% 45%;             /* Light teal - unchanged */
-    --accent-foreground: 175 38% 11%;  /* Dark Teal - unchanged */
+    --accent: 169 43% 45%;             /* Light Teal (e.g., #41A693) - for accents */
+    --accent-foreground: 0 0% 98%;     /* Off-white - ensures readability */
 
-    --destructive: 0 62.8% 30.6%;     /* Unchanged */
-    --destructive-foreground: 0 0% 98%;/* Unchanged */
+    --destructive: 0 65% 55%;         /* Noticeable Red (e.g., #dd4b4b) */
+    --destructive-foreground: 0 0% 98%;/* Off-white */
 
-    --border: 220 10% 30%;             /* (was 175 38% 20%) */
-    --input: 220 10% 28%;              /* (was 175 38% 20%) */
-    --ring: 169 43% 45%;               /* Light teal for ring - unchanged */
+    --border: 175 38% 20%;             /* Subtle Dark Teal Border (e.g., #223533) */
+    --input: 175 38% 20%;              /* Dark Teal Input Background */
+    --ring: 169 49% 30%;               /* Medium Teal for rings */
 
-    --footer-background: 220 10% 10%;  /* Even darker cool gray (was 175 38% 11%) */
-    --footer-foreground: 220 10% 75%;  /* (was 0 0% 85%) */
+    --footer-background: 175 38% 7%;   /* Even Darker Teal for footer (e.g., #0b1312) */
+    --footer-foreground: 0 0% 85%;     /* Light grey/off-white */
 
-    --sidebar-background: 220 10% 12%; /* Darker cool gray, (was 240 5.9% 10%) */
-    --sidebar-foreground: 220 10% 80%; /* (was 240 4.8% 95.9%) */
-    --sidebar-primary: 224.3 76.3% 48%; /* Unchanged */
-    --sidebar-primary-foreground: 0 0% 100%; /* Unchanged */
-    --sidebar-accent: 220 10% 20%;     /* Lighter accent for sidebar (was 240 3.7% 15.9%) */
-    --sidebar-accent-foreground: 220 10% 90%; /* Lighter text for sidebar accent (was 240 4.8% 95.9%) */
-    --sidebar-border: 220 10% 18%;     /* (was 240 3.7% 15.9%) */
-    --sidebar-ring: 217.2 91.2% 59.8%; /* Unchanged */
+    --sidebar-background: 175 38% 11%; /* Dark Teal for Sidebar (e.g., #121f1e) */
+    --sidebar-foreground: 0 0% 95%;   /* Light Grey for Sidebar text */
+    --sidebar-primary: 169 49% 30%;    /* Medium Teal for active/primary sidebar items */
+    --sidebar-primary-foreground: 0 0% 98%; /* Off-white */
+    --sidebar-accent: 175 38% 16%;     /* Dark Teal Accent for hover (e.g., #1a2928) */
+    --sidebar-accent-foreground: 0 0% 98%; /* Off-white */
+    --sidebar-border: 175 38% 22%;     /* Dark Teal Sidebar Border (e.g., #253a38) */
+    --sidebar-ring: 169 49% 30%;       /* Medium Teal for rings */
   }
 }
 
