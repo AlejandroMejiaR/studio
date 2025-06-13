@@ -10,7 +10,6 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: '/', label: 'Home' },
     { href: '/#projects', label: 'Projects' },
     { href: '/#about', label: 'About' },
     // Add more links as needed, e.g., Blog, Contact
