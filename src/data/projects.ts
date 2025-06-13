@@ -1,7 +1,6 @@
 
 import type { Project } from '@/types';
-// Lucide icons are no longer directly used here for keyFeatures,
-// they will be mapped in the client component.
+import { getSupabaseImageUrl } from '@/lib/supabase';
 
 export const projects: Project[] = [
   {
@@ -11,10 +10,10 @@ export const projects: Project[] = [
     category: 'Web Development',
     date: 'Summer 2023',
     shortDescription: 'A dynamic platform for creatives to showcase their work with interactive elements and rich media.',
-    thumbnailUrl: 'https://placehold.co/600x400/122624/F2F2F2.png?text=Project+1',
+    thumbnailUrl: getSupabaseImageUrl('proyect-image', 'cyberpunk_street_club_d7b5.jpg'),
     dataAiHint: 'abstract portfolio',
-    bannerUrl: 'https://placehold.co/1200x400/122624/F2F2F2.png?text=Showcase+Banner',
-    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Firebase', 'Framer Motion'],
+    bannerUrl: getSupabaseImageUrl('proyect-image', 'cyberpunk_street_club_d7b5.jpg'), // Using the same image for banner as an example
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Firebase', 'Framer Motion', 'Supabase'],
     problemStatement: "Artists and designers needed a more engaging way to present their portfolios online, moving beyond static images and text. Traditional portfolio sites often lack interactivity and fail to convey the depth of creative projects.",
     solutionOverview: "Developed a web platform allowing users to create rich, interactive project showcases. Features include embedded videos, 3D model viewers, and custom animations, all managed through an intuitive dashboard.",
     keyFeatures: [
@@ -23,7 +22,7 @@ export const projects: Project[] = [
       { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: 'BarChart3' },
     ],
     galleryImages: [
-      'https://placehold.co/800x600/277365/F2F2F2.png?text=Gallery+1.1', // Reverted for diagnostics
+      getSupabaseImageUrl('proyect-image', 'cyberpunk_street_club_d7b5.jpg'),
       'https://placehold.co/800x600/41A693/F2F2F2.png?text=Gallery+1.2',
       'https://placehold.co/800x600/194039/F2F2F2.png?text=Gallery+1.3',
       'https://placehold.co/800x600/122624/FFFFFF.png?text=Gallery+1.4',
@@ -92,4 +91,3 @@ export const getProjectBySlug = (slug: string): Project | undefined => {
 export const getAllProjects = (): Project[] => {
   return projects;
 };
-

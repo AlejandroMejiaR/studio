@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
         // IMPORTANT: Replace 'YOUR_SUPABASE_PROJECT_REF.supabase.co'
         // with your actual Supabase project reference and domain.
         // Example: 'abcdefghijk.supabase.co'
-        hostname: 'YOUR_SUPABASE_PROJECT_REF.supabase.co',
+        hostname: 'rhybrgoyaehkyywqgost.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**', // Standard path for Supabase public storage
       },
