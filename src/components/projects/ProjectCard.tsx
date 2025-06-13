@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Project } from '@/types';
@@ -31,7 +32,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       </CardHeader>
       <CardContent className="p-6 flex-grow">
         <Badge variant="secondary" className="mb-2 bg-accent text-accent-foreground">{project.category}</Badge>
-        <CardTitle className="font-headline text-2xl mb-2 text-primary group-hover:text-accent transition-colors">
+        <CardTitle className="font-headline text-2xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
           <Link href={`/projects/${project.slug}`}>
             {project.title}
           </Link>
