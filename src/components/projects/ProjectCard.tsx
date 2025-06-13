@@ -53,7 +53,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         <LikeButton projectId={project.id} initialLikes={initialLikes} />
         <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
           <Link href={`/projects/${project.slug}`}>
-            View Case Study <ArrowRight size={16} className="ml-1" />
+            View More <ArrowRight size={16} className="ml-1" />
           </Link>
         </Button>
       </CardFooter>
