@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import type { ElementType } from 'react';
+import { cn } from '@/lib/utils';
 
 // Carousel Imports
 import {
@@ -36,7 +37,7 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogTitle, // Added DialogTitle import
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 
@@ -223,14 +224,21 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           </div>
 
           {selectedImageUrl && (
-            <DialogContent className="max-w-5xl w-[90vw] p-2 sm:p-3 bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl rounded-lg">
-              <DialogTitle className="sr-only">Enlarged project image</DialogTitle> {/* Visually hidden title */}
-              <div className="relative w-full max-h-[85vh] min-h-[50vh] flex items-center justify-center">
+            <DialogContent 
+              className={cn(
+                "fixed inset-2 sm:inset-4 md:inset-8 p-0", 
+                "max-w-none w-auto h-auto", 
+                "bg-transparent border-none shadow-none rounded-lg",
+                "flex items-center justify-center"
+              )}
+            >
+              <DialogTitle className="sr-only">Enlarged project image</DialogTitle>
+              <div className="relative w-full h-full">
                 <Image
                   src={selectedImageUrl}
                   alt="Enlarged project image"
                   fill
-                  className="object-contain rounded-md max-w-full max-h-full"
+                  className="object-contain rounded-lg"
                 />
               </div>
             </DialogContent>
