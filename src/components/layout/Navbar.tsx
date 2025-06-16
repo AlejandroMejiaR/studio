@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
+import AnimatedBrandName from '@/components/effects/AnimatedBrandName'; // Import the new component
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -39,12 +40,14 @@ const Navbar = () => {
     // Add more links as needed, e.g., Blog, Contact
   ];
 
+  const brandName = "Alejandro Mejia - Multimedia Engineer";
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
-          <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80" />
-          <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80 animate-brand-pulse">Alejandro Mejia | Multimedia Engineer</span>
+        <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}> {/* Increased gap from 2 to 3 */}
+          <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80 animate-icon-double-pulse" /> {/* Added animation class */}
+          <AnimatedBrandName text={brandName} /> {/* Used the new component */}
         </Link>
         
         {/* Desktop Navigation */}
@@ -90,9 +93,9 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
-                <Link href="/" className="flex items-center gap-2 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80" />
-                  <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80 animate-brand-pulse">Alejandro Mejia | Multimedia Engineer</span>
+                <Link href="/" className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}> {/* Increased gap */}
+                  <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80 animate-icon-double-pulse" />
+                  <AnimatedBrandName text={brandName} />
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (

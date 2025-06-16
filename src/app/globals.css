@@ -114,13 +114,15 @@ body {
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
   }
+  /* Ensure h1 in navbar maintains its specific color based on current setup */
+  /* For AnimatedBrandName, color will be handled by its own styles */
   .dark h2 {
-    color: hsl(var(--foreground)); /* Make h2 white/off-white in dark mode */
+    color: hsl(var(--foreground)); 
   }
 }
 
 @layer utilities {
-  @keyframes brand-pulse {
+  @keyframes brand-pulse { /* This is the old pulse, can be removed if no longer used */
     0%, 90%, 100% {
       opacity: 1;
       transform: scale(1);
@@ -132,7 +134,45 @@ body {
   }
   .animate-brand-pulse {
     animation: brand-pulse 5s infinite ease-in-out;
-    display: inline-block; /* Ensures transform works correctly on span */
+    display: inline-block; 
+  }
+
+  @keyframes icon-double-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    5%, 15% { transform: scale(1.15); opacity: 0.7; } /* First pulse */
+    10%, 20% { transform: scale(1); opacity: 1; }    /* Return and brief pause */
+    25%, 35% { transform: scale(1.15); opacity: 0.7; } /* Second pulse */
+    30%, 40% { transform: scale(1); opacity: 1; }    /* Return */
+    /* Remaining 60% of 3s cycle is a pause */
+  }
+  .animate-icon-double-pulse {
+    display: inline-block;
+    animation: icon-double-pulse 3s infinite ease-in-out;
+  }
+
+  /* Text color wave animation */
+  @keyframes text-color-wave-light {
+    0%, 60%, 100% { color: hsl(var(--primary)); } /* Base color for 80% of 5s cycle. Wave takes 20% = 1s */
+    10%           { color: hsl(var(--accent)); }  /* Peak of wave - Light mode accent color */
+  }
+  .animate-text-color-wave-light span {
+    display: inline-block; /* Crucial for individual letter animation */
+    animation-name: text-color-wave-light;
+    animation-duration: 5s; /* Total cycle duration for each letter */
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes text-color-wave-dark {
+    0%, 60%, 100% { color: hsl(var(--foreground), 0.8); } /* Base color (Navbar specific dark:text-foreground/80 )*/
+    10%           { color: hsl(var(--accent)); } /* Peak of wave - Dark mode accent color */
+  }
+  .dark .animate-text-color-wave-dark span {
+    display: inline-block;
+    animation-name: text-color-wave-dark;
+    animation-duration: 5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
   }
 }
     
