@@ -41,7 +41,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   return (
-    <div className="space-y-12 md:space-y-16 lg:space-y-20">
+    <div className="space-y-8 md:space-y-10 lg:space-y-12"> {/* Reduced space-y values */}
       {/* Project Header */}
       <div className="relative h-[300px] md:h-[400px] lg:h-[500px] w-full overflow-hidden rounded-xl shadow-2xl">
         <Image
@@ -109,7 +109,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Section for Case Study */}
       {showCaseStudy && (
-        <section>
+        <div className="py-8 md:py-10 lg:py-12"> {/* Changed from section, added specific padding */}
           <div className="w-full">
             <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
               <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
@@ -158,12 +158,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </div>
             </div>
           </div>
-        </section>
+        </div>
       )}
 
       {/* New Section for Project Gallery Carousel */}
       {showGallery && (
-        <section className="mt-8 md:mt-10 lg:mt-12">
+        <div className="py-8 md:py-10 lg:py-12"> {/* Changed from section, removed mt-*, added specific padding */}
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
           <Carousel
             opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
@@ -192,7 +192,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </>
             )}
           </Carousel>
-        </section>
+        </div>
       )}
     </div>
   );
