@@ -5,7 +5,7 @@ import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react'; // Up
 import { Button } from '@/components/ui/button';
 
 const AboutMe = () => {
-  const skills = ['TypeScript', 'Next.js', 'React', 'Node.js', 'Python', 'Firebase', 'Tailwind CSS', 'UI/UX Design'];
+  const skills = ['Game Design', 'UX Design', 'Unity', 'Unreal Engine', 'C#', 'C++', 'JS', 'Python', 'Git', 'Generative AI', 'English B2'];
 
   return (
     <section id="about" className="container mx-auto px-4">
