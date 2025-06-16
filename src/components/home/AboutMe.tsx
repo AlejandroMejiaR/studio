@@ -37,9 +37,7 @@ const AboutMe = () => {
             About Me
           </h2>
           <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
-            Hello! I&apos;m a passionate and results-oriented software developer with a keen eye for design and user experience. 
-            I specialize in building modern, responsive web applications using cutting-edge technologies. 
-            My journey in tech is driven by a love for problem-solving and creating digital solutions that are both functional and beautiful.
+            Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX), with a special passion for game design and generative AI.
           </p>
           <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
             When I&apos;m not coding, you can find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee. 
