@@ -50,7 +50,6 @@ const mapDocToProject = (docId: string, data: any): Project => {
     date: data.date || '', // Assuming date is stored as a string that fits 'Summer 2023' format
     shortDescription: data.shortDescription || '',
     thumbnailUrl: data.thumbnailPath ? getSupabaseImageUrl('projects', data.thumbnailPath) : 'https://placehold.co/600x400.png',
-    dataAiHint: data.dataAiHint || 'project image',
     bannerUrl: data.bannerPath ? getSupabaseImageUrl('projects', data.bannerPath) : 'https://placehold.co/1200x600.png',
     technologies: data.technologies || [],
     problemStatement: data.problemStatement,
@@ -201,5 +200,3 @@ export const setSessionLiked = (projectId: string, liked: boolean): void => {
 };
 
 export { db, app };
-
-    

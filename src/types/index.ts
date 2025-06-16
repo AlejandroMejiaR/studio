@@ -11,7 +11,6 @@ export interface Project {
   keyFeatures?: { title: string; description: string; icon?: string }[]; // Changed React.ElementType to string
   technologies: string[];
   thumbnailUrl: string;
-  dataAiHint?: string; // Added missing dataAiHint property
   bannerUrl: string;
   galleryImages?: string[];
   liveUrl?: string;

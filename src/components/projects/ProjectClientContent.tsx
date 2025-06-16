@@ -51,7 +51,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           fill
           priority
           className="object-cover"
-          data-ai-hint={project.dataAiHint || "project banner"}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6 md:p-10">
@@ -181,7 +180,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       fill
                       sizes="(max-width: 1279px) 100vw, 1152px"
                       className="object-cover"
-                      data-ai-hint={project.dataAiHint || "project screenshot"}
                       priority={index === 0}
                     />
                   </div>

@@ -56,7 +56,6 @@ export default async function HomePage() { // Changed to async
               alt="Digital Experiences Placeholder"
               fill
               className="object-contain"
-              data-ai-hint="abstract technology"
             />
           </div>
         </div>
@@ -67,5 +66,3 @@ export default async function HomePage() { // Changed to async
     </>
   );
 }
-
-    
