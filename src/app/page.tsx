@@ -59,15 +59,6 @@ export default function HomePage() {
               data-ai-hint="abstract technology"
             />
           </div>
-           {/* The InteractiveCharacterModel usage is commented out, as 3D features are currently disabled */}
-           {/* <InteractiveCharacterModel
-              modelUrl={getSupabaseImageUrl('character_assets', 'model.glb')}
-              idleAnimUrl={getSupabaseImageUrl('character_assets', 'idle_animation.fbx')}
-              dance1AnimUrl={getSupabaseImageUrl('character_assets', 'dance_animation_1.fbx')}
-              dance2AnimUrl={getSupabaseImageUrl('character_assets', 'dance_animation_2.fbx')}
-              endClapAnimUrl={getSupabaseImageUrl('character_assets', 'clap_animation.fbx')}
-              containerClassName="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square"
-            /> */}
         </div>
       </section>
 
