@@ -40,8 +40,7 @@ const AboutMe = () => {
             Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX), with a special passion for game design and generative AI. My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.
           </p>
           <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
-            When I&apos;m not coding, you can find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee. 
-            I believe in continuous learning and always strive to expand my skill set.
+            When I’m not coding, you’ll find me exploring new design trends or savoring a good cup of coffee. I believe in continuous learning and am constantly seeking to broaden my skill set—always ready for the next challenge and collaboration.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
