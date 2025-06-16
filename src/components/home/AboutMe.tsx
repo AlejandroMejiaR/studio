@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Award, Briefcase, Coffee, Download } from 'lucide-react';
@@ -50,7 +51,7 @@ const AboutMe = () => {
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-accent">3+ Years</p>
+                <p className="text-2xl font-bold text-accent">Continuous Learner</p>
                 <p className="text-sm text-muted-foreground">Full-Stack Development</p>
               </CardContent>
             </Card>
