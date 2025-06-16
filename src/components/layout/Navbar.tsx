@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('light'); // Default to light, will be updated
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -21,10 +21,11 @@ const Navbar = () => {
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
     }
+    // No else needed, 'light' is default
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return;
+    if (!isMounted) return; // Only run on client after mount
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -45,29 +46,36 @@ const Navbar = () => {
   ];
 
   const brandName = "Alejandro Mejia - Multimedia Engineer";
-  const staggerDelay = 0.05; // Consistent with AnimatedBrandName default
+  const staggerDelay = 0.05; 
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
           {isMounted ? (
-            <Gamepad2 className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} />
+            <Gamepad2 
+              key={`icon-${theme}`} // Force remount on theme change
+              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
+            />
           ) : (
-            <Gamepad2 className="h-7 w-7 text-primary" />
+            <Gamepad2 className="h-7 w-7 text-primary" /> 
           )}
 
           {isMounted ? (
-            <AnimatedBrandName text={brandName} />
+            <AnimatedBrandName 
+              key={`brand-${theme}`} // Force remount on theme change
+              text={brandName} 
+            />
           ) : (
+            // Fallback for SSR/initial render to avoid hydration mismatch
             <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
               {brandName.split('').map((letter, index) => {
                 const delay = (brandName.length - 1 - index) * staggerDelay;
                 return (
                   <span
                     key={index}
-                    className="inline-block" // Ensure inline-block for consistent layout
-                    style={{ animationDelay: `${delay}s` }} // Match style from AnimatedBrandName
+                    className="inline-block" 
+                    style={{ animationDelay: `${delay}s` }} 
                   >
                     {letter === ' ' ? '\u00A0' : letter}
                   </span>
@@ -98,11 +106,12 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Consistent fallback
             )}
           </Button>
         </nav>
 
+        {/* Mobile Navigation */}
         <div className="md:hidden flex items-center">
           <Button
             variant="ghost"
@@ -111,10 +120,10 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="h-9 w-9 mr-2 hover:bg-accent/10"
           >
-            {isMounted ? (
+             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Consistent fallback
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -128,12 +137,18 @@ const Navbar = () => {
               <div className="p-6">
                 <Link href="/" className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}> 
                   {isMounted ? (
-                     <Gamepad2 className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} />
+                     <Gamepad2 
+                        key={`icon-mobile-${theme}`} // Force remount on theme change
+                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
+                      />
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
                   {isMounted ? (
-                    <AnimatedBrandName text={brandName} />
+                    <AnimatedBrandName 
+                      key={`brand-mobile-${theme}`} // Force remount on theme change
+                      text={brandName} 
+                    />
                   ) : (
                      <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
                         {brandName.split('').map((letter, index) => {
