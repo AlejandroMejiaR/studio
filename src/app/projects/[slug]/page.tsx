@@ -1,15 +1,14 @@
 
 import { notFound } from 'next/navigation';
 import { getProjectBySlugFromFirestore, getProjectLikes } from '@/lib/firebase';
-import ProjectClientContent from '@/components/projects/ProjectClientContent';
-import type { Metadata, ResolvingMetadata } from 'next';
+import ProjectClientContent from '@/components/projects/ProjectClientContent.tsx'; // Added .tsx extension
+import type { Metadata } from 'next';
 import type { Project } from '@/types';
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } },
-  parent: ResolvingMetadata
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
-  const slug = params.slug; 
+  const slug = params.slug;
   const project: Project | undefined = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
@@ -38,13 +37,15 @@ export async function generateMetadata(
 
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug; 
+  const slug = params.slug;
   const project = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
     notFound();
   }
 
+  // Ensure project is defined before accessing its id.
+  // The notFound() call above should handle cases where project is undefined.
   const initialLikes = await getProjectLikes(project.id);
 
   return (
@@ -61,3 +62,4 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 //     slug: project.slug,
 //   }));
 // }
+
