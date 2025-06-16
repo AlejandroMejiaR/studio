@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Award, Briefcase, Coffee, Download } from 'lucide-react';
+import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react'; // Updated icons
 import { Button } from '@/components/ui/button';
 
 const AboutMe = () => {
@@ -47,7 +47,7 @@ const AboutMe = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
             <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
-                <Award size={32} className="mx-auto text-accent mb-2" />
+                <Brain size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
               </CardHeader>
               <CardContent>
@@ -57,7 +57,7 @@ const AboutMe = () => {
             </Card>
             <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
-                <Briefcase size={32} className="mx-auto text-accent mb-2" />
+                <DraftingCompass size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Projects</CardTitle>
               </CardHeader>
               <CardContent>
@@ -67,7 +67,7 @@ const AboutMe = () => {
             </Card>
              <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
-                <Coffee size={32} className="mx-auto text-accent mb-2" />
+                <Sparkles size={32} className="mx-auto text-accent mb-2" />
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Focus</CardTitle>
               </CardHeader>
               <CardContent>
