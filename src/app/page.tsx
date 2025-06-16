@@ -8,9 +8,6 @@ import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
-// Removed: dynamic import for InteractiveCharacterModel as 3D features are currently disabled
-// import dynamic from 'next/dynamic';
-// Removed: const InteractiveCharacterModel = dynamic(...) as 3D features are currently disabled
 
 export default function HomePage() {
   const projects = getAllProjects();
