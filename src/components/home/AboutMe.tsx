@@ -15,7 +15,7 @@ const AboutMe = () => {
             <CardContent className="p-0">
               <Image
                 src="https://placehold.co/400x500/122624/F2F2F2.png?text=Your+Photo"
-                alt="Your Name"
+                alt="Alejandro Mejia Rojas"
                 width={400}
                 height={500}
                 className="rounded-t-lg object-cover w-full h-auto"
@@ -23,7 +23,7 @@ const AboutMe = () => {
               />
             </CardContent>
             <div className="p-6 bg-card rounded-b-lg">
-                <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Your Name</h3>
+                <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Alejandro Mejia Rojas</h3>
                 <p className="text-accent">Full-Stack Developer & UI/UX Enthusiast</p>
                 <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground">
                   <Download size={18} className="mr-2" />

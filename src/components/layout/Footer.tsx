@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="text-center md:text-left">
             <h3 className="font-headline text-xl font-semibold mb-2">Portfolio Ace</h3>
-            <p className="text-sm">&copy; {currentYear} Your Name. All rights reserved.</p>
+            <p className="text-sm">&copy; {currentYear} Alejandro Mejia Rojas. All rights reserved.</p>
           </div>
           
           <nav className="flex flex-col items-center space-y-2 md:items-start">
@@ -27,7 +27,7 @@ const Footer = () => {
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-accent transition-colors">
               <Linkedin size={24} />
             </a>
-            <a href="mailto:youremail@example.com" aria-label="Email" className="hover:text-accent transition-colors">
+            <a href="mailto:amejiaro@gmail.com" aria-label="Email" className="hover:text-accent transition-colors">
               <Mail size={24} />
             </a>
           </div>
