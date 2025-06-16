@@ -37,7 +37,7 @@ const AboutMe = () => {
             About Me
           </h2>
           <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
-            Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX), with a special passion for game design and generative AI.
+            Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX), with a special passion for game design and generative AI. My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.
           </p>
           <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
             When I&apos;m not coding, you can find me exploring new design trends, contributing to open-source projects, or enjoying a good cup of coffee. 
