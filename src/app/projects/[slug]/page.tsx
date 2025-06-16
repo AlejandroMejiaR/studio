@@ -9,9 +9,9 @@ import type { Project } from '@/types';
 export const revalidate = 0;
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params: { slug } }: { params: { slug: string } }
 ): Promise<Metadata> {
-  const slug = params.slug;
+  // slug is now directly available
   const project: Project | undefined = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
@@ -39,21 +39,13 @@ export async function generateMetadata(
 }
 
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug;
+export default async function ProjectPage({ params: { slug } }: { params: { slug: string } }) {
+  // slug is now directly available
   const project = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
     notFound();
   }
-
-  // Log the fetched project data on the server side
-  console.log('Project Data on Server:', {
-    id: project.id,
-    slug: project.slug,
-    title: project.title,
-    galleryImagePaths_in_firestore_would_become_galleryImages: project.galleryImages, // Log the processed galleryImages
-  });
 
   const initialLikes = await getProjectLikes(project.id);
 

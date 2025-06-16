@@ -61,6 +61,7 @@ export default async function HomePage() {
               alt="Digital Experiences Placeholder"
               fill
               className="object-contain"
+              sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"
             />
           </div>
         </div>
