@@ -7,17 +7,24 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import LikeButton from './LikeButton';
 import { ArrowRight } from 'lucide-react';
+import { useLoading } from '@/contexts/LoadingContext'; // New
 
 interface ProjectCardProps {
   project: Project;
-  initialLikes?: number; // Pass initial likes to LikeButton if fetched server-side
+  initialLikes?: number;
 }
 
 const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
+  const { showLoading } = useLoading(); // New
+
   return (
-    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
+    <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">
       <CardHeader className="p-0">
-        <Link href={`/projects/${project.slug}`} aria-label={`View details for ${project.title}`}>
+        <Link 
+          href={`/projects/${project.slug}`} 
+          aria-label={`View details for ${project.title}`}
+          onClick={showLoading} // New
+        >
           <div className="aspect-[3/2] relative overflow-hidden">
             <Image
               src={project.thumbnailUrl}
@@ -33,7 +40,10 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       <CardContent className="p-6 flex-grow">
         <Badge variant="secondary" className="mb-2 bg-accent text-accent-foreground">{project.category}</Badge>
         <CardTitle className="font-headline text-2xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
-          <Link href={`/projects/${project.slug}`}>
+          <Link 
+            href={`/projects/${project.slug}`}
+            onClick={showLoading} // New
+          >
             {project.title}
           </Link>
         </CardTitle>
@@ -53,7 +63,10 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       <CardFooter className="p-6 flex justify-between items-center border-t">
         <LikeButton projectId={project.id} initialLikes={initialLikes} />
         <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
-          <Link href={`/projects/${project.slug}`}>
+          <Link 
+            href={`/projects/${project.slug}`}
+            onClick={showLoading} // New
+          >
             View More <ArrowRight size={16} className="ml-1" />
           </Link>
         </Button>
