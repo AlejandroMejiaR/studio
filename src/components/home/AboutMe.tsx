@@ -61,7 +61,7 @@ const AboutMe = () => {
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Projects</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-accent">15+</p>
+                <p className="text-2xl font-bold text-accent">5+</p>
                 <p className="text-sm text-muted-foreground">Completed Successfully</p>
               </CardContent>
             </Card>
