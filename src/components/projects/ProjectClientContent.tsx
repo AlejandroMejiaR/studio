@@ -23,15 +23,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import type { ElementType } from 'react';
 import { cn } from '@/lib/utils';
 
-// Carousel Imports
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-} from "@/components/ui/carousel";
-
 interface ProjectClientContentProps {
   project: Project;
   initialLikes: number;
@@ -126,7 +117,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className={cn(
               "w-full",
-              showGallery ? "md:w-1/2" : "md:w-full" // Takes full width if gallery is not shown
+              showGallery ? "md:w-1/2" : "md:w-full" 
             )}>
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
                 <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
@@ -177,46 +168,28 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </div>
           )}
 
-          {/* Image Gallery */}
+          {/* Image Gallery as Collage */}
           {showGallery && (
              <div className={cn(
               "w-full",
-              showCaseStudy ? "md:w-1/2" : "md:w-full" // Takes full width if case study is not shown
+              showCaseStudy ? "md:w-1/2" : "md:w-full" 
             )}>
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
                 <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
-                <div className="relative">
-                  <Carousel
-                    opts={{
-                      align: "start",
-                      loop: project.galleryImages && project.galleryImages.length > 1,
-                    }}
-                    className="w-full max-w-full mx-auto" // Adjusted for full width within its container
-                  >
-                    <CarouselContent className="-ml-2">
-                      {project.galleryImages && project.galleryImages.map((src, index) => (
-                        <CarouselItem key={index} className="pl-2 basis-full"> {/* Ensures one image per view */}
-                          <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
-                            <Image
-                              src={src}
-                              alt={`${project.title} gallery image ${index + 1}`}
-                              fill
-                              sizes="100vw" // One image takes full viewport width available to carousel
-                              className="object-cover transition-transform duration-300 group-hover:scale-105"
-                              data-ai-hint="project screenshot"
-                              priority={index < 1} 
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    {project.galleryImages && project.galleryImages.length > 1 && (
-                      <>
-                        <CarouselPrevious className="absolute left-0 sm:-left-0.5 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                        <CarouselNext className="absolute right-0 sm:-right-0.5 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                      </>
-                    )}
-                  </Carousel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {project.galleryImages && project.galleryImages.map((src, index) => (
+                    <div key={index} className="aspect-square relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
+                      <Image
+                        src={src}
+                        alt={`${project.title} gallery image ${index + 1}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 50vw" 
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        data-ai-hint="project screenshot"
+                        priority={index < 2} // Prioritize first two images for LCP
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
