@@ -72,7 +72,7 @@ const AboutMe = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-lg font-semibold text-accent">Game Design & Gen AI</p>
-                <p className="text-sm text-muted-foreground">Creative Problem Solving</p>
+                <p className="text-sm text-muted-foreground">Turning ideas into experiences</p>
               </CardContent>
             </Card>
           </div>
