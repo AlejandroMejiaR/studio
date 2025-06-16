@@ -199,4 +199,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   );
 };
 
-export default Project
+export default ProjectClientContent;
