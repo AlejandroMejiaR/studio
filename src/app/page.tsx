@@ -7,11 +7,26 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
+import InteractiveCharacterModel from '@/components/home/InteractiveCharacterModel'; // Import the new component
+import { getSupabaseImageUrl } from '@/lib/supabase'; // To construct asset URLs
+
 
 export default function HomePage() {
   const projects = getAllProjects();
   const heroHeadline = "Crafting Digital Experiences";
   const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let’s build something amazing together.";
+
+  // Define Supabase asset URLs
+  // IMPORTANT: Replace 'portfolio-assets' with your actual bucket name
+  // and 'character_animated' with your actual folder name if different.
+  const bucketName = 'portfolio-assets'; // Or your chosen bucket name
+  const modelFolder = 'character_animated'; // Or your chosen folder path within the bucket
+
+  const modelUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/character_base.glb`);
+  const idleAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Idle.fbx`);
+  const dance1AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance1.fbx`);
+  const dance2AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance.fbx`); // Assuming animation_Dance.fbx is the second dance
+  const endClapAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_EndClap.fbx`);
 
   return (
     <>
@@ -48,10 +63,15 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right 3D Model Placeholder */}
-          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-square"> {/* Adjusted md width/height slightly */}
-            <p className="text-center p-4">Future Home of an Awesome 3D Model!</p>
-          </div>
+          {/* Right 3D Model - Replaced placeholder */}
+          <InteractiveCharacterModel
+            modelUrl={modelUrl}
+            idleAnimUrl={idleAnimUrl}
+            dance1AnimUrl={dance1AnimUrl}
+            dance2AnimUrl={dance2AnimUrl}
+            endClapAnimUrl={endClapAnimUrl}
+            containerClassName="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square" // Container sizing
+          />
         </div>
       </section>
 
