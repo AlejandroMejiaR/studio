@@ -37,6 +37,7 @@ const iconMap: Record<string, ElementType> = {
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
+  console.log("Project data received by ProjectClientContent:", project); // Added console.log
 
   const showCaseStudy = project.problemStatement || project.solutionOverview || (project.keyFeatures && project.keyFeatures.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
