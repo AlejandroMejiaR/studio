@@ -22,7 +22,7 @@ export const projects: Project[] = [
       { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: 'BarChart3' },
     ],
     galleryImages: [
-      getSupabaseImageUrl('projects', '1/gallery1.jpg'), // Changed to .jpg to demonstrate
+      // getSupabaseImageUrl('projects', '1/gallery1.jpg'), // Removed as per user request
       getSupabaseImageUrl('projects', '1/gallery2.png'),
       getSupabaseImageUrl('projects', '1/gallery3.png'),
       getSupabaseImageUrl('projects', '1/gallery4.png'),
