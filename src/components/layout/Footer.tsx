@@ -21,7 +21,7 @@ const Footer = () => {
           </nav>
 
           <div className="flex justify-center md:justify-end space-x-4">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-accent transition-colors">
+            <a href="https://github.com/AlejandroMejiaR" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="hover:text-accent transition-colors">
               <Github size={24} />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-accent transition-colors">
