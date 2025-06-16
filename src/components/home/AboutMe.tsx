@@ -68,7 +68,7 @@ const AboutMe = () => {
              <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
               <CardHeader>
                 <Coffee size={32} className="mx-auto text-accent mb-2" />
-                <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Passion</CardTitle>
+                <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Focus</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-lg font-semibold text-accent">Innovation</p>
