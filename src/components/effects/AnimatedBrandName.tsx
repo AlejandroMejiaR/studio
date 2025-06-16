@@ -40,19 +40,19 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
     observer.observe(document.documentElement, { attributes: true });
 
     return () => observer.disconnect();
-  }, []); 
+  }, []);
 
   const letters = text.split('');
 
   const animationClass = isMounted
     ? (currentTheme === 'light' ? 'animate-text-color-wave-light' : 'animate-text-color-wave-dark')
-    : ''; 
+    : '';
 
   return (
     <h1
       className={cn(
-        "font-headline text-xl font-bold text-primary dark:text-foreground/80", 
-        animationClass, 
+        "font-headline text-xl font-bold", // Removed text-primary dark:text-foreground/80
+        animationClass,
         className
       )}
       aria-label={text}

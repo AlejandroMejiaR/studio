@@ -5,13 +5,16 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
-import AnimatedBrandName from '@/components/effects/AnimatedBrandName'; 
+import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
+import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('light'); // Default to 'light'
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const storedTheme = localStorage.getItem('portfolio-ace-theme');
     if (storedTheme) {
       setTheme(storedTheme);
@@ -21,6 +24,8 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
+    if (!isMounted) return; // Only run on client after mount
+
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
       localStorage.setItem('portfolio-ace-theme', 'dark');
@@ -28,7 +33,7 @@ const Navbar = () => {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('portfolio-ace-theme', 'light');
     }
-  }, [theme]);
+  }, [theme, isMounted]);
 
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -37,7 +42,6 @@ const Navbar = () => {
   const navLinks = [
     { href: '/#projects', label: 'Projects' },
     { href: '/#about', label: 'About' },
-    // Add more links as needed, e.g., Blog, Contact
   ];
 
   const brandName = "Alejandro Mejia - Multimedia Engineer";
@@ -45,12 +49,15 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}> 
-          <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80 animate-icon-pulse" /> {/* Updated animation class */}
-          <AnimatedBrandName text={brandName} /> 
+        <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
+          <Gamepad2 className={cn(
+            "h-7 w-7",
+            isMounted ? (theme === 'dark' ? "text-foreground/80" : "text-primary") : "text-primary",
+            isMounted ? "animate-icon-pulse" : ""
+          )} />
+          <AnimatedBrandName text={brandName} />
         </Link>
         
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
             <Link
@@ -69,11 +76,14 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="h-9 w-9 hover:bg-accent/10"
           >
-            {theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />}
+            {isMounted ? (
+              theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
+            ) : (
+              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR/pre-mount
+            )}
           </Button>
         </nav>
 
-        {/* Mobile Navigation */}
         <div className="md:hidden flex items-center">
           <Button
             variant="ghost"
@@ -82,7 +92,11 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="h-9 w-9 mr-2 hover:bg-accent/10"
           >
-            {theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />}
+            {isMounted ? (
+              theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
+            ) : (
+              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR/pre-mount
+            )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -94,7 +108,11 @@ const Navbar = () => {
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
                 <Link href="/" className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}> 
-                  <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80 animate-icon-pulse" /> {/* Updated animation class */}
+                  <Gamepad2 className={cn(
+                    "h-7 w-7",
+                    isMounted ? (theme === 'dark' ? "text-foreground/80" : "text-primary") : "text-primary",
+                    isMounted ? "animate-icon-pulse" : ""
+                  )} />
                   <AnimatedBrandName text={brandName} />
                 </Link>
                 <nav className="flex flex-col space-y-4">
