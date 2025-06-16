@@ -10,9 +10,9 @@ export const projects: Project[] = [
     category: 'Web Development',
     date: 'Summer 2023',
     shortDescription: 'A dynamic platform for creatives to showcase their work with interactive elements and rich media.',
-    thumbnailUrl: getSupabaseImageUrl('projects', '1/banner.png'), // Updated path
+    thumbnailUrl: getSupabaseImageUrl('projects', '1/banner.png'),
     dataAiHint: 'abstract portfolio',
-    bannerUrl: getSupabaseImageUrl('projects', '1/banner.png'), // Updated path
+    bannerUrl: getSupabaseImageUrl('projects', '1/banner.png'),
     technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Firebase', 'Framer Motion', 'Supabase'],
     problemStatement: "Artists and designers needed a more engaging way to present their portfolios online, moving beyond static images and text. Traditional portfolio sites often lack interactivity and fail to convey the depth of creative projects.",
     solutionOverview: "Developed a web platform allowing users to create rich, interactive project showcases. Features include embedded videos, 3D model viewers, and custom animations, all managed through an intuitive dashboard.",
@@ -22,11 +22,11 @@ export const projects: Project[] = [
       { title: 'Analytics Dashboard', description: 'Track views, engagement, and user interactions for each project.', icon: 'BarChart3' },
     ],
     galleryImages: [
-      getSupabaseImageUrl('projects', '1/gallery1.png'), // Updated path
-      getSupabaseImageUrl('projects', '1/gallery2.png'), // Updated path
-      getSupabaseImageUrl('projects', '1/gallery3.png'), // Updated path
-      getSupabaseImageUrl('projects', '1/gallery4.png'), // Updated path
-      getSupabaseImageUrl('projects', '1/gallery5.png'), // Updated path
+      getSupabaseImageUrl('projects', '1/gallery1.jpg'), // Changed to .jpg to demonstrate
+      getSupabaseImageUrl('projects', '1/gallery2.png'),
+      getSupabaseImageUrl('projects', '1/gallery3.png'),
+      getSupabaseImageUrl('projects', '1/gallery4.png'),
+      getSupabaseImageUrl('projects', '1/gallery5.png'),
     ],
     liveUrl: '#',
     repoUrl: '#',
