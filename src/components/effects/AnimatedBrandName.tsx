@@ -44,6 +44,7 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
 
   const letters = text.split('');
 
+  // Apply animation class only on client-side after mount
   const animationClass = isMounted
     ? (currentTheme === 'light' ? 'animate-text-color-wave-light' : 'animate-text-color-wave-dark')
     : '';
@@ -51,8 +52,8 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
   return (
     <h1
       className={cn(
-        "font-headline text-xl font-bold", // Removed text-primary dark:text-foreground/80
-        animationClass,
+        "font-headline text-xl font-bold", // Base classes for consistent server/client initial render
+        animationClass, // Applied only client-side
         className
       )}
       aria-label={text}
@@ -63,7 +64,7 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
           <span
             key={index}
             className={cn("inline-block", letterClassName)} // Added "inline-block" for initial layout
-            style={{ animationDelay: `${delay}s` }}
+            style={{ animationDelay: `${delay}s` }} // Style applied server & client for consistency
             aria-hidden="true"
           >
             {letter === ' ' ? '\u00A0' : letter} {/* Preserve spaces */}

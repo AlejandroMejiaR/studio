@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light'); // Default to 'light'
+  const [theme, setTheme] = useState('light');
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return; // Only run on client after mount
+    if (!isMounted) return;
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -45,17 +45,36 @@ const Navbar = () => {
   ];
 
   const brandName = "Alejandro Mejia - Multimedia Engineer";
+  const staggerDelay = 0.05; // Consistent with AnimatedBrandName default
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
-          <Gamepad2 className={cn(
-            "h-7 w-7",
-            isMounted ? (theme === 'dark' ? "text-foreground/80" : "text-primary") : "text-primary",
-            isMounted ? "animate-icon-pulse" : ""
-          )} />
-          <AnimatedBrandName text={brandName} />
+          {isMounted ? (
+            <Gamepad2 className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} />
+          ) : (
+            <Gamepad2 className="h-7 w-7 text-primary" />
+          )}
+
+          {isMounted ? (
+            <AnimatedBrandName text={brandName} />
+          ) : (
+            <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
+              {brandName.split('').map((letter, index) => {
+                const delay = (brandName.length - 1 - index) * staggerDelay;
+                return (
+                  <span
+                    key={index}
+                    className="inline-block" // Ensure inline-block for consistent layout
+                    style={{ animationDelay: `${delay}s` }} // Match style from AnimatedBrandName
+                  >
+                    {letter === ' ' ? '\u00A0' : letter}
+                  </span>
+                );
+              })}
+            </h1>
+          )}
         </Link>
         
         <nav className="hidden md:flex items-center space-x-6">
@@ -79,7 +98,7 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR/pre-mount
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
         </nav>
@@ -95,7 +114,7 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR/pre-mount
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -108,12 +127,29 @@ const Navbar = () => {
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
                 <Link href="/" className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}> 
-                  <Gamepad2 className={cn(
-                    "h-7 w-7",
-                    isMounted ? (theme === 'dark' ? "text-foreground/80" : "text-primary") : "text-primary",
-                    isMounted ? "animate-icon-pulse" : ""
-                  )} />
-                  <AnimatedBrandName text={brandName} />
+                  {isMounted ? (
+                     <Gamepad2 className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} />
+                  ) : (
+                    <Gamepad2 className="h-7 w-7 text-primary" />
+                  )}
+                  {isMounted ? (
+                    <AnimatedBrandName text={brandName} />
+                  ) : (
+                     <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
+                        {brandName.split('').map((letter, index) => {
+                            const delay = (brandName.length - 1 - index) * staggerDelay;
+                            return (
+                            <span
+                                key={index}
+                                className="inline-block"
+                                style={{ animationDelay: `${delay}s` }}
+                            >
+                                {letter === ' ' ? '\u00A0' : letter}
+                            </span>
+                            );
+                        })}
+                    </h1>
+                  )}
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
