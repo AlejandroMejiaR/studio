@@ -1,25 +1,43 @@
+
 "use client";
 
 import type { FC } from 'react';
-// Static import for the renderer. It will only be processed client-side
-// because InteractiveCharacterModel itself is dynamically imported with ssr:false from page.tsx.
-import CharacterModelRenderer, { type CharacterModelRendererProps } from './CharacterModelRenderer';
+import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import type { CharacterModelRendererProps } from './CharacterModelRenderer';
 
-// Props for this wrapper component now directly extend CharacterModelRendererProps
+// Props for this wrapper component
 export interface InteractiveCharacterModelProps extends CharacterModelRendererProps {
   containerClassName?: string;
 }
 
 const InteractiveCharacterModel: FC<InteractiveCharacterModelProps> = ({
-  containerClassName,
-  // Spread the rest of the props (modelUrl, animUrls) to CharacterModelRenderer
-  ...rendererProps
+  containerClassName = "w-full h-full",
+  ...rendererProps // Contains modelUrl, idleAnimUrl, etc.
 }) => {
-  // This component is guaranteed to run on the client because it's dynamically imported
-  // with ssr:false in page.tsx. No further client-side checks needed here for rendering.
+  const [ClientRenderer, setClientRenderer] = useState<FC<CharacterModelRendererProps> | null>(null);
+
+  useEffect(() => {
+    // Dynamically import CharacterModelRenderer only on the client
+    dynamic(() => import('./CharacterModelRenderer'), { ssr: false })
+      .then(mod => setClientRenderer(() => mod.default))
+      .catch(err => console.error("Failed to load CharacterModelRenderer", err));
+  }, []);
+
+  if (!ClientRenderer) {
+    return (
+      <div className={`${containerClassName} bg-muted/20 rounded-lg flex items-center justify-center animate-pulse`}>
+        <div className="text-center">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <p className="text-muted-foreground text-sm">Initializing 3D Renderer...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={containerClassName} style={{ width: '100%', height: '100%' }}>
-      <CharacterModelRenderer {...rendererProps} />
+    <div className={containerClassName}>
+      <ClientRenderer {...rendererProps} />
     </div>
   );
 };

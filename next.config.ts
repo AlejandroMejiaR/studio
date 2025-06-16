@@ -1,5 +1,4 @@
-
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -9,6 +8,32 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Transpile packages that need to be processed by Next.js
+  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],
+  
+  // Webpack configuration to handle Three.js and R3F properly
+  webpack: (config, { isServer }) => {
+    // Handle canvas module for server-side
+    config.externals = [...(config.externals || []), { canvas: 'canvas' }];
+    
+    // Ensure proper module resolution for Three.js
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      three: 'three',
+    };
+    
+    // Handle specific modules that can cause SSR issues
+    if (isServer) {
+      config.externals.push({
+        '@react-three/fiber': '@react-three/fiber',
+        '@react-three/drei': '@react-three/drei',
+        'three': 'three',
+      });
+    }
+    
+    return config;
+  },
+  
   images: {
     remotePatterns: [
       {
@@ -25,12 +50,9 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        // IMPORTANT: Replace 'YOUR_SUPABASE_PROJECT_REF.supabase.co'
-        // with your actual Supabase project reference and domain.
-        // Example: 'abcdefghijk.supabase.co'
-        hostname: 'xtuifrsvhbydeqtmibbt.supabase.co', // Updated Supabase project reference
+        hostname: 'xtuifrsvhbydeqtmibbt.supabase.co',
         port: '',
-        pathname: '/storage/v1/object/public/**', // Standard path for Supabase public storage
+        pathname: '/storage/v1/object/public/**',
       },
     ],
   },

@@ -1,6 +1,4 @@
-
-"use client"; // Add this line to make it a Client Component
-
+"use client";
 import dynamic from 'next/dynamic';
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
@@ -10,30 +8,37 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
-import { getSupabaseImageUrl } from '@/lib/supabase'; // To construct asset URLs
+import { getSupabaseImageUrl } from '@/lib/supabase';
 
+// Dynamic import with better loading state
 const InteractiveCharacterModel = dynamic(
   () => import('@/components/home/InteractiveCharacterModel'),
   {
     ssr: false,
-    loading: () => <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square bg-muted/20 rounded-lg flex items-center justify-center"><p className="text-muted-foreground">Loading 3D Model...</p></div>,
+    loading: () => (
+      <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square bg-muted/20 rounded-lg flex items-center justify-center animate-pulse">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <p className="text-muted-foreground text-sm">Loading 3D Model...</p>
+        </div>
+      </div>
+    ),
   }
 );
-
 
 export default function HomePage() {
   const projects = getAllProjects();
   const heroHeadline = "Crafting Digital Experiences";
-  const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let’s build something amazing together.";
+  const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
 
   // Define Supabase asset URLs
-  const bucketName = '3d-models'; // Updated bucket name
-  const modelFolder = 'character_animated'; // Or your chosen folder path within the bucket
+  const bucketName = '3d-models';
+  const modelFolder = 'character_animated';
 
   const modelUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/character_base.glb`);
   const idleAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Idle.fbx`);
   const dance1AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance1.fbx`);
-  const dance2AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance.fbx`); // Assuming animation_Dance.fbx is the second dance
+  const dance2AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance.fbx`);
   const endClapAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_EndClap.fbx`);
 
   return (
@@ -44,7 +49,7 @@ export default function HomePage() {
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-center"> {/* Increased gap from gap-6 md:gap-10 */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-center">
           {/* Left Content Block */}
           <div className="md:max-w-lg text-center md:text-left">
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
@@ -71,15 +76,17 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right 3D Model - Now dynamically imported */}
-          <InteractiveCharacterModel
-            modelUrl={modelUrl}
-            idleAnimUrl={idleAnimUrl}
-            dance1AnimUrl={dance1AnimUrl}
-            dance2AnimUrl={dance2AnimUrl}
-            endClapAnimUrl={endClapAnimUrl}
-            containerClassName="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square" // Container sizing
-          />
+          {/* Right 3D Model - Dynamically imported */}
+          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square">
+            <InteractiveCharacterModel
+              modelUrl={modelUrl}
+              idleAnimUrl={idleAnimUrl}
+              dance1AnimUrl={dance1AnimUrl}
+              dance2AnimUrl={dance2AnimUrl}
+              endClapAnimUrl={endClapAnimUrl}
+              containerClassName="w-full h-full"
+            />
+          </div>
         </div>
       </section>
 
