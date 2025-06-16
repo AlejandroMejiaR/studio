@@ -1,9 +1,12 @@
 
 import { notFound } from 'next/navigation';
 import { getProjectBySlugFromFirestore, getProjectLikes } from '@/lib/firebase';
-import ProjectClientContent from '@/components/projects/ProjectClientContent.tsx'; // Added .tsx extension
+import ProjectClientContent from '@/components/projects/ProjectClientContent.tsx';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
+
+// Disable data caching for this page.
+export const revalidate = 0;
 
 export async function generateMetadata(
   { params }: { params: { slug: string } }
@@ -44,8 +47,14 @@ export default async function ProjectPage({ params }: { params: { slug: string }
     notFound();
   }
 
-  // Ensure project is defined before accessing its id.
-  // The notFound() call above should handle cases where project is undefined.
+  // Log the fetched project data on the server side
+  console.log('Project Data on Server:', {
+    id: project.id,
+    slug: project.slug,
+    title: project.title,
+    galleryImagePaths_in_firestore_would_become_galleryImages: project.galleryImages, // Log the processed galleryImages
+  });
+
   const initialLikes = await getProjectLikes(project.id);
 
   return (
@@ -54,12 +63,3 @@ export default async function ProjectPage({ params }: { params: { slug: string }
     </div>
   );
 }
-
-// Optional: Generate static paths if you have a fixed number of projects
-// export async function generateStaticParams() {
-//   const projects = await getAllProjectsFromFirestore();
-//   return projects.map((project) => ({
-//     slug: project.slug,
-//   }));
-// }
-
