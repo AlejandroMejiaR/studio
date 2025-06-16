@@ -137,40 +137,58 @@ body {
     display: inline-block; 
   }
 
+  /* Synchronized icon double pulse animation - 7s cycle */
   @keyframes icon-double-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    5%, 15% { transform: scale(1.15); opacity: 0.7; } /* First pulse */
-    10%, 20% { transform: scale(1); opacity: 1; }    /* Return and brief pause */
-    25%, 35% { transform: scale(1.15); opacity: 0.7; } /* Second pulse */
-    30%, 40% { transform: scale(1); opacity: 1; }    /* Return */
-    /* Remaining 60% of 3s cycle is a pause */
+    0%, 39.9% { transform: scale(1); opacity: 1; } /* Idle until t=2.8s (approx 40% of 7s) */
+    
+    /* Pulse 1 (Original 0s-0.6s part of 3s pulse, now 2.8s-3.4s in 7s cycle) */
+    /* Original 5% (0.15s into 3s) => t=2.8s + 0.15s = 2.95s => 2.95/7 * 100 = 42.14% */
+    42.14% { transform: scale(1.15); opacity: 0.7; }
+    /* Original 10% (0.3s into 3s) => t=2.8s + 0.3s = 3.1s => 3.1/7 * 100 = 44.28% */
+    44.28% { transform: scale(1); opacity: 1; }
+    /* Original 15% (0.45s into 3s) => t=2.8s + 0.45s = 3.25s => 3.25/7 * 100 = 46.42% */
+    46.42% { transform: scale(1.15); opacity: 0.7; }
+    /* Original 20% (0.6s into 3s) => t=2.8s + 0.6s = 3.4s => 3.4/7 * 100 = 48.57% */
+    48.57% { transform: scale(1); opacity: 1; }
+
+    /* Pulse 2 (Original 0.75s-1.2s part of 3s pulse, now 3.55s-4.0s in 7s cycle) */
+    /* Original 25% (0.75s into 3s) => t=2.8s + 0.75s = 3.55s => 3.55/7 * 100 = 50.71% */
+    50.71% { transform: scale(1.15); opacity: 0.7; }
+    /* Original 30% (0.9s into 3s) => t=2.8s + 0.9s = 3.7s => 3.7/7 * 100 = 52.85% */
+    52.85% { transform: scale(1); opacity: 1; }
+    /* Original 35% (1.05s into 3s) => t=2.8s + 1.05s = 3.85s => 3.85/7 * 100 = 55.00% */
+    55.00% { transform: scale(1.15); opacity: 0.7; }
+    /* Original 40% (1.2s into 3s) => t=2.8s + 1.2s = 4.0s => 4.0/7 * 100 = 57.14% */
+    57.14% { transform: scale(1); opacity: 1; }
+
+    100% { transform: scale(1); opacity: 1; } /* Idle for the rest of the 7s cycle */
   }
   .animate-icon-double-pulse {
     display: inline-block;
-    animation: icon-double-pulse 3s infinite ease-in-out;
+    animation: icon-double-pulse 7s infinite ease-in-out; /* Updated duration */
   }
 
-  /* Text color wave animation */
+  /* Text color wave animation - 7s cycle */
   @keyframes text-color-wave-light {
-    0%, 60%, 100% { color: hsl(var(--primary)); } /* Base color for 80% of 5s cycle. Wave takes 20% = 1s */
+    0%, 60%, 100% { color: hsl(var(--primary)); } 
     10%           { color: hsl(var(--accent)); }  /* Peak of wave - Light mode accent color */
   }
   .animate-text-color-wave-light span {
-    display: inline-block; /* Crucial for individual letter animation */
+    display: inline-block; 
     animation-name: text-color-wave-light;
-    animation-duration: 5s; /* Total cycle duration for each letter */
+    animation-duration: 7s; /* Updated duration */
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
 
   @keyframes text-color-wave-dark {
-    0%, 60%, 100% { color: hsl(var(--foreground), 0.8); } /* Base color (Navbar specific dark:text-foreground/80 )*/
+    0%, 60%, 100% { color: hsl(var(--foreground), 0.8); } 
     10%           { color: hsl(var(--accent)); } /* Peak of wave - Dark mode accent color */
   }
   .dark .animate-text-color-wave-dark span {
     display: inline-block;
     animation-name: text-color-wave-dark;
-    animation-duration: 5s;
+    animation-duration: 7s; /* Updated duration */
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
