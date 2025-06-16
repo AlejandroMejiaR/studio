@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react'; // Updated icons
+import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const AboutMe = () => {
@@ -24,7 +24,10 @@ const AboutMe = () => {
             </CardContent>
             <div className="p-6 bg-card rounded-b-lg">
                 <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Alejandro Mejia Rojas</h3>
-                <p className="text-accent">Full-Stack Developer & UI/UX Enthusiast</p>
+                <p className="text-accent">
+                  Multimedia Engineer<br />
+                  <span className="text-sm">Game Design · UX</span>
+                </p>
                 <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground">
                   <Download size={18} className="mr-2" />
                   Download CV
