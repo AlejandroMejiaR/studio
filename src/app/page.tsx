@@ -10,6 +10,10 @@ import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
 import type { Project } from '@/types';
 
+// This line disables data caching for this page.
+// On every request, getAllProjectsFromFirestore will be called.
+export const revalidate = 0;
+
 export default async function HomePage() {
   const projects = await getAllProjectsFromFirestore();
   const heroHeadline = "Crafting Digital Experiences";
