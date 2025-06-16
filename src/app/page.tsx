@@ -10,8 +10,8 @@ import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 
 export default function HomePage() {
   const projects = getAllProjects();
-  const heroHeadline = "Crafting Digital Experiences"; // Changed back
-  const heroSubtitle = "I'm Your Name, a creative developer transforming ideas into engaging web solutions. Explore my work and let's build something amazing together.";
+  const heroHeadline = "Crafting Digital Experiences"; 
+  const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI. Explore my work — let’s build something amazing together.";
 
   return (
     <>
