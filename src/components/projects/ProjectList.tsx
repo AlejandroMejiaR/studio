@@ -1,13 +1,18 @@
 
+"use client";
+
 import type { Project } from '@/types';
 import ProjectCard from './ProjectCard';
-import { getProjectLikes } from '@/lib/firebase'; // For server-side fetching of initial likes
+import { getProjectLikes } from '@/lib/firebase'; // For client-side fetching of initial likes
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+
 
 interface ProjectListProps {
   projects: Project[];
 }
 
-// Helper function to fetch all likes, can be moved to a service file
+// Helper function to fetch all likes, can be moved to a service file if used elsewhere
 async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
   if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
     console.warn("Firebase projectId is not configured. Likes will be mocked.");
@@ -17,16 +22,14 @@ async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, 
     }, {} as Record<string, number>);
   }
 
-  // Use Promise.allSettled to handle individual promise rejections
   const results = await Promise.allSettled(
     projectIds.map(async (id) => {
       try {
         const likes = await getProjectLikes(id);
         return { id, likes };
       } catch (error) {
-        // Log the specific error for this project ID but don't let it break everything
         console.error(`Failed to get likes for project ${id}:`, error);
-        return { id, likes: 0, error: true }; // Return 0 likes and mark as error
+        return { id, likes: 0, error: true };
       }
     })
   );
@@ -34,40 +37,67 @@ async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, 
   return results.reduce((acc, result) => {
     if (result.status === 'fulfilled') {
       acc[result.value.id] = result.value.likes;
-    } else {
-      // This case should ideally not be hit if the catch inside map works,
-      // but as a fallback for Promise.allSettled structure.
-      // The actual error handling and default value is done within the map's catch block.
-      // If result.status is 'rejected', result.reason is the error.
-      // We need a way to get the ID if the promise itself rejected before our catch.
-      // However, our `map` function's `catch` block ensures we always return an object.
-      // This path is less likely with the current structure.
     }
     return acc;
   }, {} as Record<string, number>);
 }
 
 
-const ProjectList = async ({ projects }: ProjectListProps) => {
-  const projectIds = projects.map(p => p.id);
-  let initialLikesMap: Record<string, number> = {};
+const ProjectList = ({ projects }: ProjectListProps) => {
+  const [initialLikesMap, setInitialLikesMap] = useState<Record<string, number>>({});
+  const [isLoadingLikes, setIsLoadingLikes] = useState(true);
 
-  try {
-    initialLikesMap = await getAllProjectLikes(projectIds);
-  } catch (error) {
-    // This top-level catch might not be strictly necessary anymore with Promise.allSettled
-    // and individual catches, but kept for safety.
-    console.error("Error fetching all project likes, defaulting to 0 for all:", error);
-    initialLikesMap = projectIds.reduce((acc, id) => {
-      acc[id] = 0;
-      return acc;
-    }, {} as Record<string, number>);
+  useEffect(() => {
+    const fetchLikes = async () => {
+      if (projects && projects.length > 0) {
+        setIsLoadingLikes(true);
+        const projectIds = projects.map(p => p.id);
+        try {
+          const likes = await getAllProjectLikes(projectIds);
+          setInitialLikesMap(likes);
+        } catch (error) {
+          console.error("Error fetching all project likes in ProjectList component:", error);
+          // Set all to 0 or handle as per your app's needs
+          setInitialLikesMap(projectIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {}));
+        } finally {
+          setIsLoadingLikes(false);
+        }
+      } else {
+        setIsLoadingLikes(false); // No projects, no likes to load
+      }
+    };
+
+    fetchLikes();
+  }, [projects]);
+
+  if (isLoadingLikes && projects.length > 0) {
+    return (
+      <section id="projects" className="container mx-auto px-4">
+        <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 text-center dark:text-foreground">
+          My Projects
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project) => (
+            <div key={project.id} className="flex flex-col space-y-3">
+              <Skeleton className="h-[200px] w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+              <div className="flex justify-between items-center pt-2">
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-8 w-24" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
   }
-
 
   return (
     <section id="projects" className="container mx-auto px-4">
-      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 text-center">
+      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 text-center dark:text-foreground">
         My Projects
       </h2>
       {projects.length === 0 ? (
@@ -75,7 +105,11 @@ const ProjectList = async ({ projects }: ProjectListProps) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} initialLikes={initialLikesMap[project.id] ?? 0} />
+            <ProjectCard 
+              key={project.id} 
+              project={project} 
+              initialLikes={initialLikesMap[project.id] ?? 0} 
+            />
           ))}
         </div>
       )}
