@@ -48,6 +48,9 @@ const iconMap: Record<string, ElementType> = {
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
 
+  const showCaseStudy = project.problemStatement || project.solutionOverview || (project.keyFeatures && project.keyFeatures.length > 0);
+  const showGallery = project.galleryImages && project.galleryImages.length > 0;
+
   return (
     <div className="space-y-12">
       {/* Project Header */}
@@ -116,94 +119,109 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       </div>
       
-      {/* Case Study Details */}
-       {(project.problemStatement || project.solutionOverview || project.keyFeatures) && (
-        <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg">
-          <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-          <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
-            {project.problemStatement && (
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
-                  <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
-                </AccordionTrigger>
-                <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2">
-                  {project.problemStatement}
-                </AccordionContent>
-              </AccordionItem>
-            )}
-            {project.solutionOverview && (
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
-                  <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
-                </AccordionTrigger>
-                <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2">
-                  {project.solutionOverview}
-                </AccordionContent>
-              </AccordionItem>
-            )}
-            {project.keyFeatures && project.keyFeatures.length > 0 && (
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
-                  <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
-                </AccordionTrigger>
-                <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2 space-y-4">
-                  {project.keyFeatures.map((feature, index) => {
-                    const IconComponent = feature.icon ? iconMap[feature.icon] : null;
-                    return (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
-                        {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
-                        <div>
-                          <h4 className="font-semibold text-primary">{feature.title}</h4>
-                          <p className="text-sm">{feature.description}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </AccordionContent>
-              </AccordionItem>
-            )}
-          </Accordion>
-        </div>
-      )}
+      {/* Combined Case Study & Gallery Section */}
+      {(showCaseStudy || showGallery) && (
+        <section className="flex flex-col md:flex-row gap-8 lg:gap-12">
+          {/* Case Study Details */}
+          {showCaseStudy && (
+            <div className={cn(
+              "w-full",
+              showGallery ? "md:w-1/2" : "md:w-full" // Takes full width if gallery is not shown
+            )}>
+              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
+                <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
+                <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
+                  {project.problemStatement && (
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
+                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
+                      </AccordionTrigger>
+                      <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2">
+                        {project.problemStatement}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+                  {project.solutionOverview && (
+                    <AccordionItem value="item-2">
+                      <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
+                        <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
+                      </AccordionTrigger>
+                      <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2">
+                        {project.solutionOverview}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+                  {project.keyFeatures && project.keyFeatures.length > 0 && (
+                    <AccordionItem value="item-3">
+                      <AccordionTrigger className="text-xl font-headline hover:text-accent data-[state=open]:text-accent">
+                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
+                      </AccordionTrigger>
+                      <AccordionContent className="text-foreground/80 text-base leading-relaxed pt-4 pl-2 space-y-4">
+                        {project.keyFeatures.map((feature, index) => {
+                          const IconComponent = feature.icon ? iconMap[feature.icon] : null;
+                          return (
+                            <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
+                              {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
+                              <div>
+                                <h4 className="font-semibold text-primary">{feature.title}</h4>
+                                <p className="text-sm">{feature.description}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )}
+                </Accordion>
+              </div>
+            </div>
+          )}
 
-      {/* Image Gallery */}
-      {project.galleryImages && project.galleryImages.length > 0 && (
-        <div> {/* Container for Carousel and Title */}
-          <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
-          <div className="relative px-0 sm:px-10 md:px-12"> {/* Relative container for positioning carousel controls and padding */}
-            <Carousel
-              opts={{
-                align: "start",
-                loop: project.galleryImages.length > 1,
-              }}
-              className="w-full max-w-5xl mx-auto"
-            >
-              <CarouselContent className="-ml-2">
-                {project.galleryImages.map((src, index) => (
-                  <CarouselItem key={index} className="pl-2 basis-full">
-                    <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
-                      <Image
-                        src={src}
-                        alt={`${project.title} gallery image ${index + 1}`}
-                        fill
-                        sizes="100vw"
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-ai-hint="project screenshot"
-                        priority={index < 1} 
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {project.galleryImages.length > 1 && (
-                <>
-                  <CarouselPrevious className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                  <CarouselNext className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                </>
-              )}
-            </Carousel>
-          </div>
-        </div>
+          {/* Image Gallery */}
+          {showGallery && (
+             <div className={cn(
+              "w-full",
+              showCaseStudy ? "md:w-1/2" : "md:w-full" // Takes full width if case study is not shown
+            )}>
+              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
+                <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
+                <div className="relative">
+                  <Carousel
+                    opts={{
+                      align: "start",
+                      loop: project.galleryImages && project.galleryImages.length > 1,
+                    }}
+                    className="w-full max-w-full mx-auto" // Adjusted for full width within its container
+                  >
+                    <CarouselContent className="-ml-2">
+                      {project.galleryImages && project.galleryImages.map((src, index) => (
+                        <CarouselItem key={index} className="pl-2 basis-full"> {/* Ensures one image per view */}
+                          <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
+                            <Image
+                              src={src}
+                              alt={`${project.title} gallery image ${index + 1}`}
+                              fill
+                              sizes="100vw" // One image takes full viewport width available to carousel
+                              className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              data-ai-hint="project screenshot"
+                              priority={index < 1} 
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    {project.galleryImages && project.galleryImages.length > 1 && (
+                      <>
+                        <CarouselPrevious className="absolute left-0 sm:-left-0.5 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
+                        <CarouselNext className="absolute right-0 sm:-right-0.5 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
+                      </>
+                    )}
+                  </Carousel>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
       )}
     </div>
   );
