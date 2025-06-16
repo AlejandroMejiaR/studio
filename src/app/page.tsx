@@ -10,8 +10,6 @@ import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
 // Removed: dynamic import for InteractiveCharacterModel as 3D features are currently disabled
 // import dynamic from 'next/dynamic';
-import { getSupabaseImageUrl } from '@/lib/supabase'; // To construct asset URLs
-
 // Removed: const InteractiveCharacterModel = dynamic(...) as 3D features are currently disabled
 
 export default function HomePage() {
@@ -60,7 +58,7 @@ export default function HomePage() {
               src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
               alt="Digital Experiences Placeholder"
               fill
-              className="object-cover"
+              className="object-contain"
               data-ai-hint="abstract technology"
             />
           </div>
