@@ -114,10 +114,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       <section className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
         {/* Case Study Details */}
         {showCaseStudy && (
-          <div className="w-full md:w-1/2">
-            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
+          <div className="w-full md:w-1/2 flex flex-col"> {/* Added flex flex-col */}
+            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col"> {/* Added flex flex-col */}
               <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-              <div className="space-y-6">
+              <div className="space-y-6 flex-grow"> {/* Added flex-grow */}
                 {project.problemStatement && (
                   <div>
                     <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -165,8 +165,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         )}
 
         {/* New 3D Model Placeholder */}
-        <div className={cn("w-full", showCaseStudy ? "md:w-1/2" : "md:w-full")}>
-          <div className="bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-video md:aspect-square h-full"> {/* Added h-full */}
+        <div className={cn("w-full", showCaseStudy ? "md:w-1/2" : "md:w-full", "flex flex-col")}> {/* Added flex flex-col */}
+          <div className="bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-video md:aspect-square h-full flex-grow"> {/* Added flex-grow */}
             <p className="text-center p-4">Future Home of Another Awesome 3D Model!</p>
           </div>
         </div>
@@ -178,7 +178,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
           <Carousel 
             opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }} 
-            className="w-full max-w-3xl mx-auto" // Added max-width and mx-auto for better centering of large carousel
+            className="w-full max-w-6xl mx-auto" 
           >
             <CarouselContent>
               {project.galleryImages?.map((src, index) => (
@@ -188,7 +188,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       src={src}
                       alt={`${project.title} gallery image ${index + 1}`}
                       fill
-                      sizes="100vw" // Since it's one full-width image at a time
+                      sizes="(max-width: 1279px) 100vw, 1152px" // Adjusted for max-w-6xl
                       className="object-cover"
                       data-ai-hint="project screenshot"
                       priority={index === 0}
@@ -199,8 +199,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </CarouselContent>
             {project.galleryImages && project.galleryImages.length > 1 && (
               <>
-                <CarouselPrevious className="absolute left-[-50px] md:left-[-60px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                <CarouselNext className="absolute right-[-50px] md:right-[-60px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                <CarouselPrevious className="absolute left-[-20px] sm:left-[-30px] md:left-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                <CarouselNext className="absolute right-[-20px] sm:right-[-30px] md:right-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
               </>
             )}
           </Carousel>
