@@ -137,39 +137,38 @@ body {
     display: inline-block; 
   }
 
-  /* Synchronized icon single pulse animation - 7s cycle */
+  /* Synchronized icon single pulse animation - 3s cycle */
   @keyframes icon-pulse {
-    0%, 39% { transform: scale(1); opacity: 1; } /* Idle until t=2.73s */
-    44% { transform: scale(1.2); opacity: 0.7; } /* Peak of pulse at t=3.08s */
-    49% { transform: scale(1); opacity: 1; }    /* End of pulse at t=3.43s */
-    100% { transform: scale(1); opacity: 1; }   /* Idle for the rest of the 7s cycle */
+    0%, 45% { transform: scale(1); opacity: 1; } /* Idle until t=1.35s (45% of 3s) */
+    55% { transform: scale(1.2); opacity: 0.7; } /* Peak of pulse at t=1.65s (55% of 3s) */
+    65%, 100% { transform: scale(1); opacity: 1; }   /* End of pulse at t=1.95s (65% of 3s), then idle */
   }
   .animate-icon-pulse {
     display: inline-block;
-    animation: icon-pulse 7s infinite ease-in-out;
+    animation: icon-pulse 3s infinite ease-in-out;
   }
 
-  /* Text color wave animation - 7s cycle */
+  /* Text color wave animation - 3s cycle */
   @keyframes text-color-wave-light {
-    0%, 60%, 100% { color: hsl(var(--primary)); } 
-    10%           { color: hsl(var(--accent)); }  /* Peak of wave - Light mode accent color */
+    0%, 100% { color: hsl(var(--primary)); } /* Base color for light mode */
+    5% { color: hsl(var(--accent)); }  /* Accent color for light mode */
+    15% { color: hsl(var(--primary)); } /* Back to base */
   }
   .animate-text-color-wave-light span {
-    /* display: inline-block; Removed, handled by component */
     animation-name: text-color-wave-light;
-    animation-duration: 7s; 
+    animation-duration: 3s; 
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
 
   @keyframes text-color-wave-dark {
-    0%, 60%, 100% { color: hsl(var(--foreground), 0.8); } 
-    10%           { color: hsl(var(--accent)); } /* Peak of wave - Dark mode accent color */
+    0%, 100% { color: hsla(var(--foreground), 0.8); } /* Base color for dark mode */
+    5% { color: hsl(var(--accent)); } /* Accent color for dark mode */
+    15% { color: hsla(var(--foreground), 0.8); } /* Back to base */
   }
   .dark .animate-text-color-wave-dark span {
-    /* display: inline-block; Removed, handled by component */
     animation-name: text-color-wave-dark;
-    animation-duration: 7s; 
+    animation-duration: 3s; 
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
