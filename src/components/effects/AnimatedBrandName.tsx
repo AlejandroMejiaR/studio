@@ -18,8 +18,11 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
   staggerDelay = 0.05, // Time difference for animation start between consecutive letters
 }) => {
   const [currentTheme, setCurrentTheme] = useState('light');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true); // Component has mounted on the client
+
     // Initial theme check
     const isDark = document.documentElement.classList.contains('dark');
     setCurrentTheme(isDark ? 'dark' : 'light');
@@ -28,8 +31,8 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
     const observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          const isDark = (mutation.target as HTMLElement).classList.contains('dark');
-          setCurrentTheme(isDark ? 'dark' : 'light');
+          const isDarkUpdated = (mutation.target as HTMLElement).classList.contains('dark');
+          setCurrentTheme(isDarkUpdated ? 'dark' : 'light');
         }
       }
     });
@@ -37,15 +40,20 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
     observer.observe(document.documentElement, { attributes: true });
 
     return () => observer.disconnect();
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
   const letters = text.split('');
+
+  // Only apply theme-specific animation class if mounted on the client
+  const animationClass = isMounted
+    ? (currentTheme === 'light' ? 'animate-text-color-wave-light' : 'animate-text-color-wave-dark')
+    : ''; // Render without theme-specific animation class on server and initial client render
 
   return (
     <h1
       className={cn(
         "font-headline text-xl font-bold text-primary dark:text-foreground/80", // Base styling from Navbar
-        currentTheme === 'light' ? 'animate-text-color-wave-light' : 'animate-text-color-wave-dark',
+        animationClass, // Apply theme-specific animation class conditionally
         className
       )}
       aria-label={text}
