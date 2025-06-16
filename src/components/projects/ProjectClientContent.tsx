@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { 
   Github, 
   ExternalLink, 
@@ -168,29 +175,50 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </div>
           )}
 
-          {/* Image Gallery as Collage */}
+          {/* Project Gallery with Carousel */}
           {showGallery && (
              <div className={cn(
               "w-full",
-              showCaseStudy ? "md:w-1/2" : "md:w-full" 
+              showCaseStudy ? "md:w-1/2" : "md:w-full",
+              "flex flex-col" // Ensures inner div can stretch
             )}>
-              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
+              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col"> {/* Ensure this container can stretch and its children too */}
                 <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {project.galleryImages && project.galleryImages.map((src, index) => (
-                    <div key={index} className="aspect-square relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
-                      <Image
-                        src={src}
-                        alt={`${project.title} gallery image ${index + 1}`}
-                        fill
-                        sizes="(max-width: 640px) 100vw, 50vw" 
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        data-ai-hint="project screenshot"
-                        priority={index < 2} // Prioritize first two images for LCP
-                      />
-                    </div>
-                  ))}
-                </div>
+                {project.galleryImages && project.galleryImages.length > 0 ? (
+                  <Carousel
+                    opts={{
+                      align: "start",
+                      loop: project.galleryImages.length > 1,
+                    }}
+                    className="w-full flex-grow" // flex-grow to take available space
+                  >
+                    <CarouselContent className="h-full"> {/* Make content fill height */}
+                      {project.galleryImages.map((src, index) => (
+                        <CarouselItem key={index} className="basis-full h-full"> {/* Item also fills height */}
+                          <div className="relative w-full h-full"> {/* Wrapper for Image with fill */}
+                            <Image
+                              src={src}
+                              alt={`${project.title} gallery image ${index + 1}`}
+                              fill
+                              sizes="(max-width: 767px) 100vw, 50vw"
+                              className="object-cover rounded-lg" // Use object-cover to fill and crop
+                              data-ai-hint="project screenshot"
+                              priority={index === 0} // Prioritize only the first image
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    {project.galleryImages.length > 1 && ( // Show nav buttons only if multiple images
+                      <>
+                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 md:left-4" />
+                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 md:right-4" />
+                      </>
+                    )}
+                  </Carousel>
+                ) : (
+                  <p className="text-muted-foreground text-center flex-grow flex items-center justify-center">No gallery images available.</p>
+                )}
               </div>
             </div>
           )}
