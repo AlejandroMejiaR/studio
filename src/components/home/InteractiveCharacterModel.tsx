@@ -3,7 +3,8 @@
 
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+// Ensure next/dynamic is imported if it were to be used at top level, but not for this specific fix.
+// import dynamic from 'next/dynamic'; 
 import type { CharacterModelRendererProps } from './CharacterModelRenderer';
 
 // Props for this wrapper component
@@ -19,10 +20,17 @@ const InteractiveCharacterModel: FC<InteractiveCharacterModelProps> = ({
 
   useEffect(() => {
     // Dynamically import CharacterModelRenderer only on the client
-    dynamic(() => import('./CharacterModelRenderer'), { ssr: false })
-      .then(mod => setClientRenderer(() => mod.default))
+    // Use standard dynamic import() which returns a Promise
+    import('./CharacterModelRenderer') 
+      .then(mod => {
+        if (mod.default) {
+          setClientRenderer(() => mod.default);
+        } else {
+          console.error("Failed to load CharacterModelRenderer: Default export not found.");
+        }
+      })
       .catch(err => console.error("Failed to load CharacterModelRenderer", err));
-  }, []);
+  }, []); // Empty dependency array ensures this runs once on mount
 
   if (!ClientRenderer) {
     return (
@@ -43,3 +51,4 @@ const InteractiveCharacterModel: FC<InteractiveCharacterModelProps> = ({
 };
 
 export default InteractiveCharacterModel;
+
