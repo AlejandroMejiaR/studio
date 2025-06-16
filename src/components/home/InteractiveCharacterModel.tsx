@@ -16,6 +16,8 @@ interface InteractiveCharacterModelProps {
   containerClassName?: string;
 }
 
+// This sub-component contains the actual R3F logic and will only be rendered on the client
+// due to the dynamic import in page.tsx.
 const CharacterModel: FC<Omit<InteractiveCharacterModelProps, 'containerClassName'>> = ({
   modelUrl,
   idleAnimUrl,
@@ -57,36 +59,51 @@ const CharacterModel: FC<Omit<InteractiveCharacterModelProps, 'containerClassNam
     if (actions.idle) {
       actions.idle.reset().play();
     }
+    // Store the callback in a variable to ensure the same function reference is used for add/remove
+    const handleAnimationFinished = (event: THREE.Event & { action: THREE.AnimationAction }) => {
+      onAnimationFinished(event);
+    };
+
     return () => {
       mixer?.stopAllAction();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      mixer?.removeEventListener('finished', onAnimationFinished);
+      mixer?.removeEventListener('finished', handleAnimationFinished as (e: THREE.Event) => void);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions, mixer]);
+  }, [actions, mixer]); // mixer dependency added as it's used in cleanup
 
+  // Keep onAnimationFinished stable with useCallback if actions/mixer are not expected to change often after init
+  // or ensure its dependencies are correctly listed if it's recreated.
+  // For simplicity here, assuming actions and mixer are stable after initial load.
   const onAnimationFinished = (event: THREE.Event & { action: THREE.AnimationAction}) => {
-    if (!actions.dance1 || !actions.dance || !actions.endClap || !actions.idle) return;
+    if (!actions.dance1 || !actions.dance || !actions.endClap || !actions.idle || !mixer) return;
 
-    if (event.action === actions.dance1) {
-      actions.dance1.fadeOut(0.3);
-      actions.dance.reset().fadeIn(0.3).play();
-    } else if (event.action === actions.dance) {
-      actions.dance.fadeOut(0.3);
-      actions.endClap.reset().fadeIn(0.3).play();
-    } else if (event.action === actions.endClap) {
-      actions.endClap.fadeOut(0.3);
-      actions.idle.reset().fadeIn(0.3).play();
-      setIsInteracting(false);
-      mixer.removeEventListener('finished', onAnimationFinished);
+    const currentAction = event.action;
+    let nextAction: THREE.AnimationAction | null = null;
+
+    if (currentAction === actions.dance1) nextAction = actions.dance;
+    else if (currentAction === actions.dance) nextAction = actions.endClap;
+    else if (currentAction === actions.endClap) nextAction = actions.idle;
+
+    currentAction.fadeOut(0.3);
+
+    if (nextAction) {
+      nextAction.reset().fadeIn(0.3).play();
+      if (nextAction === actions.idle) {
+        setIsInteracting(false);
+        mixer.removeEventListener('finished', onAnimationFinished as (e: THREE.Event) => void);
+      }
     }
   };
+
 
   const handleInteraction = () => {
     if (isInteracting || !actions.idle || !actions.dance1 || !actions.dance || !actions.endClap || !mixer) return;
 
     setIsInteracting(true);
-    mixer.addEventListener('finished', onAnimationFinished as (e: THREE.Event) => void);
+    // Store the callback for removal
+    const onFinishedCallback = (event: THREE.Event & { action: THREE.AnimationAction}) => onAnimationFinished(event);
+    mixer.addEventListener('finished', onFinishedCallback as (e: THREE.Event) => void);
 
     actions.idle.fadeOut(0.5);
     
@@ -101,19 +118,15 @@ const CharacterModel: FC<Omit<InteractiveCharacterModelProps, 'containerClassNam
     actions.dance1.reset().fadeIn(0.5).play();
   };
   
-  // Adjust scale as needed for your model
-  // For example, if your model is exported in cm from Blender, scale might be 0.01
-  const modelScale = 1; // Example: adjust this value
-
-  // Estimate model height for camera positioning (e.g., 1.8 units for 1.8m)
+  const modelScale = 1; 
   const modelHeight = 1.8 * modelScale; 
 
   return (
     <Canvas
       gl={{ alpha: true }}
       style={{ background: 'transparent', touchAction: 'none' }}
-      camera={{ position: [0, modelHeight * 0.6, 3 * modelScale], fov: 50 }} // Position camera to view model
-      shadows // Enable shadows
+      camera={{ position: [0, modelHeight * 0.6, 3 * modelScale], fov: 50 }} 
+      shadows 
     >
       <ambientLight intensity={1.5} />
       <directionalLight 
@@ -130,32 +143,22 @@ const CharacterModel: FC<Omit<InteractiveCharacterModelProps, 'containerClassNam
           ref={modelRef} 
           scale={modelScale} 
           onClick={handleInteraction}
-          position={[0, -modelHeight / 2, 0]} // Adjust if model pivot is not at its feet
+          position={[0, -modelHeight / 2, 0]} 
           castShadow
           receiveShadow
         />
       </Suspense>
-      {/* <OrbitControls /> optionally, for debugging camera and model scale */}
+      {/* <OrbitControls /> */}
     </Canvas>
   );
 };
 
 
+// This is the main exported component. It ensures the container div is always rendered.
 const InteractiveCharacterModel: FC<InteractiveCharacterModelProps> = ({ containerClassName, ...props }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    // Render a simple placeholder or null on the server to avoid hydration issues
-    // The div will take up space according to containerClassName
-    return <div className={containerClassName}></div>;
-  }
-
   return (
     <div className={containerClassName} style={{ width: '100%', height: '100%' }}>
+      {/* CharacterModel will only be rendered on the client due to dynamic import */}
       <CharacterModel {...props} />
     </div>
   );

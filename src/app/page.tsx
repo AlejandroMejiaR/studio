@@ -1,4 +1,7 @@
 
+"use client"; // Add this line to make it a Client Component
+
+import dynamic from 'next/dynamic';
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
 import { getAllProjects } from '@/data/projects';
@@ -7,8 +10,15 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
-import InteractiveCharacterModel from '@/components/home/InteractiveCharacterModel'; // Import the new component
 import { getSupabaseImageUrl } from '@/lib/supabase'; // To construct asset URLs
+
+const InteractiveCharacterModel = dynamic(
+  () => import('@/components/home/InteractiveCharacterModel'),
+  {
+    ssr: false,
+    loading: () => <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square bg-muted/20 rounded-lg flex items-center justify-center"><p className="text-muted-foreground">Loading 3D Model...</p></div>,
+  }
+);
 
 
 export default function HomePage() {
@@ -17,9 +27,7 @@ export default function HomePage() {
   const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let’s build something amazing together.";
 
   // Define Supabase asset URLs
-  // IMPORTANT: Replace 'portfolio-assets' with your actual bucket name
-  // and 'character_animated' with your actual folder name if different.
-  const bucketName = 'portfolio-assets'; // Or your chosen bucket name
+  const bucketName = '3d-models'; // Updated bucket name
   const modelFolder = 'character_animated'; // Or your chosen folder path within the bucket
 
   const modelUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/character_base.glb`);
@@ -63,7 +71,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right 3D Model - Replaced placeholder */}
+          {/* Right 3D Model - Now dynamically imported */}
           <InteractiveCharacterModel
             modelUrl={modelUrl}
             idleAnimUrl={idleAnimUrl}
