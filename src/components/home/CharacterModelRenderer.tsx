@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from 'react';
-import { Suspense, useRef, useState, useEffect } from 'react'; // Added useState back
+import { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, useFBX, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
@@ -40,14 +40,14 @@ const CharacterModelRenderer: FC<CharacterModelRendererProps> = ({
   }
   if (dance2Fbx.animations.length > 0) {
     // Ensure this name 'dance' matches the key used in actions (e.g., actions.dance)
-    dance2Fbx.animations[0].name = 'dance'; 
+    dance2Fbx.animations[0].name = 'dance';
     animationsInput.push(dance2Fbx.animations[0]);
   }
   if (endClapFbx.animations.length > 0) {
     endClapFbx.animations[0].name = 'endClap';
     animationsInput.push(endClapFbx.animations[0]);
   }
-  
+
   const { actions, mixer } = useAnimations(animationsInput, modelRef);
   const [isInteracting, setIsInteracting] = useState(false);
 
@@ -78,7 +78,7 @@ const CharacterModelRenderer: FC<CharacterModelRendererProps> = ({
       mixer.removeEventListener('finished', onAnimationFinished as (e: THREE.Event) => void);
     }
   };
-  
+
   useEffect(() => {
     if (actions.idle) {
       actions.idle.reset().play();
@@ -99,7 +99,7 @@ const CharacterModelRenderer: FC<CharacterModelRendererProps> = ({
     mixer.addEventListener('finished', onAnimationFinished as (e: THREE.Event) => void);
 
     actions.idle.fadeOut(0.5);
-    
+
     // Ensure dance animations are configured to play once
     const animsToConfigure = [actions.dance1, actions.dance, actions.endClap];
     animsToConfigure.forEach(action => {
@@ -108,34 +108,34 @@ const CharacterModelRenderer: FC<CharacterModelRendererProps> = ({
         action.clampWhenFinished = true; // Important for sequence
       }
     });
-    
+
     actions.dance1.reset().fadeIn(0.5).play();
   };
-  
-  const modelScale = 1; 
-  const modelHeight = 1.8 * modelScale; 
+
+  const modelScale = 1;
+  const modelHeight = 1.8 * modelScale;
 
   return (
     <Canvas
       gl={{ alpha: true }}
       style={{ background: 'transparent', touchAction: 'none' }} // touchAction: 'none' can help with mobile interactions
-      camera={{ position: [0, modelHeight * 0.6, 3 * modelScale], fov: 50 }} 
+      camera={{ position: [0, modelHeight * 0.6, 3 * modelScale], fov: 50 }}
       shadows // Enable shadows for the canvas
     >
       <ambientLight intensity={1.5} />
-      <directionalLight 
-        position={[5, 5, 5]} 
-        intensity={2.5} 
+      <directionalLight
+        position={[5, 5, 5]}
+        intensity={2.5}
         castShadow // Light will cast shadows
         shadow-mapSize-width={1024} // Shadow map quality
         shadow-mapSize-height={1024}
       />
-      <directionalLight position={[-5, 5, -5]} intensity={1} /> 
+      <directionalLight position={[-5, 5, -5]} intensity={1} />
       <Suspense fallback={null}> {/* Fallback for useGLTF/useFBX */}
-        <primitive 
-          object={scene} 
-          ref={modelRef} 
-          scale={modelScale} 
+        <primitive
+          object={scene}
+          ref={modelRef}
+          scale={modelScale}
           onClick={handleInteraction}
           position={[0, -modelHeight / 2, 0]} // Adjust Y to place feet at origin if pivot is at center
           castShadow // Model will cast shadows
