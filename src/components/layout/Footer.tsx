@@ -27,7 +27,7 @@ const Footer = () => {
             <a href="https://www.linkedin.com/in/alejandro-mejia-rojas-4643991b2" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="hover:text-accent transition-colors">
               <Linkedin size={24} />
             </a>
-            <a href="mailto:amejiaro@gmail.com" aria-label="Email" className="hover:text-accent transition-colors">
+            <a href="mailto:alejandro197mejia@gmail.com" aria-label="Email" className="hover:text-accent transition-colors">
               <Mail size={24} />
             </a>
           </div>
