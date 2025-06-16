@@ -3,9 +3,12 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getSupabaseImageUrl } from '@/lib/supabase'; // Added import
+import Link from 'next/link'; // Added import for potential future use, but using <a> for download
 
 const AboutMe = () => {
   const skills = ['Game Design', 'UX Design', 'Unity', 'Unreal Engine', 'C#', 'C++', 'JS', 'Python', 'Git', 'Generative AI', 'English B2'];
+  const cvUrl = getSupabaseImageUrl('documents', 'ResumeEN.pdf');
 
   return (
     <section id="about" className="container mx-auto px-4">
@@ -28,9 +31,11 @@ const AboutMe = () => {
                   Multimedia Engineer<br />
                   <span className="text-sm">Game Design · UX</span>
                 </p>
-                <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground">
-                  <Download size={18} className="mr-2" />
-                  Download CV
+                <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground" asChild>
+                  <a href={cvUrl} download="Alejandro_Mejia_Rojas_CV.pdf" target="_blank" rel="noopener noreferrer">
+                    <Download size={18} className="mr-2" />
+                    Download CV
+                  </a>
                 </Button>
             </div>
           </Card>
