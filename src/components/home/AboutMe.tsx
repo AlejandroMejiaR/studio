@@ -51,7 +51,7 @@ const AboutMe = () => {
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-accent">Continuous Learner</p>
+                <p className="text-lg font-bold text-accent">Continuous Learner</p>
                 <p className="text-sm text-muted-foreground"></p>
               </CardContent>
             </Card>
