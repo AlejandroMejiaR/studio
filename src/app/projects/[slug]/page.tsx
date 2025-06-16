@@ -9,7 +9,8 @@ export async function generateMetadata(
   { params }: { params: { slug: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const project: Project | undefined = await getProjectBySlugFromFirestore(params.slug);
+  const slug = params.slug; // Explicitly extract slug
+  const project: Project | undefined = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
     return {
@@ -37,7 +38,8 @@ export async function generateMetadata(
 
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = await getProjectBySlugFromFirestore(params.slug);
+  const slug = params.slug; // Explicitly extract slug
+  const project = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
     notFound();
