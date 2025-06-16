@@ -1,8 +1,10 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import ScrollToTopButton from '@/components/layout/ScrollToTopButton'; // Added import
 
 export const metadata: Metadata = {
   title: 'Portfolio Ace',
@@ -33,6 +35,7 @@ export default function RootLayout({
           </main>
           <Footer />
         </div>
+        <ScrollToTopButton /> {/* Added component here */}
         <Toaster />
       </body>
     </html>
