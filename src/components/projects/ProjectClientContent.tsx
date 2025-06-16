@@ -163,7 +163,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* New Section for Project Gallery Carousel */}
       {showGallery && (
-        <div className="py-8 md:py-10 lg:py-12"> {/* Changed from section, removed mt-*, added specific padding */}
+        <div className="pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Removed top padding */}
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
           <Carousel
             opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
