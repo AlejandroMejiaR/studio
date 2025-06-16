@@ -52,7 +52,7 @@ const AboutMe = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-accent">Continuous Learner</p>
-                <p className="text-sm text-muted-foreground">Full-Stack Development</p>
+                <p className="text-sm text-muted-foreground">Web, Unity & Unreal prototyping</p>
               </CardContent>
             </Card>
             <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
