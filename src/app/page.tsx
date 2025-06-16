@@ -7,7 +7,12 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
-import Image from 'next/image'; // Added for placeholder image
+import Image from 'next/image';
+// Removed: dynamic import for InteractiveCharacterModel as 3D features are currently disabled
+// import dynamic from 'next/dynamic';
+import { getSupabaseImageUrl } from '@/lib/supabase'; // To construct asset URLs
+
+// Removed: const InteractiveCharacterModel = dynamic(...) as 3D features are currently disabled
 
 export default function HomePage() {
   const projects = getAllProjects();
@@ -52,13 +57,22 @@ export default function HomePage() {
           {/* Right Placeholder Image */}
           <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30">
             <Image
-              src="https://placehold.co/500x500.png"
+              src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
               alt="Digital Experiences Placeholder"
               fill
               className="object-cover"
               data-ai-hint="abstract technology"
             />
           </div>
+           {/* The InteractiveCharacterModel usage is commented out, as 3D features are currently disabled */}
+           {/* <InteractiveCharacterModel
+              modelUrl={getSupabaseImageUrl('character_assets', 'model.glb')}
+              idleAnimUrl={getSupabaseImageUrl('character_assets', 'idle_animation.fbx')}
+              dance1AnimUrl={getSupabaseImageUrl('character_assets', 'dance_animation_1.fbx')}
+              dance2AnimUrl={getSupabaseImageUrl('character_assets', 'dance_animation_2.fbx')}
+              endClapAnimUrl={getSupabaseImageUrl('character_assets', 'clap_animation.fbx')}
+              containerClassName="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square"
+            /> */}
         </div>
       </section>
 
