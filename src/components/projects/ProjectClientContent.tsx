@@ -7,13 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  Github, 
-  ExternalLink, 
-  CalendarDays, 
-  Tag, 
-  Lightbulb, 
-  Target, 
+import {
+  Github,
+  ExternalLink,
+  CalendarDays,
+  Tag,
+  Lightbulb,
+  Target,
   CheckCircle,
   Briefcase,
   Zap,
@@ -78,7 +78,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           <p className="text-xl text-foreground/80 leading-relaxed">
             {project.shortDescription}
           </p>
-          
+
           <div className="flex flex-wrap gap-3 pt-4">
             {project.liveUrl && (
               <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -107,7 +107,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           </div>
         </div>
       </div>
-      
+
       {/* Section for Case Study */}
       {showCaseStudy && (
         <section>
@@ -166,9 +166,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       {showGallery && (
         <section className="mt-8 md:mt-10 lg:mt-12">
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
-          <Carousel 
-            opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }} 
-            className="w-full max-w-6xl mx-auto" 
+          <Carousel
+            opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
+            className="w-full max-w-6xl mx-auto"
           >
             <CarouselContent>
               {project.galleryImages?.map((src, index) => (
@@ -199,4 +199,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   );
 };
 
-export default ProjectClientContent;
+export default Project
