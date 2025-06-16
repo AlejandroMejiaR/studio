@@ -46,13 +46,13 @@ const mapDocToProject = (docId: string, data: any): Project => {
     thumbnailUrl: data.thumbnailPath ? getSupabaseImageUrl('projects', data.thumbnailPath) : 'https://placehold.co/600x400.png',
     bannerUrl: data.bannerPath ? getSupabaseImageUrl('projects', data.bannerPath) : 'https://placehold.co/1200x600.png',
     technologies: data.technologies || [],
-    problemStatement: data.problemStatement,
-    solutionOverview: data.solutionOverview,
+    problemStatement: data.problemStatement || undefined,
+    solutionOverview: data.solutionOverview || undefined,
     keyFeatures: data.keyFeatures || [],
     galleryImages: data.galleryImagePaths ? data.galleryImagePaths.map((path: string) => getSupabaseImageUrl('projects', path)) : [],
-    liveUrl: data.liveUrl,
-    repoUrl: data.repoUrl,
-    longDescriptionMarkdown: data.longDescriptionMarkdown,
+    liveUrl: data.liveUrl || undefined, // Explicitly assign, will be undefined if not in data
+    repoUrl: data.repoUrl || undefined, // Explicitly assign, will be undefined if not in data
+    longDescriptionMarkdown: data.longDescriptionMarkdown || undefined,
   };
 };
 
