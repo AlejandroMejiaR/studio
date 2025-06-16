@@ -40,31 +40,29 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
     observer.observe(document.documentElement, { attributes: true });
 
     return () => observer.disconnect();
-  }, []); // Empty dependency array means this effect runs once on mount and cleanup on unmount
+  }, []); 
 
   const letters = text.split('');
 
-  // Only apply theme-specific animation class if mounted on the client
   const animationClass = isMounted
     ? (currentTheme === 'light' ? 'animate-text-color-wave-light' : 'animate-text-color-wave-dark')
-    : ''; // Render without theme-specific animation class on server and initial client render
+    : ''; 
 
   return (
     <h1
       className={cn(
-        "font-headline text-xl font-bold text-primary dark:text-foreground/80", // Base styling from Navbar
-        animationClass, // Apply theme-specific animation class conditionally
+        "font-headline text-xl font-bold text-primary dark:text-foreground/80", 
+        animationClass, 
         className
       )}
       aria-label={text}
     >
       {letters.map((letter, index) => {
-        // Animation delay from right to left
         const delay = (letters.length - 1 - index) * staggerDelay;
         return (
           <span
             key={index}
-            className={cn(letterClassName)}
+            className={cn("inline-block", letterClassName)} // Added "inline-block" for initial layout
             style={{ animationDelay: `${delay}s` }}
             aria-hidden="true"
           >
