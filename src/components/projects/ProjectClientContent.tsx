@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from 'react';
 import type { Project } from '@/types';
 import LikeButton from './LikeButton';
 import { Button } from '@/components/ui/button';
@@ -33,14 +32,6 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 
-// Dialog Imports
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-
 interface ProjectClientContentProps {
   project: Project;
   initialLikes: number;
@@ -56,13 +47,6 @@ const iconMap: Record<string, ElementType> = {
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
-  const openLightbox = (imageUrl: string) => {
-    setSelectedImageUrl(imageUrl);
-    setIsLightboxOpen(true);
-  };
 
   return (
     <div className="space-y-12">
@@ -184,63 +168,45 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Image Gallery */}
       {project.galleryImages && project.galleryImages.length > 0 && (
-        <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
-          <div> {/* Container for Carousel and Title */}
-            <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
-            <div className="relative px-0 sm:px-10 md:px-12"> {/* Relative container for positioning carousel controls and padding */}
-              <Carousel
-                opts={{
-                  align: "start",
-                  loop: project.galleryImages.length > 1,
-                }}
-                className="w-full max-w-5xl mx-auto"
-              >
-                <CarouselContent className="-ml-2">
-                  {project.galleryImages.map((src, index) => (
-                    <CarouselItem key={index} className="pl-2 basis-full">
-                      <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
-                        <Image
-                          src={src}
-                          alt={`${project.title} gallery image ${index + 1}`}
-                          fill
-                          sizes="100vw"
-                          className="object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
-                          data-ai-hint="project screenshot"
-                          onClick={() => openLightbox(src)}
-                          priority={index < 1} 
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                {project.galleryImages.length > 1 && (
-                  <>
-                    <CarouselPrevious className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                    <CarouselNext className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
-                  </>
-                )}
-              </Carousel>
-            </div>
+        <div> {/* Container for Carousel and Title */}
+          <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
+          <div className="relative px-0 sm:px-10 md:px-12"> {/* Relative container for positioning carousel controls and padding */}
+            <Carousel
+              opts={{
+                align: "start",
+                loop: project.galleryImages.length > 1,
+              }}
+              className="w-full max-w-5xl mx-auto"
+            >
+              <CarouselContent className="-ml-2">
+                {project.galleryImages.map((src, index) => (
+                  <CarouselItem key={index} className="pl-2 basis-full">
+                    <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
+                      <Image
+                        src={src}
+                        alt={`${project.title} gallery image ${index + 1}`}
+                        fill
+                        sizes="100vw"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        data-ai-hint="project screenshot"
+                        priority={index < 1} 
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              {project.galleryImages.length > 1 && (
+                <>
+                  <CarouselPrevious className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
+                  <CarouselNext className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-10 bg-background/70 hover:bg-background/90 text-foreground disabled:opacity-30" />
+                </>
+              )}
+            </Carousel>
           </div>
-
-          {selectedImageUrl && (
-            <DialogContent className="max-w-5xl w-[90vw] p-2 sm:p-3 bg-background/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-2xl rounded-lg">
-              <DialogTitle className="sr-only">Enlarged project image</DialogTitle>
-              <div className="relative aspect-video w-full h-auto max-h-[80vh]"> {/* Adjusted for better large image display */}
-                <Image
-                  src={selectedImageUrl}
-                  alt="Enlarged project image"
-                  fill
-                  className="object-contain rounded-lg" 
-                />
-              </div>
-            </DialogContent>
-          )}
-        </Dialog>
+        </div>
       )}
     </div>
   );
 };
 
 export default ProjectClientContent;
-
