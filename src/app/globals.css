@@ -118,4 +118,21 @@ body {
     color: hsl(var(--foreground)); /* Make h2 white/off-white in dark mode */
   }
 }
+
+@layer utilities {
+  @keyframes brand-pulse {
+    0%, 90%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    95% {
+      opacity: 0.9;
+      transform: scale(1.01);
+    }
+  }
+  .animate-brand-pulse {
+    animation: brand-pulse 5s infinite ease-in-out;
+    display: inline-block; /* Ensures transform works correctly on span */
+  }
+}
     

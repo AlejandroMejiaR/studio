@@ -44,7 +44,7 @@ const Navbar = () => {
       <div className="container flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
           <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80" />
-          <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80">Portfolio Ace</span>
+          <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80 animate-brand-pulse">Alejandro Mejia | Multimedia Engineer</span>
         </Link>
         
         {/* Desktop Navigation */}
@@ -92,7 +92,7 @@ const Navbar = () => {
               <div className="p-6">
                 <Link href="/" className="flex items-center gap-2 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}>
                   <Gamepad2 className="h-7 w-7 text-primary dark:text-foreground/80" />
-                  <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80">Portfolio Ace</span>
+                  <span className="font-headline text-xl font-bold text-primary dark:text-foreground/80 animate-brand-pulse">Alejandro Mejia | Multimedia Engineer</span>
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
