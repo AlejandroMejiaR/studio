@@ -1,18 +1,30 @@
 
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
-import { getAllProjectsFromFirestore } from '@/lib/firebase'; // Changed
+import { getAllProjectsFromFirestore, getProjectBySlugFromFirestore } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import type { Project } from '@/types';
 
-export default async function HomePage() { // Changed to async
-  const projects = await getAllProjectsFromFirestore(); // Changed
+export default async function HomePage() {
+  const projects = await getAllProjectsFromFirestore();
   const heroHeadline = "Crafting Digital Experiences";
   const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
+
+  let featuredProject: Project | undefined;
+  try {
+    // Attempt to fetch the specific project for the hero carousel
+    // Using 'project-showcase-platform' as the assumed slug for "project 1"
+    featuredProject = await getProjectBySlugFromFirestore('project-showcase-platform');
+  } catch (error) {
+    console.error("Error fetching featured project for homepage carousel:", error);
+    featuredProject = undefined; // Ensure it's undefined on error
+  }
 
   return (
     <>
@@ -60,6 +72,41 @@ export default async function HomePage() { // Changed to async
           </div>
         </div>
       </section>
+
+      {/* Temporary Carousel for Project 1 */}
+      {featuredProject && featuredProject.galleryImages && featuredProject.galleryImages.length > 0 && (
+        <section className="container mx-auto px-4 py-12 md:py-16">
+          <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary mb-8 text-center dark:text-foreground">
+            Featured Project Showcase
+          </h2>
+          <Carousel
+            opts={{ align: "start", loop: featuredProject.galleryImages.length > 1 }}
+            className="w-full max-w-4xl mx-auto"
+          >
+            <CarouselContent>
+              {featuredProject.galleryImages.map((src, index) => (
+                <CarouselItem key={index} className="basis-full"> {/* Shows one image at a time */}
+                  <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-lg">
+                    <Image
+                      src={src}
+                      alt={`${featuredProject.title} gallery image ${index + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 896px"
+                      className="object-cover"
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {featuredProject.galleryImages.length > 1 && (
+              <>
+                <CarouselPrevious className="absolute left-[-20px] sm:left-[-30px] md:left-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                <CarouselNext className="absolute right-[-20px] sm:right-[-30px] md:right-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+              </>
+            )}
+          </Carousel>
+        </section>
+      )}
 
       <ProjectList projects={projects} />
       <AboutMe />
