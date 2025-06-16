@@ -1,5 +1,4 @@
 "use client";
-import dynamic from 'next/dynamic';
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
 import { getAllProjects } from '@/data/projects';
@@ -8,38 +7,12 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
-import { getSupabaseImageUrl } from '@/lib/supabase';
-
-// Dynamic import with better loading state
-const InteractiveCharacterModel = dynamic(
-  () => import('@/components/home/InteractiveCharacterModel'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square bg-muted/20 rounded-lg flex items-center justify-center animate-pulse">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-          <p className="text-muted-foreground text-sm">Loading 3D Model...</p>
-        </div>
-      </div>
-    ),
-  }
-);
+import Image from 'next/image'; // Added for placeholder image
 
 export default function HomePage() {
   const projects = getAllProjects();
   const heroHeadline = "Crafting Digital Experiences";
   const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
-
-  // Define Supabase asset URLs
-  const bucketName = '3d-models';
-  const modelFolder = 'character_animated';
-
-  const modelUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/character_base.glb`);
-  const idleAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Idle.fbx`);
-  const dance1AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance1.fbx`);
-  const dance2AnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_Dance.fbx`);
-  const endClapAnimUrl = getSupabaseImageUrl(bucketName, `${modelFolder}/animation_EndClap.fbx`);
 
   return (
     <>
@@ -76,15 +49,14 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right 3D Model - Dynamically imported */}
-          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square">
-            <InteractiveCharacterModel
-              modelUrl={modelUrl}
-              idleAnimUrl={idleAnimUrl}
-              dance1AnimUrl={dance1AnimUrl}
-              dance2AnimUrl={dance2AnimUrl}
-              endClapAnimUrl={endClapAnimUrl}
-              containerClassName="w-full h-full"
+          {/* Right Placeholder Image */}
+          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30">
+            <Image
+              src="https://placehold.co/500x500.png"
+              alt="Digital Experiences Placeholder"
+              fill
+              className="object-cover"
+              data-ai-hint="abstract technology"
             />
           </div>
         </div>

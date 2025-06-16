@@ -20,7 +20,6 @@ import {
   BarChart3,
 } from 'lucide-react';
 import type { ElementType } from 'react';
-import { cn } from '@/lib/utils';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 interface ProjectClientContentProps {
@@ -110,14 +109,13 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       </div>
       
-      {/* Section for Case Study and New Placeholder Model */}
-      <section className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
-        {/* Case Study Details */}
-        {showCaseStudy && (
-          <div className="w-full md:w-1/2 flex flex-col"> {/* Added flex flex-col */}
-            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col"> {/* Added flex flex-col */}
+      {/* Section for Case Study */}
+      {showCaseStudy && (
+        <section>
+          <div className="w-full">
+            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
               <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-              <div className="space-y-6 flex-grow"> {/* Added flex-grow */}
+              <div className="space-y-6 flex-grow">
                 {project.problemStatement && (
                   <div>
                     <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -162,15 +160,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </div>
             </div>
           </div>
-        )}
-
-        {/* New 3D Model Placeholder */}
-        <div className={cn("w-full", showCaseStudy ? "md:w-1/2" : "md:w-full", "flex flex-col")}> {/* Added flex flex-col */}
-          <div className="bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-video md:aspect-square h-full flex-grow"> {/* Added flex-grow */}
-            <p className="text-center p-4">Future Home of Another Awesome 3D Model!</p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* New Section for Project Gallery Carousel */}
       {showGallery && (
@@ -188,7 +179,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       src={src}
                       alt={`${project.title} gallery image ${index + 1}`}
                       fill
-                      sizes="(max-width: 1279px) 100vw, 1152px" // Adjusted for max-w-6xl
+                      sizes="(max-width: 1279px) 100vw, 1152px"
                       className="object-cover"
                       data-ai-hint="project screenshot"
                       priority={index === 0}
