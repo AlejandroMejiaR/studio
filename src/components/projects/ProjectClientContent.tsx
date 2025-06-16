@@ -164,7 +164,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* New Section for Project Gallery Carousel */}
       {showGallery && (
-        <section className="mt-8 md:mt-10 lg:mt-12"> {/* Reduced top margin here */}
+        <section className="mt-8 md:mt-10 lg:mt-12">
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
           <Carousel 
             opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }} 
