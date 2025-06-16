@@ -180,9 +180,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
              <div className={cn(
               "w-full",
               showCaseStudy ? "md:w-1/2" : "md:w-full",
-              "flex flex-col" // Ensures inner div can stretch
+              "flex flex-col" 
             )}>
-              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col"> {/* Ensure this container can stretch and its children too */}
+              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
                 <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
                 {project.galleryImages && project.galleryImages.length > 0 ? (
                   <Carousel
@@ -190,26 +190,27 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       align: "start",
                       loop: project.galleryImages.length > 1,
                     }}
-                    className="w-full flex-grow" // flex-grow to take available space
+                    className="w-full flex-grow" 
                   >
-                    <CarouselContent className="h-full"> {/* Make content fill height */}
+                    <CarouselContent className="-ml-4"> {/* Embla default margin */}
                       {project.galleryImages.map((src, index) => (
-                        <CarouselItem key={index} className="basis-full h-full"> {/* Item also fills height */}
-                          <div className="relative w-full h-full"> {/* Wrapper for Image with fill */}
+                        <CarouselItem key={index} className="pl-4 basis-full"> {/* Embla default padding, full width */}
+                          {/* This div defines the aspect ratio for the image */}
+                          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg">
                             <Image
                               src={src}
                               alt={`${project.title} gallery image ${index + 1}`}
                               fill
                               sizes="(max-width: 767px) 100vw, 50vw"
-                              className="object-cover rounded-lg" // Use object-cover to fill and crop
+                              className="object-cover"
                               data-ai-hint="project screenshot"
-                              priority={index === 0} // Prioritize only the first image
+                              priority={index === 0} 
                             />
                           </div>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
-                    {project.galleryImages.length > 1 && ( // Show nav buttons only if multiple images
+                    {project.galleryImages.length > 1 && ( 
                       <>
                         <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 md:left-4" />
                         <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 md:right-4" />
