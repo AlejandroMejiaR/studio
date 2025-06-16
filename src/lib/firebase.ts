@@ -36,18 +36,12 @@ const db: Firestore = getFirestore(app);
 
 // Helper to convert Firestore data to Project type
 const mapDocToProject = (docId: string, data: any): Project => {
-  // Convert Firestore Timestamps to string dates if applicable for 'date' field
-  // Assuming 'date' in Firestore might be a Timestamp or already a string.
-  // If it's a string from Firestore, this conversion won't harm it.
-  // If it's a Timestamp, it needs conversion. For simplicity, we'll assume it's stored as a string.
-  // If it were a Timestamp: const date = data.date instanceof Timestamp ? data.date.toDate().toLocaleDateString() : data.date;
-  
   return {
     id: docId,
     slug: data.slug || '',
     title: data.title || '',
     category: data.category || '',
-    date: data.date || '', // Assuming date is stored as a string that fits 'Summer 2023' format
+    date: data.date || '', 
     shortDescription: data.shortDescription || '',
     thumbnailUrl: data.thumbnailPath ? getSupabaseImageUrl('projects', data.thumbnailPath) : 'https://placehold.co/600x400.png',
     bannerUrl: data.bannerPath ? getSupabaseImageUrl('projects', data.bannerPath) : 'https://placehold.co/1200x600.png',
@@ -109,13 +103,6 @@ export const getProjectLikes = async (projectId: string): Promise<number> => {
     if (projectSnap.exists()) {
       return projectSnap.data()?.likes || 0;
     }
-    // Initialize likes if document doesn't exist and has 'likes' field.
-    // This part might be optional if projects are always created with a 'likes' field.
-    // For now, we assume 'likes' field might not exist and default to 0.
-    // If you ensure all project docs have 'likes', you might not need to write it here.
-    // await runTransaction(db, async (transaction) => {
-    //   transaction.set(projectRef, { likes: 0 }, { merge: true }); // merge true to not overwrite other fields
-    // });
     return 0;
   } catch (error) {
     console.error("Error fetching project likes:", error);
@@ -134,7 +121,6 @@ export const incrementProjectLike = async (projectId: string): Promise<number> =
     await runTransaction(db, async (transaction) => {
       const projectDoc = await transaction.get(projectRef);
       if (!projectDoc.exists() || typeof projectDoc.data()?.likes === 'undefined') {
-        // If doc doesn't exist or likes field is missing, set likes to 1
         transaction.set(projectRef, { likes: 1 }, { merge: true });
         newLikes = 1;
       } else {
@@ -165,7 +151,6 @@ export const decrementProjectLike = async (projectId: string): Promise<number> =
         newLikes = Math.max(0, currentLikes - 1);
         transaction.update(projectRef, { likes: newLikes });
       } else {
-         // If doc doesn't exist or likes field is missing, set likes to 0
          transaction.set(projectRef, { likes: 0 }, { merge: true });
          newLikes = 0;
       }
