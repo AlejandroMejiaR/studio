@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { cn } from '@/lib/utils';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 interface ProjectClientContentProps {
   project: Project;
@@ -42,7 +43,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 md:space-y-16 lg:space-y-20">
       {/* Project Header */}
       <div className="relative h-[300px] md:h-[400px] lg:h-[500px] w-full overflow-hidden rounded-xl shadow-2xl">
         <Image
@@ -109,94 +110,100 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       </div>
       
-      {/* Combined Case Study & Gallery Section */}
-      {(showCaseStudy || showGallery) && (
-        <section className="flex flex-col md:flex-row gap-8 lg:gap-12">
-          {/* Case Study Details */}
-          {showCaseStudy && (
-            <div className={cn(
-              "w-full",
-              showGallery ? "md:w-1/2" : "md:w-full" 
-            )}>
-              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg">
-                <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-                <div className="space-y-6">
-                  {project.problemStatement && (
-                    <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
-                      </h3>
-                      <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                        {project.problemStatement}
-                      </p>
-                    </div>
-                  )}
-                  {project.solutionOverview && (
-                     <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
-                      </h3>
-                      <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                        {project.solutionOverview}
-                      </p>
-                    </div>
-                  )}
-                  {project.keyFeatures && project.keyFeatures.length > 0 && (
-                    <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-4">
-                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
-                      </h3>
-                      <div className="space-y-4 pl-2">
-                        {project.keyFeatures.map((feature, index) => {
-                          const IconComponent = feature.icon ? iconMap[feature.icon] : null;
-                          return (
-                            <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
-                              {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
-                              <div>
-                                <h4 className="font-semibold text-primary">{feature.title}</h4>
-                                <p className="text-sm text-foreground/80">{feature.description}</p>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Project Gallery with Collage */}
-          {showGallery && (
-             <div className={cn(
-              "w-full",
-              showCaseStudy ? "md:w-1/2" : "md:w-full"
-            )}>
-              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
-                <h2 className="font-headline text-3xl font-bold text-primary mb-6 text-center">Project Gallery</h2>
-                {project.galleryImages && project.galleryImages.length > 0 ? (
-                  <div className="grid grid-cols-2 gap-4">
-                    {project.galleryImages.map((src, index) => (
-                      <div key={index} className="relative w-full aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <Image
-                          src={src}
-                          alt={`${project.title} gallery image ${index + 1}`}
-                          fill
-                          sizes="(max-width: 767px) 50vw, 25vw" // 2 cols on mobile (full-width gallery), 2 cols in half-width gallery on desktop
-                          className="object-cover"
-                          data-ai-hint="project screenshot"
-                          priority={index < 2} // Prioritize first two images
-                        />
-                      </div>
-                    ))}
+      {/* Section for Case Study and New Placeholder Model */}
+      <section className="flex flex-col md:flex-row gap-8 lg:gap-12 items-stretch">
+        {/* Case Study Details */}
+        {showCaseStudy && (
+          <div className="w-full md:w-1/2">
+            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full">
+              <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
+              <div className="space-y-6">
+                {project.problemStatement && (
+                  <div>
+                    <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                      <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
+                    </h3>
+                    <p className="text-foreground/80 text-base leading-relaxed pl-2">
+                      {project.problemStatement}
+                    </p>
                   </div>
-                ) : (
-                  <p className="text-muted-foreground text-center flex-grow flex items-center justify-center">No gallery images available.</p>
+                )}
+                {project.solutionOverview && (
+                   <div>
+                    <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                      <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
+                    </h3>
+                    <p className="text-foreground/80 text-base leading-relaxed pl-2">
+                      {project.solutionOverview}
+                    </p>
+                  </div>
+                )}
+                {project.keyFeatures && project.keyFeatures.length > 0 && (
+                  <div>
+                    <h3 className="flex items-center text-xl font-headline text-primary mb-4">
+                      <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
+                    </h3>
+                    <div className="space-y-4 pl-2">
+                      {project.keyFeatures.map((feature, index) => {
+                        const IconComponent = feature.icon ? iconMap[feature.icon] : null;
+                        return (
+                          <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
+                            {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
+                            <div>
+                              <h4 className="font-semibold text-primary">{feature.title}</h4>
+                              <p className="text-sm text-foreground/80">{feature.description}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* New 3D Model Placeholder */}
+        <div className={cn("w-full", showCaseStudy ? "md:w-1/2" : "md:w-full")}>
+          <div className="bg-card border border-border rounded-lg flex items-center justify-center text-muted-foreground shadow-lg aspect-video md:aspect-square h-full"> {/* Added h-full */}
+            <p className="text-center p-4">Future Home of Another Awesome 3D Model!</p>
+          </div>
+        </div>
+      </section>
+
+      {/* New Section for Project Gallery Carousel */}
+      {showGallery && (
+        <section className="mt-12 md:mt-16 lg:mt-20">
+          <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
+          <Carousel 
+            opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }} 
+            className="w-full max-w-3xl mx-auto" // Added max-width and mx-auto for better centering of large carousel
+          >
+            <CarouselContent>
+              {project.galleryImages?.map((src, index) => (
+                <CarouselItem key={index} className="basis-full">
+                  <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
+                    <Image
+                      src={src}
+                      alt={`${project.title} gallery image ${index + 1}`}
+                      fill
+                      sizes="100vw" // Since it's one full-width image at a time
+                      className="object-cover"
+                      data-ai-hint="project screenshot"
+                      priority={index === 0}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {project.galleryImages && project.galleryImages.length > 1 && (
+              <>
+                <CarouselPrevious className="absolute left-[-50px] md:left-[-60px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                <CarouselNext className="absolute right-[-50px] md:right-[-60px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+              </>
+            )}
+          </Carousel>
         </section>
       )}
     </div>
