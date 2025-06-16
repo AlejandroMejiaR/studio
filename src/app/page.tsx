@@ -1,7 +1,7 @@
-"use client";
+
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
-import { getAllProjects } from '@/data/projects';
+import { getAllProjectsFromFirestore } from '@/lib/firebase'; // Changed
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
@@ -9,8 +9,8 @@ import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
 
-export default function HomePage() {
-  const projects = getAllProjects();
+export default async function HomePage() { // Changed to async
+  const projects = await getAllProjectsFromFirestore(); // Changed
   const heroHeadline = "Crafting Digital Experiences";
   const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
 
@@ -67,3 +67,5 @@ export default function HomePage() {
     </>
   );
 }
+
+    
