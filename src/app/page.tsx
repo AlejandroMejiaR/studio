@@ -10,8 +10,8 @@ import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 
 export default function HomePage() {
   const projects = getAllProjects();
-  const heroHeadline = "Crafting Digital Experiences"; 
-  const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI. Explore my work — let’s build something amazing together.";
+  const heroHeadline = "Crafting Digital Experiences";
+  const heroSubtitle = "I’m Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let’s build something amazing together.";
 
   return (
     <>
@@ -20,25 +20,25 @@ export default function HomePage() {
         <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-center">
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
-        
+
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-center"> {/* Increased gap from gap-6 md:gap-10 */}
           {/* Left Content Block */}
           <div className="md:max-w-lg text-center md:text-left">
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em]">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
               <TypingAnimation
                 text={heroSubtitle}
-                speed={30} 
-                startDelay={1500} 
+                speed={30}
+                startDelay={1500}
               />
             </p>
             <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                 <Link href="/#projects">View My Work</Link>
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                asChild 
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
                 className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
               >
                 <Link href="/#about">
@@ -54,7 +54,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      
+
       <ProjectList projects={projects} />
       <AboutMe />
     </>
