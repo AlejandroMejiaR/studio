@@ -195,19 +195,19 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 }}
                 className="w-full max-w-5xl mx-auto"
               >
-                <CarouselContent className="-ml-2 sm:-ml-4">
+                <CarouselContent className="-ml-2">
                   {project.galleryImages.map((src, index) => (
-                    <CarouselItem key={index} className="pl-2 sm:pl-4 basis-full sm:basis-1/2">
+                    <CarouselItem key={index} className="pl-2 basis-full">
                       <div className="aspect-video relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow group">
                         <Image
                           src={src}
                           alt={`${project.title} gallery image ${index + 1}`}
                           fill
-                          sizes="(max-width: 640px) 100vw, 50vw"
+                          sizes="100vw"
                           className="object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
                           data-ai-hint="project screenshot"
                           onClick={() => openLightbox(src)}
-                          priority={index < 2} // Updated priority as fewer images might be visible initially
+                          priority={index < 1} 
                         />
                       </div>
                     </CarouselItem>
@@ -243,3 +243,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
