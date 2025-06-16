@@ -71,7 +71,7 @@ const AboutMe = () => {
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Focus</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-lg font-semibold text-accent">Innovation</p>
+                <p className="text-lg font-semibold text-accent">Game Design & Gen AI</p>
                 <p className="text-sm text-muted-foreground">Creative Problem Solving</p>
               </CardContent>
             </Card>
