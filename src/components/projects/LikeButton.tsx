@@ -76,10 +76,10 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
-        "flex items-center gap-2 transition-all duration-150 group",
+        "flex items-center gap-2 transition-all duration-150 group", // The 'group' class here is for potential future use or other child elements if any.
         isLiked
           ? "text-destructive border-destructive hover:bg-destructive/10" // Liked state
-          : "text-muted-foreground border-input hover:border-accent hover:bg-background hover:text-muted-foreground" // Unliked state: border changes to accent, bg & text don't.
+          : "text-muted-foreground border-input hover:border-accent hover:bg-background hover:text-muted-foreground" // Unliked state
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
@@ -90,7 +90,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
           "transition-colors duration-150",
           isLiked
             ? "fill-destructive text-destructive" // Liked state: heart is filled and stroked red
-            : "text-muted-foreground fill-none group-hover:fill-destructive" // Unliked: gray stroke, no fill. On hover: gray stroke, red fill.
+            : "text-muted-foreground fill-none hover:fill-destructive" // Unliked: gray stroke, no fill. On SVG hover: gray stroke, red fill.
         )}
       />
       <span>{likes}</span>
