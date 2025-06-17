@@ -49,7 +49,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </h1>
         
         {/* Badge, Date, and Tech Stack Row */}
-        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-4">
+        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-8"> {/* Increased mb from 4 to 8 as buttons were removed */}
             <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
               {project.category}
             </Badge>
@@ -66,25 +66,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </div>
             )}
         </div>
-
-        {/* Action Buttons Row */}
-        <div className="flex flex-wrap gap-3 mb-8">
-            {project.liveUrl && (
-              <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink size={18} className="mr-2" /> Live Demo
-                </Link>
-              </Button>
-            )}
-            {project.repoUrl && (
-              <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                  <Github size={18} className="mr-2" /> View Code
-                </Link>
-              </Button>
-            )}
-             <LikeButton projectId={project.id} initialLikes={initialLikes} />
-        </div>
+        {/* Action Buttons Row removed from here */}
       </div>
 
       {/* Combined Section for Case Study and Project Gallery */}
@@ -94,7 +76,26 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                <div className="space-y-6 flex-grow mt-0"> {/* Adjusted mt-8 to mt-0 */}
+                {/* Action Buttons Moved Here */}
+                <div className="flex flex-wrap gap-3 mb-6">
+                    {project.liveUrl && (
+                      <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink size={18} className="mr-2" /> Live Demo
+                        </Link>
+                      </Button>
+                    )}
+                    {project.repoUrl && (
+                      <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                        <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                          <Github size={18} className="mr-2" /> View Code
+                        </Link>
+                      </Button>
+                    )}
+                    <LikeButton projectId={project.id} initialLikes={initialLikes} />
+                </div>
+
+                <div className="space-y-6 flex-grow mt-6"> {/* Added mt-6 for spacing */}
                   {project.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -176,9 +177,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       )}
 
-      {/* Project Overview Section (Now at the bottom, without Tech Stack) */}
-      <div className="grid md:grid-cols-1 gap-8 pt-8 md:pt-12"> {/* Changed to md:grid-cols-1 since tech stack is removed */}
-        <div className="md:col-span-1 space-y-6"> {/* Changed from md:col-span-2 */}
+      {/* Project Overview Section */}
+      <div className="grid md:grid-cols-1 gap-8 pt-8 md:pt-12"> 
+        <div className="md:col-span-1 space-y-6"> 
           {project.longDescriptionMarkdown && (
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
@@ -186,7 +187,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </div>
           )}
         </div>
-        {/* Tech Stack div removed from here */}
       </div>
     </div>
   );
