@@ -120,7 +120,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 </div>
                 
                 {/* Action Buttons Moved Here - to the bottom */}
-                <div className="flex flex-wrap gap-3 pt-6 mt-auto">
+                <div className="flex gap-3 pt-6 mt-auto">
                     {project.liveUrl && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
