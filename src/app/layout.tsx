@@ -7,11 +7,11 @@ import { Toaster } from '@/components/ui/toaster';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
-import { LoadingProvider } from '@/contexts/LoadingContext'; // New
-import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay'; // New
-import { usePathname, useSearchParams } from 'next/navigation'; // New
-import { useEffect, Suspense } from 'react'; // New
-import { useLoading } from '@/contexts/LoadingContext'; // New
+import { LoadingProvider } from '@/contexts/LoadingContext';
+import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
+import { useLoading } from '@/contexts/LoadingContext';
 
 // Metadata cannot be exported from a Client Component.
 // It has been removed from this file.
@@ -20,7 +20,7 @@ import { useLoading } from '@/contexts/LoadingContext'; // New
 
 // Client Component to handle loading state consumption and effects
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
-  const { isPageLoading, hideLoading } = useLoading();
+  const { isPageLoading, loadingText, hideLoading } = useLoading(); // Get loadingText
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -43,7 +43,7 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
       </div>
       <ScrollToTopButton />
       <Toaster />
-      <LoadingSpinnerOverlay isLoading={isPageLoading} />
+      <LoadingSpinnerOverlay isLoading={isPageLoading} loadingText={loadingText} /> {/* Pass loadingText */}
     </>
   );
 }

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import LikeButton from './LikeButton';
 import { ArrowRight } from 'lucide-react';
-import { useLoading } from '@/contexts/LoadingContext'; // New
+import { useLoading } from '@/contexts/LoadingContext';
 
 interface ProjectCardProps {
   project: Project;
@@ -15,7 +15,11 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
-  const { showLoading } = useLoading(); // New
+  const { showLoading } = useLoading();
+
+  const handleProjectLinkClick = () => {
+    showLoading("Loading Project...");
+  };
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">
@@ -23,7 +27,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         <Link 
           href={`/projects/${project.slug}`} 
           aria-label={`View details for ${project.title}`}
-          onClick={showLoading} // New
+          onClick={handleProjectLinkClick}
         >
           <div className="aspect-[3/2] relative overflow-hidden">
             <Image
@@ -41,7 +45,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         <CardTitle className="font-headline text-2xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
           <Link 
             href={`/projects/${project.slug}`}
-            onClick={showLoading} // New
+            onClick={handleProjectLinkClick}
           >
             {project.title}
           </Link>
@@ -64,7 +68,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
           <Link 
             href={`/projects/${project.slug}`}
-            onClick={showLoading} // New
+            onClick={handleProjectLinkClick}
           >
             View More <ArrowRight size={16} className="ml-1" />
           </Link>

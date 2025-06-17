@@ -7,11 +7,13 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
+import { useLoading } from '@/contexts/LoadingContext'; // Import useLoading
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light'); // Default to light, will be updated
   const [isMounted, setIsMounted] = useState(false);
+  const { showLoading } = useLoading(); // Get showLoading from context
 
   useEffect(() => {
     setIsMounted(true);
@@ -48,10 +50,25 @@ const Navbar = () => {
   const brandName = "Alejandro Mejia - Multimedia Engineer";
   const staggerDelay = 0.05; 
 
+  const handleHomeNavigation = () => {
+    showLoading("Regresando al Inicio...");
+  };
+
+  const handleMobileHomeNavigation = () => {
+    handleHomeNavigation();
+    setIsMobileMenuOpen(false);
+  };
+
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" prefetch={false}>
+        <Link 
+          href="/" 
+          className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" 
+          prefetch={false}
+          onClick={handleHomeNavigation} // Add onClick handler
+        >
           {isMounted ? (
             <Gamepad2 
               key={`icon-${theme}`} // Force remount on theme change
@@ -135,7 +152,11 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
-                <Link href="/" className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" onClick={() => setIsMobileMenuOpen(false)}> 
+                <Link 
+                  href="/" 
+                  className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" 
+                  onClick={handleMobileHomeNavigation} // Add onClick handler
+                > 
                   {isMounted ? (
                      <Gamepad2 
                         key={`icon-mobile-${theme}`} // Force remount on theme change
