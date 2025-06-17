@@ -23,21 +23,21 @@ export default async function HomePage() {
     <div className="max-w-7xl mx-auto px-4">
       {/* Hero Section */}
       <section className="py-20 md:py-32">
-        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-center">
+        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground">
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-center">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-start">
           {/* Left Content Block */}
-          <div className="md:max-w-lg text-center md:text-left">
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mx-auto md:mx-0 mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
+          <div className="md:max-w-lg text-left">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
               <TypingAnimation
                 text={heroSubtitle}
                 speed={30}
                 startDelay={1500}
               />
             </p>
-            <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                 <Link href="/#projects">View My Work</Link>
               </Button>

@@ -12,8 +12,8 @@ const AboutMe = () => {
 
   return (
     <section id="about" className="">
-      <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-center">
-        <div className="md:col-span-1 flex justify-center">
+      <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-start"> {/* Changed items-center to items-start */}
+        <div className="md:col-span-1 flex justify-center md:justify-start"> {/* Added md:justify-start */}
           <Card className="w-full max-w-sm shadow-xl">
             <CardContent className="p-0">
               <Image
@@ -53,32 +53,32 @@ const AboutMe = () => {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader>
-                <Brain size={32} className="mx-auto text-accent mb-2" />
+            <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]"> {/* Removed text-center */}
+              <CardHeader className="items-center sm:items-start"> {/* Added items-center sm:items-start for icon centering */}
+                <Brain size={32} className="text-accent mb-2" /> {/* Removed mx-auto */}
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Experience</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-left"> {/* Added text-left */}
                 <p className="text-lg font-bold text-accent">Continuous Learner</p>
                 <p className="text-sm text-muted-foreground"></p>
               </CardContent>
             </Card>
-            <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader>
-                <DraftingCompass size={32} className="mx-auto text-accent mb-2" />
+            <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]"> {/* Removed text-center */}
+              <CardHeader className="items-center sm:items-start"> {/* Added items-center sm:items-start for icon centering */}
+                <DraftingCompass size={32} className="text-accent mb-2" /> {/* Removed mx-auto */}
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Projects</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-left"> {/* Added text-left */}
                 <p className="text-2xl font-bold text-accent">5+</p>
                 <p className="text-sm text-muted-foreground">Web, Unity & Unreal prototyping</p>
               </CardContent>
             </Card>
-             <Card className="text-center bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader>
-                <Sparkles size={32} className="mx-auto text-accent mb-2" />
+             <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]"> {/* Removed text-center */}
+              <CardHeader className="items-center sm:items-start"> {/* Added items-center sm:items-start for icon centering */}
+                <Sparkles size={32} className="text-accent mb-2" /> {/* Removed mx-auto */}
                 <CardTitle className="text-lg font-headline text-primary dark:text-foreground">Focus</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="text-left"> {/* Added text-left */}
                 <p className="text-lg font-semibold text-accent">Game Design & Gen AI</p>
                 <p className="text-sm text-muted-foreground"></p>
               </CardContent>
