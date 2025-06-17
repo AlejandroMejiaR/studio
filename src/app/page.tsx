@@ -20,7 +20,7 @@ export default async function HomePage() {
   const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
 
   return (
-    <div className="max-w-6xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4">
       {/* Hero Section */}
       <section className="py-20 md:py-32">
         <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-center">
