@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
+import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation'; // Added
 import {
   Github,
   ExternalLink,
@@ -41,23 +42,15 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   return (
-    <div className="space-y-8 md:space-y-10 lg:space-y-12"> {/* Reduced space-y values */}
-      {/* Project Header */}
-      <div className="relative h-[300px] md:h-[400px] lg:h-[500px] w-full overflow-hidden rounded-xl shadow-2xl">
-        <Image
-          src={project.bannerUrl}
-          alt={`${project.title} banner`}
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 p-6 md:p-10">
-          <Badge variant="secondary" className="mb-2 bg-white/20 text-white backdrop-blur-sm">{project.category}</Badge>
-          <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-bold text-white shadow-lg">
-            {project.title}
-          </h1>
-        </div>
+    <div className="space-y-8 md:space-y-10 lg:space-y-12">
+      {/* New Project Header Section */}
+      <div className="pt-8 md:pt-12">
+        <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
+          <LetterRevealAnimation text={project.title} />
+        </h1>
+        <Badge variant="secondary" className="mb-8 bg-accent/80 text-accent-foreground text-sm">
+          {project.category}
+        </Badge>
       </div>
 
       {/* Project Overview & Actions */}
@@ -70,7 +63,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </div>
             <div className="flex items-center gap-2">
               <Tag size={16} className="text-accent" />
-              <span>{project.category}</span>
+              <span>{project.category} {/* Kept category here too for context, can be removed if redundant */}</span>
             </div>
           </div>
 
@@ -109,7 +102,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Section for Case Study */}
       {showCaseStudy && (
-        <div className="py-8 md:py-10 lg:py-12"> {/* Changed from section, added specific padding */}
+        <div className="py-8 md:py-10 lg:py-12">
           <div className="w-full">
             <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
               <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
@@ -163,7 +156,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* New Section for Project Gallery Carousel */}
       {showGallery && (
-        <div className="pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Removed top padding */}
+        <div className="pb-8 md:pb-10 lg:pb-12 pt-0">
           <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
           <Carousel
             opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
