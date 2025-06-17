@@ -11,7 +11,7 @@ const AboutMe = () => {
   const cvUrl = getSupabaseImageUrl('documents', 'ResumeEN.pdf');
 
   return (
-    <section id="about" className="">
+    <section id="about" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-start"> {/* Changed items-center to items-start */}
         <div className="md:col-span-1 flex justify-center md:justify-start"> {/* Added md:justify-start */}
           <Card className="w-full max-w-sm shadow-xl">
