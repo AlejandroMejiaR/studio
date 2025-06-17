@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card'; // Added import
+import { Card } from '@/components/ui/card';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -52,7 +52,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Changed lg:items-start to lg:items-center */}
           {/* Case Study Content (Left - approx 30%) */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
@@ -153,7 +153,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   </>
                 )}
               </Carousel>
-              {/* Badge, Date, and Tech Stack Rows - MOVED HERE & RESTRUCTURED */}
+              {/* Badge, Date, and Tech Stack Rows */}
               <div className="mt-6 flex items-center justify-between"> {/* Main container for badges */}
                 {/* Left side: Category Badge - Technology Badges */}
                 {(project.category || (project.technologies && project.technologies.length > 0)) && (
