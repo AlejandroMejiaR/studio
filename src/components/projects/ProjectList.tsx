@@ -72,7 +72,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
   if (isLoadingLikes && projects.length > 0) {
     return (
-      <section id="projects" className="container mx-auto px-4">
+      <section id="projects" className="">
         <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 text-center dark:text-foreground">
           My Projects
         </h2>
@@ -96,7 +96,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   }
 
   return (
-    <section id="projects" className="container mx-auto px-4">
+    <section id="projects" className="">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 text-center dark:text-foreground">
         My Projects
       </h2>

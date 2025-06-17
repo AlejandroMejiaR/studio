@@ -11,7 +11,7 @@ const AboutMe = () => {
   const cvUrl = getSupabaseImageUrl('documents', 'ResumeEN.pdf');
 
   return (
-    <section id="about" className="container mx-auto px-4">
+    <section id="about" className="">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-center">
         <div className="md:col-span-1 flex justify-center">
           <Card className="w-full max-w-sm shadow-xl">
