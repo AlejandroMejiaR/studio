@@ -138,7 +138,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
+              {/* The h2 title for Project Gallery used to be here */}
               <Carousel
                 opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
                 className="w-full max-w-6xl mx-auto"
@@ -202,4 +202,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+    
+
     
