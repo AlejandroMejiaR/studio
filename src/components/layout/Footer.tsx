@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="text-center md:text-left">
-            <h3 className="font-headline text-xl font-semibold mb-2">Portfolio Ace</h3>
+            <h3 className="font-headline text-xl font-semibold mb-2">Portfolio</h3>
             <p className="text-sm">&copy; {currentYear} Alejandro Mejia Rojas. All rights reserved.</p>
           </div>
           
