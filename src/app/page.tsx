@@ -27,7 +27,7 @@ export default async function HomePage() {
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-start">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
           {/* Left Content Block */}
           <div className="md:max-w-lg text-left">
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
