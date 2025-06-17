@@ -48,8 +48,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
           <LetterRevealAnimation text={project.title} />
         </h1>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-          <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
+        
+        {/* Badge and Date Row */}
+        <div className="flex items-center gap-x-4 gap-y-2 flex-wrap mb-4">
             <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
               {project.category}
             </Badge>
@@ -57,8 +58,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               <CalendarDays size={16} className="mr-2 text-accent" />
               <span>{project.date}</span>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-3">
+        </div>
+
+        {/* Action Buttons Row */}
+        <div className="flex flex-wrap gap-3 mb-8">
             {project.liveUrl && (
               <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                 <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
@@ -74,7 +77,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </Button>
             )}
              <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          </div>
         </div>
       </div>
 
@@ -200,6 +202,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-
-
     
