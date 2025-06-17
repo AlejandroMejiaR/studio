@@ -16,25 +16,26 @@ export const revalidate = 0;
 
 export default async function HomePage() {
   const projects = await getAllProjectsFromFirestore();
-  const heroHeadline = "Crafting Digital Experiences";
+  // heroHeadline is no longer directly used for LetterRevealAnimation
   const heroSubtitle = "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\nExplore my work — let's build something amazing together.";
 
   return (
     <div className="max-w-7xl mx-auto px-4">
       {/* Hero Section */}
       <section className="py-20 md:py-32">
-        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-left">
-          <LetterRevealAnimation text={heroHeadline} />
-        </h1>
-
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
-          {/* Left Content Block */}
-          <div className="md:max-w-lg text-left">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
+          {/* Left Column: Title, Subtitle, Buttons */}
+          <div className="md:w-1/2 flex flex-col text-left">
+            <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
+              <LetterRevealAnimation text="Crafting Digital" />
+              <br />
+              <LetterRevealAnimation text="Experiences" />
+            </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
                 text={heroSubtitle}
                 speed={30}
-                startDelay={1500}
+                startDelay={1500} 
               />
             </p>
             <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
@@ -54,15 +55,17 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Right Placeholder Image */}
-          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30 mx-auto md:ml-[150px]">
-            <Image
-              src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
-              alt="Digital Experiences Placeholder"
-              fill
-              className="object-contain"
-              sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"
-            />
+          {/* Right Column: Image */}
+          <div className="md:w-1/2 flex justify-center md:justify-end items-center">
+            <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30">
+              <Image
+                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
+                alt="Digital Experiences Placeholder"
+                fill
+                className="object-contain"
+                sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"
+              />
+            </div>
           </div>
         </div>
       </section>
