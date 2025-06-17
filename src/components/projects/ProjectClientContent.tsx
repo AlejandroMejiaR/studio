@@ -70,7 +70,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {/* Case Study Content (Left - approx 30%) */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
