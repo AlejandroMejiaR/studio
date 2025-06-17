@@ -23,7 +23,7 @@ export default async function HomePage() {
     <div className="max-w-7xl mx-auto px-4">
       {/* Hero Section */}
       <section className="py-20 md:py-32">
-        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground">
+        <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-10 text-foreground dark:text-foreground text-left">
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
 
@@ -55,7 +55,7 @@ export default async function HomePage() {
           </div>
 
           {/* Right Placeholder Image */}
-          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30">
+          <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30 mx-auto md:mx-0">
             <Image
               src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
               alt="Digital Experiences Placeholder"
