@@ -87,8 +87,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                {/* Case Study Title Removed */}
-                <div className="space-y-6 flex-grow mt-8"> {/* Added mt-8 to compensate for removed title visually, adjust if needed */}
+                <div className="space-y-6 flex-grow mt-8">
                   {project.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -173,10 +172,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       {/* Project Overview & Actions Section (Now at the bottom) */}
       <div className="grid md:grid-cols-3 gap-8 pt-8 md:pt-12">
         <div className="md:col-span-2 space-y-6">
-           {/* Info moved to header, short description remains */}
-          <p className="text-xl text-foreground/80 leading-relaxed">
-            {project.shortDescription}
-          </p>
           {project.longDescriptionMarkdown && (
             <div className="prose prose-lg dark:prose-invert max-w-none">
               {/* Consider using a Markdown renderer here if 'longDescriptionMarkdown' is actual Markdown */}
