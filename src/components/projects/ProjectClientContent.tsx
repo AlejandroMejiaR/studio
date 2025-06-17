@@ -87,8 +87,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-                <div className="space-y-6 flex-grow">
+                {/* Case Study Title Removed */}
+                <div className="space-y-6 flex-grow mt-8"> {/* Added mt-8 to compensate for removed title visually, adjust if needed */}
                   {project.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -138,7 +138,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              {/* The h2 title for Project Gallery used to be here */}
               <Carousel
                 opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
                 className="w-full max-w-6xl mx-auto"
@@ -202,6 +201,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-    
-
     
