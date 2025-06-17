@@ -152,8 +152,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   </>
                 )}
               </Carousel>
-              {/* Badge, Date, and Tech Stack Row - MOVED HERE */}
-              <div className="flex items-center gap-x-4 gap-y-2 flex-wrap mt-6">
+              {/* Badge, Date, and Tech Stack Rows - MOVED HERE & RESTRUCTURED */}
+              <div className="flex flex-col gap-y-3 mt-6"> {/* Changed to flex-col and adjusted gap */}
+                {/* Row 1: Category (left) and Date (right) */}
+                <div className="flex justify-between items-center w-full">
                   <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                     {project.category}
                   </Badge>
@@ -161,14 +163,16 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     <CalendarDays size={18} className="mr-2 text-accent" />
                     <span>{project.date}</span>
                   </div>
-                  {project.technologies && project.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-2 items-center">
-                      <span className="text-base text-muted-foreground ml-1 mr-1">-</span>
-                      {project.technologies.map(tech => (
-                        <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90">{tech}</Badge>
-                      ))}
-                    </div>
-                  )}
+                </div>
+
+                {/* Row 2: Technology Badges */}
+                {project.technologies && project.technologies.length > 0 && (
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {project.technologies.map(tech => (
+                      <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90">{tech}</Badge>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
