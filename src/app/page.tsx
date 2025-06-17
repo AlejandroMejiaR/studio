@@ -27,10 +27,10 @@ export default async function HomePage() {
           <LetterRevealAnimation text={heroHeadline} />
         </h1>
 
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 md:items-start md:justify-between items-center">
           {/* Left Content Block */}
           <div className="md:max-w-lg text-left">
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[3em] sm:min-h-[2.5em] whitespace-pre-line">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-20 whitespace-pre-line">
               <TypingAnimation
                 text={heroSubtitle}
                 speed={30}
