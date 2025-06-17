@@ -153,19 +153,19 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 )}
               </Carousel>
               {/* Badge, Date, and Tech Stack Row - MOVED HERE */}
-              <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mt-4">
-                  <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
+              <div className="flex items-center gap-x-4 gap-y-2 flex-wrap mt-6">
+                  <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                     {project.category}
                   </Badge>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <CalendarDays size={16} className="mr-1.5 text-accent" />
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CalendarDays size={18} className="mr-2 text-accent" />
                     <span>{project.date}</span>
                   </div>
                   {project.technologies && project.technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 items-center">
-                      <span className="text-sm text-muted-foreground ml-1 mr-1">-</span>
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <span className="text-base text-muted-foreground ml-1 mr-1">-</span>
                       {project.technologies.map(tech => (
-                        <Badge key={tech} variant="outline" className="text-xs border-primary/50 text-primary/90">{tech}</Badge>
+                        <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90">{tech}</Badge>
                       ))}
                     </div>
                   )}
