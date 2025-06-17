@@ -12,7 +12,6 @@ import {
   Github,
   ExternalLink,
   CalendarDays,
-  Tag,
   Lightbulb,
   Target,
   CheckCircle,
@@ -49,15 +48,23 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           <LetterRevealAnimation text={project.title} />
         </h1>
         
-        {/* Badge and Date Row */}
-        <div className="flex items-center gap-x-4 gap-y-2 flex-wrap mb-4">
+        {/* Badge, Date, and Tech Stack Row */}
+        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-4">
             <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
               {project.category}
             </Badge>
             <div className="flex items-center text-sm text-muted-foreground">
-              <CalendarDays size={16} className="mr-2 text-accent" />
+              <CalendarDays size={16} className="mr-1.5 text-accent" />
               <span>{project.date}</span>
             </div>
+            {project.technologies && project.technologies.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 items-center">
+                <span className="text-sm text-muted-foreground ml-1 mr-1">-</span>
+                {project.technologies.map(tech => (
+                  <Badge key={tech} variant="outline" className="text-xs border-primary/50 text-primary/90">{tech}</Badge>
+                ))}
+              </div>
+            )}
         </div>
 
         {/* Action Buttons Row */}
@@ -87,7 +94,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                <div className="space-y-6 flex-grow mt-8">
+                <div className="space-y-6 flex-grow mt-0"> {/* Adjusted mt-8 to mt-0 */}
                   {project.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -169,27 +176,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       )}
 
-      {/* Project Overview & Actions Section (Now at the bottom) */}
-      <div className="grid md:grid-cols-3 gap-8 pt-8 md:pt-12">
-        <div className="md:col-span-2 space-y-6">
+      {/* Project Overview Section (Now at the bottom, without Tech Stack) */}
+      <div className="grid md:grid-cols-1 gap-8 pt-8 md:pt-12"> {/* Changed to md:grid-cols-1 since tech stack is removed */}
+        <div className="md:col-span-1 space-y-6"> {/* Changed from md:col-span-2 */}
           {project.longDescriptionMarkdown && (
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              {/* Consider using a Markdown renderer here if 'longDescriptionMarkdown' is actual Markdown */}
-              {/* For now, displaying as plain text or a simple preformatted block */}
               <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
               <p className="whitespace-pre-line">{project.longDescriptionMarkdown}</p>
             </div>
           )}
         </div>
-
-        <div className="md:col-span-1 space-y-4 p-6 bg-secondary/20 rounded-lg shadow">
-          <h3 className="font-headline text-xl font-semibold text-primary border-b pb-2">Tech Stack</h3>
-          <div className="flex flex-wrap gap-2">
-            {project.technologies.map(tech => (
-              <Badge key={tech} variant="secondary" className="bg-primary/10 text-primary border border-primary/30">{tech}</Badge>
-            ))}
-          </div>
-        </div>
+        {/* Tech Stack div removed from here */}
       </div>
     </div>
   );
