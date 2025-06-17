@@ -104,7 +104,7 @@ export default {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0' },
         },
-        'slideInLeftWithTerminalBounce': { // This one is kept if used elsewhere, or can be removed if not
+        'slideInLeftWithTerminalBounce': { 
           '0%': { opacity: '0', transform: 'translateX(-100%)' },
           '70%': { opacity: '1', transform: 'translateX(10px)' },
           '85%': { transform: 'translateX(-5px)' },
@@ -112,9 +112,13 @@ export default {
         },
         'letter-reveal-from-below': {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '60%': { opacity: '1', transform: 'translateY(-5px)' }, // Slight overshoot for bounce
+          '60%': { opacity: '1', transform: 'translateY(-5px)' }, 
           '100%': { opacity: '1', transform: 'translateY(0px)' },
-        }
+        },
+        'fadeIn': { // Added fadeIn keyframes
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -122,6 +126,7 @@ export default {
         'blink-cursor': 'blink-cursor 0.7s step-end infinite',
         'slideInLeftWithTerminalBounce': 'slideInLeftWithTerminalBounce 1s ease-out forwards',
         'letter-reveal': 'letter-reveal-from-below 0.6s ease-out forwards',
+        'fadeIn': 'fadeIn 0.3s ease-out forwards', // Added fadeIn animation
       },
     },
   },

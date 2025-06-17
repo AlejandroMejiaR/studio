@@ -4,18 +4,19 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
+import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react'; // Added Languages
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light'); // Default to light, will be updated
+  const [theme, setTheme] = useState('light');
   const [isMounted, setIsMounted] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<'EN' | 'ES'>('EN'); // Language state
   const { showLoading } = useLoading();
-  const pathname = usePathname(); // Get current pathname
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -25,11 +26,10 @@ const Navbar = () => {
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setTheme('dark');
     }
-    // No else needed, 'light' is default
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return; // Only run on client after mount
+    if (!isMounted) return;
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -44,6 +44,11 @@ const Navbar = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
+  const toggleLanguage = () => {
+    setCurrentLanguage(prev => (prev === 'EN' ? 'ES' : 'EN'));
+    // Actual language switching logic would go here in a real implementation
+  };
+
   const navLinks = [
     { href: '/#projects', label: 'Projects' },
     { href: '/#about', label: 'About' },
@@ -53,13 +58,13 @@ const Navbar = () => {
   const staggerDelay = 0.05; 
 
   const handleHomeNavigation = () => {
-    if (pathname !== '/') { // Only show loading if not already on home
+    if (pathname !== '/') {
       showLoading("Returning to Home...");
     }
   };
 
   const handleMobileHomeNavigation = () => {
-    if (pathname !== '/') { // Only show loading if not already on home
+    if (pathname !== '/') {
       showLoading("Returning to Home...");
     }
     setIsMobileMenuOpen(false);
@@ -107,17 +112,32 @@ const Navbar = () => {
           )}
         </Link>
         
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden md:flex items-center space-x-2"> {/* Reduced space-x for more items */}
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out"
+              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               prefetch={false}
             >
               {link.label}
             </Link>
           ))}
+          <Button
+            variant="ghost"
+            size="sm" // Adjusted size to be consistent
+            onClick={toggleLanguage}
+            aria-label="Toggle language"
+            className="h-9 px-2 hover:bg-accent/10 flex items-center"
+          >
+            <Languages className="h-5 w-5 text-foreground/80" />
+            <span
+              key={currentLanguage}
+              className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+            >
+              {currentLanguage}
+            </span>
+          </Button>
           <Button
             variant="ghost"
             size="icon"
@@ -128,24 +148,39 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR or pre-mount
             )}
           </Button>
         </nav>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex items-center space-x-1"> {/* Reduced space-x */}
+          <Button
+            variant="ghost"
+            size="sm" // Adjusted size
+            onClick={toggleLanguage}
+            aria-label="Toggle language"
+            className="h-9 px-2 hover:bg-accent/10 flex items-center"
+          >
+            <Languages className="h-5 w-5 text-foreground/80" />
+            <span
+              key={`mobile-${currentLanguage}`} // Ensure unique key for mobile
+              className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+            >
+              {currentLanguage}
+            </span>
+          </Button>
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className="h-9 w-9 mr-2 hover:bg-accent/10"
+            className="h-9 w-9 hover:bg-accent/10"
           >
              {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Fallback
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
