@@ -7,13 +7,15 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
-import { useLoading } from '@/contexts/LoadingContext'; // Import useLoading
+import { useLoading } from '@/contexts/LoadingContext';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light'); // Default to light, will be updated
   const [isMounted, setIsMounted] = useState(false);
-  const { showLoading } = useLoading(); // Get showLoading from context
+  const { showLoading } = useLoading();
+  const pathname = usePathname(); // Get current pathname
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,11 +53,15 @@ const Navbar = () => {
   const staggerDelay = 0.05; 
 
   const handleHomeNavigation = () => {
-    showLoading("Returning to Home...");
+    if (pathname !== '/') { // Only show loading if not already on home
+      showLoading("Returning to Home...");
+    }
   };
 
   const handleMobileHomeNavigation = () => {
-    handleHomeNavigation();
+    if (pathname !== '/') { // Only show loading if not already on home
+      showLoading("Returning to Home...");
+    }
     setIsMobileMenuOpen(false);
   };
 
@@ -67,11 +73,11 @@ const Navbar = () => {
           href="/" 
           className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" 
           prefetch={false}
-          onClick={handleHomeNavigation} // Add onClick handler
+          onClick={handleHomeNavigation}
         >
           {isMounted ? (
             <Gamepad2 
-              key={`icon-${theme}`} // Force remount on theme change
+              key={`icon-${theme}`}
               className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
             />
           ) : (
@@ -80,11 +86,10 @@ const Navbar = () => {
 
           {isMounted ? (
             <AnimatedBrandName 
-              key={`brand-${theme}`} // Force remount on theme change
+              key={`brand-${theme}`}
               text={brandName} 
             />
           ) : (
-            // Fallback for SSR/initial render to avoid hydration mismatch
             <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
               {brandName.split('').map((letter, index) => {
                 const delay = (brandName.length - 1 - index) * staggerDelay;
@@ -123,7 +128,7 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Consistent fallback
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
         </nav>
@@ -140,7 +145,7 @@ const Navbar = () => {
              {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Consistent fallback
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -155,11 +160,11 @@ const Navbar = () => {
                 <Link 
                   href="/" 
                   className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" 
-                  onClick={handleMobileHomeNavigation} // Add onClick handler
+                  onClick={handleMobileHomeNavigation}
                 > 
                   {isMounted ? (
                      <Gamepad2 
-                        key={`icon-mobile-${theme}`} // Force remount on theme change
+                        key={`icon-mobile-${theme}`}
                         className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
                       />
                   ) : (
@@ -167,7 +172,7 @@ const Navbar = () => {
                   )}
                   {isMounted ? (
                     <AnimatedBrandName 
-                      key={`brand-mobile-${theme}`} // Force remount on theme change
+                      key={`brand-mobile-${theme}`}
                       text={brandName} 
                     />
                   ) : (
