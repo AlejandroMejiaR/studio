@@ -49,7 +49,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </h1>
         
         {/* Badge, Date, and Tech Stack Row */}
-        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-8"> {/* Increased mb from 4 to 8 as buttons were removed */}
+        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-8">
             <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
               {project.category}
             </Badge>
@@ -66,7 +66,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </div>
             )}
         </div>
-        {/* Action Buttons Row removed from here */}
       </div>
 
       {/* Combined Section for Case Study and Project Gallery */}
@@ -76,26 +75,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                {/* Action Buttons Moved Here */}
-                <div className="flex flex-wrap gap-3 mb-6">
-                    {project.liveUrl && (
-                      <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink size={18} className="mr-2" /> Live Demo
-                        </Link>
-                      </Button>
-                    )}
-                    {project.repoUrl && (
-                      <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                        <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                          <Github size={18} className="mr-2" /> View Code
-                        </Link>
-                      </Button>
-                    )}
-                    <LikeButton projectId={project.id} initialLikes={initialLikes} />
-                </div>
-
-                <div className="space-y-6 flex-grow mt-6"> {/* Added mt-6 for spacing */}
+                <div className="space-y-6 flex-grow"> 
                   {project.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
@@ -137,6 +117,25 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </div>
                     </div>
                   )}
+                </div>
+                
+                {/* Action Buttons Moved Here - to the bottom */}
+                <div className="flex flex-wrap gap-3 pt-6 mt-auto">
+                    {project.liveUrl && (
+                      <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink size={18} className="mr-2" /> Live Demo
+                        </Link>
+                      </Button>
+                    )}
+                    {project.repoUrl && (
+                      <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                        <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                          <Github size={18} className="mr-2" /> View Code
+                        </Link>
+                      </Button>
+                    )}
+                    <LikeButton projectId={project.id} initialLikes={initialLikes} />
                 </div>
               </div>
             </div>
