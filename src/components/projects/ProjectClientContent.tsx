@@ -51,11 +51,11 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
       {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Changed items-center to items-start */}
           {/* Case Study Content (Left - approx 30%) */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
-              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
+              <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
                 <div className="space-y-6 flex-grow"> 
                   {project.problemStatement && (
                     <div>
@@ -118,7 +118,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                     <LikeButton projectId={project.id} initialLikes={initialLikes} />
                 </div>
-              </div>
+              </Card>
             </div>
           )}
 
@@ -153,16 +153,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 )}
               </Carousel>
               {/* Badge, Date, and Tech Stack Rows - MOVED HERE & RESTRUCTURED */}
-              <div className="mt-6 space-y-2"> {/* Changed from flex-col to space-y for simpler row separation */}
-                {/* Row 1: Date (left-aligned) */}
-                <div className="flex items-center text-base text-muted-foreground">
-                  <CalendarDays size={18} className="mr-2 text-accent" />
-                  <span>{project.date}</span>
-                </div>
-
-                {/* Row 2: Category Badge - Technology Badges (left-aligned) */}
+              <div className="mt-6 flex items-center justify-between"> {/* Main container for badges */}
+                {/* Left side: Category Badge - Technology Badges */}
                 {(project.category || (project.technologies && project.technologies.length > 0)) && (
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2"> {/* Container for category and tech badges */}
                     {project.category && (
                       <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                         {project.category}
@@ -178,6 +172,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                   </div>
                 )}
+
+                {/* Right side: Date */}
+                <div className="flex items-center text-base text-muted-foreground"> {/* Container for date */}
+                  <CalendarDays size={18} className="mr-2 text-accent" />
+                  <span>{project.date}</span>
+                </div>
               </div>
             </div>
           )}
