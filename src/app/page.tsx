@@ -27,7 +27,7 @@ export default async function HomePage() {
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
-              <LetterRevealAnimation text="Crafting Digital" />
+              <LetterRevealAnimation text="Crafting Digital" className="whitespace-nowrap" />
               <br />
               <LetterRevealAnimation text="Experiences" />
             </h1>
