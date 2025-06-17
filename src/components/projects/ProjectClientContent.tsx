@@ -47,25 +47,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
           <LetterRevealAnimation text={project.title} />
         </h1>
-        
-        {/* Badge, Date, and Tech Stack Row */}
-        <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-8">
-            <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
-              {project.category}
-            </Badge>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <CalendarDays size={16} className="mr-1.5 text-accent" />
-              <span>{project.date}</span>
-            </div>
-            {project.technologies && project.technologies.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 items-center">
-                <span className="text-sm text-muted-foreground ml-1 mr-1">-</span>
-                {project.technologies.map(tech => (
-                  <Badge key={tech} variant="outline" className="text-xs border-primary/50 text-primary/90">{tech}</Badge>
-                ))}
-              </div>
-            )}
-        </div>
       </div>
 
       {/* Combined Section for Case Study and Project Gallery */}
@@ -175,6 +156,25 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           )}
         </div>
       )}
+      
+      {/* Badge, Date, and Tech Stack Row */}
+      <div className="flex items-center gap-x-3 gap-y-2 flex-wrap mb-8">
+          <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
+            {project.category}
+          </Badge>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <CalendarDays size={16} className="mr-1.5 text-accent" />
+            <span>{project.date}</span>
+          </div>
+          {project.technologies && project.technologies.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 items-center">
+              <span className="text-sm text-muted-foreground ml-1 mr-1">-</span>
+              {project.technologies.map(tech => (
+                <Badge key={tech} variant="outline" className="text-xs border-primary/50 text-primary/90">{tech}</Badge>
+              ))}
+            </div>
+          )}
+      </div>
 
       {/* Project Overview Section */}
       <div className="grid md:grid-cols-1 gap-8 pt-8 md:pt-12"> 
