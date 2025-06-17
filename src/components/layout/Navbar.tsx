@@ -51,7 +51,7 @@ const Navbar = () => {
   const staggerDelay = 0.05; 
 
   const handleHomeNavigation = () => {
-    showLoading("Regresando al Inicio...");
+    showLoading("Returning to Home...");
   };
 
   const handleMobileHomeNavigation = () => {
