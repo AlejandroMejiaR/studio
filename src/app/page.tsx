@@ -22,7 +22,7 @@ export default async function HomePage() {
   return (
     <div className="max-w-7xl mx-auto px-4">
       {/* Hero Section */}
-      <section className="py-20 md:py-32">
+      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
@@ -59,11 +59,12 @@ export default async function HomePage() {
           <div className="md:w-1/2 flex justify-center md:justify-end items-center md:ml-[150px]">
             <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30 mx-auto md:mx-0">
               <Image
-                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
+                src="https://placehold.co/384x384.png"
                 alt="Digital Experiences Placeholder"
                 fill
                 className="object-contain"
                 sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"
+                data-ai-hint="robot laptop"
               />
             </div>
           </div>
