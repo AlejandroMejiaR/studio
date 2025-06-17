@@ -44,18 +44,43 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       {/* Project Header Section */}
-      <div className="pt-8 md:pt-12">
+      <div className="pt-0">
         <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
           <LetterRevealAnimation text={project.title} />
         </h1>
-        <Badge variant="secondary" className="mb-8 bg-accent/80 text-accent-foreground text-sm">
-          {project.category}
-        </Badge>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
+            <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm">
+              {project.category}
+            </Badge>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <CalendarDays size={16} className="mr-2 text-accent" />
+              <span>{project.date}</span>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {project.liveUrl && (
+              <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink size={18} className="mr-2" /> Live Demo
+                </Link>
+              </Button>
+            )}
+            {project.repoUrl && (
+              <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                  <Github size={18} className="mr-2" /> View Code
+                </Link>
+              </Button>
+            )}
+             <LikeButton projectId={project.id} initialLikes={initialLikes} />
+          </div>
+        </div>
       </div>
 
-      {/* NEW Combined Section for Case Study and Project Gallery */}
+      {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 py-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {/* Case Study Content (Left - approx 30%) */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
@@ -124,7 +149,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                           src={src}
                           alt={`${project.title} gallery image ${index + 1}`}
                           fill
-                          sizes="(max-width: 1279px) 100vw, 1152px" // Adjusted sizes based on potential max-width
+                          sizes="(max-width: 1279px) 100vw, 1152px"
                           className="object-cover"
                           priority={index === 0}
                         />
@@ -144,41 +169,21 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       )}
 
-      {/* MOVED: Project Overview & Actions Section */}
+      {/* Project Overview & Actions Section (Now at the bottom) */}
       <div className="grid md:grid-cols-3 gap-8 pt-8 md:pt-12">
         <div className="md:col-span-2 space-y-6">
-          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <CalendarDays size={16} className="text-accent" />
-              <span>{project.date}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Tag size={16} className="text-accent" />
-              <span>{project.category}</span>
-            </div>
-          </div>
-
+           {/* Info moved to header, short description remains */}
           <p className="text-xl text-foreground/80 leading-relaxed">
             {project.shortDescription}
           </p>
-
-          <div className="flex flex-wrap gap-3 pt-4">
-            {project.liveUrl && (
-              <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink size={18} className="mr-2" /> Live Demo
-                </Link>
-              </Button>
-            )}
-            {project.repoUrl && (
-              <Button variant="outline" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
-                <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                  <Github size={18} className="mr-2" /> View Code
-                </Link>
-              </Button>
-            )}
-             <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          </div>
+          {project.longDescriptionMarkdown && (
+            <div className="prose prose-lg dark:prose-invert max-w-none">
+              {/* Consider using a Markdown renderer here if 'longDescriptionMarkdown' is actual Markdown */}
+              {/* For now, displaying as plain text or a simple preformatted block */}
+              <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
+              <p className="whitespace-pre-line">{project.longDescriptionMarkdown}</p>
+            </div>
+          )}
         </div>
 
         <div className="md:col-span-1 space-y-4 p-6 bg-secondary/20 rounded-lg shadow">
@@ -195,3 +200,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
+
+    
