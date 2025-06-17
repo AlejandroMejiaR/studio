@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/card'; // Ensure Card is imported
 
 interface ProjectClientContentProps {
   project: Project;
@@ -43,16 +43,11 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      {/* Project Header Section */}
-      <div className="pt-0">
-        <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
-          <LetterRevealAnimation text={project.title} />
-        </h1>
-      </div>
+      {/* Project Header Section's original title div is removed */}
 
       {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Changed lg:items-start to lg:items-center */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {/* Case Study Content (Left - approx 30%) */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
@@ -126,6 +121,11 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
+              {/* NEW TITLE LOCATION */}
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
+                <LetterRevealAnimation text={project.title} />
+              </h1>
+
               <Carousel
                 opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
                 className="w-full max-w-6xl mx-auto"
@@ -186,17 +186,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       )}
       
       {/* Project Overview Section */}
-      <div className="grid md:grid-cols-1 gap-8 pt-8 md:pt-12"> 
-        {project.longDescriptionMarkdown && (
-          <div className="prose prose-lg dark:prose-invert max-w-none">
-            <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
-            <p className="whitespace-pre-line">{project.longDescriptionMarkdown}</p>
-          </div>
-        )}
-      </div>
+      {project.longDescriptionMarkdown && (
+        <div className="prose prose-lg dark:prose-invert max-w-none">
+          <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
+          <p className="whitespace-pre-line">{project.longDescriptionMarkdown}</p>
+        </div>
+      )}
     </div>
   );
 };
 
 export default ProjectClientContent;
+    
+
     
