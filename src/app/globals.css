@@ -68,11 +68,11 @@ body {
     --popover: 225 28% 17%;        /* Popover background */
     --popover-foreground: 0 0% 98%; /* Popover text */
 
-    --primary: 185 75% 55%;        /* Vibrant Cyan-Teal #33D6E0 */
-    --primary-foreground: 225 30% 10%;/* Dark for text on vibrant primary */
+    --primary: 0 0% 98%;        /* Off-white (was Vibrant Cyan-Teal #33D6E0) */
+    --primary-foreground: 225 30% 12%;/* Dark for text on new light primary (was 225 30% 10%) */
 
-    --secondary: 200 80% 60%;      /* Bright Sky Blue #4DB3E6 */
-    --secondary-foreground: 225 30% 10%; /* Dark for text on vibrant secondary */
+    --secondary: 0 0% 90%;      /* Light Grey (was Bright Sky Blue #4DB3E6) */
+    --secondary-foreground: 225 30% 12%; /* Dark for text on new light secondary (was 225 30% 10%) */
 
     --muted: 225 20% 25%;          /* Desaturated Indigo/Grey #33364D - darker */
     --muted-foreground: 225 15% 70%;   /* Lighter Grey with Indigo hint #A3A8B8 */
@@ -92,8 +92,8 @@ body {
 
     --sidebar-background: 225 25% 14%;    /* Dark Indigo for Sidebar #1A1F2E */
     --sidebar-foreground: 0 0% 95%;       /* Sidebar Text #F2F2F2 */
-    --sidebar-primary: 185 75% 55%;        /* Sidebar Primary Element (matches main primary) */
-    --sidebar-primary-foreground: 225 30% 10%; /* Sidebar Primary Text */
+    --sidebar-primary: 0 0% 98%;        /* Off-white (was Vibrant Cyan-Teal #33D6E0) */
+    --sidebar-primary-foreground: 225 25% 14%; /* Sidebar Dark Background (was 225 30% 10%) */
     --sidebar-accent: 225 25% 20%;         /* Sidebar Accent (hover/active) #262C40 */
     --sidebar-accent-foreground: 0 0% 98%; /* Sidebar Accent Text */
     --sidebar-border: 225 20% 28%;         /* Sidebar Border #383D52 */
