@@ -166,8 +166,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 </CarouselContent>
                 {project.galleryImages && project.galleryImages.length > 1 && (
                   <>
-                    <CarouselPrevious className="absolute left-[-20px] sm:left-[-30px] md:left-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                    <CarouselNext className="absolute right-[-20px] sm:right-[-30px] md:right-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
                   </>
                 )}
               </Carousel>
