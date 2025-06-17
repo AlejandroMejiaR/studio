@@ -72,7 +72,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
   if (isLoadingLikes && projects.length > 0) {
     return (
-      <section id="projects" className="">
+      <section 
+        id="projects" 
+        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
+      >
         <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground">
           My Projects
         </h2>
@@ -96,7 +99,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   }
 
   return (
-    <section id="projects" className="">
+    <section 
+      id="projects" 
+      className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
+    >
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground">
         My Projects
       </h2>
