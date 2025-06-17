@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
 import { getProjectBySlugFromFirestore, getProjectLikes } from '@/lib/firebase';
-import ProjectClientContent from '@/components/projects/ProjectClientContent.tsx';
+import ProjectClientContent from '@/components/projects/ProjectClientContent'; // Corrected import path
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
 
@@ -50,8 +50,9 @@ export default async function ProjectPage({ params: { slug } }: { params: { slug
   const initialLikes = await getProjectLikes(project.id);
 
   return (
-    <div className="container mx-auto px-4 py-8 md:py-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
       <ProjectClientContent project={project} initialLikes={initialLikes} />
     </div>
   );
 }
+
