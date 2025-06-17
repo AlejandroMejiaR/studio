@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/card'; // Ensure Card is imported
 
 interface ProjectClientContentProps {
   project: Project;
@@ -43,7 +43,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      {/* Project Header Section's original title div is removed */}
+      {/* Responsive Page Title - Visible on small screens, hidden on large */}
+      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden">
+        <LetterRevealAnimation text={project.title} />
+      </h1>
 
       {/* Combined Section for Case Study and Project Gallery */}
       {(showCaseStudy || showGallery) && (
@@ -121,8 +124,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              {/* NEW TITLE LOCATION */}
-              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8">
+              {/* Responsive Page Title - Visible on large screens (if gallery exists), hidden on small */}
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block">
                 <LetterRevealAnimation text={project.title} />
               </h1>
 
@@ -172,7 +175,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                   </div>
                 
-
                 {/* Right side: Date */}
                 <div className="flex items-center text-base text-muted-foreground"> {/* Container for date */}
                   <CalendarDays size={18} className="mr-2 text-accent" />
@@ -196,6 +198,3 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-    
-
-    
