@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation'; // Added
+import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import {
   Github,
   ExternalLink,
@@ -43,7 +43,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      {/* New Project Header Section */}
+      {/* Project Header Section */}
       <div className="pt-8 md:pt-12">
         <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
           <LetterRevealAnimation text={project.title} />
@@ -53,8 +53,99 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </Badge>
       </div>
 
-      {/* Project Overview & Actions */}
-      <div className="grid md:grid-cols-3 gap-8">
+      {/* NEW Combined Section for Case Study and Project Gallery */}
+      {(showCaseStudy || showGallery) && (
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 py-8">
+          {/* Case Study Content (Left - approx 30%) */}
+          {showCaseStudy && (
+            <div className="w-full lg:flex-[0_0_30%]">
+              <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
+                <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
+                <div className="space-y-6 flex-grow">
+                  {project.problemStatement && (
+                    <div>
+                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
+                      </h3>
+                      <p className="text-foreground/80 text-base leading-relaxed pl-2">
+                        {project.problemStatement}
+                      </p>
+                    </div>
+                  )}
+                  {project.solutionOverview && (
+                     <div>
+                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                        <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
+                      </h3>
+                      <p className="text-foreground/80 text-base leading-relaxed pl-2">
+                        {project.solutionOverview}
+                      </p>
+                    </div>
+                  )}
+                  {project.keyFeatures && project.keyFeatures.length > 0 && (
+                    <div>
+                      <h3 className="flex items-center text-xl font-headline text-primary mb-4">
+                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
+                      </h3>
+                      <div className="space-y-4 pl-2">
+                        {project.keyFeatures.map((feature, index) => {
+                          const IconComponent = feature.icon ? iconMap[feature.icon] : null;
+                          return (
+                            <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
+                              {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
+                              <div>
+                                <h4 className="font-semibold text-primary">{feature.title}</h4>
+                                <p className="text-sm text-foreground/80">{feature.description}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
+          {showGallery && (
+            <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
+              <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
+              <Carousel
+                opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
+                className="w-full max-w-6xl mx-auto"
+              >
+                <CarouselContent>
+                  {project.galleryImages?.map((src, index) => (
+                    <CarouselItem key={index} className="basis-full">
+                      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
+                        <Image
+                          src={src}
+                          alt={`${project.title} gallery image ${index + 1}`}
+                          fill
+                          sizes="(max-width: 1279px) 100vw, 1152px" // Adjusted sizes based on potential max-width
+                          className="object-cover"
+                          priority={index === 0}
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                {project.galleryImages && project.galleryImages.length > 1 && (
+                  <>
+                    <CarouselPrevious className="absolute left-[-20px] sm:left-[-30px] md:left-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                    <CarouselNext className="absolute right-[-20px] sm:right-[-30px] md:right-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                  </>
+                )}
+              </Carousel>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* MOVED: Project Overview & Actions Section */}
+      <div className="grid md:grid-cols-3 gap-8 pt-8 md:pt-12">
         <div className="md:col-span-2 space-y-6">
           <div className="flex items-center space-x-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -63,7 +154,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             </div>
             <div className="flex items-center gap-2">
               <Tag size={16} className="text-accent" />
-              <span>{project.category} {/* Kept category here too for context, can be removed if redundant */}</span>
+              <span>{project.category}</span>
             </div>
           </div>
 
@@ -99,94 +190,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           </div>
         </div>
       </div>
-
-      {/* Section for Case Study */}
-      {showCaseStudy && (
-        <div className="py-8 md:py-10 lg:py-12">
-          <div className="w-full">
-            <div className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-              <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Case Study</h2>
-              <div className="space-y-6 flex-grow">
-                {project.problemStatement && (
-                  <div>
-                    <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                      <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
-                    </h3>
-                    <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                      {project.problemStatement}
-                    </p>
-                  </div>
-                )}
-                {project.solutionOverview && (
-                   <div>
-                    <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                      <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
-                    </h3>
-                    <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                      {project.solutionOverview}
-                    </p>
-                  </div>
-                )}
-                {project.keyFeatures && project.keyFeatures.length > 0 && (
-                  <div>
-                    <h3 className="flex items-center text-xl font-headline text-primary mb-4">
-                      <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
-                    </h3>
-                    <div className="space-y-4 pl-2">
-                      {project.keyFeatures.map((feature, index) => {
-                        const IconComponent = feature.icon ? iconMap[feature.icon] : null;
-                        return (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
-                            {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
-                            <div>
-                              <h4 className="font-semibold text-primary">{feature.title}</h4>
-                              <p className="text-sm text-foreground/80">{feature.description}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* New Section for Project Gallery Carousel */}
-      {showGallery && (
-        <div className="pb-8 md:pb-10 lg:pb-12 pt-0">
-          <h2 className="font-headline text-3xl font-bold text-primary mb-8 text-center">Project Gallery</h2>
-          <Carousel
-            opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
-            className="w-full max-w-6xl mx-auto"
-          >
-            <CarouselContent>
-              {project.galleryImages?.map((src, index) => (
-                <CarouselItem key={index} className="basis-full">
-                  <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
-                    <Image
-                      src={src}
-                      alt={`${project.title} gallery image ${index + 1}`}
-                      fill
-                      sizes="(max-width: 1279px) 100vw, 1152px"
-                      className="object-cover"
-                      priority={index === 0}
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {project.galleryImages && project.galleryImages.length > 1 && (
-              <>
-                <CarouselPrevious className="absolute left-[-20px] sm:left-[-30px] md:left-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                <CarouselNext className="absolute right-[-20px] sm:right-[-30px] md:right-[-50px] top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-              </>
-            )}
-          </Carousel>
-        </div>
-      )}
     </div>
   );
 };
