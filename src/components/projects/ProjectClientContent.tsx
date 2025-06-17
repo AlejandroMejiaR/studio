@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card'; // Ensure Card is imported
+import { Card } from '@/components/ui/card';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -122,7 +122,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
               {/* NEW TITLE LOCATION */}
-              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-3">
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8">
                 <LetterRevealAnimation text={project.title} />
               </h1>
 
@@ -156,8 +156,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               {/* Badge, Date, and Tech Stack Rows */}
               <div className="mt-6 flex items-center justify-between"> {/* Main container for badges */}
                 {/* Left side: Category Badge - Technology Badges */}
-                {(project.category || (project.technologies && project.technologies.length > 0)) && (
-                  <div className="flex flex-wrap items-center gap-2"> {/* Container for category and tech badges */}
+                 <div className="flex flex-wrap items-center gap-2"> {/* Container for category and tech badges */}
                     {project.category && (
                       <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                         {project.category}
@@ -172,7 +171,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       ))
                     )}
                   </div>
-                )}
+                
 
                 {/* Right side: Date */}
                 <div className="flex items-center text-base text-muted-foreground"> {/* Container for date */}
