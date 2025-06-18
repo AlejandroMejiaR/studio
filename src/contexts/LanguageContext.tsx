@@ -1,3 +1,4 @@
+
 'use client';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
@@ -51,8 +52,8 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        line1: "Creando experiencias",
-        line2: "digitales",
+        line1: "Transformando ideas",
+        line2: "en mundos interactivos",
         subtitle: "Soy Alejandro. Creo experiencias interactivas combinando Diseño de Juegos, UX e IA Generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
@@ -100,3 +101,4 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
+
