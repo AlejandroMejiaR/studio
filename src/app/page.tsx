@@ -64,8 +64,8 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    setIsSubtitleAnimationComplete(false);
-  }, [translationsForLanguage.home.hero.subtitle]);
+    setIsSubtitleAnimationComplete(false); // Always reset for hero animations on language change or load
+  }, [translationsForLanguage.home.hero.subtitle]); // Depend on text that changes with language
 
 
   useEffect(() => {
@@ -82,10 +82,10 @@ export default function HomePage() {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); 
+      }, 300); // Increased delay to 300ms
       return () => clearTimeout(scrollTimer);
     }
-  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects]); 
+  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects, pathname]); // Added pathname to re-evaluate on nav
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
