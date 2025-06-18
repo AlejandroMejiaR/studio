@@ -10,6 +10,7 @@ export interface AppTranslations {
   nav: {
     projects: string;
     about: string;
+    mobileMenuTitle: string; // Added for mobile menu accessibility
   };
   home: {
     hero: {
@@ -72,6 +73,7 @@ const translations: Record<Language, AppTranslations> = {
     nav: {
       projects: "Projects",
       about: "About",
+      mobileMenuTitle: "Mobile Navigation Menu",
     },
     home: {
       hero: {
@@ -131,6 +133,7 @@ const translations: Record<Language, AppTranslations> = {
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
+      mobileMenuTitle: "Menú de Navegación Móvil",
     },
     home: {
       hero: {
@@ -233,12 +236,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [language]);
   
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | undefined) => {
-    // Ensure translations['EN'] exists and the keyPath is valid before accessing
     if (translations['EN']) {
       const value = keyPath(translations['EN']);
       return value;
     }
-    return undefined; // Fallback if 'EN' translations or specific key is missing
+    return undefined; 
   }, []);
 
 

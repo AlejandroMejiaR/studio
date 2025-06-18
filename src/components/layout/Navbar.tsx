@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'; // Added SheetTitle
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
@@ -199,6 +199,11 @@ const Navbar = () => {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
+               <SheetTitle className="sr-only">
+                 <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {navLinkText('mobileMenuTitle')}
+                  </span>
+               </SheetTitle>
               <div className="p-6">
                 <Link
                   href="/"
