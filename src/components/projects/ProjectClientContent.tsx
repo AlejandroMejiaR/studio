@@ -63,10 +63,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   // Constants for WordRevealAnimation for the title
-  const titleLetterStaggerConst = 0.04; // Standard stagger
-  const titleLetterAnimationDurationConst = 0.2; // Quick letter animation
-  const titleDelayBetweenWordsConst = 0; // No delay between words
-  const titleBaseDelay = 0.2; // Initial delay for the whole title animation
+  const titleLetterStaggerConst = 0.04;
+  const titleLetterAnimationDurationConst = 0; // Changed to 0
+  const titleDelayBetweenWordsConst = 0;
+  const titleBaseDelay = 0.2;
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
