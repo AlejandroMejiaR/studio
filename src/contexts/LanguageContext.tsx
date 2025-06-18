@@ -37,7 +37,7 @@ const translations: Record<Language, AppTranslations> = {
       hero: {
         line1: "Transforming Ideas",
         line2: "Into Interactive Worlds",
-        subtitle: "Hello, I'm Alejandro. I design and develop interactive experiences by integrating game design, UX, and generative AI. Explore my work — let's build something amazing together.",
+        subtitle: "Hello, I'm Alejandro. I design and develop interactive experiences by integrating game design, UX, and generative AI.\n\nExplore my work — let's build something amazing together.",
       },
       buttons: {
         viewWork: "View My Work",
@@ -46,7 +46,7 @@ const translations: Record<Language, AppTranslations> = {
     },
   },
   ES: {
-    brandName: "Alejandro Mejia - Ingeniero en Multimedia",
+    brandName: "Alejandro Mejía - Ingeniero en Multimedia",
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
