@@ -69,7 +69,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden">
+      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden break-words">
         <LetterRevealAnimation text={titleToDisplay} />
       </h1>
 
@@ -160,7 +160,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block">
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block break-words">
                  <LetterRevealAnimation text={titleToDisplay} />
               </h1>
 
