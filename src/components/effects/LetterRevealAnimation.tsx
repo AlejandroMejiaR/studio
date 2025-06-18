@@ -24,55 +24,52 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   // Create a map of original character positions for accurate delay calculation
   const charactersWithOriginalIndices = text.split('').map((char, index) => ({ char, originalIndex: index }));
   
-  // Segments for layout: words are inline-block & nowrap, spaces are inline to allow breaking
+  // Segments for layout: words are inline-block & nowrap, spaces are inline-block to allow breaking
   const segments = text.split(/(\s+)/).filter(segment => segment.length > 0); 
 
   let charCounterInOriginalText = 0; // Tracks the character position in the original text string
 
   return (
     <span className={cn(className)} aria-label={text} style={style}> {/* Root span is default (inline) */}
-      {segments.map((segment, segmentIndex) => {
+      {segments.flatMap((segment, segmentIndex) => { // Use flatMap
         if (segment.match(/^\s+$/)) { // It's a whitespace segment
-          // Render animated spaces
-          return (
-            <span key={`segment-${segmentIndex}`} className="inline"> {/* Whitespace container is inline */}
-              {segment.split('').map((spaceChar, spaceIdx) => {
-                // Ensure we don't go out of bounds if original text had trailing spaces etc.
-                if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
-                
-                const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-                const delay = charDetail.originalIndex * staggerDelay;
-                return (
-                  <span
-                    key={`space-${segmentIndex}-${spaceIdx}`}
-                    className={cn(
-                      "inline-block opacity-0 animate-letter-reveal", // Each space char is inline-block for animation
-                      letterClassName
-                    )}
-                    style={{
-                      animationDelay: `${delay}s`,
-                      animationDuration: `${animationDuration}s`,
-                    }}
-                    aria-hidden="true"
-                  >
-                    {spaceChar === ' ' ? '\u00A0' : spaceChar}
-                  </span>
-                );
-              })}
-            </span>
-          );
+          // Return an array of animated space characters directly
+          return segment.split('').map((spaceChar) => {
+            // Ensure we don't go out of bounds if original text had trailing spaces etc.
+            if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
+            
+            const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
+            const delay = charDetail.originalIndex * staggerDelay;
+            return (
+              <span
+                key={`char-${charDetail.originalIndex}`} // Unique key based on original character index
+                className={cn(
+                  "inline-block opacity-0 animate-letter-reveal",
+                  letterClassName
+                )}
+                style={{
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${animationDuration}s`,
+                }}
+                aria-hidden="true"
+              >
+                {spaceChar === ' ' ? '\u00A0' : spaceChar}
+              </span>
+            );
+          }).filter(Boolean); // Filter out any nulls
         }
         // It's a word segment
-        return (
-          <span key={`segment-${segmentIndex}`} className="inline-block whitespace-nowrap"> {/* Word is inline-block and won't break internally, removed align-bottom */}
-            {segment.split('').map((letter, letterIdx) => {
+        // Return an array containing a single word wrapper span
+        return [(
+          <span key={`word-${segmentIndex}`} className="inline-block whitespace-nowrap"> {/* Word is inline-block and won't break internally */}
+            {segment.split('').map(() => {
               if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
 
               const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
               const delay = charDetail.originalIndex * staggerDelay;
               return (
                 <span
-                  key={`letter-${segmentIndex}-${letterIdx}`}
+                  key={`char-${charDetail.originalIndex}`} // Unique key based on original character index
                   className={cn(
                     "inline-block opacity-0 animate-letter-reveal",
                     letterClassName
@@ -83,12 +80,12 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                   }}
                   aria-hidden="true"
                 >
-                  {letter}
+                  {charDetail.char} {/* Use char from charDetail to ensure consistency */}
                 </span>
               );
-            })}
+            }).filter(Boolean)}
           </span>
-        );
+        )];
       })}
     </span>
   );
