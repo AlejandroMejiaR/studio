@@ -56,20 +56,29 @@ export default function HomePage() {
 
 
   useEffect(() => {
+    // Condition 1: Client must be ready, and subtitle animation must be considered complete.
     if (!isClientReady || !isSubtitleAnimationComplete) return;
 
     const hash = window.location.hash;
     if (hash) {
-      const id = hash.substring(1);
+      const id = hash.substring(1); // e.g., "projects" or "about"
+
+      // Condition 2: If targeting "projects", projects must not be in a loading state.
+      // For "about" or other hashes, this condition is bypassed.
+      if (id === 'projects' && isLoadingProjects) {
+        return; // Defer scrolling for #projects if projects are still loading.
+      }
+
       const scrollTimer = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // Delay to ensure DOM is ready and animations (if any) have unmounted/settled
+      }, 100); // Small delay to allow DOM to settle.
+
       return () => clearTimeout(scrollTimer);
     }
-  }, [isClientReady, isSubtitleAnimationComplete, language]); // language dependency for cases where hash exists and language changes
+  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects]); // Added isLoadingProjects
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -260,4 +269,3 @@ export default function HomePage() {
     </div>
   );
 }
-
