@@ -41,23 +41,35 @@ export default function HomePage() {
       setShouldRunAnimations(true);
       sessionStorage.setItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY, 'true');
       sessionStorage.setItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY, language);
-      // setIsSubtitleAnimationComplete(false); // This will be handled by the effect below
     } else {
       setShouldRunAnimations(false);
-      // setIsSubtitleAnimationComplete(true); // This will be handled by the effect below
     }
   }, [isClientReady, language]);
 
-  // This effect ensures subtitle animation state is correctly set based on whether animations are running
-  // and when the subtitle text (language) changes.
   useEffect(() => {
     if (shouldRunAnimations) {
-      setIsSubtitleAnimationComplete(false); // Reset for new animation sequence
+      setIsSubtitleAnimationComplete(false); 
     } else {
-      // If not animating this render, consider subtitle "complete" for button visibility
       setIsSubtitleAnimationComplete(true);
     }
-  }, [shouldRunAnimations, translationsForLanguage.home.hero.subtitle]); // heroSubtitle changes on language change
+  }, [shouldRunAnimations, translationsForLanguage.home.hero.subtitle]);
+
+
+  useEffect(() => {
+    if (!isClientReady || !isSubtitleAnimationComplete) return;
+
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.substring(1);
+      const scrollTimer = setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100); // Delay to ensure DOM is ready and animations (if any) have unmounted/settled
+      return () => clearTimeout(scrollTimer);
+    }
+  }, [isClientReady, isSubtitleAnimationComplete, language]); // language dependency for cases where hash exists and language changes
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -82,7 +94,6 @@ export default function HomePage() {
     fetchProjects();
   }, []);
 
-  // Pre-calculate animation timings for the hero title
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   let currentCumulativeLineBaseDelay = 0; 
   let maxTitleAnimationOverallEndTime = 0;
@@ -249,3 +260,4 @@ export default function HomePage() {
     </div>
   );
 }
+
