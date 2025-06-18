@@ -21,78 +21,33 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   letterClassName,
   style,
 }) => {
-  const words = text.split(' ').filter(word => word.length > 0);
-  let globalCharIndex = 0;
-  const animatedElements: JSX.Element[] = [];
-
-  words.forEach((word, wordIndex) => {
-    const wordLetterSpans: JSX.Element[] = [];
-    word.split('').forEach((char) => {
-      const delay = globalCharIndex * staggerDelay;
-      wordLetterSpans.push(
-        <span
-          key={`char-${globalCharIndex}`}
-          className={cn(
-            "inline-block opacity-0 animate-letter-reveal",
-            letterClassName
-          )}
-          style={{
-            animationDelay: `${delay}s`,
-            animationDuration: `${animationDuration}s`,
-          }}
-          aria-hidden="true"
-        >
-          {char}
-        </span>
-      );
-      globalCharIndex++;
-    });
-
-    if (wordLetterSpans.length > 0) {
-      animatedElements.push(
-        <span
-          key={`word-${wordIndex}`}
-          className="inline-block whitespace-nowrap" // Keeps the word itself from breaking
-        >
-          {wordLetterSpans}
-        </span>
-      );
-    }
-
-    // Add 'Q' spacer if not the last word
-    if (wordIndex < words.length - 1) {
-      const delay = globalCharIndex * staggerDelay;
-      animatedElements.push(
-        <span
-          key={`spacer-Q-${globalCharIndex}`}
-          className={cn(
-            "inline-block opacity-0 animate-letter-reveal"
-            // Not applying letterClassName here, as it's a spacer
-          )}
-          style={{
-            animationDelay: `${delay}s`,
-            animationDuration: `${animationDuration}s`,
-            color: 'hsl(var(--background))', // Adapts to theme's background
-          }}
-          aria-hidden="true"
-        >
-          Q
-        </span>
-      );
-      globalCharIndex++;
-    }
-  });
+  const characters = text.split('');
 
   return (
     <span
-      className={cn("flex flex-wrap", className)} // Using flex-wrap for layout
-      aria-label={text} // Screen readers will read the original text
+      className={cn(className)} // Base className, can be 'block' if passed from parent
+      aria-label={text}
       style={style}
     >
-      {animatedElements.length > 0 ? animatedElements : (
-        // Fallback for empty text or text with only spaces
-        <span aria-hidden="true" style={{opacity: 0}}>{text || ''}</span>
-      )}
+      {characters.map((char, index) => {
+        const delay = index * staggerDelay;
+        return (
+          <span
+            key={`char-${index}-${char}`}
+            className={cn(
+              "inline-block opacity-0 animate-letter-reveal",
+              letterClassName
+            )}
+            style={{
+              animationDelay: `${delay}s`,
+              animationDuration: `${animationDuration}s`,
+            }}
+            aria-hidden="true"
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        );
+      })}
     </span>
   );
 };

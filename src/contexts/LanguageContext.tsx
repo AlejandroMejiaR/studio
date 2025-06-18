@@ -15,7 +15,7 @@ export interface AppTranslations {
   };
   home: {
     hero: {
-      fullTitle: string;
+      fullTitle: string[]; // Changed from string to string[]
       subtitle: string;
     };
     buttons: {
@@ -77,7 +77,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        fullTitle: "Transforming Ideas Into Interactive Worlds",
+        fullTitle: ["Transforming", "Ideas Into", "Interactive", "Worlds"], // Updated
         subtitle: "Hello, I'm Alejandro. I design and develop interactive experiences by integrating game design, UX, and generative AI.\n\nExplore my work — let's build something amazing together.",
       },
       buttons: {
@@ -137,7 +137,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        fullTitle: "Transformando Ideas En Mundos Interactivos",
+        fullTitle: ["Transformando", "Ideas En", "Mundos", "Interactivos"], // Updated
         subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
@@ -194,7 +194,7 @@ interface LanguageContextType {
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
   isClientReady: boolean;
-  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string | undefined) => string | undefined;
+  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string | string[] | undefined) => string | string[] | undefined;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -233,8 +233,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [language]);
   
-  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | undefined) => {
-    // Always return from English translations if available, otherwise undefined
+  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | string[] | undefined) => {
     if (translations['EN']) {
       const value = keyPath(translations['EN']);
       return value;
@@ -257,4 +256,3 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
-

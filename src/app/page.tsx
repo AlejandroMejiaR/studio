@@ -16,7 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
@@ -36,11 +36,11 @@ export default function HomePage() {
     fetchProjects();
   }, []);
 
-  const heroFullTitle = isClientReady ? translationsForLanguage.home.hero.fullTitle : getEnglishTranslation(t => t.home.hero.fullTitle);
-  const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle);
-  const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork);
-  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe);
-  const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle);
+  const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
+  const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle) as string || "Loading subtitle...";
+  const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
+  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
+  const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
 
   return (
@@ -51,18 +51,21 @@ export default function HomePage() {
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground text-left">
-              <LetterRevealAnimation
-                key={heroFullTitle}
-                text={heroFullTitle || ""}
-                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-              />
+              {heroFullTitleLines.map((line, index) => (
+                <LetterRevealAnimation
+                  key={`${language}-line-${index}-${line}`} // Unique key for re-renders on language/line change
+                  text={line || ""}
+                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                  className="block" // Each line is a block to ensure it starts on a new line
+                />
+              ))}
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
                 key={heroSubtitle}
                 text={heroSubtitle || ""}
                 speed={30}
-                startDelay={1500}
+                startDelay={1500} // Delay slightly more to start after title animation
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               />
             </p>
@@ -131,7 +134,6 @@ export default function HomePage() {
            </div>
          </section>
       ) : (
-        // ProjectList component now handles its own title translation
         <ProjectList projects={projects} />
       )}
       <AboutMe />
