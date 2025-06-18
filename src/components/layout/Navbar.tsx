@@ -1,7 +1,7 @@
 
 "use client";
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; // Added useRef
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
-import { useIsMobile } from '@/hooks/use-mobile'; 
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const SESSION_STORAGE_SKIP_ANIMATION_KEY = 'portfolio-ace-skip-hero-animation';
 
@@ -21,7 +21,13 @@ const Navbar = () => {
   const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
-  const isMobile = useIsMobile(); 
+  const isMobile = useIsMobile();
+
+  const [animateBrandName, setAnimateBrandName] = useState(true);
+  // This ref tracks if the *current continuous stay on the home page*
+  // was initiated by returning from a project and skipping the initial brand animation.
+  const homePageVisitSkippedInitialBrandAnimation = useRef(false);
+
 
   useEffect(() => {
     setNavbarIsMounted(true);
@@ -45,6 +51,35 @@ const Navbar = () => {
     }
   }, [theme, navbarIsMounted]);
 
+  useEffect(() => {
+    if(!isClientReady) return; // Ensure sessionStorage is available
+
+    const skipHeroAnimationSessionFlag = sessionStorage.getItem(SESSION_STORAGE_SKIP_ANIMATION_KEY);
+
+    if (pathname === '/') {
+      if (skipHeroAnimationSessionFlag === 'true') {
+        // Just arrived at home from a project page, and flag is set.
+        setAnimateBrandName(false); // Don't animate brand this time.
+        homePageVisitSkippedInitialBrandAnimation.current = true; // Mark this "home session" as having skipped.
+        // HomePage.tsx will consume and remove the sessionStorage flag.
+      } else if (homePageVisitSkippedInitialBrandAnimation.current) {
+        // Still on home, previously skipped initial brand animation, but flag is now gone
+        // (meaning HomePage processed it). Subsequent changes (like language/theme) should animate.
+        setAnimateBrandName(true);
+      } else {
+        // On home, but not because we just returned from a project with a skip flag,
+        // or this is a fresh load/refresh of home.
+        setAnimateBrandName(true);
+        homePageVisitSkippedInitialBrandAnimation.current = false; // Reset if we are animating.
+      }
+    } else {
+      // Not on the home page.
+      setAnimateBrandName(true); // Animations should be enabled for next visit to home.
+      homePageVisitSkippedInitialBrandAnimation.current = false; // Reset the tracking ref.
+    }
+  }, [pathname, language, theme, isClientReady]);
+
+
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
@@ -57,17 +92,17 @@ const Navbar = () => {
     { href: '/#projects', labelKey: 'projects' },
     { href: '/#about', labelKey: 'about' },
   ];
-  
+
   const brandTextKey = isMobile ? 'brandNameShort' : 'brandName';
-  const brandTextToRender = isClientReady 
-    ? translationsForLanguage[brandTextKey] 
+  const brandTextToRender = isClientReady
+    ? translationsForLanguage[brandTextKey]
     : getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name");
 
-  const currentLanguageDisplay = isClientReady ? language : 'EN'; 
+  const currentLanguageDisplay = isClientReady ? language : 'EN';
   const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]) || labelKey;
 
-  const returningHomeText = isClientReady 
-    ? translationsForLanguage.loadingScreen.returningHome 
+  const returningHomeText = isClientReady
+    ? translationsForLanguage.loadingScreen.returningHome
     : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
 
   const staggerDelay = 0.05;
@@ -80,7 +115,7 @@ const Navbar = () => {
       showLoading(returningHomeText);
     }
   };
-  
+
   const handleMobileHomeNavigation = () => {
     if (pathname.startsWith('/projects/')) {
       sessionStorage.setItem(SESSION_STORAGE_SKIP_ANIMATION_KEY, 'true');
@@ -90,6 +125,37 @@ const Navbar = () => {
     }
     setIsMobileMenuOpen(false);
   };
+
+  const brandNameComponent = navbarIsMounted && animateBrandName ? (
+    <AnimatedBrandName
+      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`}
+      text={brandTextToRender}
+      style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+    />
+  ) : navbarIsMounted ? (
+    <h1
+      className={cn(
+        "font-headline text-xl font-bold",
+        theme === 'dark' ? "text-foreground/80" : "text-primary"
+      )}
+      style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+    >
+      {brandTextToRender}
+    </h1>
+  ) : (
+    <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
+      {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
+        <span
+          key={index}
+          className="inline-block"
+          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
+        >
+          {letter === ' ' ? '\u00A0' : letter}
+        </span>
+      ))}
+    </h1>
+  );
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
@@ -108,26 +174,7 @@ const Navbar = () => {
           ) : (
             <Gamepad2 className="h-7 w-7 text-primary" />
           )}
-
-          {navbarIsMounted ? (
-            <AnimatedBrandName
-              key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`} 
-              text={brandTextToRender}
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-            />
-          ) : (
-            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
-              {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
-                <span
-                  key={index}
-                  className="inline-block"
-                  style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
-                >
-                  {letter === ' ' ? '\u00A0' : letter}
-                </span>
-              ))}
-            </h1>
-          )}
+          {brandNameComponent}
         </Link>
 
         <nav className="hidden md:flex items-center space-x-2">
@@ -169,7 +216,7 @@ const Navbar = () => {
             {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> 
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
         </nav>
@@ -232,25 +279,7 @@ const Navbar = () => {
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
-                  {navbarIsMounted ? (
-                    <AnimatedBrandName
-                      key={`brand-mobile-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`}
-                      text={brandTextToRender}
-                      style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                    />
-                  ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
-                        {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
-                            <span
-                                key={index}
-                                className="inline-block"
-                                style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
-                            >
-                                {letter === ' ' ? '\u00A0' : letter}
-                            </span>
-                        ))}
-                    </h1>
-                  )}
+                  {brandNameComponent}
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
