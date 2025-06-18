@@ -63,9 +63,10 @@ export default function HomePage() {
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
+                key={heroSubtitle} // Add key here
                 text={heroSubtitle}
                 speed={30}
-                startDelay={1500} 
+                startDelay={1500}
               />
             </p>
             <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
