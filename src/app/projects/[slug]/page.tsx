@@ -9,9 +9,9 @@ import type { Project } from '@/types';
 export const revalidate = 0;
 
 export async function generateMetadata(
-  { params: { slug } }: { params: { slug: string } }
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
-  // slug is now directly available
+  const slug = params.slug; // Access slug after receiving params
   const project: Project | undefined = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
@@ -39,8 +39,8 @@ export async function generateMetadata(
 }
 
 
-export default async function ProjectPage({ params: { slug } }: { params: { slug: string } }) {
-  // slug is now directly available
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
+  const slug = params.slug; // Access slug after receiving params
   const project = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
