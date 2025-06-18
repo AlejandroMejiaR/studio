@@ -18,6 +18,7 @@ const AboutMe = () => {
   // Determine text based on client readiness and language
   const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
   const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getEnglishTranslation(t => t.aboutMe.paragraph1);
+  const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getEnglishTranslation(t => t.aboutMe.paragraph2);
 
 
   return (
@@ -64,8 +65,11 @@ const AboutMe = () => {
           >
             {paragraph1}
           </p>
-          <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
-            When I’m not coding, you’ll find me exploring new design trends or savoring a good cup of coffee. I believe in continuous learning and am constantly seeking to broaden my skill set—always ready for the next challenge and collaboration.
+          <p 
+            className="text-lg text-foreground/80 mb-8 leading-relaxed"
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          >
+            {paragraph2}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">

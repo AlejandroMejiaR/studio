@@ -25,7 +25,8 @@ export interface AppTranslations {
   };
   aboutMe: {
     title: string;
-    paragraph1: string; // Added paragraph1
+    paragraph1: string;
+    paragraph2: string; 
   };
   // Add other sections/keys as needed
 }
@@ -51,6 +52,7 @@ const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "About Me",
       paragraph1: "Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.",
+      paragraph2: "When I’m not coding, you’ll find me exploring new design trends or savoring a good cup of coffee. I believe in continuous learning and am constantly seeking to broaden my skill set—always ready for the next challenge and collaboration.",
     },
   },
   ES: {
@@ -74,6 +76,7 @@ const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "Sobre mí",
       paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tan funcionales como visualmente atractivas.",
+      paragraph2: "Cuando no estoy programando, probablemente me encuentres explorando nuevas tendencias tecnológicas o disfrutando de una buena taza de café. Creo firmemente en el aprendizaje continuo y siempre estoy buscando ampliar mis habilidades, abierto a nuevos desafíos y colaboraciones.",
     },
   },
 };
