@@ -23,8 +23,9 @@ export interface AppTranslations {
       aboutMe: string;
     }
   };
-  aboutMe: { // Added aboutMe section
+  aboutMe: {
     title: string;
+    paragraph1: string; // Added paragraph1
   };
   // Add other sections/keys as needed
 }
@@ -47,8 +48,9 @@ const translations: Record<Language, AppTranslations> = {
         aboutMe: "About Me",
       }
     },
-    aboutMe: { // Added English translation for aboutMe title
+    aboutMe: {
       title: "About Me",
+      paragraph1: "Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.",
     },
   },
   ES: {
@@ -69,8 +71,9 @@ const translations: Record<Language, AppTranslations> = {
         aboutMe: "Sobre Mí",
       }
     },
-    aboutMe: { // Added Spanish translation for aboutMe title
+    aboutMe: {
       title: "Sobre mí",
+      paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tan funcionales como visualmente atractivas.",
     },
   },
 };
@@ -92,7 +95,7 @@ const getInitialLanguage = (): Language => {
       return storedLanguage;
     }
   }
-  return 'EN';
+  return 'EN'; // Default language
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
@@ -100,7 +103,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    setIsClientReady(true);
+    setIsClientReady(true); // Client is ready after mount
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
@@ -110,6 +113,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  // This effect syncs the language state back to localStorage if it was initialized to default
+  // or if it changes for any other reason.
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
@@ -118,7 +123,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   }, [language]);
-
+  
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string) => {
     return keyPath(translations['EN']);
   }, []);

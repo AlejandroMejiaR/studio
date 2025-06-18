@@ -17,6 +17,8 @@ const AboutMe = () => {
 
   // Determine text based on client readiness and language
   const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
+  const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getEnglishTranslation(t => t.aboutMe.paragraph1);
+
 
   return (
     <section id="about" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
@@ -52,12 +54,15 @@ const AboutMe = () => {
         <div className="md:col-span-2">
           <h2 
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-6 dark:text-foreground"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }} // Apply visibility style
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
             {aboutMeTitle}
           </h2>
-          <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
-            Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.
+          <p 
+            className="text-lg text-foreground/80 mb-6 leading-relaxed"
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          >
+            {paragraph1}
           </p>
           <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
             When I’m not coding, you’ll find me exploring new design trends or savoring a good cup of coffee. I believe in continuous learning and am constantly seeking to broaden my skill set—always ready for the next challenge and collaboration.
