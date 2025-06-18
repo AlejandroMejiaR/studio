@@ -26,10 +26,10 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   const animatedElements: JSX.Element[] = [];
 
   words.forEach((word, wordIndex) => {
-    // Add letters of the word
+    const wordLetterSpans: JSX.Element[] = [];
     word.split('').forEach((char) => {
       const delay = globalCharIndex * staggerDelay;
-      animatedElements.push(
+      wordLetterSpans.push(
         <span
           key={`char-${globalCharIndex}`}
           className={cn(
@@ -48,7 +48,18 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
       globalCharIndex++;
     });
 
-    // Add invisible 'Q' as a spacer if not the last word
+    if (wordLetterSpans.length > 0) {
+      animatedElements.push(
+        <span
+          key={`word-${wordIndex}`}
+          className="inline-block whitespace-nowrap" // Keeps the word itself from breaking
+        >
+          {wordLetterSpans}
+        </span>
+      );
+    }
+
+    // Add 'Q' spacer if not the last word
     if (wordIndex < words.length - 1) {
       const delay = globalCharIndex * staggerDelay;
       animatedElements.push(
@@ -79,9 +90,8 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
       style={style}
     >
       {animatedElements.length > 0 ? animatedElements : (
-        // Fallback for empty text or text with only spaces to avoid empty span if not desired
-        // Or, to ensure the aria-label is still on a span if text is effectively empty after processing
-        <span aria-hidden="true" style={{opacity: 0}}>{text}</span>
+        // Fallback for empty text or text with only spaces
+        <span aria-hidden="true" style={{opacity: 0}}>{text || ''}</span>
       )}
     </span>
   );
