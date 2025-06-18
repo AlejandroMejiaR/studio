@@ -48,12 +48,12 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
       globalCharIndex++;
     });
 
-    // Add invisible 'a' as a spacer if not the last word
+    // Add invisible 'Q' as a spacer if not the last word
     if (wordIndex < words.length - 1) {
       const delay = globalCharIndex * staggerDelay;
       animatedElements.push(
         <span
-          key={`spacer-a-${globalCharIndex}`}
+          key={`spacer-Q-${globalCharIndex}`}
           className={cn(
             "inline-block opacity-0 animate-letter-reveal"
             // Not applying letterClassName here, as it's a spacer
@@ -65,7 +65,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
           }}
           aria-hidden="true"
         >
-          a
+          Q
         </span>
       );
       globalCharIndex++;
