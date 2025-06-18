@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
+import WordRevealAnimation from '@/components/effects/WordRevealAnimation'; // Changed from LetterRevealAnimation
 import {
   Github,
   ExternalLink,
@@ -69,8 +69,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden break-words">
-        <LetterRevealAnimation text={titleToDisplay} />
+      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden">
+        <WordRevealAnimation
+          text={titleToDisplay}
+          lineBaseDelay={0}
+          delayBetweenWords={0.1}
+          letterStaggerDelay={0.03}
+          letterAnimationDuration={0.5}
+        />
       </h1>
 
       {(showCaseStudy || showGallery) && (
@@ -82,7 +88,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {problemStatementToDisplay && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> 
+                        <Lightbulb className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                           {theChallengeText}
                         </span>
@@ -95,7 +101,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {solutionOverviewToDisplay && (
                      <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Target className="mr-3 h-6 w-6 text-accent" /> 
+                        <Target className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                           {theApproachText}
                         </span>
@@ -108,7 +114,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0 && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-4">
-                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> 
+                        <CheckCircle className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                            {keyFeaturesOutcomesText}
                         </span>
@@ -130,12 +136,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     </div>
                   )}
                 </div>
-                
+
                 <div className="flex gap-3 pt-6 mt-auto">
                     {project.liveUrl && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink size={18} className="mr-2" /> 
+                          <ExternalLink size={18} className="mr-2" />
                            <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                             {liveDemoButtonText}
                           </span>
@@ -145,7 +151,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     {project.repoUrl && (
                       <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                          <Github size={18} className="mr-2" /> 
+                          <Github size={18} className="mr-2" />
                           <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                             {viewCodeButtonText}
                           </span>
@@ -160,8 +166,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block break-words">
-                 <LetterRevealAnimation text={titleToDisplay} />
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block">
+                 <WordRevealAnimation
+                    text={titleToDisplay}
+                    lineBaseDelay={0}
+                    delayBetweenWords={0.1}
+                    letterStaggerDelay={0.03}
+                    letterAnimationDuration={0.5}
+                  />
               </h1>
 
               <Carousel
@@ -207,7 +219,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       ))
                     )}
                   </div>
-                
+
                 <div className="flex items-center text-base text-muted-foreground">
                   <CalendarDays size={18} className="mr-2 text-accent" />
                   <span>{project.date}</span>
@@ -217,7 +229,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           )}
         </div>
       )}
-      
+
     </div>
   );
 };
