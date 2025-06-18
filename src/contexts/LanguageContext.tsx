@@ -51,6 +51,13 @@ export interface AppTranslations {
   projectList: {
     noProjects: string;
   };
+  projectDetails: { // Added new section for project detail titles
+    theChallenge: string;
+    theApproach: string;
+    keyFeaturesOutcomes: string;
+    liveDemoButton: string;
+    viewCodeButton: string;
+  };
   likeButton: {
     unlikedTitle: string;
     unlikedDescription: string;
@@ -113,6 +120,13 @@ const translations: Record<Language, AppTranslations> = {
     projectList: {
       noProjects: "No projects to display yet. Check back soon!",
     },
+    projectDetails: {
+      theChallenge: "The Challenge",
+      theApproach: "The Approach",
+      keyFeaturesOutcomes: "Key Features & Outcomes",
+      liveDemoButton: "Live Demo",
+      viewCodeButton: "View Code",
+    },
     likeButton: {
       unlikedTitle: "Unliked!",
       unlikedDescription: "You unliked this project.",
@@ -172,6 +186,13 @@ const translations: Record<Language, AppTranslations> = {
     },
     projectList: {
       noProjects: "Aún no hay proyectos para mostrar. ¡Vuelve pronto!",
+    },
+    projectDetails: {
+      theChallenge: "El Desafío",
+      theApproach: "El Enfoque",
+      keyFeaturesOutcomes: "Características Clave y Resultados",
+      liveDemoButton: "Demo en Vivo",
+      viewCodeButton: "Ver Código",
     },
     likeButton: {
       unlikedTitle: "¡Ya no me gusta!",

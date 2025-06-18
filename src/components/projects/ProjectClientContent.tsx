@@ -39,7 +39,7 @@ const iconMap: Record<string, ElementType> = {
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
-  const { language, isClientReady, getEnglishTranslation } = useLanguage();
+  const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   // Use a fallback to project.en if project[currentLangKey] is undefined for some reason (e.g. malformed data)
@@ -50,6 +50,13 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
   const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
   const keyFeaturesToDisplay = isClientReady ? langContent.keyFeatures : project.en.keyFeatures;
+
+  // Translated section titles
+  const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
+  const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
+  const keyFeaturesOutcomesText = isClientReady ? translationsForLanguage.projectDetails.keyFeaturesOutcomes : getEnglishTranslation(t => t.projectDetails.keyFeaturesOutcomes);
+  const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
+  const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
 
   // Fallback for key feature text within map
@@ -75,7 +82,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {problemStatementToDisplay && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
+                        <Lightbulb className="mr-3 h-6 w-6 text-accent" /> 
+                        <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                          {theChallengeText}
+                        </span>
                       </h3>
                       <p className="text-foreground/80 text-base leading-relaxed pl-2">
                         {problemStatementToDisplay}
@@ -85,7 +95,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {solutionOverviewToDisplay && (
                      <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Target className="mr-3 h-6 w-6 text-accent" /> The Approach
+                        <Target className="mr-3 h-6 w-6 text-accent" /> 
+                        <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                          {theApproachText}
+                        </span>
                       </h3>
                       <p className="text-foreground/80 text-base leading-relaxed pl-2">
                         {solutionOverviewToDisplay}
@@ -95,7 +108,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0 && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-4">
-                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
+                        <CheckCircle className="mr-3 h-6 w-6 text-accent" /> 
+                        <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                           {keyFeaturesOutcomesText}
+                        </span>
                       </h3>
                       <div className="space-y-4 pl-2">
                         {keyFeaturesToDisplay.map((feature, index) => {
@@ -119,14 +135,20 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     {project.liveUrl && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink size={18} className="mr-2" /> Live Demo
+                          <ExternalLink size={18} className="mr-2" /> 
+                           <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                            {liveDemoButtonText}
+                          </span>
                         </Link>
                       </Button>
                     )}
                     {project.repoUrl && (
                       <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
-                          <Github size={18} className="mr-2" /> View Code
+                          <Github size={18} className="mr-2" /> 
+                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                            {viewCodeButtonText}
+                          </span>
                         </Link>
                       </Button>
                     )}
@@ -201,4 +223,3 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-
