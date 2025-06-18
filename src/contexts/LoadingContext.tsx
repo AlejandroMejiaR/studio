@@ -2,7 +2,8 @@
 "use client";
 
 import type { ReactNode } from 'react';
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { useLanguage } from './LanguageContext'; // Import useLanguage
 
 interface LoadingContextType {
   isPageLoading: boolean;
@@ -11,23 +12,39 @@ interface LoadingContextType {
   hideLoading: () => void;
 }
 
-const DEFAULT_LOADING_TEXT = "Loading...";
-
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 export const LoadingProvider = ({ children }: { children: ReactNode }) => {
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  
+  const getDynamicDefaultLoadingText = useCallback(() => {
+    return isClientReady 
+      ? translationsForLanguage.loadingScreen.defaultText 
+      : getEnglishTranslation(t => t.loadingScreen.defaultText) || "Loading...";
+  }, [isClientReady, translationsForLanguage, getEnglishTranslation]);
+
   const [isPageLoading, setIsPageLoading] = useState(false);
-  const [loadingText, setLoadingText] = useState<string>(DEFAULT_LOADING_TEXT);
+  const [loadingText, setLoadingText] = useState<string>(getDynamicDefaultLoadingText());
+
+  // Update loadingText if language changes while it's using the default
+  useEffect(() => {
+    if (!isPageLoading || loadingText === getDynamicDefaultLoadingText()) {
+        // If not loading, or if loading and current text is the (potentially old) default, update to new default
+        setLoadingText(getDynamicDefaultLoadingText());
+    }
+    // This effect should re-run if the default loading text changes (due to language switch)
+  }, [getDynamicDefaultLoadingText, isPageLoading, loadingText]);
+
 
   const showLoading = useCallback((text?: string) => {
-    setLoadingText(text || DEFAULT_LOADING_TEXT);
+    setLoadingText(text || getDynamicDefaultLoadingText());
     setIsPageLoading(true);
-  }, []);
+  }, [getDynamicDefaultLoadingText]);
 
   const hideLoading = useCallback(() => {
     setIsPageLoading(false);
-    setLoadingText(DEFAULT_LOADING_TEXT); // Reset text on hide
-  }, []);
+    setLoadingText(getDynamicDefaultLoadingText()); // Reset text on hide
+  }, [getDynamicDefaultLoadingText]);
 
   return (
     <LoadingContext.Provider value={{ isPageLoading, loadingText, showLoading, hideLoading }}>

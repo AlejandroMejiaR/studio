@@ -54,22 +54,25 @@ const Navbar = () => {
     { href: '/#about', labelKey: 'about' },
   ];
   
-  const brandTextToRender = isClientReady ? translationsForLanguage.brandName : getEnglishTranslation(t => t.brandName);
-  const currentLanguageDisplay = isClientReady ? language : 'EN'; // Used for key and display
-  const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]);
+  const brandTextToRender = isClientReady ? translationsForLanguage.brandName : getEnglishTranslation(t => t.brandName) || "Brand Name";
+  const currentLanguageDisplay = isClientReady ? language : 'EN'; 
+  const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]) || labelKey;
 
+  const returningHomeText = isClientReady 
+    ? translationsForLanguage.loadingScreen.returningHome 
+    : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
 
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
     if (pathname !== '/') {
-      showLoading("Returning to Home...");
+      showLoading(returningHomeText);
     }
   };
   
   const handleMobileHomeNavigation = () => {
     if (pathname !== '/') {
-      showLoading("Returning to Home...");
+      showLoading(returningHomeText);
     }
     setIsMobileMenuOpen(false);
   };
@@ -99,14 +102,12 @@ const Navbar = () => {
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             />
           ) : (
-            // Fallback for SSR/pre-hydration (no AnimatedBrandName, simple h1)
-            // Visibility will be handled by parent or hydration of AnimatedBrandName
-            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
-              {getEnglishTranslation(t => t.brandName).split('').map((letter, index) => (
+            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName) || "Brand"} style={{ visibility: 'hidden' }}>
+              {(getEnglishTranslation(t => t.brandName) || "Brand").split('').map((letter, index) => (
                 <span
                   key={index}
                   className="inline-block"
-                  style={{ animationDelay: `${((getEnglishTranslation(t => t.brandName).length - 1 - index) * staggerDelay)}s` }}
+                  style={{ animationDelay: `${(((getEnglishTranslation(t => t.brandName) || "Brand").length - 1 - index) * staggerDelay)}s` }}
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </span>
@@ -219,12 +220,12 @@ const Navbar = () => {
                       style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
-                        {getEnglishTranslation(t => t.brandName).split('').map((letter, index) => (
+                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName) || "Brand"} style={{ visibility: 'hidden' }}>
+                        {(getEnglishTranslation(t => t.brandName) || "Brand").split('').map((letter, index) => (
                             <span
                                 key={index}
                                 className="inline-block"
-                                style={{ animationDelay: `${((getEnglishTranslation(t => t.brandName).length - 1 - index) * staggerDelay)}s` }}
+                                style={{ animationDelay: `${(((getEnglishTranslation(t => t.brandName) || "Brand").length - 1 - index) * staggerDelay)}s` }}
                             >
                                 {letter === ' ' ? '\u00A0' : letter}
                             </span>

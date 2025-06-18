@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import LikeButton from './LikeButton';
 import { ArrowRight } from 'lucide-react';
 import { useLoading } from '@/contexts/LoadingContext';
-import { useLanguage } from '@/contexts/LanguageContext'; // Added
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
   project: Project;
@@ -17,14 +17,18 @@ interface ProjectCardProps {
 
 const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const { showLoading } = useLoading();
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Added
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+
+  const loadingProjectText = isClientReady 
+    ? translationsForLanguage.loadingScreen.loadingProject 
+    : getEnglishTranslation(t => t.loadingScreen.loadingProject) || "Loading Project...";
 
   const handleProjectLinkClick = () => {
-    showLoading("Loading Project...");
+    showLoading(loadingProjectText);
   };
 
-  const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : getEnglishTranslation(t => t.projectCard.viewMore);
-  const technologiesLabelText = isClientReady ? translationsForLanguage.projectCard.technologiesLabel : getEnglishTranslation(t => t.projectCard.technologiesLabel);
+  const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : getEnglishTranslation(t => t.projectCard.viewMore) || "View More";
+  const technologiesLabelText = isClientReady ? translationsForLanguage.projectCard.technologiesLabel : getEnglishTranslation(t => t.projectCard.technologiesLabel) || "Technologies:";
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">

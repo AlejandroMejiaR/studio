@@ -59,6 +59,11 @@ export interface AppTranslations {
     errorTitle: string;
     errorDescription: string;
   };
+  loadingScreen: {
+    defaultText: string;
+    loadingProject: string;
+    returningHome: string;
+  };
 }
 
 const translations: Record<Language, AppTranslations> = {
@@ -115,6 +120,11 @@ const translations: Record<Language, AppTranslations> = {
       errorTitle: "Error",
       errorDescription: "Could not update like status. Please try again.",
     },
+    loadingScreen: {
+      defaultText: "Loading...",
+      loadingProject: "Loading Project...",
+      returningHome: "Returning to Home...",
+    },
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
@@ -170,6 +180,11 @@ const translations: Record<Language, AppTranslations> = {
       errorTitle: "Error",
       errorDescription: "No se pudo actualizar el estado de 'me gusta'. Por favor, inténtalo de nuevo.",
     },
+    loadingScreen: {
+      defaultText: "Cargando...",
+      loadingProject: "Cargando Proyecto...",
+      returningHome: "Volviendo al Inicio...",
+    },
   },
 };
 
@@ -218,7 +233,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [language]);
   
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | undefined) => {
-    return keyPath(translations['EN']);
+    // Ensure translations['EN'] exists and the keyPath is valid before accessing
+    if (translations['EN']) {
+      const value = keyPath(translations['EN']);
+      return value;
+    }
+    return undefined; // Fallback if 'EN' translations or specific key is missing
   }, []);
 
 
