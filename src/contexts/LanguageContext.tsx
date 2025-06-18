@@ -26,7 +26,7 @@ export interface AppTranslations {
   aboutMe: {
     title: string;
     paragraph1: string;
-    paragraph2: string; 
+    paragraph2: string;
   };
   // Add other sections/keys as needed
 }
@@ -52,7 +52,7 @@ const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "About Me",
       paragraph1: "Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.",
-      paragraph2: "When I’m not coding, you’ll find me exploring new design trends or savoring a good cup of coffee. I believe in continuous learning and am constantly seeking to broaden my skill set—always ready for the next challenge and collaboration.",
+      paragraph2: "When I’m not coding, you’ll probably find me exploring new technology trends or enjoying a good cup of coffee. I strongly believe in continuous learning and am always looking to expand my skill set—open to new challenges and collaborations.",
     },
   },
   ES: {
