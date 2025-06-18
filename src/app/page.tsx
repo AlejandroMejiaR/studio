@@ -20,6 +20,7 @@ export default function HomePage() {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
+  const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -42,10 +43,15 @@ export default function HomePage() {
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
+  // Reset subtitle animation complete state if subtitle text changes (e.g., language switch)
+  useEffect(() => {
+    setIsSubtitleAnimationComplete(false);
+  }, [heroSubtitle]);
+
   // Pre-calculate animation timings for the hero title
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
-  let currentCumulativeLineBaseDelay = 0; // Tracks the start delay for each WordRevealAnimation
-  let maxTitleAnimationOverallEndTime = 0;    // Tracks when the entire title animation finishes
+  let currentCumulativeLineBaseDelay = 0; 
+  let maxTitleAnimationOverallEndTime = 0;
 
   const letterStaggerConst = 0.04;
   const letterAnimationDurationConst = 0.5;
@@ -55,7 +61,6 @@ export default function HomePage() {
     const currentLineStartOffset = currentCumulativeLineBaseDelay;
     lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
 
-    // Calculate internal duration of this line's WordRevealAnimation
     const words = lineText.split(' ').filter(w => w.length > 0);
     let internalDurationOfThisLine = 0;
     if (words.length > 0) {
@@ -64,7 +69,7 @@ export default function HomePage() {
         const wordAnimTime = (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
         internalDurationOfThisLine += wordAnimTime;
 
-        if (i < words.length - 1) { // If not the last word, add inter-word delay
+        if (i < words.length - 1) {
           let actualInterWordDelay = delayBetweenWordsConst;
           if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
             actualInterWordDelay = 0;
@@ -78,26 +83,15 @@ export default function HomePage() {
     if (thisLineEndsAt > maxTitleAnimationOverallEndTime) {
       maxTitleAnimationOverallEndTime = thisLineEndsAt;
     }
-
-    // Update currentCumulativeLineBaseDelay for the *next* line's start, replicating the previous stagger logic
-    // The old logic was: cumulativeLineDelay += (wordsInLine > 0 ? estimatedLineDuration : 0.3);
-    // where estimatedLineDuration = (wordsInLine * 0.5) + ((wordsInLine > 0 ? wordsInLine -1 : 0) * 0.15) + 0.3;
-    // This was a somewhat arbitrary stagger. Let's use the internal duration of the current line for a more natural flow,
-    // or a fixed small step if a specific stagger rhythm is preferred.
-    // For now, let's assume a simple stagger where the next line starts shortly after the previous one *could* have started its own words.
-    // A safer bet is to use the actual internal duration of the line to advance, ensuring lines don't overlap too much
-    // if that's the desired effect, or use a smaller increment for more overlap.
-    // The original logic's `estimatedLineDuration` included a `+0.3` per line and per-word/per-gap times.
-    // Let's use the internal line duration plus a small fixed offset for staggering.
+    
     if (words.length > 0) {
-        currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3; // Example: Start next line when current is ~halfway + fixed offset
+        currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3; 
     } else {
-        currentCumulativeLineBaseDelay += 0.3; // Stagger for empty lines
+        currentCumulativeLineBaseDelay += 0.3; 
     }
   });
   
-  // The typing animation for the subtitle should start after the entire title animation finishes.
-  const subtitleTypingStartDelay = maxTitleAnimationOverallEndTime + 0.5; // Adding a 0.5s buffer
+  const subtitleTypingStartDelay = maxTitleAnimationOverallEndTime + 0.5; 
 
   return (
     <div className="max-w-7xl mx-auto px-4">
@@ -129,30 +123,33 @@ export default function HomePage() {
                 speed={30}
                 startDelay={subtitleTypingStartDelay}
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                onComplete={() => setIsSubtitleAnimationComplete(true)}
               />
             </p>
-            <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href="/#projects">
-                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                    {viewWorkButtonText}
-                  </span>
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
-              >
-                <Link href="/#about">
-                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                    {aboutMeButtonText}
-                  </span>
-                  <ArrowDown size={20} className="ml-2" />
-                </Link>
-              </Button>
-            </div>
+            {isSubtitleAnimationComplete && (
+              <div className="flex flex-col sm:flex-row justify-start items-center gap-4 animate-fadeIn">
+                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Link href="/#projects">
+                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                      {viewWorkButtonText}
+                    </span>
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  asChild
+                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
+                >
+                  <Link href="/#about">
+                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                      {aboutMeButtonText}
+                    </span>
+                    <ArrowDown size={20} className="ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Right Column: Image */}
