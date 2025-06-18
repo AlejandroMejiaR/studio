@@ -64,15 +64,15 @@ const mapDocToProject = (docId: string, data: any): Project => {
     repoUrl: data.repoUrl || undefined,
 
     en: {
-      title: data.en?.title || defaultEnTranslation.title,
-      shortDescription: data.en?.shortDescription || defaultEnTranslation.shortDescription,
+      title: data.en?.title ?? defaultEnTranslation.title,
+      shortDescription: data.en?.shortDescription ?? defaultEnTranslation.shortDescription,
       problemStatement: data.en?.problemStatement || defaultEnTranslation.problemStatement,
       solutionOverview: data.en?.solutionOverview || defaultEnTranslation.solutionOverview,
       keyFeatures: data.en?.keyFeatures || defaultEnTranslation.keyFeatures,
     },
     es: {
-      title: data.es?.title || defaultEsTranslation.title,
-      shortDescription: data.es?.shortDescription || defaultEsTranslation.shortDescription,
+      title: data.es?.title ?? defaultEsTranslation.title,
+      shortDescription: data.es?.shortDescription ?? defaultEsTranslation.shortDescription,
       problemStatement: data.es?.problemStatement || defaultEsTranslation.problemStatement,
       solutionOverview: data.es?.solutionOverview || defaultEsTranslation.solutionOverview,
       keyFeatures: data.es?.keyFeatures || defaultEsTranslation.keyFeatures,
