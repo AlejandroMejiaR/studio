@@ -1,8 +1,28 @@
+
+"use client";
+
 import { Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useLoading } from '@/contexts/LoadingContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+  const { showLoading } = useLoading();
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+
+  const returningHomeText = isClientReady
+    ? translationsForLanguage.loadingScreen.returningHome
+    : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
+
+  const handleNavigationToHomeSection = () => {
+    if (pathname.startsWith('/projects/')) {
+      showLoading(returningHomeText);
+    }
+    // Navigation will be handled by the Link component's href
+  };
 
   return (
     <footer className="bg-footer-bg text-footer-fg py-12">
@@ -15,8 +35,20 @@ const Footer = () => {
           
           <nav className="flex flex-col items-center space-y-2 md:items-start">
             <h4 className="font-headline text-lg font-medium mb-1">Quick Links</h4>
-            <Link href="/#projects" className="hover:text-accent transition-colors">Projects</Link>
-            <Link href="/#about" className="hover:text-accent transition-colors">About Me</Link>
+            <Link 
+              href="/#projects" 
+              className="hover:text-accent transition-colors"
+              onClick={handleNavigationToHomeSection}
+            >
+              Projects
+            </Link>
+            <Link 
+              href="/#about" 
+              className="hover:text-accent transition-colors"
+              onClick={handleNavigationToHomeSection}
+            >
+              About Me
+            </Link>
             {/* <Link href="/contact" className="hover:text-accent transition-colors">Contact</Link> */}
           </nav>
 
