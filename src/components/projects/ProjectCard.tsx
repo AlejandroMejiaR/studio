@@ -1,7 +1,9 @@
 
+"use client"; // Added "use client"
+
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Project } from '@/types';
+import type { Project, ProjectTranslationDetails } from '@/types'; // Import ProjectTranslationDetails
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,7 +19,7 @@ interface ProjectCardProps {
 
 const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const { showLoading } = useLoading();
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const loadingProjectText = isClientReady 
     ? translationsForLanguage.loadingScreen.loadingProject 
@@ -30,18 +32,22 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : getEnglishTranslation(t => t.projectCard.viewMore) || "View More";
   const technologiesLabelText = isClientReady ? translationsForLanguage.projectCard.technologiesLabel : getEnglishTranslation(t => t.projectCard.technologiesLabel) || "Technologies:";
 
+  // Determine which language content to use
+  const currentLangKey = language.toLowerCase() as 'en' | 'es';
+  const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en; // Fallback to English
+
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">
       <CardHeader className="p-0">
         <Link 
           href={`/projects/${project.slug}`} 
-          aria-label={`View details for ${project.title}`}
+          aria-label={`View details for ${isClientReady ? langContent.title : project.en.title}`}
           onClick={handleProjectLinkClick}
         >
           <div className="aspect-[3/2] relative overflow-hidden">
             <Image
               src={project.thumbnailUrl}
-              alt={project.title}
+              alt={isClientReady ? langContent.title : project.en.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -56,11 +62,11 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
             href={`/projects/${project.slug}`}
             onClick={handleProjectLinkClick}
           >
-            {project.title}
+            {isClientReady ? langContent.title : project.en.title}
           </Link>
         </CardTitle>
         <CardDescription className="text-foreground/70 line-clamp-3">
-          {project.shortDescription}
+          {isClientReady ? langContent.shortDescription : project.en.shortDescription}
         </CardDescription>
         <div className="mt-4">
           <p className="text-xs text-muted-foreground mb-1">

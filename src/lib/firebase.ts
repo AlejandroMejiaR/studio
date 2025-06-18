@@ -13,7 +13,7 @@ import {
   where,
   Timestamp
 } from 'firebase/firestore';
-import type { Project } from '@/types';
+import type { Project, ProjectTranslationDetails } from '@/types'; // Added ProjectTranslationDetails
 import { getSupabaseImageUrl } from '@/lib/supabase';
 
 const firebaseConfig = {
@@ -36,23 +36,51 @@ const db: Firestore = getFirestore(app);
 
 // Helper to convert Firestore data to Project type
 const mapDocToProject = (docId: string, data: any): Project => {
+  const defaultEnTranslation: ProjectTranslationDetails = {
+    title: 'English Title Missing',
+    shortDescription: 'English short description missing.',
+    problemStatement: undefined,
+    solutionOverview: undefined,
+    keyFeatures: [],
+    longDescriptionMarkdown: undefined,
+  };
+  const defaultEsTranslation: ProjectTranslationDetails = {
+    title: 'Título en Español Faltante',
+    shortDescription: 'Descripción corta en español faltante.',
+    problemStatement: undefined,
+    solutionOverview: undefined,
+    keyFeatures: [],
+    longDescriptionMarkdown: undefined,
+  };
+
   return {
     id: docId,
-    slug: data.slug || '',
-    title: data.title || '',
-    category: data.category || '',
-    date: data.date || '',
-    shortDescription: data.shortDescription || '',
+    slug: data.slug || `project-${docId}`, // Ensure slug exists
+    category: data.category || 'Uncategorized',
+    date: data.date || 'N/A',
     thumbnailUrl: data.thumbnailPath ? getSupabaseImageUrl('projects', data.thumbnailPath) : 'https://placehold.co/600x400.png',
     bannerUrl: data.bannerPath ? getSupabaseImageUrl('projects', data.bannerPath) : 'https://placehold.co/1200x600.png',
     technologies: data.technologies || [],
-    problemStatement: data.problemStatement || undefined,
-    solutionOverview: data.solutionOverview || undefined,
-    keyFeatures: data.keyFeatures || [],
     galleryImages: data.galleryImagePaths ? data.galleryImagePaths.map((path: string) => getSupabaseImageUrl('projects', path)) : [],
-    liveUrl: data.liveUrl || undefined, // Explicitly assign, will be undefined if not in data
-    repoUrl: data.repoUrl || undefined, // Explicitly assign, will be undefined if not in data
-    longDescriptionMarkdown: data.longDescriptionMarkdown || undefined,
+    liveUrl: data.liveUrl || undefined,
+    repoUrl: data.repoUrl || undefined,
+
+    en: data.en ? {
+      title: data.en.title || defaultEnTranslation.title,
+      shortDescription: data.en.shortDescription || defaultEnTranslation.shortDescription,
+      problemStatement: data.en.problemStatement,
+      solutionOverview: data.en.solutionOverview,
+      keyFeatures: data.en.keyFeatures || [],
+      longDescriptionMarkdown: data.en.longDescriptionMarkdown,
+    } : defaultEnTranslation,
+    es: data.es ? {
+      title: data.es.title || defaultEsTranslation.title,
+      shortDescription: data.es.shortDescription || defaultEsTranslation.shortDescription,
+      problemStatement: data.es.problemStatement,
+      solutionOverview: data.es.solutionOverview,
+      keyFeatures: data.es.keyFeatures || [],
+      longDescriptionMarkdown: data.es.longDescriptionMarkdown,
+    } : defaultEsTranslation,
   };
 };
 
@@ -113,9 +141,7 @@ export const getProjectLikes = async (projectId: string): Promise<number> => {
 const updateLikesInFirestore = async (projectId: string, amount: number): Promise<number> => {
   if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
     console.warn("Firebase projectId is not configured. Likes will not be updated in Firestore.");
-    // For mock environments, you might want to simulate the update or just return a predictable value.
-    // Here, we'll just log and return a placeholder.
-    const currentLikes = await getProjectLikes(projectId); // This will use the mock path if projectId is not configured
+    const currentLikes = await getProjectLikes(projectId); 
     return currentLikes + amount;
   }
 
@@ -125,13 +151,12 @@ const updateLikesInFirestore = async (projectId: string, amount: number): Promis
     await runTransaction(db, async (transaction) => {
       const projectDoc = await transaction.get(projectRef);
       if (!projectDoc.exists()) {
-        // Project document doesn't exist, create it with the initial like count
         const initialLikes = amount > 0 ? amount : 0;
         transaction.set(projectRef, { likes: initialLikes }, { merge: true });
         finalLikes = initialLikes;
       } else {
         const currentLikes = projectDoc.data().likes || 0;
-        const newLikes = Math.max(0, currentLikes + amount); // Ensure likes don't go below 0
+        const newLikes = Math.max(0, currentLikes + amount); 
         transaction.update(projectRef, { likes: newLikes });
         finalLikes = newLikes;
       }
@@ -139,7 +164,6 @@ const updateLikesInFirestore = async (projectId: string, amount: number): Promis
     return finalLikes;
   } catch (error) {
     console.error(`Error updating likes for project ${projectId} in Firestore:`, error);
-    // Attempt to return current likes or 0 if transaction fails
     const currentLikes = await getProjectLikes(projectId);
     return currentLikes;
   }

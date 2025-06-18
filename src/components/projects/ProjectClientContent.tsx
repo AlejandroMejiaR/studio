@@ -1,7 +1,7 @@
 
 "use client";
 
-import type { Project } from '@/types';
+import type { Project, ProjectTranslationDetails } from '@/types'; // Import ProjectTranslationDetails
 import LikeButton from './LikeButton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,7 +21,8 @@ import {
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card'; // Ensure Card is imported
+import { Card } from '@/components/ui/card';
+import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
 
 interface ProjectClientContentProps {
   project: Project;
@@ -38,14 +39,20 @@ const iconMap: Record<string, ElementType> = {
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
-  const showCaseStudy = project.problemStatement || project.solutionOverview || (project.keyFeatures && project.keyFeatures.length > 0);
+  const { language, isClientReady } = useLanguage(); // Get current language and client readiness
+
+  // Determine which language content to use
+  const currentLangKey = language.toLowerCase() as 'en' | 'es';
+  const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en; // Fallback to English if somehow currentLangKey is invalid or content missing
+
+  const showCaseStudy = langContent.problemStatement || langContent.solutionOverview || (langContent.keyFeatures && langContent.keyFeatures.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       {/* Responsive Page Title - Visible on small screens, hidden on large */}
       <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden">
-        <LetterRevealAnimation text={project.title} />
+        <LetterRevealAnimation text={isClientReady ? langContent.title : project.en.title} />
       </h1>
 
       {/* Combined Section for Case Study and Project Gallery */}
@@ -55,34 +62,34 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
-                <div className="space-y-6 flex-grow"> 
-                  {project.problemStatement && (
+                <div className="space-y-6 flex-grow">
+                  {langContent.problemStatement && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
                         <Lightbulb className="mr-3 h-6 w-6 text-accent" /> The Challenge
                       </h3>
                       <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                        {project.problemStatement}
+                        {langContent.problemStatement}
                       </p>
                     </div>
                   )}
-                  {project.solutionOverview && (
+                  {langContent.solutionOverview && (
                      <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
                         <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
                       </h3>
                       <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                        {project.solutionOverview}
+                        {langContent.solutionOverview}
                       </p>
                     </div>
                   )}
-                  {project.keyFeatures && project.keyFeatures.length > 0 && (
+                  {langContent.keyFeatures && langContent.keyFeatures.length > 0 && (
                     <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-4">
                         <CheckCircle className="mr-3 h-6 w-6 text-accent" /> Key Features & Outcomes
                       </h3>
                       <div className="space-y-4 pl-2">
-                        {project.keyFeatures.map((feature, index) => {
+                        {langContent.keyFeatures.map((feature, index) => {
                           const IconComponent = feature.icon ? iconMap[feature.icon] : null;
                           return (
                             <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
@@ -99,7 +106,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   )}
                 </div>
                 
-                {/* Action Buttons Moved Here - to the bottom */}
                 <div className="flex gap-3 pt-6 mt-auto">
                     {project.liveUrl && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -124,9 +130,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {/* Project Gallery Content (Right - approx 70% or full if no case study) */}
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              {/* Responsive Page Title - Visible on large screens (if gallery exists), hidden on small */}
               <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block">
-                <LetterRevealAnimation text={project.title} />
+                 <LetterRevealAnimation text={isClientReady ? langContent.title : project.en.title} />
               </h1>
 
               <Carousel
@@ -139,7 +144,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
                         <Image
                           src={src}
-                          alt={`${project.title} gallery image ${index + 1}`}
+                          alt={`${isClientReady ? langContent.title : project.en.title} gallery image ${index + 1}`}
                           fill
                           sizes="(max-width: 1279px) 100vw, 1152px"
                           className="object-cover"
@@ -156,10 +161,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   </>
                 )}
               </Carousel>
-              {/* Badge, Date, and Tech Stack Rows */}
-              <div className="mt-6 flex items-center justify-between"> {/* Main container for badges */}
-                {/* Left side: Category Badge - Technology Badges */}
-                 <div className="flex flex-wrap items-center gap-2"> {/* Container for category and tech badges */}
+              <div className="mt-6 flex items-center justify-between">
+                 <div className="flex flex-wrap items-center gap-2">
                     {project.category && (
                       <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                         {project.category}
@@ -175,8 +178,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                   </div>
                 
-                {/* Right side: Date */}
-                <div className="flex items-center text-base text-muted-foreground"> {/* Container for date */}
+                <div className="flex items-center text-base text-muted-foreground">
                   <CalendarDays size={18} className="mr-2 text-accent" />
                   <span>{project.date}</span>
                 </div>
@@ -186,11 +188,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       )}
       
-      {/* Project Overview Section */}
-      {project.longDescriptionMarkdown && (
+      {langContent.longDescriptionMarkdown && (
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
-          <p className="whitespace-pre-line">{project.longDescriptionMarkdown}</p>
+          <p className="whitespace-pre-line">{langContent.longDescriptionMarkdown}</p>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
 import { getProjectBySlugFromFirestore, getProjectLikes } from '@/lib/firebase';
-import ProjectClientContent from '@/components/projects/ProjectClientContent'; // Corrected import path
+import ProjectClientContent from '@/components/projects/ProjectClientContent';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
 
@@ -11,7 +11,7 @@ export const revalidate = 0;
 export async function generateMetadata(
   { params }: { params: { slug: string } }
 ): Promise<Metadata> {
-  const slug = params.slug; // Access slug after receiving params
+  const slug = params.slug;
   const project: Project | undefined = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
@@ -20,18 +20,27 @@ export async function generateMetadata(
     };
   }
 
+  // Default to English for metadata, fallback to Spanish if English title is missing/defaulted
+  const title = (project.en.title && project.en.title !== 'English Title Missing'
+                 ? project.en.title
+                 : project.es.title) || 'Portfolio Project';
+  const description = (project.en.shortDescription && project.en.shortDescription !== 'English short description missing.'
+                      ? project.en.shortDescription
+                      : project.es.shortDescription) || 'Details about this project.';
+
+
   return {
-    title: `${project.title} | Portfolio Ace`,
-    description: project.shortDescription,
+    title: `${title} | Portfolio Ace`,
+    description: description,
     openGraph: {
-      title: project.title,
-      description: project.shortDescription,
+      title: title,
+      description: description,
       images: [
         {
-          url: project.bannerUrl,
+          url: project.bannerUrl, // bannerUrl is not language-specific
           width: 1200,
           height: 630,
-          alt: project.title,
+          alt: title,
         },
       ],
     },
@@ -40,7 +49,7 @@ export async function generateMetadata(
 
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug; // Access slug after receiving params
+  const slug = params.slug;
   const project = await getProjectBySlugFromFirestore(slug);
 
   if (!project) {
@@ -55,4 +64,3 @@ export default async function ProjectPage({ params }: { params: { slug: string }
     </div>
   );
 }
-
