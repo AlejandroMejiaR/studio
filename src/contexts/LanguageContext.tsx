@@ -56,7 +56,7 @@ const translations: Record<Language, AppTranslations> = {
         line1: "Transformando ideas",
         line2: "en mundos",
         line3: "interactivos",
-        subtitle: "Soy Alejandro. Creo experiencias interactivas combinando Diseño de Juegos, UX e IA Generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
+        subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas que combinan game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
@@ -103,4 +103,3 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
-
