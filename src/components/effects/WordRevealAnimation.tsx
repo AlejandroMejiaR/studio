@@ -31,19 +31,31 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
 }) => {
   const words = text.split(' ').filter(word => word.length > 0);
   const animatedElements: React.ReactNode[] = [];
-  let currentWordStartDelay = lineBaseDelay;
+  let currentCumulativeDelayForThisLine = lineBaseDelay;
 
   words.forEach((word, wordIndex) => {
+    // Determine the delay to add *before* this word starts, if it's not the first word.
+    // This delay is the pause *between* the previous word finishing and this word starting.
     if (wordIndex > 0) {
-         currentWordStartDelay += delayBetweenWords;
+      const prevWord = words[wordIndex - 1];
+      const currentWord = words[wordIndex];
+      
+      let actualInterWordDelay = delayBetweenWords; // Default delay
+      
+      // Check for specific pairs to remove the delay
+      if ((prevWord === "Ideas" && currentWord === "Into") || (prevWord === "Ideas" && currentWord === "En")) {
+        actualInterWordDelay = 0; // No pause for these specific pairs
+      }
+      currentCumulativeDelayForThisLine += actualInterWordDelay;
     }
+    // currentCumulativeDelayForThisLine is now the actual start time for *this* word's animation.
 
     animatedElements.push(
-      <span key={`${word}-${wordIndex}-wrapper`} className={cn('inline-block whitespace-nowrap', wordClassName)}>
+      <span key={`${word}-${wordIndex}-wrapper-${text.substring(0,5)}`} className={cn('inline-block whitespace-nowrap', wordClassName)}>
         <LetterRevealAnimation
-          key={`${word}-${wordIndex}`}
+          key={`${word}-${wordIndex}-${text.substring(0,5)}`}
           text={word}
-          baseDelay={currentWordStartDelay}
+          baseDelay={currentCumulativeDelayForThisLine} // This word starts animating at this time
           letterStaggerDelay={letterStaggerDelay}
           letterAnimationDuration={letterAnimationDuration}
           letterClassName={letterClassName}
@@ -51,17 +63,19 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
       </span>
     );
 
-    const wordItselfAnimationDuration = (word.length > 0 ? (word.length - 1) * letterStaggerDelay : 0) + letterAnimationDuration;
-    currentWordStartDelay += wordItselfAnimationDuration;
+    // Calculate the duration of the current word's letter-by-letter animation
+    const currentWordAnimationDuration = (word.length > 0 ? (word.length - 1) * letterStaggerDelay : 0) + letterAnimationDuration;
+    // Advance currentCumulativeDelayForThisLine to be the time when *this* word *finishes* animating.
+    currentCumulativeDelayForThisLine += currentWordAnimationDuration; 
 
-
+    // Add a space span if not the last word on the line
     if (wordIndex < words.length - 1) {
-      animatedElements.push(<span key={`space-${wordIndex}`} className="inline-block">&nbsp;</span>);
+      animatedElements.push(<span key={`space-${wordIndex}-${text.substring(0,5)}`} className="inline-block">&nbsp;</span>);
     }
   });
 
   return (
-    <span className={cn(className)} style={style}>
+    <span className={cn(className)} style={style} aria-label={text}>
       {animatedElements.map((element, index) => (
           <React.Fragment key={index}>{element}</React.Fragment>
       ))}
@@ -70,4 +84,3 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
 };
 
 export default WordRevealAnimation;
-
