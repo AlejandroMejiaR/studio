@@ -57,11 +57,10 @@ export default function RootLayout({
   const themeKey = 'portfolio-ace-theme';
   try {
     const storedTheme = localStorage.getItem(themeKey);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-      document.documentElement.classList.add('dark');
-    } else {
+    if (storedTheme === 'light') {
       document.documentElement.classList.remove('dark');
+    } else { // Default to dark if 'dark' is stored OR no theme is stored at all
+      document.documentElement.classList.add('dark');
     }
   } catch (e) {
     console.warn('Initial theme application error:', e);
@@ -87,3 +86,4 @@ export default function RootLayout({
     </html>
   );
 }
+

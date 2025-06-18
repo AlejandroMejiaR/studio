@@ -1,7 +1,7 @@
 
 "use client";
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
@@ -14,23 +14,26 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark'); // Default to dark
   const [navbarIsMounted, setNavbarIsMounted] = useState(false);
   const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
   const isMobile = useIsMobile();
 
-  const [animateBrandName, setAnimateBrandName] = useState(false);
+  const [animateBrandName, setAnimateBrandName] = useState(true);
 
 
   useEffect(() => {
     setNavbarIsMounted(true);
     const storedTheme = localStorage.getItem('portfolio-ace-theme');
     if (storedTheme) {
-      setTheme(storedTheme);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme(storedTheme); // 'light' or 'dark'
+    } else {
+      // If no theme is stored, default to dark, matching the layout script.
       setTheme('dark');
+      document.documentElement.classList.add('dark'); // Ensure class is set if storage was empty
+      localStorage.setItem('portfolio-ace-theme', 'dark'); // Persist default if not set
     }
   }, []);
 
@@ -48,16 +51,16 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!isClientReady) {
-      setAnimateBrandName(false); // Don't animate if client isn't ready
+      setAnimateBrandName(false);
       return;
     }
 
     if (pathname === '/') {
-      setAnimateBrandName(true); // Always animate brand on homepage
+        setAnimateBrandName(true);
     } else {
       setAnimateBrandName(false); // Static brand on other pages
     }
-  }, [pathname, language, theme, isClientReady]); // Theme and language changes will re-evaluate
+  }, [pathname, language, theme, isClientReady]);
 
 
   const toggleTheme = () => {
@@ -100,9 +103,9 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const brandNameComponent = navbarIsMounted && animateBrandName ? (
+  const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (
     <AnimatedBrandName
-      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}-${pathname}`} // Key ensures re-animation
+      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}-${pathname}`}
       text={brandTextToRender}
       style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
     />
@@ -117,12 +120,12 @@ const Navbar = () => {
       {brandTextToRender}
     </h1>
   ) : ( 
-    <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
-      {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
+    <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")} style={{ visibility: 'hidden' }}>
+      {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")).split('').map((letter, index) => (
         <span
           key={index}
           className="inline-block"
-          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
+          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")).length - 1 - index) * staggerDelay)}s` }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </span>
@@ -142,8 +145,8 @@ const Navbar = () => {
         >
           {navbarIsMounted ? (
             <Gamepad2
-              key={`icon-${theme}-${pathname}`} // Re-render icon on theme/path change for animation consistency
-              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
+              key={`icon-${theme}-${pathname}`} 
+              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName && pathname === '/' ? "animate-icon-pulse" : "")}
             />
           ) : (
             <Gamepad2 className="h-7 w-7 text-primary" /> 
@@ -190,7 +193,7 @@ const Navbar = () => {
             {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> 
+              <Sun className="h-5 w-5 text-primary" /> 
             )}
           </Button>
         </nav>
@@ -223,7 +226,7 @@ const Navbar = () => {
              {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Sun className="h-5 w-5 text-primary" />
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -248,7 +251,7 @@ const Navbar = () => {
                   {navbarIsMounted ? (
                      <Gamepad2
                         key={`icon-mobile-${theme}-${pathname}`}
-                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
+                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName && pathname === '/' ? "animate-icon-pulse" : "")}
                       />
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
