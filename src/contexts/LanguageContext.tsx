@@ -44,15 +44,15 @@ const translations: Record<Language, AppTranslations> = {
     },
   },
   ES: {
-    brandName: "Alejandro Mejia - Ingeniero en Multimedia", // Corrected: Removed tilde from Mejia
+    brandName: "Alejandro Mejia - Ingeniero en Multimedia",
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
     },
     home: {
       hero: {
-        line1: "Creando experiencias", // Changed from "Creando experiencias digitales"
-        line2: "digitales", // Changed from ""
+        line1: "Creando experiencias",
+        line2: "digitales",
         subtitle: "Soy Alejandro. Creo experiencias interactivas combinando Diseño de Juegos, UX e IA Generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
