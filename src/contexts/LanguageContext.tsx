@@ -23,6 +23,9 @@ export interface AppTranslations {
       aboutMe: string;
     }
   };
+  aboutMe: { // Added aboutMe section
+    title: string;
+  };
   // Add other sections/keys as needed
 }
 
@@ -44,6 +47,9 @@ const translations: Record<Language, AppTranslations> = {
         aboutMe: "About Me",
       }
     },
+    aboutMe: { // Added English translation for aboutMe title
+      title: "About Me",
+    },
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
@@ -63,6 +69,9 @@ const translations: Record<Language, AppTranslations> = {
         aboutMe: "Sobre Mí",
       }
     },
+    aboutMe: { // Added Spanish translation for aboutMe title
+      title: "Sobre mí",
+    },
   },
 };
 
@@ -70,8 +79,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
-  isClientReady: boolean; // Added
-  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string) => string; // Helper
+  isClientReady: boolean;
+  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -88,10 +97,10 @@ const getInitialLanguage = (): Language => {
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
-  const [isClientReady, setIsClientReady] = useState(false); // Added
+  const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    setIsClientReady(true); // Set client ready after mount
+    setIsClientReady(true);
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
