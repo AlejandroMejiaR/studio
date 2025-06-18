@@ -1,7 +1,7 @@
 
 "use client";
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react'; // Added useRef
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
@@ -12,7 +12,8 @@ import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const SESSION_STORAGE_SKIP_ANIMATION_KEY = 'portfolio-ace-skip-hero-animation';
+const SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY = 'portfolio-ace-initial-animations-done';
+const SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY = 'portfolio-ace-last-animated-language';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -23,10 +24,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const isMobile = useIsMobile();
 
-  const [animateBrandName, setAnimateBrandName] = useState(true);
-  // This ref tracks if the *current continuous stay on the home page*
-  // was initiated by returning from a project and skipping the initial brand animation.
-  const homePageVisitSkippedInitialBrandAnimation = useRef(false);
+  const [animateBrandName, setAnimateBrandName] = useState(false);
 
 
   useEffect(() => {
@@ -52,30 +50,21 @@ const Navbar = () => {
   }, [theme, navbarIsMounted]);
 
   useEffect(() => {
-    if(!isClientReady) return; // Ensure sessionStorage is available
-
-    const skipHeroAnimationSessionFlag = sessionStorage.getItem(SESSION_STORAGE_SKIP_ANIMATION_KEY);
+    if (!isClientReady) return;
 
     if (pathname === '/') {
-      if (skipHeroAnimationSessionFlag === 'true') {
-        // Just arrived at home from a project page, and flag is set.
-        setAnimateBrandName(false); // Don't animate brand this time.
-        homePageVisitSkippedInitialBrandAnimation.current = true; // Mark this "home session" as having skipped.
-        // HomePage.tsx will consume and remove the sessionStorage flag.
-      } else if (homePageVisitSkippedInitialBrandAnimation.current) {
-        // Still on home, previously skipped initial brand animation, but flag is now gone
-        // (meaning HomePage processed it). Subsequent changes (like language/theme) should animate.
+      const initialAnimationsDone = sessionStorage.getItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY) === 'true';
+      const lastAnimatedLang = sessionStorage.getItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY);
+
+      if (!initialAnimationsDone || lastAnimatedLang !== language) {
         setAnimateBrandName(true);
       } else {
-        // On home, but not because we just returned from a project with a skip flag,
-        // or this is a fresh load/refresh of home.
-        setAnimateBrandName(true);
-        homePageVisitSkippedInitialBrandAnimation.current = false; // Reset if we are animating.
+        setAnimateBrandName(false);
       }
     } else {
-      // Not on the home page.
-      setAnimateBrandName(true); // Animations should be enabled for next visit to home.
-      homePageVisitSkippedInitialBrandAnimation.current = false; // Reset the tracking ref.
+      // On other pages, the brand name should be static.
+      // It will re-evaluate if we navigate back to home.
+      setAnimateBrandName(false);
     }
   }, [pathname, language, theme, isClientReady]);
 
@@ -108,18 +97,15 @@ const Navbar = () => {
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
-    if (pathname.startsWith('/projects/')) {
-      sessionStorage.setItem(SESSION_STORAGE_SKIP_ANIMATION_KEY, 'true');
-    }
+    // No longer need to set session storage here for animation skipping.
+    // That logic is now global in HomePage.
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
   };
 
   const handleMobileHomeNavigation = () => {
-    if (pathname.startsWith('/projects/')) {
-      sessionStorage.setItem(SESSION_STORAGE_SKIP_ANIMATION_KEY, 'true');
-    }
+    // No longer need to set session storage here.
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
@@ -128,7 +114,7 @@ const Navbar = () => {
 
   const brandNameComponent = navbarIsMounted && animateBrandName ? (
     <AnimatedBrandName
-      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`}
+      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`} // Key ensures re-animation
       text={brandTextToRender}
       style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
     />
@@ -142,13 +128,13 @@ const Navbar = () => {
     >
       {brandTextToRender}
     </h1>
-  ) : (
+  ) : ( // Fallback for SSR or before mount, visibility hidden to prevent flash
     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
       {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
         <span
           key={index}
           className="inline-block"
-          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
+          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }} // Placeholder for potential initial structure if ever needed
         >
           {letter === ' ' ? '\u00A0' : letter}
         </span>
@@ -168,11 +154,11 @@ const Navbar = () => {
         >
           {navbarIsMounted ? (
             <Gamepad2
-              key={`icon-${theme}`}
-              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
+              key={`icon-${theme}`} // Re-render icon on theme change for animation consistency
+              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
             />
           ) : (
-            <Gamepad2 className="h-7 w-7 text-primary" />
+            <Gamepad2 className="h-7 w-7 text-primary" /> // Fallback for SSR
           )}
           {brandNameComponent}
         </Link>
@@ -216,7 +202,7 @@ const Navbar = () => {
             {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR
             )}
           </Button>
         </nav>
@@ -249,7 +235,7 @@ const Navbar = () => {
              {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -274,12 +260,13 @@ const Navbar = () => {
                   {navbarIsMounted ? (
                      <Gamepad2
                         key={`icon-mobile-${theme}`}
-                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
+                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
                       />
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
-                  {brandNameComponent}
+                  {/* Use the same brandNameComponent instance for mobile sheet for consistency */}
+                  {brandNameComponent} 
                 </Link>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (

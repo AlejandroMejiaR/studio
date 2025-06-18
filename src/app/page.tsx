@@ -1,7 +1,7 @@
 
 "use client"; 
 
-import { useEffect, useState, useRef } from 'react'; // Added useRef
+import { useEffect, useState } from 'react';
 import type { Project } from '@/types';
 import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import AboutMe from '@/components/home/AboutMe';
@@ -15,27 +15,50 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const SESSION_STORAGE_SKIP_ANIMATION_KEY = 'portfolio-ace-skip-hero-animation';
+const SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY = 'portfolio-ace-initial-animations-done';
+const SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY = 'portfolio-ace-last-animated-language';
+
 
 export default function HomePage() {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
-  const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
   
-  const justReturnedFromProjectRef = useRef(false);
+  const [shouldRunAnimations, setShouldRunAnimations] = useState(false);
+  const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
+
 
   useEffect(() => {
-    const skipAnimationFlag = sessionStorage.getItem(SESSION_STORAGE_SKIP_ANIMATION_KEY);
-    if (skipAnimationFlag === 'true') {
-      justReturnedFromProjectRef.current = true;
-      sessionStorage.removeItem(SESSION_STORAGE_SKIP_ANIMATION_KEY);
-      setIsSubtitleAnimationComplete(true); // Ensure buttons appear if animation is skipped
+    if (!isClientReady) {
+      return;
     }
-  }, []);
 
-  const shouldAnimateThisRender = !justReturnedFromProjectRef.current;
+    const initialAnimationsDone = sessionStorage.getItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY) === 'true';
+    const lastAnimatedLang = sessionStorage.getItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY);
+
+    if (!initialAnimationsDone || lastAnimatedLang !== language) {
+      setShouldRunAnimations(true);
+      sessionStorage.setItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY, 'true');
+      sessionStorage.setItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY, language);
+      // setIsSubtitleAnimationComplete(false); // This will be handled by the effect below
+    } else {
+      setShouldRunAnimations(false);
+      // setIsSubtitleAnimationComplete(true); // This will be handled by the effect below
+    }
+  }, [isClientReady, language]);
+
+  // This effect ensures subtitle animation state is correctly set based on whether animations are running
+  // and when the subtitle text (language) changes.
+  useEffect(() => {
+    if (shouldRunAnimations) {
+      setIsSubtitleAnimationComplete(false); // Reset for new animation sequence
+    } else {
+      // If not animating this render, consider subtitle "complete" for button visibility
+      setIsSubtitleAnimationComplete(true);
+    }
+  }, [shouldRunAnimations, translationsForLanguage.home.hero.subtitle]); // heroSubtitle changes on language change
+
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
   const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle) as string || "Loading subtitle...";
@@ -43,31 +66,6 @@ export default function HomePage() {
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
-  // Effect to reset subtitle animation complete state if subtitle text changes (e.g., language switch)
-  // OR if we are animating this render after previously skipping.
-  useEffect(() => {
-    if (shouldAnimateThisRender) { // Only reset if we are supposed to animate
-      setIsSubtitleAnimationComplete(false);
-    } else {
-        // If we are NOT animating this render (because justReturnedFromProjectRef.current is true),
-        // ensure subtitle is marked complete for buttons. This is also set in the mount effect.
-        setIsSubtitleAnimationComplete(true);
-    }
-  }, [heroSubtitle, shouldAnimateThisRender]); // heroSubtitle changes on language change
-
-
-  // After the render where `justReturnedFromProjectRef.current` was true (meaning shouldAnimateThisRender was false), reset the ref.
-  useEffect(() => {
-    if (justReturnedFromProjectRef.current) {
-      // After the component has rendered once with the skipped animation,
-      // reset the ref so subsequent language changes or navigations will animate.
-      // Use a microtask (like setTimeout with 0) to ensure this runs after the current render cycle.
-      const timer = setTimeout(() => {
-        justReturnedFromProjectRef.current = false;
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [shouldAnimateThisRender]); // This effect runs when shouldAnimateThisRender changes.
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -133,12 +131,12 @@ export default function HomePage() {
     const currentLineAnimProps = lineAnimationProps[lineIndex];
     if (!currentLineAnimProps) return null; 
 
-    if (!shouldAnimateThisRender) {
+    if (!shouldRunAnimations) {
       return <span key={`${language}-static-line-${lineIndex}-${lineText}`} className="block">{lineText}</span>;
     }
     return (
       <WordRevealAnimation
-        key={`${language}-line-${lineIndex}-${lineText}`} // Key ensures re-animation on language change
+        key={`${language}-line-${lineIndex}-${lineText}`} 
         text={lineText || ""}
         lineBaseDelay={currentLineAnimProps.lineBaseDelay}
         delayBetweenWords={delayBetweenWordsConst}
@@ -150,14 +148,14 @@ export default function HomePage() {
     );
   });
 
-  const subtitleElement = !shouldAnimateThisRender ? (
+  const subtitleElement = !shouldRunAnimations ? (
     <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
       {heroSubtitle}
     </p>
   ) : (
     <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
       <TypingAnimation
-        key={heroSubtitle} // Key ensures re-animation on language change / subtitle text change
+        key={heroSubtitle} 
         text={heroSubtitle || ""}
         speed={30}
         startDelay={subtitleTypingStartDelay}
