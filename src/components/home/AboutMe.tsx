@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/button';
 import { getSupabaseImageUrl } from '@/lib/supabase';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
+import React from 'react'; // Import React for forwardRef
 
-const AboutMe = () => {
+// Wrap AboutMe component with forwardRef to allow assigning ref from parent
+const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
   const skills = ['Game Design', 'UX Design', 'Unity', 'Unreal Engine', 'C#', 'C++', 'JS', 'Python', 'Git', 'Generative AI', 'English B2'];
@@ -35,7 +37,10 @@ const AboutMe = () => {
 
 
   return (
-    <section id="about" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
+    // The outer section element is now in page.tsx and has the ref
+    // This component now renders its content directly.
+    // id="about" is also handled by the wrapping section in page.tsx
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-start">
         <div className="md:col-span-1 flex justify-center md:justify-start">
           <Card className="w-full max-w-sm shadow-xl">
@@ -172,8 +177,10 @@ const AboutMe = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
+});
+
+AboutMe.displayName = 'AboutMe'; // Add display name for React Developer Tools
 
 export default AboutMe;

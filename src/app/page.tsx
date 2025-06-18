@@ -1,7 +1,7 @@
 
 "use client"; 
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react'; // Added useRef
 import type { Project } from '@/types';
 import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import AboutMe from '@/components/home/AboutMe';
@@ -13,44 +13,75 @@ import TypingAnimation from '@/components/effects/TypingAnimation';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useFooter } from '@/contexts/FooterContext'; // Added useFooter
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { setIsFooterVisible } = useFooter(); // Get setIsFooterVisible
+  const aboutMeRef = useRef<HTMLElement | null>(null); // Ref for the AboutMe section
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
-  
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
 
+
+  // Effect for IntersectionObserver to control footer visibility
   useEffect(() => {
-    // Reset subtitle animation complete flag when subtitle text changes (e.g., language switch)
-    // This ensures buttons re-appear after the new subtitle animates.
+    const aboutSection = aboutMeRef.current;
+    if (!aboutSection || !isClientReady) return;
+
+    // Set initial footer visibility based on whether "About Me" is in view
+    const initialObserver = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+        initialObserver.disconnect(); // Disconnect after initial check
+      },
+      { threshold: 0.1 }
+    );
+    initialObserver.observe(aboutSection);
+    
+    // Main observer to toggle visibility on scroll
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1, // Adjust threshold as needed (0.1 means 10% of the element is visible)
+      }
+    );
+
+    observer.observe(aboutSection);
+
+    return () => {
+      observer.disconnect();
+      initialObserver.disconnect();
+      // When leaving homepage, reset footer to be visible by default for other pages
+      setIsFooterVisible(true); 
+    };
+  }, [isClientReady, setIsFooterVisible]);
+
+
+  useEffect(() => {
     setIsSubtitleAnimationComplete(false);
   }, [translationsForLanguage.home.hero.subtitle]);
 
 
   useEffect(() => {
-    // Condition 1: Client must be ready, and subtitle animation must be considered complete.
     if (!isClientReady || !isSubtitleAnimationComplete) return;
 
     const hash = window.location.hash;
     if (hash) {
-      const id = hash.substring(1); // e.g., "projects" or "about"
-
-      // Condition 2: If targeting "projects", projects must not be in a loading state.
-      // For "about" or other hashes, this condition is bypassed.
+      const id = hash.substring(1); 
       if (id === 'projects' && isLoadingProjects) {
-        return; // Defer scrolling for #projects if projects are still loading.
+        return; 
       }
-
       const scrollTimer = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100); // Small delay to allow DOM to settle.
-
+      }, 100); 
       return () => clearTimeout(scrollTimer);
     }
   }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects]); 
@@ -233,7 +264,10 @@ export default function HomePage() {
       ) : (
         <ProjectList projects={projects} />
       )}
-      <AboutMe />
+      {/* Assign ref to AboutMe section wrapper */}
+      <section ref={aboutMeRef} id="about">
+        <AboutMe />
+      </section>
     </div>
   );
 }

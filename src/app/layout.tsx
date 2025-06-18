@@ -8,7 +8,8 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LoadingProvider } from '@/contexts/LoadingContext';
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'; // Added useLanguage
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { FooterProvider, useFooter } from '@/contexts/FooterContext'; // Added FooterProvider and useFooter
 import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
@@ -17,20 +18,18 @@ import { useLoading } from '@/contexts/LoadingContext';
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isPageLoading, loadingText, hideLoading } = useLoading();
-  const { isClientReady } = useLanguage(); // Get isClientReady from LanguageContext
+  const { isClientReady } = useLanguage();
+  const { isFooterVisible } = useFooter(); // Get footer visibility state
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // This hideLoading is for page transitions, not initial load readiness
-    if (isClientReady) { // Only hide loading if client is ready
+    if (isClientReady) {
         hideLoading();
     }
   }, [pathname, searchParams, hideLoading, isClientReady]);
 
   if (!isClientReady) {
-    // Render nothing until the language context (and other client-side things) are ready.
-    // This prevents the footer or any other layout part from flashing.
     return null;
   }
 
@@ -39,11 +38,11 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">
-          <Suspense fallback={<div></div>}> {/* Simple fallback, won't show until isClientReady */}
+          <Suspense fallback={<div></div>}>
             {children}
           </Suspense>
         </main>
-        <Footer />
+        {isFooterVisible && <Footer />} {/* Conditionally render Footer */}
       </div>
       <ScrollToTopButton />
       <Toaster />
@@ -87,9 +86,11 @@ export default function RootLayout({
       <body className="font-body antialiased bg-background text-foreground" suppressHydrationWarning={true}>
         <LanguageProvider>
           <LoadingProvider>
-            <LayoutClientLogic>
-              {children}
-            </LayoutClientLogic>
+            <FooterProvider> {/* Wrap with FooterProvider */}
+              <LayoutClientLogic>
+                {children}
+              </LayoutClientLogic>
+            </FooterProvider>
           </LoadingProvider>
         </LanguageProvider>
       </body>
