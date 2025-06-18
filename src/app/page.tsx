@@ -41,7 +41,7 @@ export default function HomePage() {
 
   const heroLine1 = translationsForLanguage.home.hero.line1;
   const heroLine2 = translationsForLanguage.home.hero.line2;
-  const heroLine3 = translationsForLanguage.home.hero.line3; // Get line 3
+  const heroLine3 = translationsForLanguage.home.hero.line3;
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = translationsForLanguage.home.buttons.viewWork;
   const aboutMeButtonText = translationsForLanguage.home.buttons.aboutMe;
@@ -55,11 +55,11 @@ export default function HomePage() {
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
-              <LetterRevealAnimation text={heroLine1} className="whitespace-nowrap" />
+              <LetterRevealAnimation key={heroLine1} text={heroLine1} className="whitespace-nowrap" />
               {heroLine2 && <br />}
-              {heroLine2 && <LetterRevealAnimation text={heroLine2} />}
-              {heroLine3 && <br />} {/* Conditionally render BR for line 3 */}
-              {heroLine3 && <LetterRevealAnimation text={heroLine3} />} {/* Conditionally render line 3 */}
+              {heroLine2 && <LetterRevealAnimation key={heroLine2} text={heroLine2} />}
+              {heroLine3 && <br />}
+              {heroLine3 && <LetterRevealAnimation key={heroLine3} text={heroLine3} />}
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
