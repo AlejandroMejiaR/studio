@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-import WordRevealAnimation from '@/components/effects/WordRevealAnimation'; // Changed from LetterRevealAnimation
+// Removed WordRevealAnimation import as it's no longer used for the main title here
 import {
   Github,
   ExternalLink,
@@ -23,6 +23,7 @@ import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { cn } from '@/lib/utils';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -42,41 +43,35 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
-  // Use a fallback to project.en if project[currentLangKey] is undefined for some reason (e.g. malformed data)
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
 
-  // Determine text for display, falling back to English if client isn't ready or if a translation is missing
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
   const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
   const keyFeaturesToDisplay = isClientReady ? langContent.keyFeatures : project.en.keyFeatures;
 
-  // Translated section titles
   const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
   const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
   const keyFeaturesOutcomesText = isClientReady ? translationsForLanguage.projectDetails.keyFeaturesOutcomes : getEnglishTranslation(t => t.projectDetails.keyFeaturesOutcomes);
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
-
-  // Fallback for key feature text within map
   const getKeyFeatureTitle = (feature: any) => isClientReady ? feature.title : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || 'Feature Title Missing');
   const getKeyFeatureDescription = (feature: any) => isClientReady ? feature.description : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || 'Feature description missing.');
-
 
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
-      <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden">
-        <WordRevealAnimation
-          text={titleToDisplay}
-          lineBaseDelay={0}
-          delayBetweenWords={0} // Changed to 0
-          letterStaggerDelay={0.03}
-          letterAnimationDuration={0.5}
-        />
+      <h1
+        className={cn(
+          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden",
+          isClientReady ? "animate-fadeIn" : "opacity-0" // Apply animation if client is ready
+        )}
+        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+      >
+        {titleToDisplay}
       </h1>
 
       {(showCaseStudy || showGallery) && (
@@ -166,14 +161,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block">
-                 <WordRevealAnimation
-                    text={titleToDisplay}
-                    lineBaseDelay={0}
-                    delayBetweenWords={0} // Changed to 0
-                    letterStaggerDelay={0.03}
-                    letterAnimationDuration={0.5}
-                  />
+              <h1
+                className={cn(
+                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block",
+                  isClientReady ? "animate-fadeIn" : "opacity-0" // Apply animation if client is ready
+                )}
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+              >
+                 {titleToDisplay}
               </h1>
 
               <Carousel
