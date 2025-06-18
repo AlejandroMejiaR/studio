@@ -1,7 +1,7 @@
 
 "use client"; 
 
-import { useEffect, useState, useRef } from 'react'; // Added useRef
+import { useEffect, useState, useRef } from 'react';
 import type { Project } from '@/types';
 import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import AboutMe from '@/components/home/AboutMe';
@@ -13,13 +13,15 @@ import TypingAnimation from '@/components/effects/TypingAnimation';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useFooter } from '@/contexts/FooterContext'; // Added useFooter
+import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 export default function HomePage() {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-  const { setIsFooterVisible } = useFooter(); // Get setIsFooterVisible
-  const aboutMeRef = useRef<HTMLElement | null>(null); // Ref for the AboutMe section
+  const { setIsFooterVisible } = useFooter();
+  const aboutMeRef = useRef<HTMLElement | null>(null);
+  const pathname = usePathname(); // Get current pathname
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
@@ -29,25 +31,24 @@ export default function HomePage() {
   // Effect for IntersectionObserver to control footer visibility
   useEffect(() => {
     const aboutSection = aboutMeRef.current;
-    if (!aboutSection || !isClientReady) return;
 
-    // Set initial footer visibility based on whether "About Me" is in view
-    const initialObserver = new IntersectionObserver(
-      ([entry]) => {
-        setIsFooterVisible(entry.isIntersecting);
-        initialObserver.disconnect(); // Disconnect after initial check
-      },
-      { threshold: 0.1 }
-    );
-    initialObserver.observe(aboutSection);
-    
-    // Main observer to toggle visibility on scroll
+    if (!isClientReady || !aboutSection) {
+      // If critical conditions aren't met (e.g., client not ready, or ref not attached yet),
+      // and we are on the homepage, ensure the footer is explicitly set to hidden.
+      // This reinforces FooterContext's default 'false' for the homepage.
+      if (pathname === '/') {
+        setIsFooterVisible(false);
+      }
+      return;
+    }
+
+    // Single observer handles both initial check and subsequent scroll changes.
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsFooterVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1, // Adjust threshold as needed (0.1 means 10% of the element is visible)
+        threshold: 0.1, // Adjust threshold as needed
       }
     );
 
@@ -55,11 +56,11 @@ export default function HomePage() {
 
     return () => {
       observer.disconnect();
-      initialObserver.disconnect();
-      // When leaving homepage, reset footer to be visible by default for other pages
-      setIsFooterVisible(true); 
+      // When navigating away from the homepage, FooterContext's own useEffect 
+      // (which depends on pathname) will handle setting footer visibility 
+      // appropriately for the new page. So, no explicit setIsFooterVisible(true) here.
     };
-  }, [isClientReady, setIsFooterVisible]);
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added pathname and aboutMeRef
 
 
   useEffect(() => {

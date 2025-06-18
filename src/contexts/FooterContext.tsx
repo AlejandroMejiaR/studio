@@ -14,18 +14,22 @@ const FooterContext = createContext<FooterContextType | undefined>(undefined);
 
 export const FooterProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  // Default to true, so footer is visible on non-homepage routes or if observer logic isn't active
-  const [isFooterVisible, setIsFooterVisible] = useState(true);
+  // Default to false. Effects will manage visibility.
+  // This helps prevent flash on homepage, as page.tsx will explicitly show it if needed.
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
-    // If on the homepage, the page itself will control visibility via IntersectionObserver.
-    // If not on the homepage, ensure footer is visible.
-    if (pathname !== '/') {
+    if (pathname === '/') {
+      // On the homepage, isFooterVisible starts as false (from useState).
+      // src/app/page.tsx's IntersectionObserver is responsible for setting it to true
+      // if the 'About Me' section is initially in view, or later when scrolled to.
+      // If page.tsx determines "About Me" is not in view, it will call setIsFooterVisible(false),
+      // confirming the initial state.
+    } else {
+      // For all other pages, ensure the footer is visible.
       setIsFooterVisible(true);
     }
-    // For the homepage, src/app/page.tsx will set the initial state
-    // based on whether the 'about' section is initially in view or not.
-  }, [pathname]);
+  }, [pathname, setIsFooterVisible]); // setIsFooterVisible added for exhaustive-deps
 
   return (
     <FooterContext.Provider value={{ isFooterVisible, setIsFooterVisible }}>
