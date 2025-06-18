@@ -15,44 +15,19 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY = 'portfolio-ace-initial-animations-done';
-const SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY = 'portfolio-ace-last-animated-language';
-
-
 export default function HomePage() {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   
-  const [shouldRunAnimations, setShouldRunAnimations] = useState(false);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
 
-
   useEffect(() => {
-    if (!isClientReady) {
-      return;
-    }
-
-    const initialAnimationsDone = sessionStorage.getItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY) === 'true';
-    const lastAnimatedLang = sessionStorage.getItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY);
-
-    if (!initialAnimationsDone || lastAnimatedLang !== language) {
-      setShouldRunAnimations(true);
-      sessionStorage.setItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY, 'true');
-      sessionStorage.setItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY, language);
-    } else {
-      setShouldRunAnimations(false);
-    }
-  }, [isClientReady, language]);
-
-  useEffect(() => {
-    if (shouldRunAnimations) {
-      setIsSubtitleAnimationComplete(false); 
-    } else {
-      setIsSubtitleAnimationComplete(true);
-    }
-  }, [shouldRunAnimations, translationsForLanguage.home.hero.subtitle]);
+    // Reset subtitle animation complete flag when subtitle text changes (e.g., language switch)
+    // This ensures buttons re-appear after the new subtitle animates.
+    setIsSubtitleAnimationComplete(false);
+  }, [translationsForLanguage.home.hero.subtitle]);
 
 
   useEffect(() => {
@@ -78,7 +53,7 @@ export default function HomePage() {
 
       return () => clearTimeout(scrollTimer);
     }
-  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects]); // Added isLoadingProjects
+  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects]); 
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -151,9 +126,6 @@ export default function HomePage() {
     const currentLineAnimProps = lineAnimationProps[lineIndex];
     if (!currentLineAnimProps) return null; 
 
-    if (!shouldRunAnimations) {
-      return <span key={`${language}-static-line-${lineIndex}-${lineText}`} className="block">{lineText}</span>;
-    }
     return (
       <WordRevealAnimation
         key={`${language}-line-${lineIndex}-${lineText}`} 
@@ -168,11 +140,7 @@ export default function HomePage() {
     );
   });
 
-  const subtitleElement = !shouldRunAnimations ? (
-    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
-      {heroSubtitle}
-    </p>
-  ) : (
+  const subtitleElement = (
     <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
       <TypingAnimation
         key={heroSubtitle} 

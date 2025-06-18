@@ -12,9 +12,6 @@ import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY = 'portfolio-ace-initial-animations-done';
-const SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY = 'portfolio-ace-last-animated-language';
-
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
@@ -50,23 +47,17 @@ const Navbar = () => {
   }, [theme, navbarIsMounted]);
 
   useEffect(() => {
-    if (!isClientReady) return;
+    if (!isClientReady) {
+      setAnimateBrandName(false); // Don't animate if client isn't ready
+      return;
+    }
 
     if (pathname === '/') {
-      const initialAnimationsDone = sessionStorage.getItem(SESSION_STORAGE_INITIAL_ANIMATIONS_DONE_KEY) === 'true';
-      const lastAnimatedLang = sessionStorage.getItem(SESSION_STORAGE_LAST_ANIMATED_LANGUAGE_KEY);
-
-      if (!initialAnimationsDone || lastAnimatedLang !== language) {
-        setAnimateBrandName(true);
-      } else {
-        setAnimateBrandName(false);
-      }
+      setAnimateBrandName(true); // Always animate brand on homepage
     } else {
-      // On other pages, the brand name should be static.
-      // It will re-evaluate if we navigate back to home.
-      setAnimateBrandName(false);
+      setAnimateBrandName(false); // Static brand on other pages
     }
-  }, [pathname, language, theme, isClientReady]);
+  }, [pathname, language, theme, isClientReady]); // Theme and language changes will re-evaluate
 
 
   const toggleTheme = () => {
@@ -97,15 +88,12 @@ const Navbar = () => {
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
-    // No longer need to set session storage here for animation skipping.
-    // That logic is now global in HomePage.
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
   };
 
   const handleMobileHomeNavigation = () => {
-    // No longer need to set session storage here.
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
@@ -114,7 +102,7 @@ const Navbar = () => {
 
   const brandNameComponent = navbarIsMounted && animateBrandName ? (
     <AnimatedBrandName
-      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`} // Key ensures re-animation
+      key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}-${pathname}`} // Key ensures re-animation
       text={brandTextToRender}
       style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
     />
@@ -128,13 +116,13 @@ const Navbar = () => {
     >
       {brandTextToRender}
     </h1>
-  ) : ( // Fallback for SSR or before mount, visibility hidden to prevent flash
+  ) : ( 
     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
       {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
         <span
           key={index}
           className="inline-block"
-          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }} // Placeholder for potential initial structure if ever needed
+          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </span>
@@ -154,11 +142,11 @@ const Navbar = () => {
         >
           {navbarIsMounted ? (
             <Gamepad2
-              key={`icon-${theme}`} // Re-render icon on theme change for animation consistency
+              key={`icon-${theme}-${pathname}`} // Re-render icon on theme/path change for animation consistency
               className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
             />
           ) : (
-            <Gamepad2 className="h-7 w-7 text-primary" /> // Fallback for SSR
+            <Gamepad2 className="h-7 w-7 text-primary" /> 
           )}
           {brandNameComponent}
         </Link>
@@ -202,7 +190,7 @@ const Navbar = () => {
             {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR
+              <Moon className="h-5 w-5 text-primary" /> 
             )}
           </Button>
         </nav>
@@ -235,7 +223,7 @@ const Navbar = () => {
              {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -259,13 +247,12 @@ const Navbar = () => {
                 >
                   {navbarIsMounted ? (
                      <Gamepad2
-                        key={`icon-mobile-${theme}`}
+                        key={`icon-mobile-${theme}-${pathname}`}
                         className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", animateBrandName ? "animate-icon-pulse" : "")}
                       />
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
-                  {/* Use the same brandNameComponent instance for mobile sheet for consistency */}
                   {brandNameComponent} 
                 </Link>
                 <nav className="flex flex-col space-y-4">
