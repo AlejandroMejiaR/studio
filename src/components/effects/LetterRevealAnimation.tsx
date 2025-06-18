@@ -31,7 +31,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
 
   return (
     <span className={cn(className)} aria-label={text} style={style}> {/* Root span is default (inline) */}
-      {segments.flatMap((segment, segmentIndex) => { // Use flatMap
+      {segments.flatMap((segment, segmentIndex) => { 
         if (segment.match(/^\s+$/)) { // It's a whitespace segment
           // Return an array of animated space characters directly
           return segment.split('').map((spaceChar) => {
@@ -53,7 +53,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                 }}
                 aria-hidden="true"
               >
-                {spaceChar === ' ' ? '\u00A0' : spaceChar}
+                {spaceChar} {/* Use the original space character directly */}
               </span>
             );
           }).filter(Boolean); // Filter out any nulls
