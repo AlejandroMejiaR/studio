@@ -17,6 +17,27 @@ const Footer = () => {
     ? translationsForLanguage.loadingScreen.returningHome
     : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
 
+  const portfolioTitleText = isClientReady
+    ? translationsForLanguage.footer.portfolioTitle
+    : getEnglishTranslation(t => t.footer.portfolioTitle) || "Portfolio";
+
+  const rightsReservedText = isClientReady
+    ? translationsForLanguage.footer.rightsReservedText
+    : getEnglishTranslation(t => t.footer.rightsReservedText) || "All rights reserved.";
+
+  const quickLinksTitleText = isClientReady
+    ? translationsForLanguage.footer.quickLinksTitle
+    : getEnglishTranslation(t => t.footer.quickLinksTitle) || "Quick Links";
+  
+  const projectsLinkText = isClientReady
+    ? translationsForLanguage.footer.projectsLink
+    : getEnglishTranslation(t => t.footer.projectsLink) || "Projects";
+
+  const aboutMeLinkText = isClientReady
+    ? translationsForLanguage.footer.aboutMeLink
+    : getEnglishTranslation(t => t.footer.aboutMeLink) || "About Me";
+
+
   const handleNavigationToHomeSection = () => {
     if (pathname.startsWith('/projects/')) {
       showLoading(returningHomeText);
@@ -29,25 +50,35 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           <div className="text-center md:text-left">
-            <h3 className="font-headline text-xl font-semibold mb-2">Portfolio</h3>
-            <p className="text-sm">&copy; {currentYear} Alejandro Mejia Rojas. All rights reserved.</p>
+            <h3 className="font-headline text-xl font-semibold mb-2" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+              {portfolioTitleText}
+            </h3>
+            <p className="text-sm" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+              &copy; {currentYear} Alejandro Mejia Rojas. {rightsReservedText}
+            </p>
           </div>
           
           <nav className="flex flex-col items-center space-y-2 md:items-start">
-            <h4 className="font-headline text-lg font-medium mb-1">Quick Links</h4>
+            <h4 className="font-headline text-lg font-medium mb-1" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+              {quickLinksTitleText}
+            </h4>
             <Link 
               href="/#projects" 
               className="hover:text-accent transition-colors"
               onClick={handleNavigationToHomeSection}
             >
-              Projects
+              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                {projectsLinkText}
+              </span>
             </Link>
             <Link 
               href="/#about" 
               className="hover:text-accent transition-colors"
               onClick={handleNavigationToHomeSection}
             >
-              About Me
+              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                {aboutMeLinkText}
+              </span>
             </Link>
             {/* <Link href="/contact" className="hover:text-accent transition-colors">Contact</Link> */}
           </nav>

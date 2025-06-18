@@ -51,7 +51,7 @@ export interface AppTranslations {
   projectList: {
     noProjects: string;
   };
-  projectDetails: { // Added new section for project detail titles
+  projectDetails: {
     theChallenge: string;
     theApproach: string;
     keyFeaturesOutcomes: string;
@@ -70,6 +70,13 @@ export interface AppTranslations {
     defaultText: string;
     loadingProject: string;
     returningHome: string;
+  };
+  footer: { // Added footer translations
+    portfolioTitle: string;
+    rightsReservedText: string; // Text part, year and name will be inserted
+    quickLinksTitle: string;
+    projectsLink: string;
+    aboutMeLink: string;
   };
 }
 
@@ -140,6 +147,13 @@ const translations: Record<Language, AppTranslations> = {
       loadingProject: "Loading Project...",
       returningHome: "Returning to Home...",
     },
+    footer: {
+      portfolioTitle: "Portfolio",
+      rightsReservedText: "All rights reserved.",
+      quickLinksTitle: "Quick Links",
+      projectsLink: "Projects",
+      aboutMeLink: "About Me",
+    },
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
@@ -206,6 +220,13 @@ const translations: Record<Language, AppTranslations> = {
       defaultText: "Cargando...",
       loadingProject: "Cargando Proyecto...",
       returningHome: "Volviendo al Inicio...",
+    },
+    footer: {
+      portfolioTitle: "Portafolio",
+      rightsReservedText: "Todos los derechos reservados.",
+      quickLinksTitle: "Enlaces Rápidos",
+      projectsLink: "Proyectos",
+      aboutMeLink: "Sobre Mí",
     },
   },
 };
