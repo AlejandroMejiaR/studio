@@ -27,17 +27,10 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
-  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(true); // Default to true for animations
-
-  // Signal for specifically scrolling to projects section
-  const [scrollToProjectsSignal, setScrollToProjectsSignal] = useState(false);
+  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(true);
 
   useEffect(() => {
-    if (!isClientReady) {
-      setShouldAnimateInitialLoadOrLanguageChange(false);
-      return;
-    }
-    // Always animate on initial load or language change if client is ready
+    // Animations should always run on homepage load or language change.
     setShouldAnimateInitialLoadOrLanguageChange(true);
     setIsSubtitleAnimationComplete(false); // Reset for animations
   }, [isClientReady, language]);
@@ -58,70 +51,74 @@ export default function HomePage() {
         setIsFooterVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1, // Adjust as needed, 0.1 means 10% of the element is visible
+        threshold: 0.1,
       }
     );
 
     observer.observe(aboutSection);
 
-    // Initial check in case the "About Me" section is already visible on load
     if (aboutSection) {
         const rect = aboutSection.getBoundingClientRect();
-        const isInitiallyVisible = 
+        const isInitiallyVisible =
             rect.top < window.innerHeight && rect.bottom >= 0;
         setIsFooterVisible(isInitiallyVisible);
     }
 
-
     return () => {
       observer.disconnect();
     };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added pathname
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
 
 
-  // Effect to set signal for scrolling to #projects when projects load
-  useEffect(() => {
-    if (!isLoadingProjects && window.location.hash === '#projects') {
-      setScrollToProjectsSignal(true);
-    }
-  }, [isLoadingProjects, pathname]); // Also depend on pathname to re-check hash on navigation
-
-  // Effect to perform scroll when scrollToProjectsSignal is true
-  useEffect(() => {
-    if (scrollToProjectsSignal) {
-      const scrollTimer = setTimeout(() => {
-        const element = document.getElementById('projects');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300); // Increased delay
-      setScrollToProjectsSignal(false); // Reset the signal
-      return () => clearTimeout(scrollTimer);
-    }
-  }, [scrollToProjectsSignal]);
-
-  // General hash scrolling for other IDs like #about
   useEffect(() => {
     if (!isClientReady) return;
 
-    // Ensure animations are complete or not running before attempting to scroll
-    if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
-        return;
-    }
-
     const hash = window.location.hash;
-    // Handle only hashes other than #projects, as #projects is handled by its specific signal
-    if (hash && hash !== '#projects') {
-      const id = hash.substring(1);
-      const scrollTimer = setTimeout(() => {
+    if (!hash) return; // No hash, nothing to scroll to
+
+    const id = hash.substring(1);
+    let scrollTimer: NodeJS.Timeout;
+
+    if (id === 'projects') {
+      // Specific handling for #projects
+      if (!isLoadingProjects) { // Only attempt if projects are loaded
+        scrollTimer = setTimeout(() => {
+          const element = document.getElementById('projects');
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 300); // Delay for DOM readiness
+      }
+      // If projects are loading, do nothing yet for #projects;
+      // this effect will re-run when isLoadingProjects changes (due to dependency array).
+    } else {
+      // General handling for other hashes (e.g., #about)
+      if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
+        // If animating and animations not done, wait for animations to complete.
+        // This effect will re-run when isSubtitleAnimationComplete changes.
+        return;
+      }
+      scrollTimer = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 300); // Increased delay
-      return () => clearTimeout(scrollTimer);
+      }, 300); // Delay for DOM readiness / animation completion
     }
-  }, [isClientReady, pathname, isSubtitleAnimationComplete, shouldAnimateInitialLoadOrLanguageChange, language]);
+
+    return () => {
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+    };
+  }, [
+    isClientReady,
+    pathname, // Re-evaluate when path/hash changes
+    isLoadingProjects, // Crucial for #projects
+    isSubtitleAnimationComplete, // For #about and other general hashes
+    shouldAnimateInitialLoadOrLanguageChange, // For #about and other general hashes
+    language // If content affecting layout/ids changes due to language
+  ]);
 
 
   useEffect(() => {
@@ -161,7 +158,6 @@ export default function HomePage() {
   const letterAnimationDurationConst = 0.5;
   const delayBetweenWordsConst = 0.15;
 
-  // Always animate if shouldAnimateInitialLoadOrLanguageChange is true
   if (shouldAnimateInitialLoadOrLanguageChange) {
     heroFullTitleLines.forEach((lineText) => {
         const currentLineStartOffset = currentCumulativeLineBaseDelay;
