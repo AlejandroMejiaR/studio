@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react'; // Added Languages
+import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
@@ -14,7 +14,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
   const [isMounted, setIsMounted] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState<'EN' | 'ES'>('EN'); // Language state
+  const [currentLanguage, setCurrentLanguage] = useState<'EN' | 'ES'>('EN');
   const { showLoading } = useLoading();
   const pathname = usePathname();
 
@@ -46,7 +46,6 @@ const Navbar = () => {
 
   const toggleLanguage = () => {
     setCurrentLanguage(prev => (prev === 'EN' ? 'ES' : 'EN'));
-    // Actual language switching logic would go here in a real implementation
   };
 
   const navLinks = [
@@ -54,8 +53,12 @@ const Navbar = () => {
     { href: '/#about', label: 'About' },
   ];
 
-  const brandName = "Alejandro Mejia - Multimedia Engineer";
-  const staggerDelay = 0.05; 
+  const brandNameTranslations = {
+    EN: "Alejandro Mejia - Multimedia Engineer",
+    ES: "Alejandro Mejía - Ingeniero en Multimedia",
+  };
+  const brandName = brandNameTranslations[currentLanguage];
+  const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
     if (pathname !== '/') {
@@ -74,35 +77,35 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-16 items-center justify-between">
-        <Link 
-          href="/" 
-          className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80" 
+        <Link
+          href="/"
+          className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80"
           prefetch={false}
           onClick={handleHomeNavigation}
         >
           {isMounted ? (
-            <Gamepad2 
+            <Gamepad2
               key={`icon-${theme}`}
-              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
+              className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
             />
           ) : (
-            <Gamepad2 className="h-7 w-7 text-primary" /> 
+            <Gamepad2 className="h-7 w-7 text-primary" />
           )}
 
           {isMounted ? (
-            <AnimatedBrandName 
-              key={`brand-${theme}`}
-              text={brandName} 
+            <AnimatedBrandName
+              key={`brand-${theme}-${currentLanguage}`}
+              text={brandName}
             />
           ) : (
-            <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
-              {brandName.split('').map((letter, index) => {
-                const delay = (brandName.length - 1 - index) * staggerDelay;
+            <h1 className="font-headline text-xl font-bold" aria-label={brandNameTranslations.EN}>
+              {brandNameTranslations.EN.split('').map((letter, index) => {
+                const delay = (brandNameTranslations.EN.length - 1 - index) * staggerDelay;
                 return (
                   <span
                     key={index}
-                    className="inline-block" 
-                    style={{ animationDelay: `${delay}s` }} 
+                    className="inline-block"
+                    style={{ animationDelay: `${delay}s` }}
                   >
                     {letter === ' ' ? '\u00A0' : letter}
                   </span>
@@ -111,8 +114,8 @@ const Navbar = () => {
             </h1>
           )}
         </Link>
-        
-        <nav className="hidden md:flex items-center space-x-2"> {/* Reduced space-x for more items */}
+
+        <nav className="hidden md:flex items-center space-x-2">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -125,7 +128,7 @@ const Navbar = () => {
           ))}
           <Button
             variant="ghost"
-            size="sm" // Adjusted size to be consistent
+            size="sm"
             onClick={toggleLanguage}
             aria-label="Toggle language"
             className="h-9 px-2 hover:bg-accent/10 flex items-center"
@@ -148,23 +151,23 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback for SSR or pre-mount
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
         </nav>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center space-x-1"> {/* Reduced space-x */}
+        <div className="md:hidden flex items-center space-x-1">
           <Button
             variant="ghost"
-            size="sm" // Adjusted size
+            size="sm"
             onClick={toggleLanguage}
             aria-label="Toggle language"
             className="h-9 px-2 hover:bg-accent/10 flex items-center"
           >
             <Languages className="h-5 w-5 text-foreground/80" />
             <span
-              key={`mobile-${currentLanguage}`} // Ensure unique key for mobile
+              key={`mobile-${currentLanguage}`}
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
             >
               {currentLanguage}
@@ -180,7 +183,7 @@ const Navbar = () => {
              {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> // Fallback
+              <Moon className="h-5 w-5 text-primary" />
             )}
           </Button>
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -192,28 +195,28 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background">
               <div className="p-6">
-                <Link 
-                  href="/" 
-                  className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80" 
+                <Link
+                  href="/"
+                  className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80"
                   onClick={handleMobileHomeNavigation}
-                > 
+                >
                   {isMounted ? (
-                     <Gamepad2 
+                     <Gamepad2
                         key={`icon-mobile-${theme}`}
-                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")} 
+                        className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
                       />
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
                   {isMounted ? (
-                    <AnimatedBrandName 
-                      key={`brand-mobile-${theme}`}
-                      text={brandName} 
+                    <AnimatedBrandName
+                      key={`brand-mobile-${theme}-${currentLanguage}`}
+                      text={brandName}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={brandName}>
-                        {brandName.split('').map((letter, index) => {
-                            const delay = (brandName.length - 1 - index) * staggerDelay;
+                     <h1 className="font-headline text-xl font-bold" aria-label={brandNameTranslations.EN}>
+                        {brandNameTranslations.EN.split('').map((letter, index) => {
+                            const delay = (brandNameTranslations.EN.length - 1 - index) * staggerDelay;
                             return (
                             <span
                                 key={index}
