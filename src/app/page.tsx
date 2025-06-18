@@ -52,7 +52,7 @@ export default function HomePage() {
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
+            <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground text-left">
               <LetterRevealAnimation
                 key={heroLine1}
                 text={heroLine1}
