@@ -64,7 +64,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   // Constants for WordRevealAnimation for the title
   const titleLetterStaggerConst = 0.04;
-  const titleLetterAnimationDurationConst = 0; // Changed to 0
+  const titleLetterAnimationDurationConst = 0;
   const titleDelayBetweenWordsConst = 0;
   const titleBaseDelay = 0.2;
 
@@ -72,7 +72,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       <h1
         className={cn(
-          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden break-words"
+          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden"
         )}
       >
         {isClientReady ? (
@@ -91,7 +91,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       </h1>
 
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
@@ -148,7 +148,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   )}
                 </div>
 
-                <div className="flex gap-3 pt-6 mt-auto">
+                <div className="flex flex-wrap gap-3 pt-6 mt-auto">
                     {project.liveUrl && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
@@ -179,7 +179,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
               <h1
                  className={cn(
-                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block break-words"
+                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block"
                 )}
               >
                 {isClientReady ? (
