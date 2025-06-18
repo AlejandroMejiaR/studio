@@ -15,7 +15,7 @@ export interface AppTranslations {
   };
   home: {
     hero: {
-      fullTitle: string; // Changed from line1, line2, line3
+      fullTitle: string;
       subtitle: string;
     };
     buttons: {
@@ -137,7 +137,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        fullTitle: "Transformando ideas en mundos interactivos",
+        fullTitle: "Transformando Ideas En Mundos Interactivos",
         subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
