@@ -73,7 +73,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         <WordRevealAnimation
           text={titleToDisplay}
           lineBaseDelay={0}
-          delayBetweenWords={0.1}
+          delayBetweenWords={0} // Changed to 0
           letterStaggerDelay={0.03}
           letterAnimationDuration={0.5}
         />
@@ -170,7 +170,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                  <WordRevealAnimation
                     text={titleToDisplay}
                     lineBaseDelay={0}
-                    delayBetweenWords={0.1}
+                    delayBetweenWords={0} // Changed to 0
                     letterStaggerDelay={0.03}
                     letterAnimationDuration={0.5}
                   />
