@@ -7,10 +7,11 @@ type Language = 'EN' | 'ES';
 
 export interface AppTranslations {
   brandName: string;
+  brandNameShort: string; // Added for mobile
   nav: {
     projects: string;
     about: string;
-    mobileMenuTitle: string; // Added for mobile menu accessibility
+    mobileMenuTitle: string;
   };
   home: {
     hero: {
@@ -70,6 +71,7 @@ export interface AppTranslations {
 const translations: Record<Language, AppTranslations> = {
   EN: {
     brandName: "Alejandro Mejia - Multimedia Engineer",
+    brandNameShort: "Alejandro Mejia",
     nav: {
       projects: "Projects",
       about: "About",
@@ -130,6 +132,7 @@ const translations: Record<Language, AppTranslations> = {
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
+    brandNameShort: "Alejandro Mejía",
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
@@ -216,7 +219,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    setIsClientReady(true); // Client is ready after mount
+    setIsClientReady(true); 
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
@@ -236,6 +239,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, [language]);
   
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | undefined) => {
+    // Always return from English translations if available, otherwise undefined
     if (translations['EN']) {
       const value = keyPath(translations['EN']);
       return value;

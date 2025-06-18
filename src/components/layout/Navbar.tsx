@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'; // Added SheetTitle
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
+import { useIsMobile } from '@/hooks/use-mobile'; // Added
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -18,6 +19,7 @@ const Navbar = () => {
   const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
+  const isMobile = useIsMobile(); // Added
 
   useEffect(() => {
     setNavbarIsMounted(true);
@@ -54,7 +56,11 @@ const Navbar = () => {
     { href: '/#about', labelKey: 'about' },
   ];
   
-  const brandTextToRender = isClientReady ? translationsForLanguage.brandName : getEnglishTranslation(t => t.brandName) || "Brand Name";
+  const brandTextKey = isMobile ? 'brandNameShort' : 'brandName';
+  const brandTextToRender = isClientReady 
+    ? translationsForLanguage[brandTextKey] 
+    : getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name");
+
   const currentLanguageDisplay = isClientReady ? language : 'EN'; 
   const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]) || labelKey;
 
@@ -97,17 +103,17 @@ const Navbar = () => {
 
           {navbarIsMounted ? (
             <AnimatedBrandName
-              key={`brand-${theme}-${currentLanguageDisplay}`} 
+              key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`} 
               text={brandTextToRender}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             />
           ) : (
-            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName) || "Brand"} style={{ visibility: 'hidden' }}>
-              {(getEnglishTranslation(t => t.brandName) || "Brand").split('').map((letter, index) => (
+            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
+              {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
                 <span
                   key={index}
                   className="inline-block"
-                  style={{ animationDelay: `${(((getEnglishTranslation(t => t.brandName) || "Brand").length - 1 - index) * staggerDelay)}s` }}
+                  style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </span>
@@ -220,17 +226,17 @@ const Navbar = () => {
                   )}
                   {navbarIsMounted ? (
                     <AnimatedBrandName
-                      key={`brand-mobile-${theme}-${currentLanguageDisplay}`}
+                      key={`brand-mobile-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}`}
                       text={brandTextToRender}
                       style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName) || "Brand"} style={{ visibility: 'hidden' }}>
-                        {(getEnglishTranslation(t => t.brandName) || "Brand").split('').map((letter, index) => (
+                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")} style={{ visibility: 'hidden' }}>
+                        {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).split('').map((letter, index) => (
                             <span
                                 key={index}
                                 className="inline-block"
-                                style={{ animationDelay: `${(((getEnglishTranslation(t => t.brandName) || "Brand").length - 1 - index) * staggerDelay)}s` }}
+                                style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand")).length - 1 - index) * staggerDelay)}s` }}
                             >
                                 {letter === ' ' ? '\u00A0' : letter}
                             </span>
