@@ -27,6 +27,21 @@ export interface AppTranslations {
     title: string;
     paragraph1: string;
     paragraph2: string;
+    experienceCard: {
+      title: string;
+      detail: string;
+    };
+    projectsCard: {
+      title: string;
+      detailNumber: string;
+      detailText: string;
+    };
+    focusCard: {
+      title: string;
+      detail: string;
+    };
+    skillsTitle: string;
+    downloadCVButton: string;
   };
   // Add other sections/keys as needed
 }
@@ -53,6 +68,21 @@ const translations: Record<Language, AppTranslations> = {
       title: "About Me",
       paragraph1: "Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.",
       paragraph2: "When I’m not coding, you’ll probably find me exploring new technology trends or enjoying a good cup of coffee. I strongly believe in continuous learning and am always looking to expand my skill set—open to new challenges and collaborations.",
+      experienceCard: {
+        title: "Experience",
+        detail: "Continuous Learner",
+      },
+      projectsCard: {
+        title: "Projects",
+        detailNumber: "5+",
+        detailText: "Web, Unity & Unreal prototyping",
+      },
+      focusCard: {
+        title: "Focus",
+        detail: "Game Design & Gen AI",
+      },
+      skillsTitle: "My Skills",
+      downloadCVButton: "Download CV",
     },
   },
   ES: {
@@ -77,6 +107,21 @@ const translations: Record<Language, AppTranslations> = {
       title: "Sobre mí",
       paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tan funcionales como visualmente atractivas.",
       paragraph2: "Cuando no estoy programando, probablemente me encuentres explorando nuevas tendencias tecnológicas o disfrutando de una buena taza de café. Creo firmemente en el aprendizaje continuo y siempre estoy buscando ampliar mis habilidades, abierto a nuevos desafíos y colaboraciones.",
+      experienceCard: {
+        title: "Experiencia",
+        detail: "Aprendiz continuo",
+      },
+      projectsCard: {
+        title: "Proyectos",
+        detailNumber: "5+",
+        detailText: "Prototipado en Web, Unity y Unreal",
+      },
+      focusCard: {
+        title: "Enfoque",
+        detail: "UX e IA generativa",
+      },
+      skillsTitle: "Mis Habilidades",
+      downloadCVButton: "Descargar CV",
     },
   },
 };
@@ -86,7 +131,7 @@ interface LanguageContextType {
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
   isClientReady: boolean;
-  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string) => string;
+  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string | undefined) => string | undefined;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -116,8 +161,6 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // This effect syncs the language state back to localStorage if it was initialized to default
-  // or if it changes for any other reason.
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
@@ -127,7 +170,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [language]);
   
-  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string) => {
+  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | undefined) => {
     return keyPath(translations['EN']);
   }, []);
 
