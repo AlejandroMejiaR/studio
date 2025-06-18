@@ -10,7 +10,9 @@ import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
-import { useIsMobile } from '@/hooks/use-mobile'; // Added
+import { useIsMobile } from '@/hooks/use-mobile'; 
+
+const SESSION_STORAGE_SKIP_ANIMATION_KEY = 'portfolio-ace-skip-hero-animation';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,7 +21,7 @@ const Navbar = () => {
   const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
-  const isMobile = useIsMobile(); // Added
+  const isMobile = useIsMobile(); 
 
   useEffect(() => {
     setNavbarIsMounted(true);
@@ -71,12 +73,18 @@ const Navbar = () => {
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
+    if (pathname.startsWith('/projects/')) {
+      sessionStorage.setItem(SESSION_STORAGE_SKIP_ANIMATION_KEY, 'true');
+    }
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
   };
   
   const handleMobileHomeNavigation = () => {
+    if (pathname.startsWith('/projects/')) {
+      sessionStorage.setItem(SESSION_STORAGE_SKIP_ANIMATION_KEY, 'true');
+    }
     if (pathname !== '/') {
       showLoading(returningHomeText);
     }
