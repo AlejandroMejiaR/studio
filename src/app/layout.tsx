@@ -8,7 +8,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LoadingProvider } from '@/contexts/LoadingContext';
-import { LanguageProvider } from '@/contexts/LanguageContext'; // Added
+import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext'; // Added useLanguage
 import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
@@ -16,20 +16,30 @@ import { useLoading } from '@/contexts/LoadingContext';
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
-  const { isPageLoading, loadingText, hideLoading } = useLoading(); 
+  const { isPageLoading, loadingText, hideLoading } = useLoading();
+  const { isClientReady } = useLanguage(); // Get isClientReady from LanguageContext
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    hideLoading();
-  }, [pathname, searchParams, hideLoading]);
+    // This hideLoading is for page transitions, not initial load readiness
+    if (isClientReady) { // Only hide loading if client is ready
+        hideLoading();
+    }
+  }, [pathname, searchParams, hideLoading, isClientReady]);
+
+  if (!isClientReady) {
+    // Render nothing until the language context (and other client-side things) are ready.
+    // This prevents the footer or any other layout part from flashing.
+    return null;
+  }
 
   return (
     <>
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">
-          <Suspense fallback={<div></div>}>
+          <Suspense fallback={<div></div>}> {/* Simple fallback, won't show until isClientReady */}
             {children}
           </Suspense>
         </main>
@@ -86,4 +96,3 @@ export default function RootLayout({
     </html>
   );
 }
-
