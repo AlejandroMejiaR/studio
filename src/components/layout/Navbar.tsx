@@ -8,14 +8,15 @@ import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
+import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext'; // Updated import
 import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
   const [isMounted, setIsMounted] = useState(false);
-  const [currentLanguage, setCurrentLanguage] = useState<'EN' | 'ES'>('EN');
   const { showLoading } = useLoading();
+  const { language, setLanguage, translationsForLanguage } = useLanguage(); // Use language context
   const pathname = usePathname();
 
   useEffect(() => {
@@ -45,47 +46,29 @@ const Navbar = () => {
   };
 
   const toggleLanguage = () => {
-    setCurrentLanguage(prev => (prev === 'EN' ? 'ES' : 'EN'));
+    setLanguage(language === 'EN' ? 'ES' : 'EN');
   };
 
-  const translations = {
-    brandName: {
-      EN: "Alejandro Mejia - Multimedia Engineer",
-      ES: "Alejandro Mejia - Ingeniero en Multimedia",
-    },
-    nav: {
-      projects: {
-        EN: "Projects",
-        ES: "Proyectos",
-      },
-      about: {
-        EN: "About",
-        ES: "Sobre mí",
-      },
-    }
-  };
-
-  const navLinks = [
+  const navLinks: { href: string; labelKey: keyof AppTranslations['nav'] }[] = [
     { href: '/#projects', labelKey: 'projects' },
     { href: '/#about', labelKey: 'about' },
   ];
-
-  const brandName = translations.brandName[currentLanguage];
-  const staggerDelay = 0.05;
+  
+  const brandTextToDisplay = translationsForLanguage.brandName;
+  const staggerDelay = 0.05; // Retained for AnimatedBrandName logic
 
   const handleHomeNavigation = () => {
     if (pathname !== '/') {
       showLoading("Returning to Home...");
     }
   };
-
+  
   const handleMobileHomeNavigation = () => {
     if (pathname !== '/') {
       showLoading("Returning to Home...");
     }
     setIsMobileMenuOpen(false);
   };
-
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
@@ -107,23 +90,21 @@ const Navbar = () => {
 
           {isMounted ? (
             <AnimatedBrandName
-              key={`brand-${theme}-${currentLanguage}`}
-              text={brandName}
+              key={`brand-${theme}-${language}`} // Use language from context for key
+              text={brandTextToDisplay}
             />
           ) : (
-            <h1 className="font-headline text-xl font-bold" aria-label={translations.brandName.EN}>
-              {translations.brandName.EN.split('').map((letter, index) => {
-                const delay = (translations.brandName.EN.length - 1 - index) * staggerDelay;
-                return (
-                  <span
-                    key={index}
-                    className="inline-block"
-                    style={{ animationDelay: `${delay}s` }}
-                  >
-                    {letter === ' ' ? '\u00A0' : letter}
-                  </span>
-                );
-              })}
+            // Fallback for SSR/pre-mount - uses default EN
+            <h1 className="font-headline text-xl font-bold" aria-label="Alejandro Mejia - Multimedia Engineer">
+              {"Alejandro Mejia - Multimedia Engineer".split('').map((letter, index) => (
+                <span
+                  key={index}
+                  className="inline-block"
+                  style={{ animationDelay: `${( ("Alejandro Mejia - Multimedia Engineer".length - 1 - index) * staggerDelay)}s` }}
+                >
+                  {letter === ' ' ? '\u00A0' : letter}
+                </span>
+              ))}
             </h1>
           )}
         </Link>
@@ -136,7 +117,7 @@ const Navbar = () => {
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               prefetch={false}
             >
-              {translations.nav[link.labelKey as keyof typeof translations.nav][currentLanguage]}
+              {translationsForLanguage.nav[link.labelKey]}
             </Link>
           ))}
           <Button
@@ -148,10 +129,10 @@ const Navbar = () => {
           >
             <Languages className="h-5 w-5 text-foreground/80" />
             <span
-              key={currentLanguage}
+              key={language} // Use language from context for key
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
             >
-              {currentLanguage}
+              {language}
             </span>
           </Button>
           <Button
@@ -164,7 +145,7 @@ const Navbar = () => {
             {isMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" />
+              <Moon className="h-5 w-5 text-primary" /> /* Default to Moon for SSR */
             )}
           </Button>
         </nav>
@@ -180,10 +161,10 @@ const Navbar = () => {
           >
             <Languages className="h-5 w-5 text-foreground/80" />
             <span
-              key={`mobile-${currentLanguage}`}
+              key={`mobile-${language}`} // Use language from context for key
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
             >
-              {currentLanguage}
+              {language}
             </span>
           </Button>
           <Button
@@ -223,23 +204,20 @@ const Navbar = () => {
                   )}
                   {isMounted ? (
                     <AnimatedBrandName
-                      key={`brand-mobile-${theme}-${currentLanguage}`}
-                      text={brandName}
+                      key={`brand-mobile-${theme}-${language}`} // Use language from context
+                      text={brandTextToDisplay}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={translations.brandName.EN}>
-                        {translations.brandName.EN.split('').map((letter, index) => {
-                            const delay = (translations.brandName.EN.length - 1 - index) * staggerDelay;
-                            return (
+                     <h1 className="font-headline text-xl font-bold" aria-label="Alejandro Mejia - Multimedia Engineer">
+                        {"Alejandro Mejia - Multimedia Engineer".split('').map((letter, index) => (
                             <span
                                 key={index}
                                 className="inline-block"
-                                style={{ animationDelay: `${delay}s` }}
+                                style={{ animationDelay: `${( ("Alejandro Mejia - Multimedia Engineer".length - 1 - index) * staggerDelay)}s` }}
                             >
                                 {letter === ' ' ? '\u00A0' : letter}
                             </span>
-                            );
-                        })}
+                        ))}
                     </h1>
                   )}
                 </Link>
@@ -252,7 +230,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       prefetch={false}
                     >
-                      {translations.nav[link.labelKey as keyof typeof translations.nav][currentLanguage]}
+                      {translationsForLanguage.nav[link.labelKey]}
                     </Link>
                   ))}
                 </nav>

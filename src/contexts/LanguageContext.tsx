@@ -1,0 +1,102 @@
+'use client';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+
+type Language = 'EN' | 'ES';
+
+export interface AppTranslations {
+  brandName: string;
+  nav: {
+    projects: string;
+    about: string;
+  };
+  home: {
+    hero: {
+      line1: string;
+      line2: string;
+      subtitle: string;
+    };
+    buttons: {
+      viewWork: string;
+      aboutMe: string;
+    }
+  };
+  // Add other sections/keys as needed
+}
+
+const translations: Record<Language, AppTranslations> = {
+  EN: {
+    brandName: "Alejandro Mejia - Multimedia Engineer",
+    nav: {
+      projects: "Projects",
+      about: "About",
+    },
+    home: {
+      hero: {
+        line1: "Crafting Digital",
+        line2: "Experiences",
+        subtitle: "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\n\nExplore my work — let's build something amazing together.",
+      },
+      buttons: {
+        viewWork: "View My Work",
+        aboutMe: "About Me",
+      }
+    },
+  },
+  ES: {
+    brandName: "Alejandro Mejia - Ingeniero en Multimedia",
+    nav: {
+      projects: "Proyectos",
+      about: "Sobre mí",
+    },
+    home: {
+      hero: {
+        line1: "Creando experiencias digitales", // User request for the first <LetterRevealAnimation>
+        line2: "", // Second line is empty in Spanish as per interpretation of user request
+        subtitle: "Soy Alejandro. Creo experiencias interactivas combinando Diseño de Juegos, UX e IA Generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
+      },
+      buttons: {
+        viewWork: "Ver Mi Trabajo",
+        aboutMe: "Sobre Mí",
+      }
+    },
+  },
+};
+
+interface LanguageContextType {
+  language: Language;
+  setLanguage: (language: Language) => void;
+  translationsForLanguage: AppTranslations;
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [language, setLanguageState] = useState<Language>('EN'); // Default EN
+
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem('portfolio-ace-language') as Language | null;
+    if (storedLanguage && (storedLanguage === 'EN' || storedLanguage === 'ES')) {
+      setLanguageState(storedLanguage);
+    }
+  }, []);
+
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('portfolio-ace-language', lang);
+  }, []);
+  
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, translationsForLanguage: translations[language] }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = (): LanguageContextType => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
