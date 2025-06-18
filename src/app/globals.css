@@ -172,5 +172,37 @@ body {
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
-}
 
+  /* Project Title Color Fade-in Animations */
+  @keyframes title-color-fade-in-light {
+    0% {
+      opacity: 0;
+      color: hsl(var(--accent));
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      color: hsl(var(--primary)); /* Uses --primary for the final "blackish" text color in light mode */
+      transform: translateY(0);
+    }
+  }
+  .animate-title-color-fade-in-light {
+    animation: title-color-fade-in-light 1s ease-out forwards;
+  }
+
+  @keyframes title-color-fade-in-dark {
+    0% {
+      opacity: 0;
+      color: hsl(var(--accent)); /* Accent is purple in dark mode */
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      color: hsl(var(--foreground)); /* Foreground is off-white in dark mode */
+      transform: translateY(0);
+    }
+  }
+  .dark .animate-title-color-fade-in-dark {
+    animation: title-color-fade-in-dark 1s ease-out forwards;
+  }
+}

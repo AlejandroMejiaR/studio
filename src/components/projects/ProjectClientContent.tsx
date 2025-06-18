@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import Link from 'next/link';
-// Removed WordRevealAnimation import as it's no longer used for the main title here
 import {
   Github,
   ExternalLink,
@@ -24,6 +23,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react'; // Added for theme detection
 
 interface ProjectClientContentProps {
   project: Project;
@@ -41,6 +41,26 @@ const iconMap: Record<string, ElementType> = {
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const [currentTheme, setCurrentTheme] = useState('dark'); // Default to dark as per initial script in layout
+
+  useEffect(() => {
+    // Set initial theme based on document class
+    const isDark = document.documentElement.classList.contains('dark');
+    setCurrentTheme(isDark ? 'dark' : 'light');
+
+    // Observe theme changes
+    const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          const isDarkUpdated = (mutation.target as HTMLElement).classList.contains('dark');
+          setCurrentTheme(isDarkUpdated ? 'dark' : 'light');
+        }
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -62,14 +82,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
+  const titleAnimationClass = isClientReady
+    ? (currentTheme === 'light' ? 'animate-title-color-fade-in-light' : 'animate-title-color-fade-in-dark')
+    : 'opacity-0';
+
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       <h1
         className={cn(
-          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 block lg:hidden",
-          isClientReady ? "animate-fadeIn" : "opacity-0" // Apply animation if client is ready
+          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden",
+          titleAnimationClass
         )}
-        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
       >
         {titleToDisplay}
       </h1>
@@ -82,7 +105,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 <div className="space-y-6 flex-grow">
                   {problemStatementToDisplay && (
                     <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                      <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
                         <Lightbulb className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                           {theChallengeText}
@@ -95,7 +118,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   )}
                   {solutionOverviewToDisplay && (
                      <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-3">
+                      <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
                         <Target className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                           {theApproachText}
@@ -108,7 +131,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   )}
                   {keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0 && (
                     <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary mb-4">
+                      <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-4">
                         <CheckCircle className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                            {keyFeaturesOutcomesText}
@@ -121,7 +144,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                             <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
                               {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
                               <div>
-                                <h4 className="font-semibold text-primary">{getKeyFeatureTitle(feature)}</h4>
+                                <h4 className="font-semibold text-primary dark:text-foreground">{getKeyFeatureTitle(feature)}</h4>
                                 <p className="text-sm text-foreground/80">{getKeyFeatureDescription(feature)}</p>
                               </div>
                             </div>
@@ -144,7 +167,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </Button>
                     )}
                     {project.repoUrl && (
-                      <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                      <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
                           <Github size={18} className="mr-2" />
                           <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
@@ -163,10 +186,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
               <h1
                 className={cn(
-                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-8 hidden lg:block",
-                  isClientReady ? "animate-fadeIn" : "opacity-0" // Apply animation if client is ready
+                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block",
+                  titleAnimationClass
                 )}
-                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               >
                  {titleToDisplay}
               </h1>
@@ -210,7 +232,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                     {project.technologies && project.technologies.length > 0 && (
                       project.technologies.map(tech => (
-                        <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90">{tech}</Badge>
+                        <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90 dark:border-foreground/50 dark:text-foreground/90">{tech}</Badge>
                       ))
                     )}
                   </div>
