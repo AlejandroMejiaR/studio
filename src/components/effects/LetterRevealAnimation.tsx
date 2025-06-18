@@ -41,7 +41,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                 if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
                 
                 const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-                const delay = charDetail.originalIndex * staggerDelay; // Changed calculation
+                const delay = charDetail.originalIndex * staggerDelay;
                 return (
                   <span
                     key={`space-${segmentIndex}-${spaceIdx}`}
@@ -64,12 +64,12 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
         }
         // It's a word segment
         return (
-          <span key={`segment-${segmentIndex}`} className="inline-block whitespace-nowrap align-bottom"> {/* Word is inline-block and won't break internally */}
+          <span key={`segment-${segmentIndex}`} className="inline-block whitespace-nowrap"> {/* Word is inline-block and won't break internally, removed align-bottom */}
             {segment.split('').map((letter, letterIdx) => {
               if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
 
               const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-              const delay = charDetail.originalIndex * staggerDelay; // Changed calculation
+              const delay = charDetail.originalIndex * staggerDelay;
               return (
                 <span
                   key={`letter-${segmentIndex}-${letterIdx}`}
