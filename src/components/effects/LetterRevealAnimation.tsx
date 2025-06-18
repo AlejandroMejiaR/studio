@@ -10,7 +10,7 @@ interface LetterRevealAnimationProps {
   animationDuration?: number; // Duration of each letter's animation (in seconds)
   className?: string; // Class for the container span
   letterClassName?: string; // Class for individual letter spans
-  style?: React.CSSProperties; // Added style prop
+  style?: React.CSSProperties;
 }
 
 const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
@@ -19,16 +19,17 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   animationDuration = 0.6,
   className,
   letterClassName,
-  style, // Destructure style prop
+  style,
 }) => {
   const charactersWithOriginalIndices = text.split('').map((char, index) => ({ char, originalIndex: index }));
   const segments = text.split(/(\s+)/).filter(segment => segment.length > 0);
   let charCounterInOriginalText = 0;
 
   return (
-    <span className={cn(className)} aria-label={text} style={style}>
+    <span className={cn("flex flex-wrap", className)} aria-label={text} style={style}>
       {segments.flatMap((segment, segmentIndex) => {
-        if (segment.match(/^\s+$/)) { // It's a whitespace segment
+        // Whitespace segment
+        if (segment.match(/^\s+$/)) {
           return segment.split('').map(() => {
             if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
             
@@ -47,12 +48,12 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                 }}
                 aria-hidden="true"
               >
-                {'\u00A0'} {/* Use non-breaking space */}
+                {'\u00A0'} {/* Use non-breaking space to ensure space is rendered */}
               </span>
             );
           }).filter(Boolean);
         }
-        // It's a word segment
+        // Word segment
         return [(
           <span key={`word-${segmentIndex}`} className="inline-block whitespace-nowrap">
             {segment.split('').map(() => {
