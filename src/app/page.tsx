@@ -54,6 +54,7 @@ export default function HomePage() {
               <LetterRevealAnimation
                 key={heroFullTitle}
                 text={heroFullTitle || ""}
+                className="block" // Ensure the animation container is a block element
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               />
             </h1>
