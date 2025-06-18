@@ -22,7 +22,6 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   style,
 }) => {
   const charactersWithOriginalIndices = text.split('').map((char, index) => ({ char, originalIndex: index }));
-  // Filter out any zero-length segments that might result from split (e.g., from leading/trailing/multiple spaces)
   const segments = text.split(/(\s+)/).filter(segment => segment.length > 0);
   let charCounterInOriginalText = 0;
 
@@ -38,7 +37,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
             const delay = charDetail.originalIndex * staggerDelay;
             return (
               <span
-                key={`char-${charDetail.originalIndex}`}
+                key={`char-${charDetail.originalIndex}-space`}
                 className={cn(
                   "inline-block opacity-0 animate-letter-reveal",
                   letterClassName
@@ -49,10 +48,10 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                 }}
                 aria-hidden="true"
               >
-                {'\u00A0'} {/* Use non-breaking space for spaces */}
+                {' '} {/* Use a regular space here */}
               </span>
             );
-          }).filter(Boolean); // Filter out any nulls if charCounter went out of bounds
+          }).filter(Boolean);
         }
         
         // Word segment
@@ -63,7 +62,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
           const delay = charDetail.originalIndex * staggerDelay;
           return (
             <span
-              key={`char-${charDetail.originalIndex}`}
+              key={`char-${charDetail.originalIndex}-letter`}
               className={cn(
                 "inline-block opacity-0 animate-letter-reveal",
                 letterClassName
@@ -77,22 +76,18 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
               {charDetail.char}
             </span>
           );
-        }).filter(Boolean); // Filter out any nulls if charCounter went out of bounds
+        }).filter(Boolean);
 
-        // If a "word" segment results in no animatable letters, return null for this segment.
         if (animatedLetters.length === 0) {
-          // This also handles cases where a segment might have had length but all its characters
-          // were somehow determined to be non-renderable (though current logic renders all chars).
-          // If segment was genuinely empty and bypassed the initial filter, this also catches it.
-          return null;
+          return null; 
         }
 
-        return ( // Return the word-wrapper span directly (flatMap handles flattening later)
+        return (
           <span key={`word-${segmentIndex}-${charCounterInOriginalText}`} className="inline-block whitespace-nowrap">
             {animatedLetters}
           </span>
         );
-      }).filter(Boolean) /* Filter out any nulls returned for empty/non-renderable word segments */ }
+      }).filter(Boolean)}
     </span>
   );
 };
