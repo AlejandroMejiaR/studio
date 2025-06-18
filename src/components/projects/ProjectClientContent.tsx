@@ -22,8 +22,9 @@ import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { cn } from '@/lib/utils';
-import { useState, useEffect } from 'react'; // Added for theme detection
+import WordRevealAnimation from '@/components/effects/WordRevealAnimation'; // Added
+import { cn } from '@/lib/utils'; // Added cn for h1 potentially
+// Removed useEffect and useState for theme detection as they are no longer needed for this animation type
 
 interface ProjectClientContentProps {
   project: Project;
@@ -41,26 +42,7 @@ const iconMap: Record<string, ElementType> = {
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-  const [currentTheme, setCurrentTheme] = useState('dark'); // Default to dark as per initial script in layout
-
-  useEffect(() => {
-    // Set initial theme based on document class
-    const isDark = document.documentElement.classList.contains('dark');
-    setCurrentTheme(isDark ? 'dark' : 'light');
-
-    // Observe theme changes
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          const isDarkUpdated = (mutation.target as HTMLElement).classList.contains('dark');
-          setCurrentTheme(isDarkUpdated ? 'dark' : 'light');
-        }
-      }
-    });
-    observer.observe(document.documentElement, { attributes: true });
-    return () => observer.disconnect();
-  }, []);
-
+  // Removed theme detection useEffect and useState
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -82,19 +64,34 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
-  const titleAnimationClass = isClientReady
-    ? (currentTheme === 'light' ? 'animate-title-color-fade-in-light' : 'animate-title-color-fade-in-dark')
-    : 'opacity-0';
+  // Constants for WordRevealAnimation
+  const letterStaggerConst = 0.04;
+  const letterAnimationDurationConst = 0.5;
+  const delayBetweenWordsConst = 0.15; 
+  const titleBaseDelay = 0.2;
+
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       <h1
         className={cn(
           "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden",
-          titleAnimationClass
+          // Removed animation classes like animate-title-color-fade-in or animate-fadeIn
         )}
       >
-        {titleToDisplay}
+        {isClientReady ? (
+          <WordRevealAnimation
+            key={`title-mobile-${titleToDisplay}-${language}`}
+            text={titleToDisplay || ""}
+            lineBaseDelay={titleBaseDelay}
+            delayBetweenWords={delayBetweenWordsConst}
+            letterStaggerDelay={letterStaggerConst}
+            letterAnimationDuration={letterAnimationDurationConst}
+            className="block" // Ensure it behaves as a block for layout
+          />
+        ) : (
+          <span style={{ visibility: 'hidden' }}>{project.en.title}</span> // Fallback for SSR, hidden until client ready
+        )}
       </h1>
 
       {(showCaseStudy || showGallery) && (
@@ -185,12 +182,24 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           {showGallery && (
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
               <h1
-                className={cn(
+                 className={cn(
                   "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block",
-                  titleAnimationClass
+                  // Removed animation classes like animate-title-color-fade-in or animate-fadeIn
                 )}
               >
-                 {titleToDisplay}
+                {isClientReady ? (
+                  <WordRevealAnimation
+                    key={`title-desktop-${titleToDisplay}-${language}`}
+                    text={titleToDisplay || ""}
+                    lineBaseDelay={titleBaseDelay}
+                    delayBetweenWords={delayBetweenWordsConst}
+                    letterStaggerDelay={letterStaggerConst}
+                    letterAnimationDuration={letterAnimationDurationConst}
+                    className="block" // Ensure it behaves as a block for layout
+                  />
+                ) : (
+                  <span style={{ visibility: 'hidden' }}>{project.en.title}</span> // Fallback for SSR, hidden until client ready
+                )}
               </h1>
 
               <Carousel
@@ -252,3 +261,5 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
+    
