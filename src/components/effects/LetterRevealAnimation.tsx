@@ -41,7 +41,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
                 if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
                 
                 const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-                const delay = (text.length - 1 - charDetail.originalIndex) * staggerDelay;
+                const delay = charDetail.originalIndex * staggerDelay; // Changed calculation
                 return (
                   <span
                     key={`space-${segmentIndex}-${spaceIdx}`}
@@ -69,7 +69,7 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
               if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
 
               const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-              const delay = (text.length - 1 - charDetail.originalIndex) * staggerDelay;
+              const delay = charDetail.originalIndex * staggerDelay; // Changed calculation
               return (
                 <span
                   key={`letter-${segmentIndex}-${letterIdx}`}
