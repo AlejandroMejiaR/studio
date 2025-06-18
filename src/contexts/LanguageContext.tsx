@@ -15,7 +15,7 @@ export interface AppTranslations {
     hero: {
       line1: string;
       line2: string;
-      line3?: string; // Added optional line3
+      line3?: string;
       subtitle: string;
     };
     buttons: {
@@ -37,8 +37,7 @@ const translations: Record<Language, AppTranslations> = {
       hero: {
         line1: "Transforming Ideas",
         line2: "Into Interactive Worlds",
-        // line3 is intentionally omitted or can be empty for EN
-        subtitle: "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\n\nExplore my work — let's build something amazing together.",
+        subtitle: "Hello, I'm Alejandro. I design and develop interactive experiences by integrating game design, UX, and generative AI. Explore my work — let's build something amazing together.",
       },
       buttons: {
         viewWork: "View My Work",
@@ -56,7 +55,7 @@ const translations: Record<Language, AppTranslations> = {
       hero: {
         line1: "Transformando ideas",
         line2: "en mundos",
-        line3: "interactivos", // Third line for Spanish
+        line3: "interactivos",
         subtitle: "Soy Alejandro. Creo experiencias interactivas combinando Diseño de Juegos, UX e IA Generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
