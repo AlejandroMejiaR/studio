@@ -55,7 +55,7 @@ const Navbar = () => {
 
   const brandNameTranslations = {
     EN: "Alejandro Mejia - Multimedia Engineer",
-    ES: "Alejandro Mejía - Ingeniero en Multimedia",
+    ES: "Alejandro Mejia - Ingeniero en Multimedia",
   };
   const brandName = brandNameTranslations[currentLanguage];
   const staggerDelay = 0.05;
