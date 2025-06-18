@@ -14,13 +14,13 @@ import { usePathname } from 'next/navigation';
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
-  const [navbarIsMounted, setNavbarIsMounted] = useState(false); // Renamed from isMounted
+  const [navbarIsMounted, setNavbarIsMounted] = useState(false);
   const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
 
   useEffect(() => {
-    setNavbarIsMounted(true); // Navbar itself has mounted
+    setNavbarIsMounted(true);
     const storedTheme = localStorage.getItem('portfolio-ace-theme');
     if (storedTheme) {
       setTheme(storedTheme);
@@ -55,7 +55,7 @@ const Navbar = () => {
   ];
   
   const brandTextToRender = isClientReady ? translationsForLanguage.brandName : getEnglishTranslation(t => t.brandName);
-  const currentLanguageDisplay = isClientReady ? language : 'EN';
+  const currentLanguageDisplay = isClientReady ? language : 'EN'; // Used for key and display
   const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]);
 
 
@@ -96,8 +96,11 @@ const Navbar = () => {
             <AnimatedBrandName
               key={`brand-${theme}-${currentLanguageDisplay}`} 
               text={brandTextToRender}
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             />
           ) : (
+            // Fallback for SSR/pre-hydration (no AnimatedBrandName, simple h1)
+            // Visibility will be handled by parent or hydration of AnimatedBrandName
             <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
               {getEnglishTranslation(t => t.brandName).split('').map((letter, index) => (
                 <span
@@ -120,7 +123,9 @@ const Navbar = () => {
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               prefetch={false}
             >
-              {navLinkText(link.labelKey)}
+              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                {navLinkText(link.labelKey)}
+              </span>
             </Link>
           ))}
           <Button
@@ -134,6 +139,7 @@ const Navbar = () => {
             <span
               key={`desktop-lang-indicator-${currentLanguageDisplay}`}
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             >
               {currentLanguageDisplay}
             </span>
@@ -166,6 +172,7 @@ const Navbar = () => {
             <span
               key={`mobile-lang-indicator-${currentLanguageDisplay}`}
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             >
               {currentLanguageDisplay}
             </span>
@@ -209,6 +216,7 @@ const Navbar = () => {
                     <AnimatedBrandName
                       key={`brand-mobile-${theme}-${currentLanguageDisplay}`}
                       text={brandTextToRender}
+                      style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
                     />
                   ) : (
                      <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
@@ -233,7 +241,9 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       prefetch={false}
                     >
-                      {navLinkText(link.labelKey)}
+                      <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                        {navLinkText(link.labelKey)}
+                      </span>
                     </Link>
                   ))}
                 </nav>

@@ -10,6 +10,7 @@ interface LetterRevealAnimationProps {
   animationDuration?: number; // Duration of each letter's animation (in seconds)
   className?: string; // Class for the container span
   letterClassName?: string; // Class for individual letter spans
+  style?: React.CSSProperties; // Added style prop
 }
 
 const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
@@ -18,11 +19,12 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   animationDuration = 0.6,
   className,
   letterClassName,
+  style, // Destructure style prop
 }) => {
   const letters = text.split('');
 
   return (
-    <span className={cn("inline-block", className)} aria-label={text}>
+    <span className={cn("inline-block", className)} aria-label={text} style={style}> {/* Apply the passed style */}
       {letters.map((letter, index) => (
         <span
           key={index}

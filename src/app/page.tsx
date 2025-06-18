@@ -52,11 +52,28 @@ export default function HomePage() {
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
-              <LetterRevealAnimation key={heroLine1} text={heroLine1} className="whitespace-nowrap" />
+              <LetterRevealAnimation
+                key={heroLine1}
+                text={heroLine1}
+                className="whitespace-nowrap"
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+              />
               {heroLine2 && <br />}
-              {heroLine2 && <LetterRevealAnimation key={heroLine2} text={heroLine2} />}
+              {heroLine2 && (
+                <LetterRevealAnimation
+                  key={heroLine2}
+                  text={heroLine2}
+                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                />
+              )}
               {heroLine3 && <br />}
-              {heroLine3 && <LetterRevealAnimation key={heroLine3} text={heroLine3} />}
+              {heroLine3 && (
+                <LetterRevealAnimation
+                  key={heroLine3}
+                  text={heroLine3}
+                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                />
+              )}
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
@@ -64,11 +81,16 @@ export default function HomePage() {
                 text={heroSubtitle}
                 speed={30}
                 startDelay={1500}
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               />
             </p>
             <div className="flex flex-col sm:flex-row justify-start items-center gap-4">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href="/#projects">{viewWorkButtonText}</Link>
+                <Link href="/#projects">
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {viewWorkButtonText}
+                  </span>
+                </Link>
               </Button>
               <Button
                 size="lg"
@@ -77,7 +99,10 @@ export default function HomePage() {
                 className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
               >
                 <Link href="/#about">
-                  {aboutMeButtonText} <ArrowDown size={20} className="ml-2" />
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {aboutMeButtonText}
+                  </span>
+                  <ArrowDown size={20} className="ml-2" />
                 </Link>
               </Button>
             </div>

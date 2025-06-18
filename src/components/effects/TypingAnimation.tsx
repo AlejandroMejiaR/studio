@@ -11,6 +11,7 @@ interface TypingAnimationProps {
   className?: string; // Class for the span wrapping text + cursor
   cursorClassName?: string;
   startDelay?: number; // Optional delay before starting animation
+  style?: React.CSSProperties; // Added style prop
 }
 
 const TypingAnimation: FC<TypingAnimationProps> = ({
@@ -19,6 +20,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
   className,
   cursorClassName = 'inline-block w-[2px] h-[1.2em] ml-1 bg-foreground animate-blink-cursor align-text-bottom',
   startDelay = 0,
+  style, // Destructure style prop
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -37,7 +39,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
     if (!isReadyToStart) return;
 
     if (displayedText.length < text.length) {
-      setIsTypingComplete(false); 
+      setIsTypingComplete(false);
       const timeoutId = setTimeout(() => {
         setDisplayedText(text.substring(0, displayedText.length + 1));
       }, speed);
@@ -52,11 +54,11 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
   if (!text && isReadyToStart && displayedText === '') return null;
 
   return (
-    <span className={cn(className)}>
+    <span className={cn(className)} style={style}> {/* Apply the passed style */}
       {displayedText}
       {isReadyToStart && (
         <span className={cn(
-          cursorClassName, 
+          cursorClassName,
           { 'opacity-0': isTypingComplete && displayedText.length === text.length }
         )} />
       )}

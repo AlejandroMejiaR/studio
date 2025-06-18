@@ -9,6 +9,7 @@ interface AnimatedBrandNameProps {
   className?: string;
   letterClassName?: string;
   staggerDelay?: number; // in seconds
+  style?: React.CSSProperties; // Added style prop
 }
 
 const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
@@ -16,6 +17,7 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
   className,
   letterClassName,
   staggerDelay = 0.05, // Time difference for animation start between consecutive letters
+  style, // Destructure style prop
 }) => {
   const [currentTheme, setCurrentTheme] = useState('light');
   const [isMounted, setIsMounted] = useState(false);
@@ -56,6 +58,7 @@ const AnimatedBrandName: React.FC<AnimatedBrandNameProps> = ({
         animationClass, // Applied only client-side
         className
       )}
+      style={style} // Apply the passed style
       aria-label={text}
     >
       {letters.map((letter, index) => {
