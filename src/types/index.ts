@@ -5,7 +5,6 @@ export interface ProjectTranslationDetails {
   problemStatement?: string;
   solutionOverview?: string;
   keyFeatures?: { title: string; description: string; icon?: string }[];
-  longDescriptionMarkdown?: string;
 }
 
 export interface Project {

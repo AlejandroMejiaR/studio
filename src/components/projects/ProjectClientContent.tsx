@@ -50,7 +50,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
   const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
   const keyFeaturesToDisplay = isClientReady ? langContent.keyFeatures : project.en.keyFeatures;
-  const longDescriptionToDisplay = isClientReady ? langContent.longDescriptionMarkdown : project.en.longDescriptionMarkdown;
+
 
   // Fallback for key feature text within map
   const getKeyFeatureTitle = (feature: any) => isClientReady ? feature.title : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || 'Feature Title Missing');
@@ -196,12 +196,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
         </div>
       )}
       
-      {longDescriptionToDisplay && (
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <h3 className="font-headline text-2xl font-semibold text-primary mb-4">Project Details</h3>
-          <p className="whitespace-pre-line">{longDescriptionToDisplay}</p>
-        </div>
-      )}
     </div>
   );
 };

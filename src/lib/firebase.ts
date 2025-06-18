@@ -42,7 +42,6 @@ const mapDocToProject = (docId: string, data: any): Project => {
     problemStatement: '',
     solutionOverview: '',
     keyFeatures: [],
-    longDescriptionMarkdown: '',
   };
   const defaultEsTranslation: ProjectTranslationDetails = {
     title: 'Título en Español Faltante',
@@ -50,7 +49,6 @@ const mapDocToProject = (docId: string, data: any): Project => {
     problemStatement: '',
     solutionOverview: '',
     keyFeatures: [],
-    longDescriptionMarkdown: '',
   };
 
   return {
@@ -71,7 +69,6 @@ const mapDocToProject = (docId: string, data: any): Project => {
       problemStatement: data.en?.problemStatement || defaultEnTranslation.problemStatement,
       solutionOverview: data.en?.solutionOverview || defaultEnTranslation.solutionOverview,
       keyFeatures: data.en?.keyFeatures || defaultEnTranslation.keyFeatures,
-      longDescriptionMarkdown: data.en?.longDescriptionMarkdown || defaultEnTranslation.longDescriptionMarkdown,
     },
     es: {
       title: data.es?.title || defaultEsTranslation.title,
@@ -79,7 +76,6 @@ const mapDocToProject = (docId: string, data: any): Project => {
       problemStatement: data.es?.problemStatement || defaultEsTranslation.problemStatement,
       solutionOverview: data.es?.solutionOverview || defaultEsTranslation.solutionOverview,
       keyFeatures: data.es?.keyFeatures || defaultEsTranslation.keyFeatures,
-      longDescriptionMarkdown: data.es?.longDescriptionMarkdown || defaultEsTranslation.longDescriptionMarkdown,
     },
   };
 };
