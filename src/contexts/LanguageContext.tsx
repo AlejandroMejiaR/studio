@@ -79,7 +79,7 @@ const translations: Record<Language, AppTranslations> = {
       },
       focusCard: {
         title: "Focus",
-        detail: "Game Design & Gen AI",
+        detail: "UX & Gen AI", // Changed here
       },
       skillsTitle: "My Skills",
       downloadCVButton: "Download CV",
@@ -189,3 +189,4 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
+
