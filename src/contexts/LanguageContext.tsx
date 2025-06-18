@@ -70,27 +70,30 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
+  isClientReady: boolean; // Added
+  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string) => string; // Helper
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Function to get initial language from localStorage or default
 const getInitialLanguage = (): Language => {
-  if (typeof window !== 'undefined') { // Ensure this only runs on client
+  if (typeof window !== 'undefined') {
     const storedLanguage = localStorage.getItem('portfolio-ace-language') as Language | null;
     if (storedLanguage && (storedLanguage === 'EN' || storedLanguage === 'ES')) {
       return storedLanguage;
     }
   }
-  return 'EN'; // Default language
+  return 'EN';
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Initialize state with value from localStorage if available, otherwise default.
-  // This function (getInitialLanguage) runs only on the initial render on the client.
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+  const [isClientReady, setIsClientReady] = useState(false); // Added
 
-  // setLanguage function to update state and localStorage
+  useEffect(() => {
+    setIsClientReady(true); // Set client ready after mount
+  }, []);
+
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== 'undefined') {
@@ -98,22 +101,22 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // This useEffect ensures that localStorage is updated if the initial language was the default
-  // (because localStorage was empty/invalid), or if the language state changes for other reasons.
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
-      // If language in state is different from localStorage, update localStorage.
-      // This covers the case where getInitialLanguage defaulted and localStorage was empty,
-      // ensuring the default language is persisted.
       if (language !== currentStoredLanguage) {
         localStorage.setItem('portfolio-ace-language', language);
       }
     }
-  }, [language]); // Rerun when language state changes
+  }, [language]);
+
+  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string) => {
+    return keyPath(translations['EN']);
+  }, []);
+
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, translationsForLanguage: translations[language] }}>
+    <LanguageContext.Provider value={{ language, setLanguage, translationsForLanguage: translations[language], isClientReady, getEnglishTranslation }}>
       {children}
     </LanguageContext.Provider>
   );

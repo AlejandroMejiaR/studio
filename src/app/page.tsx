@@ -1,5 +1,5 @@
 
-"use client"; // Make HomePage a client component
+"use client"; 
 
 import { useEffect, useState } from 'react';
 import type { Project } from '@/types';
@@ -12,13 +12,11 @@ import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
 import Image from 'next/image';
-import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
-import { Skeleton } from '@/components/ui/skeleton'; // For loading state
-
-// export const revalidate = 0; // Revalidate is for server-rendered pages; data fetching is now client-side
+import { useLanguage } from '@/contexts/LanguageContext';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function HomePage() {
-  const { translationsForLanguage } = useLanguage(); // Use the language context
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
@@ -31,7 +29,6 @@ export default function HomePage() {
         setProjects(fetchedProjects);
       } catch (error) {
         console.error("Failed to fetch projects:", error);
-        // Optionally set an error state here
       } finally {
         setIsLoadingProjects(false);
       }
@@ -39,12 +36,12 @@ export default function HomePage() {
     fetchProjects();
   }, []);
 
-  const heroLine1 = translationsForLanguage.home.hero.line1;
-  const heroLine2 = translationsForLanguage.home.hero.line2;
-  const heroLine3 = translationsForLanguage.home.hero.line3;
-  const heroSubtitle = translationsForLanguage.home.hero.subtitle;
-  const viewWorkButtonText = translationsForLanguage.home.buttons.viewWork;
-  const aboutMeButtonText = translationsForLanguage.home.buttons.aboutMe;
+  const heroLine1 = isClientReady ? translationsForLanguage.home.hero.line1 : getEnglishTranslation(t => t.home.hero.line1);
+  const heroLine2 = isClientReady ? translationsForLanguage.home.hero.line2 : getEnglishTranslation(t => t.home.hero.line2);
+  const heroLine3 = isClientReady ? translationsForLanguage.home.hero.line3 : getEnglishTranslation(t => t.home.hero.line3 || "");
+  const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle);
+  const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork);
+  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe);
 
 
   return (
@@ -63,7 +60,7 @@ export default function HomePage() {
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
-                key={heroSubtitle} // Add key here
+                key={heroSubtitle}
                 text={heroSubtitle}
                 speed={30}
                 startDelay={1500}
@@ -91,7 +88,7 @@ export default function HomePage() {
             <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30 mx-auto md:mx-0">
               <Image
                 src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
-                alt="Digital Experiences Placeholder" // This alt text could also be translated
+                alt="Digital Experiences Placeholder"
                 fill
                 className="object-contain"
                 sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"

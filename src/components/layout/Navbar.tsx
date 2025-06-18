@@ -8,19 +8,19 @@ import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLoading } from '@/contexts/LoadingContext';
-import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext'; // Updated import
+import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
-  const [isMounted, setIsMounted] = useState(false);
+  const [navbarIsMounted, setNavbarIsMounted] = useState(false); // Renamed from isMounted
   const { showLoading } = useLoading();
-  const { language, setLanguage, translationsForLanguage } = useLanguage(); // Use language context
+  const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
 
   useEffect(() => {
-    setIsMounted(true);
+    setNavbarIsMounted(true); // Navbar itself has mounted
     const storedTheme = localStorage.getItem('portfolio-ace-theme');
     if (storedTheme) {
       setTheme(storedTheme);
@@ -30,7 +30,7 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (!isMounted) return;
+    if (!navbarIsMounted) return;
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -39,7 +39,7 @@ const Navbar = () => {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('portfolio-ace-theme', 'light');
     }
-  }, [theme, isMounted]);
+  }, [theme, navbarIsMounted]);
 
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -54,8 +54,12 @@ const Navbar = () => {
     { href: '/#about', labelKey: 'about' },
   ];
   
-  const brandTextToDisplay = translationsForLanguage.brandName;
-  const staggerDelay = 0.05; // Retained for AnimatedBrandName logic
+  const brandTextToRender = isClientReady ? translationsForLanguage.brandName : getEnglishTranslation(t => t.brandName);
+  const currentLanguageDisplay = isClientReady ? language : 'EN';
+  const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]);
+
+
+  const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
     if (pathname !== '/') {
@@ -79,7 +83,7 @@ const Navbar = () => {
           prefetch={false}
           onClick={handleHomeNavigation}
         >
-          {isMounted ? (
+          {navbarIsMounted ? (
             <Gamepad2
               key={`icon-${theme}`}
               className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
@@ -88,19 +92,18 @@ const Navbar = () => {
             <Gamepad2 className="h-7 w-7 text-primary" />
           )}
 
-          {isMounted ? (
+          {navbarIsMounted ? (
             <AnimatedBrandName
-              key={`brand-${theme}-${language}`} // Use language from context for key
-              text={brandTextToDisplay}
+              key={`brand-${theme}-${currentLanguageDisplay}`} 
+              text={brandTextToRender}
             />
           ) : (
-            // Fallback for SSR/pre-mount - uses default EN
-            <h1 className="font-headline text-xl font-bold" aria-label="Alejandro Mejia - Multimedia Engineer">
-              {"Alejandro Mejia - Multimedia Engineer".split('').map((letter, index) => (
+            <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
+              {getEnglishTranslation(t => t.brandName).split('').map((letter, index) => (
                 <span
                   key={index}
                   className="inline-block"
-                  style={{ animationDelay: `${( ("Alejandro Mejia - Multimedia Engineer".length - 1 - index) * staggerDelay)}s` }}
+                  style={{ animationDelay: `${((getEnglishTranslation(t => t.brandName).length - 1 - index) * staggerDelay)}s` }}
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </span>
@@ -117,7 +120,7 @@ const Navbar = () => {
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               prefetch={false}
             >
-              {translationsForLanguage.nav[link.labelKey]}
+              {navLinkText(link.labelKey)}
             </Link>
           ))}
           <Button
@@ -129,10 +132,10 @@ const Navbar = () => {
           >
             <Languages className="h-5 w-5 text-foreground/80" />
             <span
-              key={language} // Use language from context for key
+              key={`desktop-lang-indicator-${currentLanguageDisplay}`}
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
             >
-              {language}
+              {currentLanguageDisplay}
             </span>
           </Button>
           <Button
@@ -142,10 +145,10 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="h-9 w-9 hover:bg-accent/10"
           >
-            {isMounted ? (
+            {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
-              <Moon className="h-5 w-5 text-primary" /> /* Default to Moon for SSR */
+              <Moon className="h-5 w-5 text-primary" /> 
             )}
           </Button>
         </nav>
@@ -161,10 +164,10 @@ const Navbar = () => {
           >
             <Languages className="h-5 w-5 text-foreground/80" />
             <span
-              key={`mobile-${language}`} // Use language from context for key
+              key={`mobile-lang-indicator-${currentLanguageDisplay}`}
               className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
             >
-              {language}
+              {currentLanguageDisplay}
             </span>
           </Button>
           <Button
@@ -174,7 +177,7 @@ const Navbar = () => {
             aria-label="Toggle theme"
             className="h-9 w-9 hover:bg-accent/10"
           >
-             {isMounted ? (
+             {navbarIsMounted ? (
               theme === 'light' ? <Moon className="h-5 w-5 text-foreground/80" /> : <Sun className="h-5 w-5 text-foreground/80" />
             ) : (
               <Moon className="h-5 w-5 text-primary" />
@@ -194,7 +197,7 @@ const Navbar = () => {
                   className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80"
                   onClick={handleMobileHomeNavigation}
                 >
-                  {isMounted ? (
+                  {navbarIsMounted ? (
                      <Gamepad2
                         key={`icon-mobile-${theme}`}
                         className={cn("h-7 w-7", theme === 'dark' ? "text-foreground/80" : "text-primary", "animate-icon-pulse")}
@@ -202,18 +205,18 @@ const Navbar = () => {
                   ) : (
                     <Gamepad2 className="h-7 w-7 text-primary" />
                   )}
-                  {isMounted ? (
+                  {navbarIsMounted ? (
                     <AnimatedBrandName
-                      key={`brand-mobile-${theme}-${language}`} // Use language from context
-                      text={brandTextToDisplay}
+                      key={`brand-mobile-${theme}-${currentLanguageDisplay}`}
+                      text={brandTextToRender}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label="Alejandro Mejia - Multimedia Engineer">
-                        {"Alejandro Mejia - Multimedia Engineer".split('').map((letter, index) => (
+                     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t.brandName)}>
+                        {getEnglishTranslation(t => t.brandName).split('').map((letter, index) => (
                             <span
                                 key={index}
                                 className="inline-block"
-                                style={{ animationDelay: `${( ("Alejandro Mejia - Multimedia Engineer".length - 1 - index) * staggerDelay)}s` }}
+                                style={{ animationDelay: `${((getEnglishTranslation(t => t.brandName).length - 1 - index) * staggerDelay)}s` }}
                             >
                                 {letter === ' ' ? '\u00A0' : letter}
                             </span>
@@ -230,7 +233,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       prefetch={false}
                     >
-                      {translationsForLanguage.nav[link.labelKey]}
+                      {navLinkText(link.labelKey)}
                     </Link>
                   ))}
                 </nav>
