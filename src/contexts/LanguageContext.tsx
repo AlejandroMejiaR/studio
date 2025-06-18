@@ -46,7 +46,7 @@ const translations: Record<Language, AppTranslations> = {
     },
   },
   ES: {
-    brandName: "Alejandro Mejia - Ingeniero en Multimedia",
+    brandName: "Alejandro Mejía - Ingeniero en Multimedia",
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
@@ -74,21 +74,44 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<Language>('EN'); // Default EN
-
-  useEffect(() => {
+// Function to get initial language from localStorage or default
+const getInitialLanguage = (): Language => {
+  if (typeof window !== 'undefined') { // Ensure this only runs on client
     const storedLanguage = localStorage.getItem('portfolio-ace-language') as Language | null;
     if (storedLanguage && (storedLanguage === 'EN' || storedLanguage === 'ES')) {
-      setLanguageState(storedLanguage);
+      return storedLanguage;
+    }
+  }
+  return 'EN'; // Default language
+};
+
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  // Initialize state with value from localStorage if available, otherwise default.
+  // This function (getInitialLanguage) runs only on the initial render on the client.
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+
+  // setLanguage function to update state and localStorage
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('portfolio-ace-language', lang);
     }
   }, []);
 
-  const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem('portfolio-ace-language', lang);
-  }, []);
-  
+  // This useEffect ensures that localStorage is updated if the initial language was the default
+  // (because localStorage was empty/invalid), or if the language state changes for other reasons.
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
+      // If language in state is different from localStorage, update localStorage.
+      // This covers the case where getInitialLanguage defaulted and localStorage was empty,
+      // ensuring the default language is persisted.
+      if (language !== currentStoredLanguage) {
+        localStorage.setItem('portfolio-ace-language', language);
+      }
+    }
+  }, [language]); // Rerun when language state changes
+
   return (
     <LanguageContext.Provider value={{ language, setLanguage, translationsForLanguage: translations[language] }}>
       {children}
