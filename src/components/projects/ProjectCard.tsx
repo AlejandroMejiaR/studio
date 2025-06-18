@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Project, ProjectTranslationDetails } from '@/types'; // Import ProjectTranslationDetails
+import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -36,18 +36,22 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en; // Fallback to English
 
+  const titleToDisplay = isClientReady ? langContent.title : project.en.title;
+  const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
+
+
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">
       <CardHeader className="p-0">
         <Link 
           href={`/projects/${project.slug}`} 
-          aria-label={`View details for ${isClientReady ? langContent.title : project.en.title}`}
+          aria-label={`View details for ${titleToDisplay}`}
           onClick={handleProjectLinkClick}
         >
           <div className="aspect-[3/2] relative overflow-hidden">
             <Image
               src={project.thumbnailUrl}
-              alt={isClientReady ? langContent.title : project.en.title}
+              alt={titleToDisplay}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -62,11 +66,11 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
             href={`/projects/${project.slug}`}
             onClick={handleProjectLinkClick}
           >
-            {isClientReady ? langContent.title : project.en.title}
+            {titleToDisplay}
           </Link>
         </CardTitle>
         <CardDescription className="text-foreground/70 line-clamp-3">
-          {isClientReady ? langContent.shortDescription : project.en.shortDescription}
+          {shortDescriptionToDisplay}
         </CardDescription>
         <div className="mt-4">
           <p className="text-xs text-muted-foreground mb-1">

@@ -13,7 +13,7 @@ import {
   where,
   Timestamp
 } from 'firebase/firestore';
-import type { Project, ProjectTranslationDetails } from '@/types'; // Added ProjectTranslationDetails
+import type { Project, ProjectTranslationDetails } from '@/types';
 import { getSupabaseImageUrl } from '@/lib/supabase';
 
 const firebaseConfig = {
@@ -39,18 +39,18 @@ const mapDocToProject = (docId: string, data: any): Project => {
   const defaultEnTranslation: ProjectTranslationDetails = {
     title: 'English Title Missing',
     shortDescription: 'English short description missing.',
-    problemStatement: undefined,
-    solutionOverview: undefined,
+    problemStatement: '',
+    solutionOverview: '',
     keyFeatures: [],
-    longDescriptionMarkdown: undefined,
+    longDescriptionMarkdown: '',
   };
   const defaultEsTranslation: ProjectTranslationDetails = {
     title: 'Título en Español Faltante',
     shortDescription: 'Descripción corta en español faltante.',
-    problemStatement: undefined,
-    solutionOverview: undefined,
+    problemStatement: '',
+    solutionOverview: '',
     keyFeatures: [],
-    longDescriptionMarkdown: undefined,
+    longDescriptionMarkdown: '',
   };
 
   return {
@@ -65,22 +65,22 @@ const mapDocToProject = (docId: string, data: any): Project => {
     liveUrl: data.liveUrl || undefined,
     repoUrl: data.repoUrl || undefined,
 
-    en: data.en ? {
-      title: data.en.title || defaultEnTranslation.title,
-      shortDescription: data.en.shortDescription || defaultEnTranslation.shortDescription,
-      problemStatement: data.en.problemStatement,
-      solutionOverview: data.en.solutionOverview,
-      keyFeatures: data.en.keyFeatures || [],
-      longDescriptionMarkdown: data.en.longDescriptionMarkdown,
-    } : defaultEnTranslation,
-    es: data.es ? {
-      title: data.es.title || defaultEsTranslation.title,
-      shortDescription: data.es.shortDescription || defaultEsTranslation.shortDescription,
-      problemStatement: data.es.problemStatement,
-      solutionOverview: data.es.solutionOverview,
-      keyFeatures: data.es.keyFeatures || [],
-      longDescriptionMarkdown: data.es.longDescriptionMarkdown,
-    } : defaultEsTranslation,
+    en: {
+      title: data.en?.title || defaultEnTranslation.title,
+      shortDescription: data.en?.shortDescription || defaultEnTranslation.shortDescription,
+      problemStatement: data.en?.problemStatement || defaultEnTranslation.problemStatement,
+      solutionOverview: data.en?.solutionOverview || defaultEnTranslation.solutionOverview,
+      keyFeatures: data.en?.keyFeatures || defaultEnTranslation.keyFeatures,
+      longDescriptionMarkdown: data.en?.longDescriptionMarkdown || defaultEnTranslation.longDescriptionMarkdown,
+    },
+    es: {
+      title: data.es?.title || defaultEsTranslation.title,
+      shortDescription: data.es?.shortDescription || defaultEsTranslation.shortDescription,
+      problemStatement: data.es?.problemStatement || defaultEsTranslation.problemStatement,
+      solutionOverview: data.es?.solutionOverview || defaultEsTranslation.solutionOverview,
+      keyFeatures: data.es?.keyFeatures || defaultEsTranslation.keyFeatures,
+      longDescriptionMarkdown: data.es?.longDescriptionMarkdown || defaultEsTranslation.longDescriptionMarkdown,
+    },
   };
 };
 
