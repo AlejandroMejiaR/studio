@@ -48,16 +48,29 @@ const Navbar = () => {
     setCurrentLanguage(prev => (prev === 'EN' ? 'ES' : 'EN'));
   };
 
+  const translations = {
+    brandName: {
+      EN: "Alejandro Mejia - Multimedia Engineer",
+      ES: "Alejandro Mejia - Ingeniero en Multimedia",
+    },
+    nav: {
+      projects: {
+        EN: "Projects",
+        ES: "Proyectos",
+      },
+      about: {
+        EN: "About",
+        ES: "Sobre mí",
+      },
+    }
+  };
+
   const navLinks = [
-    { href: '/#projects', label: 'Projects' },
-    { href: '/#about', label: 'About' },
+    { href: '/#projects', labelKey: 'projects' },
+    { href: '/#about', labelKey: 'about' },
   ];
 
-  const brandNameTranslations = {
-    EN: "Alejandro Mejia - Multimedia Engineer",
-    ES: "Alejandro Mejia - Ingeniero en Multimedia",
-  };
-  const brandName = brandNameTranslations[currentLanguage];
+  const brandName = translations.brandName[currentLanguage];
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
@@ -98,9 +111,9 @@ const Navbar = () => {
               text={brandName}
             />
           ) : (
-            <h1 className="font-headline text-xl font-bold" aria-label={brandNameTranslations.EN}>
-              {brandNameTranslations.EN.split('').map((letter, index) => {
-                const delay = (brandNameTranslations.EN.length - 1 - index) * staggerDelay;
+            <h1 className="font-headline text-xl font-bold" aria-label={translations.brandName.EN}>
+              {translations.brandName.EN.split('').map((letter, index) => {
+                const delay = (translations.brandName.EN.length - 1 - index) * staggerDelay;
                 return (
                   <span
                     key={index}
@@ -123,7 +136,7 @@ const Navbar = () => {
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               prefetch={false}
             >
-              {link.label}
+              {translations.nav[link.labelKey as keyof typeof translations.nav][currentLanguage]}
             </Link>
           ))}
           <Button
@@ -214,9 +227,9 @@ const Navbar = () => {
                       text={brandName}
                     />
                   ) : (
-                     <h1 className="font-headline text-xl font-bold" aria-label={brandNameTranslations.EN}>
-                        {brandNameTranslations.EN.split('').map((letter, index) => {
-                            const delay = (brandNameTranslations.EN.length - 1 - index) * staggerDelay;
+                     <h1 className="font-headline text-xl font-bold" aria-label={translations.brandName.EN}>
+                        {translations.brandName.EN.split('').map((letter, index) => {
+                            const delay = (translations.brandName.EN.length - 1 - index) * staggerDelay;
                             return (
                             <span
                                 key={index}
@@ -239,7 +252,7 @@ const Navbar = () => {
                       onClick={() => setIsMobileMenuOpen(false)}
                       prefetch={false}
                     >
-                      {link.label}
+                      {translations.nav[link.labelKey as keyof typeof translations.nav][currentLanguage]}
                     </Link>
                   ))}
                 </nav>
