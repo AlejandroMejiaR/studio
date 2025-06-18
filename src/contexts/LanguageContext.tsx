@@ -46,7 +46,7 @@ const translations: Record<Language, AppTranslations> = {
     },
   },
   ES: {
-    brandName: "Alejandro Mejía - Ingeniero en Multimedia",
+    brandName: "Alejandro Mejia - Ingeniero en Multimedia",
     nav: {
       projects: "Proyectos",
       about: "Sobre mí",
@@ -56,7 +56,7 @@ const translations: Record<Language, AppTranslations> = {
         line1: "Transformando ideas",
         line2: "en mundos",
         line3: "interactivos",
-        subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas que combinan game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
+        subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
