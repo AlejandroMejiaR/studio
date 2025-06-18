@@ -76,6 +76,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
     ? translationsForLanguage.home.projectsSectionTitle 
     : getEnglishTranslation(t => t.home.projectsSectionTitle);
 
+  const noProjectsText = isClientReady 
+    ? translationsForLanguage.projectList.noProjects 
+    : getEnglishTranslation(t => t.projectList.noProjects);
+
   if (isLoadingLikes && projects.length > 0) {
     // The loading state for ProjectList doesn't need its own title, 
     // as HomePage.tsx handles the title when ProjectList itself is loading projects.
@@ -122,7 +126,12 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         {projectsSectionTitleText}
       </h2>
       {projects.length === 0 ? (
-        <p className="text-lg text-muted-foreground">No projects to display yet. Check back soon!</p>
+        <p 
+          className="text-lg text-muted-foreground"
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+        >
+          {noProjectsText}
+        </p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (

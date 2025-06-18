@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import LikeButton from './LikeButton';
 import { ArrowRight } from 'lucide-react';
 import { useLoading } from '@/contexts/LoadingContext';
+import { useLanguage } from '@/contexts/LanguageContext'; // Added
 
 interface ProjectCardProps {
   project: Project;
@@ -16,10 +17,14 @@ interface ProjectCardProps {
 
 const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const { showLoading } = useLoading();
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Added
 
   const handleProjectLinkClick = () => {
     showLoading("Loading Project...");
   };
+
+  const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : getEnglishTranslation(t => t.projectCard.viewMore);
+  const technologiesLabelText = isClientReady ? translationsForLanguage.projectCard.technologiesLabel : getEnglishTranslation(t => t.projectCard.technologiesLabel);
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full group">
@@ -54,7 +59,11 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           {project.shortDescription}
         </CardDescription>
         <div className="mt-4">
-          <p className="text-xs text-muted-foreground mb-1">Technologies:</p>
+          <p className="text-xs text-muted-foreground mb-1">
+            <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+              {technologiesLabelText}
+            </span>
+          </p>
           <div className="flex flex-wrap gap-2">
             {project.technologies.slice(0, 3).map((tech) => (
               <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
@@ -70,7 +79,10 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
             href={`/projects/${project.slug}`}
             onClick={handleProjectLinkClick}
           >
-            View More <ArrowRight size={16} className="ml-1" />
+            <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+              {viewMoreText}
+            </span>
+            <ArrowRight size={16} className="ml-1" />
           </Link>
         </Button>
       </CardFooter>

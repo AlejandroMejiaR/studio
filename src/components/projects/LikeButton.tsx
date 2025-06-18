@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getProjectLikes, incrementProjectLike, decrementProjectLike, hasSessionLiked, setSessionLiked } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext'; // Added
 
 interface LikeButtonProps {
   projectId: string;
@@ -18,6 +19,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  const { translationsForLanguage } = useLanguage(); // Added
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -49,19 +51,25 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
         newLikesCount = await decrementProjectLike(projectId);
         setSessionLiked(projectId, false);
         setIsLiked(false);
-        toast({ title: "Unliked!", description: "You unliked this project." });
+        toast({ 
+          title: translationsForLanguage.likeButton.unlikedTitle, 
+          description: translationsForLanguage.likeButton.unlikedDescription 
+        });
       } else {
         newLikesCount = await incrementProjectLike(projectId);
         setSessionLiked(projectId, true);
         setIsLiked(true);
-        toast({ title: "Liked!", description: "Thanks for liking this project!" });
+        toast({ 
+          title: translationsForLanguage.likeButton.likedTitle, 
+          description: translationsForLanguage.likeButton.likedDescription 
+        });
       }
       setLikes(newLikesCount);
     } catch (error) {
       console.error("Error updating like:", error);
       toast({
-        title: "Error",
-        description: "Could not update like status. Please try again.",
+        title: translationsForLanguage.likeButton.errorTitle,
+        description: translationsForLanguage.likeButton.errorDescription,
         variant: "destructive",
       });
     } finally {

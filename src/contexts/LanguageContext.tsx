@@ -22,7 +22,7 @@ export interface AppTranslations {
       viewWork: string;
       aboutMe: string;
     };
-    projectsSectionTitle: string; // Added for "My Projects"
+    projectsSectionTitle: string;
   };
   aboutMe: {
     title: string;
@@ -44,7 +44,21 @@ export interface AppTranslations {
     skillsTitle: string;
     downloadCVButton: string;
   };
-  // Add other sections/keys as needed
+  projectCard: {
+    viewMore: string;
+    technologiesLabel: string;
+  };
+  projectList: {
+    noProjects: string;
+  };
+  likeButton: {
+    unlikedTitle: string;
+    unlikedDescription: string;
+    likedTitle: string;
+    likedDescription: string;
+    errorTitle: string;
+    errorDescription: string;
+  };
 }
 
 const translations: Record<Language, AppTranslations> = {
@@ -86,6 +100,21 @@ const translations: Record<Language, AppTranslations> = {
       skillsTitle: "My Skills",
       downloadCVButton: "Download CV",
     },
+    projectCard: {
+      viewMore: "View More",
+      technologiesLabel: "Technologies:",
+    },
+    projectList: {
+      noProjects: "No projects to display yet. Check back soon!",
+    },
+    likeButton: {
+      unlikedTitle: "Unliked!",
+      unlikedDescription: "You unliked this project.",
+      likedTitle: "Liked!",
+      likedDescription: "Thanks for liking this project!",
+      errorTitle: "Error",
+      errorDescription: "Could not update like status. Please try again.",
+    },
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
@@ -125,6 +154,21 @@ const translations: Record<Language, AppTranslations> = {
       },
       skillsTitle: "Mis Habilidades",
       downloadCVButton: "Descargar CV",
+    },
+    projectCard: {
+      viewMore: "Ver más",
+      technologiesLabel: "Tecnologías:",
+    },
+    projectList: {
+      noProjects: "Aún no hay proyectos para mostrar. ¡Vuelve pronto!",
+    },
+    likeButton: {
+      unlikedTitle: "¡Ya no me gusta!",
+      unlikedDescription: "Quitaste tu 'me gusta' de este proyecto.",
+      likedTitle: "¡Me gusta!",
+      likedDescription: "¡Gracias por darle 'me gusta' a este proyecto!",
+      errorTitle: "Error",
+      errorDescription: "No se pudo actualizar el estado de 'me gusta'. Por favor, inténtalo de nuevo.",
     },
   },
 };
