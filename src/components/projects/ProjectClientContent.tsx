@@ -85,7 +85,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                   {solutionOverviewToDisplay && (
                      <div>
                       <h3 className="flex items-center text-xl font-headline text-primary mb-3">
-                        <Target className="mr-3 h-6 w-6 text-accent" /> Our Approach
+                        <Target className="mr-3 h-6 w-6 text-accent" /> The Approach
                       </h3>
                       <p className="text-foreground/80 text-base leading-relaxed pl-2">
                         {solutionOverviewToDisplay}
@@ -201,3 +201,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
