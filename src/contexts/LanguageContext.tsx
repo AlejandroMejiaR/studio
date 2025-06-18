@@ -33,8 +33,8 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        line1: "Crafting Digital",
-        line2: "Experiences",
+        line1: "Transforming Ideas",
+        line2: "Into Interactive Worlds",
         subtitle: "I'm Alejandro. I create interactive experiences by blending Game Design, UX, and Generative AI.\n\nExplore my work — let's build something amazing together.",
       },
       buttons: {
