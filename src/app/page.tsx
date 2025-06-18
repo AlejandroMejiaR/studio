@@ -42,6 +42,7 @@ export default function HomePage() {
   const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle);
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork);
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe);
+  const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle);
 
 
   return (
@@ -126,8 +127,11 @@ export default function HomePage() {
 
       {isLoadingProjects ? (
          <section id="projects-loading" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
-           <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground">
-             My Projects
+           <h2 
+            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+           >
+             {projectsSectionTitleText}
            </h2>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
              {[1, 2, 3].map((i) => (
@@ -146,6 +150,7 @@ export default function HomePage() {
            </div>
          </section>
       ) : (
+        // ProjectList component now handles its own title translation
         <ProjectList projects={projects} />
       )}
       <AboutMe />

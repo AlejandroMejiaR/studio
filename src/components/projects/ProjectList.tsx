@@ -6,6 +6,7 @@ import ProjectCard from './ProjectCard';
 import { getProjectLikes } from '@/lib/firebase'; // For client-side fetching of initial likes
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 interface ProjectListProps {
@@ -46,6 +47,7 @@ async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, 
 const ProjectList = ({ projects }: ProjectListProps) => {
   const [initialLikesMap, setInitialLikesMap] = useState<Record<string, number>>({});
   const [isLoadingLikes, setIsLoadingLikes] = useState(true);
+  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   useEffect(() => {
     const fetchLikes = async () => {
@@ -69,15 +71,25 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
     fetchLikes();
   }, [projects]);
+  
+  const projectsSectionTitleText = isClientReady 
+    ? translationsForLanguage.home.projectsSectionTitle 
+    : getEnglishTranslation(t => t.home.projectsSectionTitle);
 
   if (isLoadingLikes && projects.length > 0) {
+    // The loading state for ProjectList doesn't need its own title, 
+    // as HomePage.tsx handles the title when ProjectList itself is loading projects.
+    // This skeleton is for when ProjectList is mounted but still fetching *likes*.
     return (
       <section 
         id="projects" 
         className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
       >
-        <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground">
-          My Projects
+        <h2 
+            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+        >
+          {projectsSectionTitleText}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
@@ -88,8 +100,8 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                 <Skeleton className="h-4 w-1/2" />
               </div>
               <div className="flex justify-between items-center pt-2">
-                <Skeleton className="h-8 w-20" />
-                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-8 w-20" /> {/* For LikeButton */}
+                <Skeleton className="h-8 w-24" /> {/* For View More Button */}
               </div>
             </div>
           ))}
@@ -103,8 +115,11 @@ const ProjectList = ({ projects }: ProjectListProps) => {
       id="projects" 
       className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
     >
-      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground">
-        My Projects
+      <h2 
+        className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
+        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+      >
+        {projectsSectionTitleText}
       </h2>
       {projects.length === 0 ? (
         <p className="text-lg text-muted-foreground">No projects to display yet. Check back soon!</p>

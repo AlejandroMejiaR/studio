@@ -21,7 +21,8 @@ export interface AppTranslations {
     buttons: {
       viewWork: string;
       aboutMe: string;
-    }
+    };
+    projectsSectionTitle: string; // Added for "My Projects"
   };
   aboutMe: {
     title: string;
@@ -62,7 +63,8 @@ const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "View My Work",
         aboutMe: "About Me",
-      }
+      },
+      projectsSectionTitle: "My Projects",
     },
     aboutMe: {
       title: "About Me",
@@ -79,7 +81,7 @@ const translations: Record<Language, AppTranslations> = {
       },
       focusCard: {
         title: "Focus",
-        detail: "UX & Gen AI", // Changed here
+        detail: "UX & Gen AI",
       },
       skillsTitle: "My Skills",
       downloadCVButton: "Download CV",
@@ -101,7 +103,8 @@ const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "Ver Mi Trabajo",
         aboutMe: "Sobre Mí",
-      }
+      },
+      projectsSectionTitle: "Mis Proyectos",
     },
     aboutMe: {
       title: "Sobre mí",
