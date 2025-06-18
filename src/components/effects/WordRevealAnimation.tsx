@@ -4,6 +4,7 @@
 import type { FC } from 'react';
 import { cn } from '@/lib/utils';
 import LetterRevealAnimation from './LetterRevealAnimation';
+import React from 'react';
 
 interface WordRevealAnimationProps {
   text: string; // A single line of text
@@ -33,14 +34,12 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
   let currentWordStartDelay = lineBaseDelay;
 
   words.forEach((word, wordIndex) => {
-    // Add delay before this word (except for the very first word on the line if lineBaseDelay covers it)
-    // This structure ensures delayBetweenWords is added *after* the previous word's animation completes.
     if (wordIndex > 0) {
          currentWordStartDelay += delayBetweenWords;
     }
 
     animatedElements.push(
-      <span key={`${word}-${wordIndex}-wrapper`} className={cn(wordClassName)}>
+      <span key={`${word}-${wordIndex}-wrapper`} className={cn('inline-block whitespace-nowrap', wordClassName)}>
         <LetterRevealAnimation
           key={`${word}-${wordIndex}`}
           text={word}
@@ -57,15 +56,18 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
 
 
     if (wordIndex < words.length - 1) {
-      animatedElements.push(<span key={`space-${wordIndex}`}>{' '}</span>);
+      animatedElements.push(<span key={`space-${wordIndex}`} className="inline-block">&nbsp;</span>);
     }
   });
 
   return (
     <span className={cn(className)} style={style}>
-      {animatedElements}
+      {animatedElements.map((element, index) => (
+          <React.Fragment key={index}>{element}</React.Fragment>
+      ))}
     </span>
   );
 };
 
 export default WordRevealAnimation;
+
