@@ -30,10 +30,11 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
       style={style}
     >
       {characters.map((char, index) => {
+        // Corrected delay calculation for left-to-right animation
         const delay = index * staggerDelay;
         return (
           <span
-            key={`char-${index}-${char}`}
+            key={`char-${index}-${char}-${text}`} // Ensure key is unique across different texts/renders
             className={cn(
               "inline-block opacity-0 animate-letter-reveal",
               letterClassName
