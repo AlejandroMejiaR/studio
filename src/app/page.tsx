@@ -36,9 +36,7 @@ export default function HomePage() {
     fetchProjects();
   }, []);
 
-  const heroLine1 = isClientReady ? translationsForLanguage.home.hero.line1 : getEnglishTranslation(t => t.home.hero.line1);
-  const heroLine2 = isClientReady ? translationsForLanguage.home.hero.line2 : getEnglishTranslation(t => t.home.hero.line2);
-  const heroLine3 = isClientReady ? translationsForLanguage.home.hero.line3 : getEnglishTranslation(t => t.home.hero.line3 || "");
+  const heroFullTitle = isClientReady ? translationsForLanguage.home.hero.fullTitle : getEnglishTranslation(t => t.home.hero.fullTitle);
   const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : getEnglishTranslation(t => t.home.hero.subtitle);
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork);
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe);
@@ -54,31 +52,15 @@ export default function HomePage() {
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground text-left">
               <LetterRevealAnimation
-                key={heroLine1}
-                text={heroLine1}
+                key={heroFullTitle}
+                text={heroFullTitle || ""}
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               />
-              {heroLine2 && <br />}
-              {heroLine2 && (
-                <LetterRevealAnimation
-                  key={heroLine2}
-                  text={heroLine2}
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                />
-              )}
-              {heroLine3 && <br />}
-              {heroLine3 && (
-                <LetterRevealAnimation
-                  key={heroLine3}
-                  text={heroLine3}
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                />
-              )}
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
                 key={heroSubtitle}
-                text={heroSubtitle}
+                text={heroSubtitle || ""}
                 speed={30}
                 startDelay={1500}
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}

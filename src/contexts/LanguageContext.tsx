@@ -7,7 +7,7 @@ type Language = 'EN' | 'ES';
 
 export interface AppTranslations {
   brandName: string;
-  brandNameShort: string; // Added for mobile
+  brandNameShort: string;
   nav: {
     projects: string;
     about: string;
@@ -15,9 +15,7 @@ export interface AppTranslations {
   };
   home: {
     hero: {
-      line1: string;
-      line2: string;
-      line3?: string;
+      fullTitle: string; // Changed from line1, line2, line3
       subtitle: string;
     };
     buttons: {
@@ -79,8 +77,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        line1: "Transforming Ideas",
-        line2: "Into Interactive Worlds",
+        fullTitle: "Transforming Ideas Into Interactive Worlds",
         subtitle: "Hello, I'm Alejandro. I design and develop interactive experiences by integrating game design, UX, and generative AI.\n\nExplore my work — let's build something amazing together.",
       },
       buttons: {
@@ -140,9 +137,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        line1: "Transformando ideas",
-        line2: "en mundos",
-        line3: "interactivos",
+        fullTitle: "Transformando ideas en mundos interactivos",
         subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
