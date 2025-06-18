@@ -149,7 +149,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                 </div>
 
                 <div className="flex flex-wrap justify-start items-center gap-3 pt-6 mt-auto">
-                    {project.liveUrl && (
+                    {project.liveUrl && project.liveUrl !== 'none' && (
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
                           <ExternalLink size={18} className="mr-2" />
@@ -159,7 +159,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                         </Link>
                       </Button>
                     )}
-                    {project.repoUrl && (
+                    {project.repoUrl && project.repoUrl !== 'none' && (
                       <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
                         <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
                           <Github size={18} className="mr-2 md:mr-0" />
