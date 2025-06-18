@@ -22,9 +22,8 @@ import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import WordRevealAnimation from '@/components/effects/WordRevealAnimation'; // Added
-import { cn } from '@/lib/utils'; // Added cn for h1 potentially
-// Removed useEffect and useState for theme detection as they are no longer needed for this animation type
+import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
+import { cn } from '@/lib/utils';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -42,7 +41,6 @@ const iconMap: Record<string, ElementType> = {
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-  // Removed theme detection useEffect and useState
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -64,19 +62,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
-  // Constants for WordRevealAnimation
-  const letterStaggerConst = 0.04;
-  const letterAnimationDurationConst = 0.5;
-  const delayBetweenWordsConst = 0.15; 
-  const titleBaseDelay = 0.2;
-
+  // Constants for WordRevealAnimation for the title
+  const titleLetterStaggerConst = 0.04; // Standard stagger
+  const titleLetterAnimationDurationConst = 0.2; // Quick letter animation
+  const titleDelayBetweenWordsConst = 0; // No delay between words
+  const titleBaseDelay = 0.2; // Initial delay for the whole title animation
 
   return (
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       <h1
         className={cn(
-          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden",
-          // Removed animation classes like animate-title-color-fade-in or animate-fadeIn
+          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden break-words"
         )}
       >
         {isClientReady ? (
@@ -84,13 +80,13 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             key={`title-mobile-${titleToDisplay}-${language}`}
             text={titleToDisplay || ""}
             lineBaseDelay={titleBaseDelay}
-            delayBetweenWords={delayBetweenWordsConst}
-            letterStaggerDelay={letterStaggerConst}
-            letterAnimationDuration={letterAnimationDurationConst}
-            className="block" // Ensure it behaves as a block for layout
+            delayBetweenWords={titleDelayBetweenWordsConst}
+            letterStaggerDelay={titleLetterStaggerConst}
+            letterAnimationDuration={titleLetterAnimationDurationConst}
+            className="block"
           />
         ) : (
-          <span style={{ visibility: 'hidden' }}>{project.en.title}</span> // Fallback for SSR, hidden until client ready
+          <span style={{ visibility: 'hidden' }}>{project.en.title}</span>
         )}
       </h1>
 
@@ -183,8 +179,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
               <h1
                  className={cn(
-                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block",
-                  // Removed animation classes like animate-title-color-fade-in or animate-fadeIn
+                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block break-words"
                 )}
               >
                 {isClientReady ? (
@@ -192,13 +187,13 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     key={`title-desktop-${titleToDisplay}-${language}`}
                     text={titleToDisplay || ""}
                     lineBaseDelay={titleBaseDelay}
-                    delayBetweenWords={delayBetweenWordsConst}
-                    letterStaggerDelay={letterStaggerConst}
-                    letterAnimationDuration={letterAnimationDurationConst}
-                    className="block" // Ensure it behaves as a block for layout
+                    delayBetweenWords={titleDelayBetweenWordsConst}
+                    letterStaggerDelay={titleLetterStaggerConst}
+                    letterAnimationDuration={titleLetterAnimationDurationConst}
+                    className="block"
                   />
                 ) : (
-                  <span style={{ visibility: 'hidden' }}>{project.en.title}</span> // Fallback for SSR, hidden until client ready
+                  <span style={{ visibility: 'hidden' }}>{project.en.title}</span>
                 )}
               </h1>
 
@@ -261,5 +256,3 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-
-    
