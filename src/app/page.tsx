@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
-import LetterRevealAnimation from '@/components/effects/LetterRevealAnimation';
+import WordRevealAnimation from '@/components/effects/WordRevealAnimation'; // Changed
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -42,6 +42,7 @@ export default function HomePage() {
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
+  let cumulativeLineDelay = 0;
 
   return (
     <div className="max-w-7xl mx-auto px-4">
@@ -51,21 +52,35 @@ export default function HomePage() {
           {/* Left Column: Title, Subtitle, Buttons */}
           <div className="md:w-1/2 flex flex-col text-left">
             <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground text-left">
-              {heroFullTitleLines.map((line, index) => (
-                <LetterRevealAnimation
-                  key={`${language}-line-${index}-${line}`} // Unique key for re-renders on language/line change
-                  text={line || ""}
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                  className="block" // Each line is a block to ensure it starts on a new line
-                />
-              ))}
+              {heroFullTitleLines.map((line, lineIndex) => {
+                const currentLineDelay = cumulativeLineDelay;
+                // Estimate this line's duration for the next line's delay
+                // This is an approximation. A more precise calculation would involve WordRevealAnimation exposing its duration.
+                const wordsInLine = line.split(' ').filter(w => w.length > 0).length;
+                const estimatedLineDuration = (wordsInLine * 0.5) + ((wordsInLine > 0 ? wordsInLine -1 : 0) * 0.15) + 0.3; // approx word anim + delay between + base letter anim
+                cumulativeLineDelay += (wordsInLine > 0 ? estimatedLineDuration : 0.3); // Add a small delay even for empty lines if they were to occur
+
+
+                return (
+                  <WordRevealAnimation
+                    key={`${language}-line-${lineIndex}-${line}`}
+                    text={line || ""}
+                    lineBaseDelay={currentLineDelay} // Progressively delay start of each line
+                    delayBetweenWords={0.15}     // Time between words on the same line
+                    letterStaggerDelay={0.04}    // Time between letters in a word
+                    letterAnimationDuration={0.5}// Duration of each letter's animation
+                    style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                    className="block" // Each line is a block
+                  />
+                );
+              })}
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
               <TypingAnimation
                 key={heroSubtitle}
                 text={heroSubtitle || ""}
                 speed={30}
-                startDelay={1500} // Delay slightly more to start after title animation
+                startDelay={cumulativeLineDelay + 0.5} // Start typing after title animation
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               />
             </p>

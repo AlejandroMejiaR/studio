@@ -6,17 +6,19 @@ import { cn } from '@/lib/utils';
 
 interface LetterRevealAnimationProps {
   text: string;
-  staggerDelay?: number;
-  animationDuration?: number;
-  className?: string;
-  letterClassName?: string;
+  baseDelay?: number; // Time before this animation instance starts
+  letterStaggerDelay?: number; // Time between each letter appearing
+  letterAnimationDuration?: number; // Duration of each letter's individual animation
+  className?: string; // Class for the root span of this component
+  letterClassName?: string; // Class for individual letter spans
   style?: React.CSSProperties;
 }
 
 const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   text,
-  staggerDelay = 0.05,
-  animationDuration = 0.6,
+  baseDelay = 0,
+  letterStaggerDelay = 0.05,
+  letterAnimationDuration = 0.6,
   className,
   letterClassName,
   style,
@@ -25,23 +27,22 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
 
   return (
     <span
-      className={cn(className)} // Base className, can be 'block' if passed from parent
+      className={cn(className)}
       aria-label={text}
       style={style}
     >
       {characters.map((char, index) => {
-        // Corrected delay calculation for left-to-right animation
-        const delay = index * staggerDelay;
+        const delay = baseDelay + (index * letterStaggerDelay);
         return (
           <span
-            key={`char-${index}-${char}-${text}`} // Ensure key is unique across different texts/renders
+            key={`char-${index}-${char}-${text.substring(0,10)}`}
             className={cn(
               "inline-block opacity-0 animate-letter-reveal",
               letterClassName
             )}
             style={{
               animationDelay: `${delay}s`,
-              animationDuration: `${animationDuration}s`,
+              animationDuration: `${letterAnimationDuration}s`,
             }}
             aria-hidden="true"
           >
