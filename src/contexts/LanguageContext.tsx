@@ -71,9 +71,9 @@ export interface AppTranslations {
     loadingProject: string;
     returningHome: string;
   };
-  footer: { // Added footer translations
+  footer: {
     portfolioTitle: string;
-    rightsReservedText: string; // Text part, year and name will be inserted
+    rightsReservedText: string;
     quickLinksTitle: string;
     projectsLink: string;
     aboutMeLink: string;
@@ -248,7 +248,7 @@ const getInitialLanguage = (): Language => {
       return storedLanguage;
     }
   }
-  return 'EN'; // Default language
+  return 'ES'; // Default language changed to Spanish
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
