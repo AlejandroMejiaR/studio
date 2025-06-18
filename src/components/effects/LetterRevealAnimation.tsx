@@ -21,73 +21,68 @@ const LetterRevealAnimation: FC<LetterRevealAnimationProps> = ({
   letterClassName,
   style,
 }) => {
-  const charactersWithOriginalIndices = text.split('').map((char, index) => ({ char, originalIndex: index }));
-  const segments = text.split(/(\s+)/).filter(segment => segment.length > 0);
-  let charCounterInOriginalText = 0;
+  const words = text.split(' ').filter(word => word.length > 0);
+  let globalCharIndex = 0;
+  const animatedElements: JSX.Element[] = [];
+
+  words.forEach((word, wordIndex) => {
+    // Add letters of the word
+    word.split('').forEach((char) => {
+      const delay = globalCharIndex * staggerDelay;
+      animatedElements.push(
+        <span
+          key={`char-${globalCharIndex}`}
+          className={cn(
+            "inline-block opacity-0 animate-letter-reveal",
+            letterClassName
+          )}
+          style={{
+            animationDelay: `${delay}s`,
+            animationDuration: `${animationDuration}s`,
+          }}
+          aria-hidden="true"
+        >
+          {char}
+        </span>
+      );
+      globalCharIndex++;
+    });
+
+    // Add invisible 'a' as a spacer if not the last word
+    if (wordIndex < words.length - 1) {
+      const delay = globalCharIndex * staggerDelay;
+      animatedElements.push(
+        <span
+          key={`spacer-a-${globalCharIndex}`}
+          className={cn(
+            "inline-block opacity-0 animate-letter-reveal"
+            // Not applying letterClassName here, as it's a spacer
+          )}
+          style={{
+            animationDelay: `${delay}s`,
+            animationDuration: `${animationDuration}s`,
+            color: 'hsl(var(--background))', // Adapts to theme's background
+          }}
+          aria-hidden="true"
+        >
+          a
+        </span>
+      );
+      globalCharIndex++;
+    }
+  });
 
   return (
-    <span className={cn("flex flex-wrap", className)} aria-label={text} style={style}>
-      {segments.flatMap((segment, segmentIndex) => {
-        // Whitespace segment
-        if (segment.match(/^\s+$/)) {
-          return segment.split('').map(() => {
-            if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
-            
-            const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-            const delay = charDetail.originalIndex * staggerDelay;
-            return (
-              <span
-                key={`char-${charDetail.originalIndex}-space`}
-                className={cn(
-                  "inline-block opacity-0 animate-letter-reveal",
-                  letterClassName
-                )}
-                style={{
-                  animationDelay: `${delay}s`,
-                  animationDuration: `${animationDuration}s`,
-                }}
-                aria-hidden="true"
-              >
-                {' '} {/* Use a regular space here */}
-              </span>
-            );
-          }).filter(Boolean);
-        }
-        
-        // Word segment
-        const animatedLetters = segment.split('').map(() => {
-          if (charCounterInOriginalText >= charactersWithOriginalIndices.length) return null;
-
-          const charDetail = charactersWithOriginalIndices[charCounterInOriginalText++];
-          const delay = charDetail.originalIndex * staggerDelay;
-          return (
-            <span
-              key={`char-${charDetail.originalIndex}-letter`}
-              className={cn(
-                "inline-block opacity-0 animate-letter-reveal",
-                letterClassName
-              )}
-              style={{
-                animationDelay: `${delay}s`,
-                animationDuration: `${animationDuration}s`,
-              }}
-              aria-hidden="true"
-            >
-              {charDetail.char}
-            </span>
-          );
-        }).filter(Boolean);
-
-        if (animatedLetters.length === 0) {
-          return null; 
-        }
-
-        return (
-          <span key={`word-${segmentIndex}-${charCounterInOriginalText}`} className="inline-block whitespace-nowrap">
-            {animatedLetters}
-          </span>
-        );
-      }).filter(Boolean)}
+    <span
+      className={cn("flex flex-wrap", className)} // Using flex-wrap for layout
+      aria-label={text} // Screen readers will read the original text
+      style={style}
+    >
+      {animatedElements.length > 0 ? animatedElements : (
+        // Fallback for empty text or text with only spaces to avoid empty span if not desired
+        // Or, to ensure the aria-label is still on a span if text is effectively empty after processing
+        <span aria-hidden="true" style={{opacity: 0}}>{text}</span>
+      )}
     </span>
   );
 };
