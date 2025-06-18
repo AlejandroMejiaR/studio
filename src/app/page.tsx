@@ -1,5 +1,5 @@
 
-"use client"; 
+"use client";
 
 import { useEffect, useState, useRef } from 'react';
 import type { Project } from '@/types';
@@ -15,77 +15,120 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation';
+
 
 export default function HomePage() {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const { setIsFooterVisible } = useFooter();
   const aboutMeRef = useRef<HTMLElement | null>(null);
-  const pathname = usePathname(); // Get current pathname
+  const pathname = usePathname();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
+  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(true); // Default to true for animations
+
+  // Signal for specifically scrolling to projects section
+  const [scrollToProjectsSignal, setScrollToProjectsSignal] = useState(false);
+
+  useEffect(() => {
+    if (!isClientReady) {
+      setShouldAnimateInitialLoadOrLanguageChange(false);
+      return;
+    }
+    // Always animate on initial load or language change if client is ready
+    setShouldAnimateInitialLoadOrLanguageChange(true);
+    setIsSubtitleAnimationComplete(false); // Reset for animations
+  }, [isClientReady, language]);
 
 
-  // Effect for IntersectionObserver to control footer visibility
   useEffect(() => {
     const aboutSection = aboutMeRef.current;
 
     if (!isClientReady || !aboutSection) {
-      // If critical conditions aren't met (e.g., client not ready, or ref not attached yet),
-      // and we are on the homepage, ensure the footer is explicitly set to hidden.
-      // This reinforces FooterContext's default 'false' for the homepage.
       if (pathname === '/') {
         setIsFooterVisible(false);
       }
       return;
     }
 
-    // Single observer handles both initial check and subsequent scroll changes.
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsFooterVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1, // Adjust threshold as needed
+        threshold: 0.1, // Adjust as needed, 0.1 means 10% of the element is visible
       }
     );
 
     observer.observe(aboutSection);
 
+    // Initial check in case the "About Me" section is already visible on load
+    if (aboutSection) {
+        const rect = aboutSection.getBoundingClientRect();
+        const isInitiallyVisible = 
+            rect.top < window.innerHeight && rect.bottom >= 0;
+        setIsFooterVisible(isInitiallyVisible);
+    }
+
+
     return () => {
       observer.disconnect();
-      // When navigating away from the homepage, FooterContext's own useEffect 
-      // (which depends on pathname) will handle setting footer visibility 
-      // appropriately for the new page. So, no explicit setIsFooterVisible(true) here.
     };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added pathname and aboutMeRef
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added pathname
 
 
+  // Effect to set signal for scrolling to #projects when projects load
   useEffect(() => {
-    setIsSubtitleAnimationComplete(false); // Always reset for hero animations on language change or load
-  }, [translationsForLanguage.home.hero.subtitle]); // Depend on text that changes with language
+    if (!isLoadingProjects && window.location.hash === '#projects') {
+      setScrollToProjectsSignal(true);
+    }
+  }, [isLoadingProjects, pathname]); // Also depend on pathname to re-check hash on navigation
 
-
+  // Effect to perform scroll when scrollToProjectsSignal is true
   useEffect(() => {
-    if (!isClientReady || !isSubtitleAnimationComplete) return;
+    if (scrollToProjectsSignal) {
+      const scrollTimer = setTimeout(() => {
+        const element = document.getElementById('projects');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // Increased delay
+      setScrollToProjectsSignal(false); // Reset the signal
+      return () => clearTimeout(scrollTimer);
+    }
+  }, [scrollToProjectsSignal]);
+
+  // General hash scrolling for other IDs like #about
+  useEffect(() => {
+    if (!isClientReady) return;
+
+    // Ensure animations are complete or not running before attempting to scroll
+    if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
+        return;
+    }
 
     const hash = window.location.hash;
-    if (hash) {
-      const id = hash.substring(1); 
-      if (id === 'projects' && isLoadingProjects) {
-        return; 
-      }
+    // Handle only hashes other than #projects, as #projects is handled by its specific signal
+    if (hash && hash !== '#projects') {
+      const id = hash.substring(1);
       const scrollTimer = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 300); // Increased delay to 300ms
+      }, 300); // Increased delay
       return () => clearTimeout(scrollTimer);
     }
-  }, [isClientReady, isSubtitleAnimationComplete, language, isLoadingProjects, pathname]); // Added pathname to re-evaluate on nav
+  }, [isClientReady, pathname, isSubtitleAnimationComplete, shouldAnimateInitialLoadOrLanguageChange, language]);
+
+
+  useEffect(() => {
+    if (shouldAnimateInitialLoadOrLanguageChange) {
+        setIsSubtitleAnimationComplete(false);
+    }
+  }, [translationsForLanguage.home.hero.subtitle, shouldAnimateInitialLoadOrLanguageChange]);
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -111,71 +154,82 @@ export default function HomePage() {
   }, []);
 
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
-  let currentCumulativeLineBaseDelay = 0; 
+  let currentCumulativeLineBaseDelay = 0;
   let maxTitleAnimationOverallEndTime = 0;
 
   const letterStaggerConst = 0.04;
   const letterAnimationDurationConst = 0.5;
   const delayBetweenWordsConst = 0.15;
 
-  heroFullTitleLines.forEach((lineText) => {
-    const currentLineStartOffset = currentCumulativeLineBaseDelay;
-    lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
+  // Always animate if shouldAnimateInitialLoadOrLanguageChange is true
+  if (shouldAnimateInitialLoadOrLanguageChange) {
+    heroFullTitleLines.forEach((lineText) => {
+        const currentLineStartOffset = currentCumulativeLineBaseDelay;
+        lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
 
-    const words = lineText.split(' ').filter(w => w.length > 0);
-    let internalDurationOfThisLine = 0;
-    if (words.length > 0) {
-      for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        const wordAnimTime = (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
-        internalDurationOfThisLine += wordAnimTime;
+        const words = lineText.split(' ').filter(w => w.length > 0);
+        let internalDurationOfThisLine = 0;
+        if (words.length > 0) {
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const wordAnimTime = (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
+            internalDurationOfThisLine += wordAnimTime;
 
-        if (i < words.length - 1) {
-          let actualInterWordDelay = delayBetweenWordsConst;
-          if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
-            actualInterWordDelay = 0;
-          }
-          internalDurationOfThisLine += actualInterWordDelay;
+            if (i < words.length - 1) {
+            let actualInterWordDelay = delayBetweenWordsConst;
+            if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
+                actualInterWordDelay = 0;
+            }
+            internalDurationOfThisLine += actualInterWordDelay;
+            }
         }
-      }
-    }
+        }
 
-    const thisLineEndsAt = currentLineStartOffset + internalDurationOfThisLine;
-    if (thisLineEndsAt > maxTitleAnimationOverallEndTime) {
-      maxTitleAnimationOverallEndTime = thisLineEndsAt;
-    }
-    
-    if (words.length > 0) {
-        currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3; 
-    } else {
-        currentCumulativeLineBaseDelay += 0.3; 
-    }
-  });
-  
-  const subtitleTypingStartDelay = maxTitleAnimationOverallEndTime + 0.5; 
+        const thisLineEndsAt = currentLineStartOffset + internalDurationOfThisLine;
+        if (thisLineEndsAt > maxTitleAnimationOverallEndTime) {
+        maxTitleAnimationOverallEndTime = thisLineEndsAt;
+        }
 
-  const heroTitleElements = heroFullTitleLines.map((lineText, lineIndex) => {
-    const currentLineAnimProps = lineAnimationProps[lineIndex];
-    if (!currentLineAnimProps) return null; 
+        if (words.length > 0) {
+            currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3;
+        } else {
+            currentCumulativeLineBaseDelay += 0.3;
+        }
+    });
+  }
+  const subtitleTypingStartDelay = shouldAnimateInitialLoadOrLanguageChange ? maxTitleAnimationOverallEndTime + 0.5 : 0;
 
-    return (
-      <WordRevealAnimation
-        key={`${language}-line-${lineIndex}-${lineText}`} 
-        text={lineText || ""}
-        lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-        delayBetweenWords={delayBetweenWordsConst}
-        letterStaggerDelay={letterStaggerConst}
-        letterAnimationDuration={letterAnimationDurationConst}
-        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-        className="block"
-      />
-    );
-  });
 
-  const subtitleElement = (
+  const heroTitleElements = shouldAnimateInitialLoadOrLanguageChange ? (
+    heroFullTitleLines.map((lineText, lineIndex) => {
+      const currentLineAnimProps = lineAnimationProps[lineIndex];
+      if (!currentLineAnimProps) return null;
+
+      return (
+        <WordRevealAnimation
+          key={`${language}-line-${lineIndex}-${lineText}`}
+          text={lineText || ""}
+          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+          delayBetweenWords={delayBetweenWordsConst}
+          letterStaggerDelay={letterStaggerConst}
+          letterAnimationDuration={letterAnimationDurationConst}
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          className="block"
+        />
+      );
+    })
+  ) : (
+    heroFullTitleLines.map((lineText, lineIndex) => (
+      <span key={`static-line-${lineIndex}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+        {lineText}
+      </span>
+    ))
+  );
+
+  const subtitleElement = shouldAnimateInitialLoadOrLanguageChange ? (
     <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
       <TypingAnimation
-        key={heroSubtitle} 
+        key={heroSubtitle}
         text={heroSubtitle || ""}
         speed={30}
         startDelay={subtitleTypingStartDelay}
@@ -183,7 +237,12 @@ export default function HomePage() {
         onComplete={() => setIsSubtitleAnimationComplete(true)}
       />
     </p>
+  ) : (
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+      {heroSubtitle}
+    </p>
   );
+
 
   return (
     <div className="max-w-7xl mx-auto px-4">
@@ -196,7 +255,7 @@ export default function HomePage() {
               {heroTitleElements}
             </h1>
             {subtitleElement}
-            {isSubtitleAnimationComplete && (
+            {(isSubtitleAnimationComplete || !shouldAnimateInitialLoadOrLanguageChange) && (
               <div className="flex flex-col sm:flex-row justify-start items-center gap-4 animate-fadeIn">
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
                   <Link href="/#projects">
@@ -240,7 +299,7 @@ export default function HomePage() {
 
       {isLoadingProjects ? (
          <section id="projects-loading" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
-           <h2 
+           <h2
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
            >
