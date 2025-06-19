@@ -13,12 +13,11 @@ import {
   CalendarDays,
   Lightbulb,
   Target,
-  CheckCircle,
   Briefcase,
   Zap,
   BarChart3,
   Sparkles,
-  Factory, // Added Factory import
+  Factory,
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -38,9 +37,8 @@ const iconMap: Record<string, ElementType> = {
   BarChart3,
   Lightbulb,
   Target,
-  CheckCircle,
   Sparkles,
-  Factory, // Added Factory to the map
+  Factory,
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
@@ -52,25 +50,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
   const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
-  const keyFeaturesToDisplay = isClientReady ? langContent.keyFeatures : project.en.keyFeatures;
+  // Key features are no longer displayed in this component directly
 
   const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
   const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
-  const keyFeaturesOutcomesText = isClientReady ? translationsForLanguage.projectDetails.keyFeaturesOutcomes : getEnglishTranslation(t => t.projectDetails.keyFeaturesOutcomes);
+  // keyFeaturesOutcomesText is no longer needed
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
-  const getKeyFeatureTitle = (feature: any) => {
-    const currentFeature = project[currentLangKey]?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description) || project.en?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description);
-    return isClientReady ? (currentFeature?.title ?? '') : (project.en?.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || '');
-  };
-  const getKeyFeatureDescription = (feature: any) => {
-    const currentFeature = project[currentLangKey]?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description) || project.en?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description);
-    return isClientReady ? (currentFeature?.description ?? '') : (project.en?.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || '');
-  };
+  // Helper functions getKeyFeatureTitle and getKeyFeatureDescription are no longer needed here
 
-
-  const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
+  const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay; // Adjusted: keyFeatures are removed
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
   // Constants for WordRevealAnimation for the title
@@ -102,7 +92,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       </h1>
 
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Changed lg:items-start to lg:items-center */}
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
@@ -133,30 +123,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </p>
                     </div>
                   )}
-                  {keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0 && (
-                    <div>
-                      <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-4">
-                        <CheckCircle className="mr-3 h-6 w-6 text-accent" />
-                        <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                           {keyFeaturesOutcomesText}
-                        </span>
-                      </h3>
-                      <div className="space-y-4 pl-2">
-                        {keyFeaturesToDisplay.map((feature, index) => {
-                          const IconComponent = feature.icon ? iconMap[feature.icon] : null;
-                          return (
-                            <div key={index} className="flex items-start gap-3 p-3 bg-secondary/10 rounded-md">
-                              {IconComponent && <IconComponent className="h-6 w-6 text-accent mt-1 shrink-0" />}
-                              <div>
-                                <h4 className="font-semibold text-primary dark:text-foreground">{getKeyFeatureTitle(feature)}</h4>
-                                <p className="text-sm text-foreground/80">{getKeyFeatureDescription(feature)}</p>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                  {/* Key Features section removed */}
                 </div>
 
                 <div className="flex flex-wrap justify-start items-center gap-3 pt-6 mt-auto">
