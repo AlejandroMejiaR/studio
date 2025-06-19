@@ -17,7 +17,7 @@ import {
   Zap,
   BarChart3,
   Sparkles,
-  Factory,
+  Factory, // Added Factory
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -37,8 +37,8 @@ const iconMap: Record<string, ElementType> = {
   BarChart3,
   Lightbulb,
   Target,
-  Sparkles,
-  Factory,
+  Sparkles, // Added Sparkles
+  Factory,   // Added Factory
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
@@ -50,20 +50,15 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
   const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
-  // Key features are no longer displayed in this component directly
 
   const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
   const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
-  // keyFeaturesOutcomesText is no longer needed
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
-  // Helper functions getKeyFeatureTitle and getKeyFeatureDescription are no longer needed here
-
-  const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay; // Adjusted: keyFeatures are removed
+  const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay;
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
 
-  // Constants for WordRevealAnimation for the title
   const titleLetterStaggerConst = 0.04;
   const titleLetterAnimationDurationConst = 0;
   const titleDelayBetweenWordsConst = 0;
@@ -94,8 +89,8 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       {(showCaseStudy || showGallery) && (
         <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
           {showCaseStudy && (
-            <div className="w-full lg:flex-[0_0_30%]">
-              <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
+            <div className="w-full lg:flex-[0_0_30%] lg:flex lg:items-center"> {/* Ensure Card is centered if wrapper is taller */}
+              <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col w-full"> {/* Removed h-full, added w-full */}
                 <div className="space-y-6 flex-grow">
                   {problemStatementToDisplay && (
                     <div>
@@ -123,7 +118,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </p>
                     </div>
                   )}
-                  {/* Key Features section removed */}
                 </div>
 
                 <div className="flex flex-wrap justify-start items-center gap-3 pt-6 mt-auto">
@@ -234,3 +228,4 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
