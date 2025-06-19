@@ -13,11 +13,8 @@ import {
   CalendarDays,
   Lightbulb,
   Target,
-  Briefcase,
-  Zap,
-  BarChart3,
   Sparkles,
-  Factory, // Added Factory
+  Factory,
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -32,13 +29,13 @@ interface ProjectClientContentProps {
 }
 
 const iconMap: Record<string, ElementType> = {
-  Briefcase,
+  Briefcase: Briefcase,
   Zap,
   BarChart3,
   Lightbulb,
   Target,
-  Sparkles, // Added Sparkles
-  Factory,   // Added Factory
+  Sparkles,
+  Factory,
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
@@ -68,12 +65,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
     <div className="space-y-8 md:space-y-10 lg:space-y-12">
       <h1
         className={cn(
-          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 block lg:hidden"
+          "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 text-left"
         )}
       >
         {isClientReady ? (
           <WordRevealAnimation
-            key={`title-mobile-${titleToDisplay}-${language}`}
+            key={`title-${titleToDisplay}-${language}`}
             text={titleToDisplay || ""}
             lineBaseDelay={titleBaseDelay}
             delayBetweenWords={titleDelayBetweenWordsConst}
@@ -87,10 +84,68 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       </h1>
 
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
-          {showCaseStudy && (
-            <div className="w-full lg:flex-[0_0_30%] lg:flex lg:items-center"> {/* Ensure Card is centered if wrapper is taller */}
-              <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col w-full"> {/* Removed h-full, added w-full */}
+        <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+          {/* Left Column: Carousel Section */}
+          <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
+            {showGallery && (
+              <>
+                <Carousel
+                  opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
+                  className="w-full max-w-6xl mx-auto"
+                >
+                  <CarouselContent>
+                    {project.galleryImages?.map((src, index) => (
+                      <CarouselItem key={index} className="basis-full">
+                        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
+                          <Image
+                            src={src}
+                            alt={`${titleToDisplay} gallery image ${index + 1}`}
+                            fill
+                            sizes="(max-width: 1279px) 100vw, 1152px"
+                            className="object-cover"
+                            priority={index === 0}
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {project.galleryImages && project.galleryImages.length > 1 && (
+                    <>
+                      <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                      <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                    </>
+                  )}
+                </Carousel>
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex flex-wrap items-center gap-2">
+                      {project.category && (
+                        <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
+                          {project.category}
+                        </Badge>
+                      )}
+                      {project.category && project.technologies && project.technologies.length > 0 && (
+                        <span className="text-muted-foreground mx-1">-</span>
+                      )}
+                      {project.technologies && project.technologies.length > 0 && (
+                        project.technologies.map(tech => (
+                          <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90 dark:border-foreground/50 dark:text-foreground/90">{tech}</Badge>
+                        ))
+                      )}
+                    </div>
+
+                  <div className="flex items-center text-base text-muted-foreground">
+                    <CalendarDays size={18} className="mr-2 text-accent" />
+                    <span>{project.date}</span>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Right Column: Case Study Section */}
+          <div className="w-full lg:flex-[0_0_30%]">
+            {showCaseStudy && (
+              <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full">
                 <div className="space-y-6 flex-grow">
                   {problemStatementToDisplay && (
                     <div>
@@ -106,7 +161,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     </div>
                   )}
                   {solutionOverviewToDisplay && (
-                     <div>
+                      <div>
                       <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
                         <Target className="mr-3 h-6 w-6 text-accent" />
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
@@ -125,7 +180,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                         <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
                           <ExternalLink size={18} className="mr-2" />
-                           <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                             {liveDemoButtonText}
                           </span>
                         </Link>
@@ -144,88 +199,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     <LikeButton projectId={project.id} initialLikes={initialLikes} />
                 </div>
               </Card>
-            </div>
-          )}
-
-          {showGallery && (
-            <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_70%]' : 'lg:flex-[1_1_100%]'}`}>
-              <h1
-                 className={cn(
-                  "font-headline text-4xl sm:text-5xl md:text-6xl font-bold mb-8 hidden lg:block"
-                )}
-              >
-                {isClientReady ? (
-                  <WordRevealAnimation
-                    key={`title-desktop-${titleToDisplay}-${language}`}
-                    text={titleToDisplay || ""}
-                    lineBaseDelay={titleBaseDelay}
-                    delayBetweenWords={titleDelayBetweenWordsConst}
-                    letterStaggerDelay={titleLetterStaggerConst}
-                    letterAnimationDuration={titleLetterAnimationDurationConst}
-                    className="block"
-                  />
-                ) : (
-                  <span style={{ visibility: 'hidden' }}>{project.en.title}</span>
-                )}
-              </h1>
-
-              <Carousel
-                opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
-                className="w-full max-w-6xl mx-auto"
-              >
-                <CarouselContent>
-                  {project.galleryImages?.map((src, index) => (
-                    <CarouselItem key={index} className="basis-full">
-                      <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
-                        <Image
-                          src={src}
-                          alt={`${titleToDisplay} gallery image ${index + 1}`}
-                          fill
-                          sizes="(max-width: 1279px) 100vw, 1152px"
-                          className="object-cover"
-                          priority={index === 0}
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                {project.galleryImages && project.galleryImages.length > 1 && (
-                  <>
-                    <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                    <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                  </>
-                )}
-              </Carousel>
-              <div className="mt-6 flex items-center justify-between">
-                 <div className="flex flex-wrap items-center gap-2">
-                    {project.category && (
-                      <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                        {project.category}
-                      </Badge>
-                    )}
-                    {project.category && project.technologies && project.technologies.length > 0 && (
-                       <span className="text-muted-foreground mx-1">-</span>
-                    )}
-                    {project.technologies && project.technologies.length > 0 && (
-                      project.technologies.map(tech => (
-                        <Badge key={tech} variant="outline" className="text-sm px-3 py-1 border-primary/50 text-primary/90 dark:border-foreground/50 dark:text-foreground/90">{tech}</Badge>
-                      ))
-                    )}
-                  </div>
-
-                <div className="flex items-center text-base text-muted-foreground">
-                  <CalendarDays size={18} className="mr-2 text-accent" />
-                  <span>{project.date}</span>
-                </div>
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
-
     </div>
   );
 };
 
 export default ProjectClientContent;
-
