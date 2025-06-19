@@ -17,7 +17,8 @@ import {
   Briefcase,
   Zap,
   BarChart3,
-  Sparkles, // Added Sparkles import
+  Sparkles,
+  Factory, // Added Factory import
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -38,7 +39,8 @@ const iconMap: Record<string, ElementType> = {
   Lightbulb,
   Target,
   CheckCircle,
-  Sparkles, // Added Sparkles to the map
+  Sparkles,
+  Factory, // Added Factory to the map
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
@@ -58,8 +60,14 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
-  const getKeyFeatureTitle = (feature: any) => isClientReady ? (feature.title ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || '');
-  const getKeyFeatureDescription = (feature: any) => isClientReady ? (feature.description ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || '');
+  const getKeyFeatureTitle = (feature: any) => {
+    const currentFeature = project[currentLangKey]?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description) || project.en?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description);
+    return isClientReady ? (currentFeature?.title ?? '') : (project.en?.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || '');
+  };
+  const getKeyFeatureDescription = (feature: any) => {
+    const currentFeature = project[currentLangKey]?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description) || project.en?.keyFeatures?.find(f => f.title === feature.title && f.description === feature.description);
+    return isClientReady ? (currentFeature?.description ?? '') : (project.en?.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || '');
+  };
 
 
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
@@ -94,7 +102,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
       </h1>
 
       {(showCaseStudy || showGallery) && (
-        <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pb-8 md:pb-10 lg:pb-12 pt-0"> {/* Changed lg:items-start to lg:items-center */}
           {showCaseStudy && (
             <div className="w-full lg:flex-[0_0_30%]">
               <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg h-full flex flex-col">
@@ -259,6 +267,3 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
-
-
-    
