@@ -17,6 +17,7 @@ import {
   Briefcase,
   Zap,
   BarChart3,
+  Sparkles, // Added Sparkles import
 } from 'lucide-react';
 import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
@@ -37,6 +38,7 @@ const iconMap: Record<string, ElementType> = {
   Lightbulb,
   Target,
   CheckCircle,
+  Sparkles, // Added Sparkles to the map
 };
 
 const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
@@ -56,8 +58,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
 
-  const getKeyFeatureTitle = (feature: any) => isClientReady ? (feature.title ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || 'Feature Title Missing');
-  const getKeyFeatureDescription = (feature: any) => isClientReady ? (feature.description ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || 'Feature description missing.');
+  const getKeyFeatureTitle = (feature: any) => isClientReady ? (feature.title ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.title || '');
+  const getKeyFeatureDescription = (feature: any) => isClientReady ? (feature.description ?? '') : (project.en.keyFeatures?.find(f => f.title === feature.title || f.description === feature.description)?.description || '');
+
 
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay || (keyFeaturesToDisplay && keyFeaturesToDisplay.length > 0);
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
@@ -256,3 +259,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 };
 
 export default ProjectClientContent;
+
+
+    
