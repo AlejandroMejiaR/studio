@@ -55,7 +55,7 @@ export default function HomePage() {
   const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
   const subtitleReturnAnimationDuration = 300;
-  const subtitleFinalFadeInDelay = 500; // Delay for subtitle's final fade-in after hero settles
+  const subtitleFinalFadeInDelay = 1000; // Delay for subtitle's final fade-in after hero settles
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -168,12 +168,11 @@ export default function HomePage() {
     // This check prevents the logic from running if animations were skipped or already completed
     if (!shouldAnimateHeroIntro && !isHeroSettled) return;
 
-
-    setIsSubtitleTypingEmphasized(false);
-    setIsSubtitleTypingEmphasizedComplete(true);
-    setIsSubtitleReturning(true);
-    setIsTitleSlidingUp(true);
-    setIsTitleSlidingDown(false);
+    setIsSubtitleTypingEmphasized(false); // Stop typing animation component
+    setIsSubtitleTypingEmphasizedComplete(true); // Mark typing as complete
+    setIsSubtitleReturning(true); // Start return (resize/reposition + fade-out)
+    setIsTitleSlidingUp(true); // Start title slide up
+    setIsTitleSlidingDown(false); // Ensure title is not sliding down
 
     const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
     const timer = setTimeout(() => {
@@ -386,13 +385,21 @@ export default function HomePage() {
       return 'opacity-80';
     }
   
+    // If returning, it's fading out
+    if (isSubtitleReturning) {
+      return 'opacity-0'; 
+    }
+    
+    // If hero is settled AND subtitle is ready for final fade-in
     if (isHeroSettled && isSubtitleReadyToFadeIn) {
-      return 'opacity-80'; // Final visible state after delay
+      return 'opacity-80'; 
     }
-    // If returning, or hero is settled but subtitle isn't ready for final fade-in, keep it hidden
-    if (isSubtitleReturning || (isHeroSettled && !isSubtitleReadyToFadeIn) ) {
-      return 'opacity-0';
+    
+    // If hero is settled but subtitle is NOT ready for final fade-in, keep it hidden
+    if (isHeroSettled && !isSubtitleReadyToFadeIn) {
+        return 'opacity-0';
     }
+
     // If emphasizing, typing, or just finished typing (before returning), it's fully opaque
     if (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
       return 'opacity-100';
@@ -406,6 +413,7 @@ export default function HomePage() {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
 
     if (shouldAnimateHeroIntro) {
+      // During typing, show typing animation
       if (isSubtitleTypingEmphasized) {
         return (
           <TypingAnimation
@@ -419,16 +427,16 @@ export default function HomePage() {
           />
         );
       }
-      // If hero is settled AND subtitle is ready to fade in, show the text.
-      // Also, if typing is complete but we are in the "returning" phase (and thus opacity 0), show static text.
-      // Also, if it's emphasizing but not yet typing, show a placeholder.
+      // If emphasizing but not yet typing, show a placeholder to allow container to animate
       if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
          return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
       }
-      if ((isHeroSettled && isSubtitleReadyToFadeIn) || isSubtitleTypingEmphasizedComplete) {
+      // If typing is complete, or if hero is settled AND subtitle is ready to fade in, show the static text.
+      // This covers the "return" phase (where opacity is 0) and the final "settled and visible" phase.
+      if (isSubtitleTypingEmphasizedComplete || (isHeroSettled && isSubtitleReadyToFadeIn)) {
         return heroSubtitle;
       }
-      // Otherwise, during other animation phases show a placeholder.
+      // Otherwise (e.g., title reveal, title slide down), show placeholder.
       return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
     
