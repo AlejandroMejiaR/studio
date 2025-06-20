@@ -395,44 +395,30 @@ export default function HomePage() {
 
   const getSubtitleOpacityClass = () => {
     if (!isClientReady) return 'opacity-0';
-    if (!shouldAnimateHeroIntro) { // Animations skipped or fully completed
-      // When animations are skipped, we respect isSubtitleReadyToFadeIn for the final fade
+    if (!shouldAnimateHeroIntro) {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
-  
-    // If returning, it's fading out
-    if (isSubtitleReturning) {
-      return 'opacity-0'; 
-    }
-    
-    // If hero is settled AND subtitle is ready for final fade-in
-    if (isHeroSettled && isSubtitleReadyToFadeIn) {
-      return 'opacity-80'; 
-    }
-    
-    // If hero is settled but subtitle is NOT ready for final fade-in, keep it hidden
-    if (isHeroSettled && !isSubtitleReadyToFadeIn) {
-        return 'opacity-0';
-    }
 
-    // If emphasizing, typing, or just finished typing (before returning), it's fully opaque
-    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
+    // Highest priority: if returning or settled but not ready for final fade, it's invisible.
+    if (isSubtitleReturning) return 'opacity-0';
+    if (isHeroSettled) return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
+
+    // During typing or the post-typing pause, it's fully visible.
+    if (isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
       return 'opacity-100';
     }
-    
-    return 'opacity-0'; // Default to hidden during other animation phases (e.g., title reveal)
+
+    // Default to invisible for any other animation phase (title reveal, container moving, etc.)
+    return 'opacity-0';
   };
   
 
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-
-    // If animations are skipped, show the content when ready.
     if (!shouldAnimateHeroIntro) {
       return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
-  
-    // If we're in the typing phase, show the typing animation.
+
     if (isSubtitleTypingEmphasized) {
       return (
         <TypingAnimation
@@ -447,17 +433,9 @@ export default function HomePage() {
       );
     }
   
-    // For all other animation states (before typing, during the pause, during the return, and during the final fade-in),
-    // render the static heroSubtitle text. Its visibility will be controlled by the opacity class on the parent <p>.
-    // This prevents re-mounting the text node, which can break CSS transitions.
-    // However, if the container is meant to be visible but empty (e.g., during isSubtitleEmphasizing before typing),
-    // we still need a placeholder to give the container height.
-    if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
-        return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    }
-
-    // In all other cases where the animation is running, but we're not typing, render the final text.
-    // The opacity class on the parent <p> will handle making it visible or invisible.
+    // For ALL other cases in the animation sequence (pause, return, final fade-in, etc.),
+    // render the final static text. The parent's opacity class will handle making it
+    // visible or invisible. This prevents re-mounting the text node, which can break CSS transitions.
     return heroSubtitle;
   };
 
@@ -583,4 +561,5 @@ export default function HomePage() {
 
 
     
+
 
