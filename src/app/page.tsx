@@ -177,28 +177,34 @@ export default function HomePage() {
     // This check prevents the logic from running if animations were skipped or already completed
     if (!shouldAnimateHeroIntro && !isHeroSettled && !isSubtitleReadyToFadeIn) return;
 
+    // Mark typing as complete to show the full static text.
+    setIsSubtitleTypingEmphasized(false);
+    setIsSubtitleTypingEmphasizedComplete(true);
 
-    setIsSubtitleTypingEmphasized(false); // Stop typing animation component
-    setIsSubtitleTypingEmphasizedComplete(true); // Mark typing as complete, ensures static text content
-    setIsSubtitleReturning(true); // Start return (resize/reposition + fade-out)
-    setIsTitleSlidingUp(true); // Start title slide up
-    setIsTitleSlidingDown(false); // Ensure title is not sliding down
+    // Wait for 1 second before starting the 'return' animation.
+    const delayTimer = setTimeout(() => {
+        setIsSubtitleReturning(true); // Start return (resize/reposition + fade-out)
+        setIsTitleSlidingUp(true); // Start title slide up
+        setIsTitleSlidingDown(false); // Ensure title is not sliding down
 
-    const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
-    const timer = setTimeout(() => {
-      setIsHeroSettled(true);
-      setShouldAnimateHeroIntro(false); // Mark animations as done for this sequence
-      if (isClientReady) { // Ensure client-side before accessing sessionStorage
-        sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
-      }
-      // After hero is settled, trigger the subtitle fade-in after a short delay
-      const fadeInTimer = setTimeout(() => {
-        setIsSubtitleReadyToFadeIn(true);
-      }, subtitleFinalFadeInDelay);
-      animationTimersRef.current.push(fadeInTimer);
+        const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
+        const timer = setTimeout(() => {
+          setIsHeroSettled(true);
+          setShouldAnimateHeroIntro(false); // Mark animations as done for this sequence
+          if (isClientReady) { // Ensure client-side before accessing sessionStorage
+            sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
+          }
+          // After hero is settled, trigger the subtitle fade-in after a short delay
+          const fadeInTimer = setTimeout(() => {
+            setIsSubtitleReadyToFadeIn(true);
+          }, subtitleFinalFadeInDelay);
+          animationTimersRef.current.push(fadeInTimer);
 
-    }, settleDelay);
-    animationTimersRef.current.push(timer);
+        }, settleDelay);
+        animationTimersRef.current.push(timer);
+    }, 1000); // 1-second delay
+
+    animationTimersRef.current.push(delayTimer);
   };
 
 
@@ -240,7 +246,8 @@ export default function HomePage() {
       pathname, 
       shouldAnimateHeroIntro, 
       isHeroSettled,
-      language // Re-evaluate if language changes, as it might restart animations
+      language, // Re-evaluate if language changes, as it might restart animations
+      setShouldNavbarContentBeVisible
   ]);
 
 
@@ -453,9 +460,8 @@ export default function HomePage() {
     }
     
     // If animations are completely skipped or finished from a previous session
-    // We still respect isSubtitleReadyToFadeIn for the final appearance
-    if (isHeroSettled && isSubtitleReadyToFadeIn) {
-      return heroSubtitle;
+    if (isHeroSettled && isClientReady) {
+      return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
     return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   };
@@ -579,3 +585,6 @@ export default function HomePage() {
     
 
 
+
+
+    
