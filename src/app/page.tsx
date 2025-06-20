@@ -51,7 +51,7 @@ export default function HomePage() {
 
   // Animation durations (ms)
   const titleSlideDownAnimationDuration = 500;
-  const subtitleEmphasisAnimationDuration = 300; // For font size/weight transition
+  const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
   const subtitleReturnAnimationDuration = 300; // Same as emphasis
 
@@ -149,8 +149,8 @@ export default function HomePage() {
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true); // Assume typing is done if skipped
-      setIsSubtitleReturning(true); // or false depending on final look
-      setIsTitleSlidingUp(false); // or false
+      setIsSubtitleReturning(false); 
+      setIsTitleSlidingUp(false); 
       setIsHeroSettled(true);
     }
 
@@ -385,7 +385,6 @@ export default function HomePage() {
         <div className="flex flex-col items-center max-w-4xl w-full">
           <h1 className={cn(
             "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center",
-            // Animation classes for slide down/up
             { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
             { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
             { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
@@ -398,8 +397,12 @@ export default function HomePage() {
           <p className={cn(
               "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold opacity-100" 
-                : "text-xl md:text-2xl font-normal opacity-80"
+                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-26" // Emphasized and moved up
+                : "text-xl md:text-2xl font-normal opacity-80 translate-y-0", // Normal and at original position
+                {
+                  // Ensure translate-y-0 is applied explicitly when returning, overriding -translate-y-26
+                  'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
+                }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
@@ -408,20 +411,18 @@ export default function HomePage() {
                 key={`${heroSubtitle}-${language}-emphasized`}
                 text={heroSubtitle || ""}
                 speed={30}
-                startDelay={0} // Start immediately when isSubtitleTypingEmphasized is true
+                startDelay={0} 
                 onComplete={handleSubtitleEmphasisTypingComplete}
               />
             ) : (isHeroSettled || !shouldAnimateHeroIntro) ? (
               heroSubtitle
             ) : (
-              // Placeholder or empty during transitions if needed
-              // For example, keep it visible but static during title animations
               isTitleRevealComplete || isTitleSlidingDown ? heroSubtitle : ""
             )}
           </p>
 
           {(isHeroSettled || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-0 animate-fadeIn">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>

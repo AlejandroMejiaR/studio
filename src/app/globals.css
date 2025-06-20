@@ -260,8 +260,8 @@ body {
   }
 
   .subtitle-emphasis-transition {
-    transition-property: font-size, font-weight, opacity;
-    transition-duration: 0.3s;
+    transition-property: font-size, font-weight, opacity, transform; /* Added transform */
+    transition-duration: 0.3s; /* Matches subtitleEmphasisAnimationDuration */
     transition-timing-function: ease-in-out;
   }
 }
