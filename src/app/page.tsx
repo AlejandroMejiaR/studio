@@ -47,12 +47,15 @@ export default function HomePage() {
   const [isSubtitleReturning, setIsSubtitleReturning] = useState(false);
   const [isTitleSlidingUp, setIsTitleSlidingUp] = useState(false);
   const [isHeroSettled, setIsHeroSettled] = useState(false);
+  const [isSubtitleReadyToFadeIn, setIsSubtitleReadyToFadeIn] = useState(false);
+
 
   // Animation durations (ms)
   const titleSlideDownAnimationDuration = 500;
   const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
-  const subtitleReturnAnimationDuration = 300; 
+  const subtitleReturnAnimationDuration = 300;
+  const subtitleFinalFadeInDelay = 200; // Delay for subtitle's final fade-in after hero settles
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -98,6 +101,8 @@ export default function HomePage() {
       setIsSubtitleReturning(false);
       setIsTitleSlidingUp(false);
       setIsHeroSettled(false);
+      setIsSubtitleReadyToFadeIn(false);
+
 
       const heroFullTitleLinesForCalc = translationsForLanguage.home.hero.fullTitle;
       let calculatedMaxTitleAnimationOverallEndTime = 0;
@@ -151,6 +156,7 @@ export default function HomePage() {
       setIsSubtitleReturning(false);
       setIsTitleSlidingUp(false);
       setIsHeroSettled(true);
+      setIsSubtitleReadyToFadeIn(true);
     }
 
     return clearAnimationTimeouts;
@@ -159,21 +165,29 @@ export default function HomePage() {
 
   const handleSubtitleEmphasisTypingComplete = () => {
     if (!isClientReady) return;
+    // This check prevents the logic from running if animations were skipped or already completed
     if (!shouldAnimateHeroIntro && !isHeroSettled) return;
 
-    setIsSubtitleTypingEmphasized(false); 
+
+    setIsSubtitleTypingEmphasized(false);
     setIsSubtitleTypingEmphasizedComplete(true);
-    setIsSubtitleReturning(true); 
+    setIsSubtitleReturning(true);
     setIsTitleSlidingUp(true);
     setIsTitleSlidingDown(false);
 
     const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
     const timer = setTimeout(() => {
-      setIsHeroSettled(true); 
-      setShouldAnimateHeroIntro(false); 
-      if (isClientReady) {
+      setIsHeroSettled(true);
+      setShouldAnimateHeroIntro(false); // Mark animations as done for this sequence
+      if (isClientReady) { // Ensure client-side before accessing sessionStorage
         sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
       }
+      // After hero is settled, trigger the subtitle fade-in after a short delay
+      const fadeInTimer = setTimeout(() => {
+        setIsSubtitleReadyToFadeIn(true);
+      }, subtitleFinalFadeInDelay);
+      animationTimersRef.current.push(fadeInTimer);
+
     }, settleDelay);
     animationTimersRef.current.push(timer);
   };
@@ -193,14 +207,17 @@ export default function HomePage() {
         if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
         } else if (heroAnimationsDoneOrSkipped) {
+            // If animations are done or skipped, ensure navbar starts hidden and fades in after a delay
             setShouldNavbarContentBeVisible(false); 
             navbarAnimationTimeoutRef.current = setTimeout(() => {
                 setShouldNavbarContentBeVisible(true);
-            }, 1000); 
+            }, 1000); // Delay for navbar fade-in
         } else {
+             // Default to hidden if conditions aren't met (e.g., initial state before logic runs)
             setShouldNavbarContentBeVisible(false);
         }
     } else {
+        // For all other pages, navbar should be immediately visible
         setShouldNavbarContentBeVisible(true);
     }
 
@@ -215,29 +232,32 @@ export default function HomePage() {
       shouldAnimateHeroIntro, 
       isHeroSettled, 
       setShouldNavbarContentBeVisible,
-      language 
+      language // Re-evaluate if language changes, as it might restart animations
   ]);
 
 
   useEffect(() => {
     const aboutSection = aboutMeRef.current;
     if (!isClientReady || !aboutSection) {
+      // Default footer visibility based on path if aboutSection isn't ready
       if (pathname === '/') {
         setIsFooterVisible(false);
       }
       return;
     }
 
+    // IntersectionObserver for the About Me section
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsFooterVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1, 
+        threshold: 0.1, // Adjust threshold as needed
       }
     );
 
     observer.observe(aboutSection);
+    // Check initial visibility on mount
     const rect = aboutSection.getBoundingClientRect();
     const isInitiallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
     setIsFooterVisible(isInitiallyVisible);
@@ -246,7 +266,7 @@ export default function HomePage() {
     return () => {
       observer.disconnect();
     };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); 
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added pathname
 
 
   useEffect(() => {
@@ -265,11 +285,14 @@ export default function HomePage() {
       }
     };
 
+    // Delay scrolling until animations are likely complete or skipped
     if (id === 'projects') {
+      // For #projects, wait for project data and hero animations
       if (!isLoadingProjects && (isHeroSettled || !shouldAnimateHeroIntro)) {
-        scrollTimer = setTimeout(attemptScroll, 300); 
+        scrollTimer = setTimeout(attemptScroll, 300); // Short delay after animations/load
       }
     } else {
+      // For other hashes like #about, just wait for hero animations
       if (isHeroSettled || !shouldAnimateHeroIntro) {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
@@ -288,7 +311,7 @@ export default function HomePage() {
     isLoadingProjects, 
     isHeroSettled, 
     shouldAnimateHeroIntro, 
-    language 
+    language // Language change might re-trigger animations, so re-evaluate scroll
   ]);
 
 
@@ -358,15 +381,26 @@ export default function HomePage() {
   }
 
   const getSubtitleOpacityClass = () => {
-    if (!isClientReady) return 'opacity-0'; 
-    if (!shouldAnimateHeroIntro) return 'opacity-80'; 
-    if (isHeroSettled) return 'opacity-80'; 
-
-    if (isSubtitleReturning) return 'opacity-0'; 
-    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized) return 'opacity-100';
+    if (!isClientReady) return 'opacity-0';
+    if (!shouldAnimateHeroIntro) { // Animations skipped or fully completed
+      return 'opacity-80';
+    }
+  
+    if (isHeroSettled && isSubtitleReadyToFadeIn) {
+      return 'opacity-80'; // Final visible state after delay
+    }
+    // If returning, or hero is settled but subtitle isn't ready for final fade-in, keep it hidden
+    if (isSubtitleReturning || (isHeroSettled && !isSubtitleReadyToFadeIn) ) {
+      return 'opacity-0';
+    }
+    // If emphasizing, typing, or just finished typing (before returning), it's fully opaque
+    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
+      return 'opacity-100';
+    }
     
-    return 'opacity-0';
+    return 'opacity-0'; // Default to hidden during other animation phases (e.g., title reveal)
   };
+  
 
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
@@ -375,21 +409,26 @@ export default function HomePage() {
       if (isSubtitleTypingEmphasized) {
         return (
           <TypingAnimation
-            key={`${heroSubtitle}-${language}-emphasized`} 
+            key={`${heroSubtitle}-${language}-emphasized`}
             text={heroSubtitle || ""}
-            speed={50} 
-            startDelay={0} 
+            speed={50}
+            startDelay={0}
             onComplete={handleSubtitleEmphasisTypingComplete}
             punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-            punctuationPauseFactor={7} 
+            punctuationPauseFactor={7}
           />
         );
       }
-      if (isSubtitleTypingEmphasizedComplete || isHeroSettled) {
+      // If hero is settled AND subtitle is ready to fade in, show the text.
+      // Also, if typing is complete but we are in the "returning" phase (and thus opacity 0), show static text.
+      if ((isHeroSettled && isSubtitleReadyToFadeIn) || isSubtitleTypingEmphasizedComplete) {
         return heroSubtitle;
       }
+      // Otherwise, during other animation phases show a placeholder.
       return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
+    
+    // If animations are completely skipped or finished from a previous session
     return heroSubtitle;
   };
 
