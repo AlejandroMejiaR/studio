@@ -415,18 +415,18 @@ export default function HomePage() {
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
-            { (shouldAnimateHeroIntro && (isSubtitleEmphasizing || isSubtitleTypingEmphasized)) ?
-                (isSubtitleTypingEmphasized ?
+            { (shouldAnimateHeroIntro && isSubtitleEmphasizing && !isSubtitleTypingEmphasized) ?
+                <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} /> // Placeholder during emphasis transition before typing
+              : (shouldAnimateHeroIntro && isSubtitleTypingEmphasized) ?
                   <TypingAnimation
                     key={`${heroSubtitle}-${language}-emphasized`}
                     text={heroSubtitle || ""}
-                    speed={30}
+                    speed={50} // Slower speed
                     startDelay={0}
                     onComplete={handleSubtitleEmphasisTypingComplete}
+                    // punctuationChars and punctuationPauseFactor will use defaults from the component
                   />
-                  : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} /> // Placeholder during emphasis transition before typing
-                )
-              : heroSubtitle // Static text for all other cases (settled, no animation, returning phase etc.)
+                : heroSubtitle // Static text for all other cases (settled, no animation, returning phase etc.)
             }
           </p>
 

@@ -13,6 +13,8 @@ interface TypingAnimationProps {
   startDelay?: number; // Optional delay before starting animation, in seconds
   style?: React.CSSProperties;
   onComplete?: () => void; // Callback for when animation completes
+  punctuationChars?: string[]; // Characters that trigger a longer pause
+  punctuationPauseFactor?: number; // Factor to multiply speed by for punctuation pause
 }
 
 const TypingAnimation: FC<TypingAnimationProps> = ({
@@ -23,6 +25,8 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
   startDelay = 0, // Delay in seconds
   style,
   onComplete,
+  punctuationChars = ['.', ',', '!', '?', ';', ':', '\n'],
+  punctuationPauseFactor = 7,
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -49,9 +53,15 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
     let animationFinished = false;
     if (displayedText.length < text.length) {
       setIsTypingComplete(false);
+      
+      let currentSpeed = speed;
+      if (displayedText.length > 0 && punctuationChars.includes(displayedText[displayedText.length - 1])) {
+        currentSpeed = speed * punctuationPauseFactor;
+      }
+
       const timeoutId = setTimeout(() => {
         setDisplayedText(text.substring(0, displayedText.length + 1));
-      }, speed);
+      }, currentSpeed);
       return () => clearTimeout(timeoutId);
     } else {
       if (text.length > 0) {
@@ -67,7 +77,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
     if(animationFinished && onComplete) {
         onComplete();
     }
-  }, [displayedText, text, speed, isReadyToStart, onComplete, isTypingComplete]);
+  }, [displayedText, text, speed, isReadyToStart, onComplete, isTypingComplete, punctuationChars, punctuationPauseFactor]);
 
   if (!text && isReadyToStart && displayedText === '') return null;
 
@@ -85,3 +95,4 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
 };
 
 export default TypingAnimation;
+
