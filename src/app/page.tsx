@@ -320,7 +320,7 @@ export default function HomePage() {
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn mt-8">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-10 py-5">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
@@ -379,7 +379,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
