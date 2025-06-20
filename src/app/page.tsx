@@ -267,7 +267,7 @@ export default function HomePage() {
   );
 
   const subtitleElement = shouldAnimateHeroIntro ? (
-    <p className="text-4xl md:text-5xl text-foreground/80 max-w-full md:max-w-3xl mb-12 min-h-[7em] whitespace-pre-line">
+    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line">
       <TypingAnimation
         key={heroSubtitle} // Key change will re-trigger animation
         text={heroSubtitle || ""}
@@ -282,7 +282,7 @@ export default function HomePage() {
       />
     </p>
   ) : (
-    <p className="text-4xl md:text-5xl text-foreground/80 max-w-full md:max-w-3xl mb-12 min-h-[7em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
       {heroSubtitle}
     </p>
   );
@@ -299,13 +299,13 @@ export default function HomePage() {
     <div className="container mx-auto"> 
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
         <div className="flex flex-col items-center max-w-3xl w-full">
-          <h1 className="font-headline text-7xl sm:text-8xl md:text-9xl lg:text-[7.5rem] font-bold mb-8 text-foreground dark:text-foreground">
+          <h1 className="font-headline text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-bold mb-6 text-foreground dark:text-foreground">
             {heroTitleElements}
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-10">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-2xl px-10 py-5">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-8">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-8 py-4">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
@@ -316,13 +316,13 @@ export default function HomePage() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-2xl px-10 py-5"
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-xl px-8 py-4"
               >
                 <Link href="/#about">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {aboutMeButtonText}
                   </span>
-                  <ArrowDown size={32} className="ml-2.5" />
+                  <ArrowDown size={28} className="ml-2" />
                 </Link>
               </Button>
             </div>
