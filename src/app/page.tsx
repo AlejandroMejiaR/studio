@@ -460,7 +460,7 @@ export default function HomePage() {
     }
     
     // If animations are completely skipped or finished from a previous session
-    if (isHeroSettled && isClientReady) {
+    if (!shouldAnimateHeroIntro && isClientReady) {
       return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
     return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
