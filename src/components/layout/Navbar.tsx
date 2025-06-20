@@ -11,6 +11,7 @@ import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,6 +21,7 @@ const Navbar = () => {
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
   const isMobile = useIsMobile();
+  const { shouldNavbarContentBeVisible } = useNavbarVisibility();
 
   const [animateBrandName, setAnimateBrandName] = useState(true);
 
@@ -56,11 +58,12 @@ const Navbar = () => {
     }
 
     if (pathname === '/') {
-        setAnimateBrandName(true);
+        // Only animate brand name if content is also visible (or about to be)
+        setAnimateBrandName(shouldNavbarContentBeVisible);
     } else {
       setAnimateBrandName(false); // Static brand on other pages
     }
-  }, [pathname, language, theme, isClientReady]);
+  }, [pathname, language, theme, isClientReady, shouldNavbarContentBeVisible]);
 
 
   const toggleTheme = () => {
@@ -136,7 +139,11 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
-      <div className="container flex h-16 items-center justify-between">
+      <div className={cn(
+          "container flex h-16 items-center justify-between",
+          pathname === '/' && !shouldNavbarContentBeVisible && "opacity-0",
+          pathname === '/' && shouldNavbarContentBeVisible && "animate-fadeInNavbarContent"
+      )}>
         <Link
           href="/"
           className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80"

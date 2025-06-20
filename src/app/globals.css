@@ -233,12 +233,12 @@ body {
     animation-name: wordInitialAccentToFinalColorDark;
   }
 
-  /* Navbar fade-in animation */
-  @keyframes fadeInNavbarDelayed {
-    from { opacity: 0; transform: translateY(-10px); }
+  /* Navbar content fade-in animation */
+  @keyframes fadeInNavbarContent {
+    from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  .animate-fadeInNavbarDelayed {
-    animation: fadeInNavbarDelayed 0.8s ease-out forwards;
+  .animate-fadeInNavbarContent {
+    animation: fadeInNavbarContent 0.6s ease-out forwards;
   }
 }

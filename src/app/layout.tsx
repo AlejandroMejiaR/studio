@@ -10,19 +10,19 @@ import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LoadingProvider } from '@/contexts/LoadingContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
-import { NavbarVisibilityProvider, useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
+import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
 import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense, useState } from 'react'; // Added useState
+import { useEffect, Suspense } from 'react'; 
 import { useLoading } from '@/contexts/LoadingContext';
-import { cn } from '@/lib/utils';
+// import { cn } from '@/lib/utils'; // No longer needed here for Navbar wrapper
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isPageLoading, loadingText, hideLoading } = useLoading();
   const { isClientReady } = useLanguage();
   const { isFooterVisible } = useFooter();
-  const { isNavbarVisible, isNavbarReadyToAnimateIn } = useNavbarVisibility(); // Added isNavbarReadyToAnimateIn
+  // const { isNavbarVisible, isNavbarReadyToAnimateIn } = useNavbarVisibility(); // Removed, Navbar controls its own content visibility
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -39,11 +39,7 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        {isNavbarVisible && (
-          <div className={cn(pathname === '/' && isNavbarReadyToAnimateIn && 'animate-fadeInNavbarDelayed')}>
-            <Navbar />
-          </div>
-        )}
+        <Navbar /> {/* Navbar is always rendered; its internal content visibility is managed */}
         <main className="flex-grow">
           <Suspense fallback={<div></div>}>
             {children}
