@@ -13,17 +13,20 @@ interface NavbarVisibilityContextType {
 const NavbarVisibilityContext = createContext<NavbarVisibilityContextType | undefined>(undefined);
 
 export const NavbarVisibilityProvider = ({ children }: { children: ReactNode }) => {
-  const [shouldNavbarContentBeVisible, setShouldNavbarContentBeVisible] = useState(true);
+  // Default to false to prevent flash on homepage.
+  // page.tsx will set it to true for homepage when appropriate.
+  const [shouldNavbarContentBeVisible, setShouldNavbarContentBeVisible] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    // This effect ensures that when navigating away from the homepage,
-    // the navbar content becomes visible immediately if it was hidden.
-    // For the homepage itself, its visibility is primarily controlled by HomePage.tsx.
+    // If not on the homepage, the navbar content should be visible.
+    // For the homepage, its visibility is controlled by effects in page.tsx.
     if (pathname !== '/') {
       setShouldNavbarContentBeVisible(true);
     }
-    // If navigating TO the homepage, HomePage.tsx will set it to false if animations are running.
+    // If on the homepage, and this effect runs before page.tsx's effect,
+    // it might briefly be false, which is desired to prevent flash.
+    // page.tsx will then take over.
   }, [pathname]);
 
   return (
