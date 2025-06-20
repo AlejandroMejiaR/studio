@@ -15,7 +15,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
-import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext'; // Added
+import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 
 
 export default function HomePage() {
@@ -29,7 +29,7 @@ export default function HomePage() {
     markInitialLanguageSelected
   } = useLanguage();
   const { setIsFooterVisible } = useFooter();
-  const { setIsNavbarVisible } = useNavbarVisibility(); // Added
+  const { setIsNavbarVisible } = useNavbarVisibility();
   const aboutMeRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
 
@@ -54,31 +54,34 @@ export default function HomePage() {
     markInitialLanguageSelected();
   };
   
-  // Effect to control Navbar visibility
   useEffect(() => {
-    if (!isClientReady || !initialLanguageSelectedByUser) {
-      // If client isn't ready or language not selected (i.e., selection screen is up),
-      // Navbar should be visible.
-      setIsNavbarVisible(true);
-      return;
+    if (!isClientReady) {
+      return; // Wait for client readiness before making decisions
     }
 
-    if (pathname === '/') {
-      if (shouldAnimateInitialLoadOrLanguageChange) {
-        setIsNavbarVisible(false); // Hide Navbar if animations are about to play on home
-      } else {
-        setIsNavbarVisible(true); // Show Navbar if no animations on home (e.g. already completed)
-      }
+    if (!initialLanguageSelectedByUser) {
+      setIsNavbarVisible(false); // Hide Navbar on language selection screen
     } else {
-      setIsNavbarVisible(true); // Always show Navbar on other pages
+      // Language HAS been selected
+      if (pathname === '/') {
+        // On homepage after language selection
+        if (shouldAnimateInitialLoadOrLanguageChange) {
+          setIsNavbarVisible(false); // Hide Navbar if animations are about to play
+        } else {
+          setIsNavbarVisible(true);  // Show Navbar if no animations (e.g., already completed or not applicable)
+        }
+      } else {
+        // On other pages, Navbar should be visible
+        setIsNavbarVisible(true);
+      }
     }
   }, [
-    isClientReady, 
-    initialLanguageSelectedByUser, 
-    pathname, 
-    shouldAnimateInitialLoadOrLanguageChange, 
+    isClientReady,
+    initialLanguageSelectedByUser,
+    pathname,
+    shouldAnimateInitialLoadOrLanguageChange,
     setIsNavbarVisible,
-    language // Added language as a dependency to re-evaluate if it changes
+    language // Re-evaluate if language changes (which might affect shouldAnimate... flag)
   ]);
 
 
@@ -136,7 +139,6 @@ export default function HomePage() {
       }
     } else {
       if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
-        // Wait for animations if they are active and not complete for non-project hash links
         return;
       }
       scrollTimer = setTimeout(() => {
@@ -178,7 +180,6 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    // Projects are only fetched if language has been selected.
     if (!initialLanguageSelectedByUser) return;
 
     const fetchProjects = async () => {
@@ -277,7 +278,7 @@ export default function HomePage() {
         style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
         onComplete={() => {
           setIsSubtitleAnimationComplete(true);
-          if (pathname === '/') setIsNavbarVisible(true); // Show Navbar when subtitle (last animation) completes
+          if (pathname === '/') setIsNavbarVisible(true); 
         }}
       />
     </p>
@@ -290,7 +291,6 @@ export default function HomePage() {
   if (!isClientReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        {/* Basic placeholder while client readiness is being determined by LanguageProvider */}
       </div>
     );
   }
@@ -300,7 +300,7 @@ export default function HomePage() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center">
         <div className="mb-12">
           <h1 className="text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-4">
-            Welcome / Bienvenido
+            Hola! / Hello!
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground">
             Please select your language / Por favor, selecciona tu idioma
@@ -329,7 +329,6 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto"> 
-      {/* Hero Section */}
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
         <div className="flex flex-col items-center max-w-3xl w-full">
           <h1 className="font-headline text-7xl sm:text-8xl md:text-9xl lg:text-[7.5rem] font-bold mb-8 text-foreground dark:text-foreground">
@@ -396,3 +395,4 @@ export default function HomePage() {
     </div>
   );
 }
+
