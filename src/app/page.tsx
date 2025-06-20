@@ -37,7 +37,6 @@ export default function HomePage() {
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
   const previousLanguageRef = useRef<Language | undefined>();
-  const initialLoadAnimatedRef = useRef(false);
 
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
@@ -63,19 +62,31 @@ export default function HomePage() {
   };
 
 
+  // This useEffect determines if the main hero intro animation should run.
   useEffect(() => {
-    if (isClientReady) {
-      if (!initialLoadAnimatedRef.current) {
-        setShouldAnimateHeroIntro(true);
-        initialLoadAnimatedRef.current = true;
-      } else if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
-        setShouldAnimateHeroIntro(true); // Restart full animation on language change
-      }
-      if (previousLanguageRef.current !== language) {
-        previousLanguageRef.current = language;
-      }
-    } else {
+    if (!isClientReady) {
       setShouldAnimateHeroIntro(false);
+      return;
+    }
+
+    const hasAnimatedThisSession = sessionStorage.getItem('portfolioAceHeroAnimatedThisSession') === 'true';
+
+    // If language changes, we always want to re-animate for the new language.
+    // We set the session flag to 'false' to allow the animation for the new language.
+    if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
+      sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'false');
+      setShouldAnimateHeroIntro(true);
+    } else if (!hasAnimatedThisSession) {
+      // If language hasn't changed, and it hasn't animated this session yet.
+      setShouldAnimateHeroIntro(true);
+    } else {
+      // Language hasn't changed, AND it has already animated this session.
+      setShouldAnimateHeroIntro(false);
+    }
+
+    // Update previous language for the next render cycle.
+    if (previousLanguageRef.current !== language) {
+      previousLanguageRef.current = language;
     }
   }, [isClientReady, language]);
 
@@ -159,7 +170,7 @@ export default function HomePage() {
 
 
   const handleSubtitleEmphasisTypingComplete = () => {
-    if (!shouldAnimateHeroIntro) return; // Prevent updates if animation was reset/skipped
+    if (!shouldAnimateHeroIntro && !isHeroSettled) return; // Prevent updates if animation was reset/skipped or already settled by skip logic
 
     setIsSubtitleTypingEmphasizedComplete(true);
     setIsSubtitleReturning(true);
@@ -170,6 +181,9 @@ export default function HomePage() {
     const timer = setTimeout(() => {
       setIsHeroSettled(true);
       setShouldAnimateHeroIntro(false); // Animation sequence complete
+      if (isClientReady) {
+        sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
+      }
     }, settleDelay);
     animationTimersRef.current.push(timer);
   };
@@ -189,14 +203,17 @@ export default function HomePage() {
         if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
         } else if (heroAnimationsDoneOrSkipped) {
-            setShouldNavbarContentBeVisible(false);
+            // Navbar content should become visible after a delay if hero is settled or animation is skipped
+            setShouldNavbarContentBeVisible(false); // Initially hide
             navbarAnimationTimeoutRef.current = setTimeout(() => {
                 setShouldNavbarContentBeVisible(true);
-            }, 1000);
+            }, 1000); // Delay for navbar content to appear
         } else {
+             // Default to hidden if conditions not met (e.g., initial state before decisions)
             setShouldNavbarContentBeVisible(false);
         }
     } else {
+        // For all other pages, navbar content is immediately visible
         setShouldNavbarContentBeVisible(true);
     }
 
@@ -211,7 +228,7 @@ export default function HomePage() {
       shouldAnimateHeroIntro,
       isHeroSettled,
       setShouldNavbarContentBeVisible,
-      language
+      language // Re-evaluate if language changes, as this might reset shouldAnimateHeroIntro
   ]);
 
 
@@ -265,13 +282,15 @@ export default function HomePage() {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     } else {
+      // For other sections (like #about), scroll after hero animations are done or skipped
       if (shouldAnimateHeroIntro && !isHeroSettled) {
-        // Wait if animations are running
+        // Wait if animations are running for #about or other non-project sections
       } else {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     }
-    animationTimersRef.current.push(scrollTimer);
+    if(scrollTimer) animationTimersRef.current.push(scrollTimer);
+
 
     return () => {
       if (scrollTimer) {
@@ -280,11 +299,11 @@ export default function HomePage() {
     };
   }, [
     isClientReady,
-    pathname,
+    pathname, // Added pathname to re-evaluate if on a different page but hash remains
     isLoadingProjects,
     isHeroSettled,
     shouldAnimateHeroIntro,
-    language
+    language // Re-evaluate on language change as content might shift
   ]);
 
 
@@ -373,8 +392,10 @@ export default function HomePage() {
 
 
   if (!isClientReady) {
+    // Minimal content for server render or before client hydration, helps prevent layout shifts
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
+        {/* You can put a very simple static loader here if needed, but often just empty is fine */}
       </div>
     );
   }
@@ -398,7 +419,7 @@ export default function HomePage() {
               "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
               // Styles for emphasized state (moved up, larger, bolder, fully opaque)
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-44" // MOVED UP MORE
+                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-44"
                 // Styles for normal state (original position, smaller, normal weight, slightly transparent)
                 : "text-xl md:text-2xl font-normal opacity-80 translate-y-0",
               {
@@ -406,11 +427,11 @@ export default function HomePage() {
                 'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
                 // Hide subtitle unless it's in an active visible phase of its animation, or hero is settled
                 'opacity-0': shouldAnimateHeroIntro &&
-                             !(isSubtitleEmphasizing ||
-                               isSubtitleTypingEmphasized ||
-                               (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) ||
-                               isSubtitleReturning ||
-                               isHeroSettled),
+                             !isHeroSettled && // If hero is settled, always show (unless its the placeholder below)
+                             !isSubtitleEmphasizing &&
+                             !isSubtitleTypingEmphasized &&
+                             !(isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) && // When complete but not yet returning
+                             !isSubtitleReturning,
               }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
@@ -421,17 +442,18 @@ export default function HomePage() {
                   <TypingAnimation
                     key={`${heroSubtitle}-${language}-emphasized`}
                     text={heroSubtitle || ""}
-                    speed={50} // Slower speed
+                    speed={50}
                     startDelay={0}
                     onComplete={handleSubtitleEmphasisTypingComplete}
-                    // punctuationChars and punctuationPauseFactor will use defaults from the component
+                    punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
+                    punctuationPauseFactor={7}
                   />
                 : heroSubtitle // Static text for all other cases (settled, no animation, returning phase etc.)
             }
           </p>
 
           {(isHeroSettled || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn mt-8">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
