@@ -315,7 +315,7 @@ export default function HomePage() {
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-16 md:py-20">
         <div className="flex flex-col items-center max-w-4xl w-full">
-          <h1 className="font-headline text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-bold mb-8 text-foreground dark:text-foreground text-center">
+          <h1 className="font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center">
             {heroTitleElements}
           </h1>
           {subtitleElement}
