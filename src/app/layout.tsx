@@ -9,7 +9,8 @@ import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LoadingProvider } from '@/contexts/LoadingContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
-import { FooterProvider, useFooter } from '@/contexts/FooterContext'; // Added FooterProvider and useFooter
+import { FooterProvider, useFooter } from '@/contexts/FooterContext';
+import { NavbarVisibilityProvider, useNavbarVisibility } from '@/contexts/NavbarVisibilityContext'; // Added
 import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
@@ -19,7 +20,8 @@ import { useLoading } from '@/contexts/LoadingContext';
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isPageLoading, loadingText, hideLoading } = useLoading();
   const { isClientReady } = useLanguage();
-  const { isFooterVisible } = useFooter(); // Get footer visibility state
+  const { isFooterVisible } = useFooter();
+  const { isNavbarVisible } = useNavbarVisibility(); // Added
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -36,7 +38,7 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Navbar />
+        {isNavbarVisible && <Navbar />} {/* Conditionally render Navbar */}
         <main className="flex-grow">
           <Suspense fallback={<div></div>}>
             {children}
@@ -86,10 +88,12 @@ export default function RootLayout({
       <body className="font-body antialiased bg-background text-foreground" suppressHydrationWarning={true}>
         <LanguageProvider>
           <LoadingProvider>
-            <FooterProvider> {/* Wrap with FooterProvider */}
-              <LayoutClientLogic>
-                {children}
-              </LayoutClientLogic>
+            <FooterProvider>
+              <NavbarVisibilityProvider> {/* Wrap with NavbarVisibilityProvider */}
+                <LayoutClientLogic>
+                  {children}
+                </LayoutClientLogic>
+              </NavbarVisibilityProvider>
             </FooterProvider>
           </LoadingProvider>
         </LanguageProvider>
