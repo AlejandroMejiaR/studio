@@ -148,28 +148,38 @@ export default function HomePage() {
       animationTimersRef.current.push(timer3);
 
     } else if (!shouldAnimateHeroIntro && isClientReady) {
+      // Animations are skipped
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
-      setIsSubtitleTypingEmphasizedComplete(true);
-      setIsSubtitleReturning(false);
-      setIsTitleSlidingUp(false);
-      setIsHeroSettled(true);
-      setIsSubtitleReadyToFadeIn(true);
+      setIsSubtitleTypingEmphasizedComplete(true); // Subtitle content is static text
+      setIsSubtitleReturning(false); // No return animation needed
+      setIsTitleSlidingUp(false); // No title slide-up needed
+      setIsHeroSettled(true); // Hero is immediately settled
+
+      // Keep subtitle hidden initially when skipping animations
+      setIsSubtitleReadyToFadeIn(false);
+
+      // Now, schedule the fade-in for the subtitle after the delay
+      const fadeInTimer = setTimeout(() => {
+        setIsSubtitleReadyToFadeIn(true);
+      }, subtitleFinalFadeInDelay);
+      animationTimersRef.current.push(fadeInTimer);
     }
 
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, language, translationsForLanguage.home.hero.fullTitle]);
+  }, [shouldAnimateHeroIntro, isClientReady, language, translationsForLanguage.home.hero.fullTitle, subtitleFinalFadeInDelay]);
 
 
   const handleSubtitleEmphasisTypingComplete = () => {
     if (!isClientReady) return;
     // This check prevents the logic from running if animations were skipped or already completed
-    if (!shouldAnimateHeroIntro && !isHeroSettled) return;
+    if (!shouldAnimateHeroIntro && !isHeroSettled && !isSubtitleReadyToFadeIn) return;
+
 
     setIsSubtitleTypingEmphasized(false); // Stop typing animation component
-    setIsSubtitleTypingEmphasizedComplete(true); // Mark typing as complete
+    setIsSubtitleTypingEmphasizedComplete(true); // Mark typing as complete, ensures static text content
     setIsSubtitleReturning(true); // Start return (resize/reposition + fade-out)
     setIsTitleSlidingUp(true); // Start title slide up
     setIsTitleSlidingDown(false); // Ensure title is not sliding down
@@ -382,7 +392,8 @@ export default function HomePage() {
   const getSubtitleOpacityClass = () => {
     if (!isClientReady) return 'opacity-0';
     if (!shouldAnimateHeroIntro) { // Animations skipped or fully completed
-      return 'opacity-80';
+      // When animations are skipped, we respect isSubtitleReadyToFadeIn for the final fade
+      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
   
     // If returning, it's fading out
@@ -431,8 +442,10 @@ export default function HomePage() {
       if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
          return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
       }
-      // If typing is complete, or if hero is settled AND subtitle is ready to fade in, show the static text.
-      // This covers the "return" phase (where opacity is 0) and the final "settled and visible" phase.
+      // If typing is complete (which sets isSubtitleTypingEmphasizedComplete), 
+      // or if hero is settled AND subtitle is ready to fade in, show the static text.
+      // This covers the "return" phase (where opacity is 0 from getSubtitleOpacityClass) 
+      // and the final "settled and visible" phase.
       if (isSubtitleTypingEmphasizedComplete || (isHeroSettled && isSubtitleReadyToFadeIn)) {
         return heroSubtitle;
       }
@@ -441,7 +454,8 @@ export default function HomePage() {
     }
     
     // If animations are completely skipped or finished from a previous session
-    return heroSubtitle;
+    // We still respect isSubtitleReadyToFadeIn for the final appearance
+    return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   };
 
 
