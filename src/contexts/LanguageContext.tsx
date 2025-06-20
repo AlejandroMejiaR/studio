@@ -250,7 +250,7 @@ const getInitialLanguage = (): Language => {
       return storedLanguage;
     }
   }
-  return 'ES';
+  return 'ES'; // Default language if nothing is stored or if the stored value is invalid
 };
 
 const INITIAL_LANGUAGE_CHOSEN_KEY = 'portfolio-ace-initial-language-chosen';
@@ -263,41 +263,46 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setIsClientReady(true);
     if (typeof window !== 'undefined') {
-      const alreadySelected = localStorage.getItem(INITIAL_LANGUAGE_CHOSEN_KEY) === 'true';
-      setInitialLanguageSelectedByUser(alreadySelected);
-      // If already selected, ensure the language state matches localStorage,
-      // otherwise getInitialLanguage() provides the default or last explicit set.
-      if (alreadySelected) {
+      // Use sessionStorage to check if the prompt was shown in the current session
+      const alreadySelectedThisSession = sessionStorage.getItem(INITIAL_LANGUAGE_CHOSEN_KEY) === 'true';
+      setInitialLanguageSelectedByUser(alreadySelectedThisSession);
+
+      // Ensure language state matches localStorage for persistence across sessions
+      // (This doesn't affect the prompt visibility, only the default language)
+      if (alreadySelectedThisSession) {
         const storedLang = localStorage.getItem('portfolio-ace-language') as Language | null;
         if (storedLang && storedLang !== language) {
           setLanguageState(storedLang);
         }
+      } else {
+        // If not selected this session, ensure the language is the default or last saved preference
+        // This helps if the user closes tab before selecting on the prompt, then reopens.
+        // The prompt will show again, but with their previously *chosen* language pre-selected,
+        // or the default if no language was ever chosen.
+        const lastChosenLang = localStorage.getItem('portfolio-ace-language') as Language | null;
+        if (lastChosenLang && lastChosenLang !== language) {
+             setLanguageState(lastChosenLang);
+        } else if (!lastChosenLang && language !== getInitialLanguage()){ // ensure default if no prev choice
+            setLanguageState(getInitialLanguage());
+        }
       }
     }
-  }, []);
+  }, []); // Runs once on mount
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('portfolio-ace-language', lang);
+      localStorage.setItem('portfolio-ace-language', lang); // Persist chosen language
     }
   }, []);
 
   const markInitialLanguageSelected = useCallback(() => {
     setInitialLanguageSelectedByUser(true);
     if (typeof window !== 'undefined') {
-      localStorage.setItem(INITIAL_LANGUAGE_CHOSEN_KEY, 'true');
+      // Mark as selected for this session
+      sessionStorage.setItem(INITIAL_LANGUAGE_CHOSEN_KEY, 'true');
     }
   }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && isClientReady) { // ensure client ready before trying to set
-      const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
-      if (language !== currentStoredLanguage) {
-        localStorage.setItem('portfolio-ace-language', language);
-      }
-    }
-  }, [language, isClientReady]);
   
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | string[] | undefined) => {
     if (translations['EN']) {
@@ -312,7 +317,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     <LanguageContext.Provider value={{ 
         language, 
         setLanguage, 
-        translationsForLanguage: translations[language], 
+        translationsForLanguage: translations[language] || translations[getInitialLanguage()], // Fallback if translations[language] is undefined
         isClientReady, 
         getEnglishTranslation,
         initialLanguageSelectedByUser,
@@ -330,3 +335,4 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
+
