@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, type Language } from '@/contexts/LanguageContext';
 import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
@@ -21,12 +21,9 @@ import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 export default function HomePage() {
   const { 
     language, 
-    setLanguage, 
     translationsForLanguage, 
     isClientReady, 
-    getEnglishTranslation,
-    initialLanguageSelectedByUser,
-    markInitialLanguageSelected
+    getEnglishTranslation
   } = useLanguage();
   const { setIsFooterVisible } = useFooter();
   const { setIsNavbarVisible } = useNavbarVisibility();
@@ -36,61 +33,59 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
-  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(false);
+  
+  // This flag determines if the full hero intro animation plays.
+  // It should play on initial load and on language change.
+  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
+  const previousLanguageRef = useRef<Language | undefined>();
+  const initialLoadAnimatedRef = useRef(false); // Tracks if initial load animation has been triggered
 
 
   useEffect(() => {
-    if (initialLanguageSelectedByUser) {
-      setShouldAnimateInitialLoadOrLanguageChange(true);
-      setIsSubtitleAnimationComplete(false); 
+    if (isClientReady) {
+      if (!initialLoadAnimatedRef.current) {
+        // First meaningful render after client is ready
+        setShouldAnimateHeroIntro(true);
+        setIsSubtitleAnimationComplete(false); // Ensure subtitle also re-animates or resets
+        initialLoadAnimatedRef.current = true;
+      } else if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
+        // Language has changed (and it's not the very first load animation cycle)
+        setShouldAnimateHeroIntro(true);
+        setIsSubtitleAnimationComplete(false); // Ensure subtitle also re-animates or resets
+      }
+      // Only update previousLanguageRef if language actually changed or on initial setup
+      if (previousLanguageRef.current !== language) {
+        previousLanguageRef.current = language;
+      }
     } else {
-      setShouldAnimateInitialLoadOrLanguageChange(false);
+      // Client not ready, ensure animations are off.
+      setShouldAnimateHeroIntro(false);
     }
-  }, [initialLanguageSelectedByUser, language]);
-
-
-  const handleInitialLanguageSelect = (selectedLang: 'EN' | 'ES') => {
-    setLanguage(selectedLang);
-    markInitialLanguageSelected();
-  };
+  }, [isClientReady, language]);
   
   useEffect(() => {
-    if (!isClientReady) {
-      return; // Wait for client readiness before making decisions
-    }
+    if (!isClientReady) return;
 
-    if (!initialLanguageSelectedByUser) {
-      setIsNavbarVisible(false); // Hide Navbar on language selection screen
-    } else {
-      // Language HAS been selected
-      if (pathname === '/') {
-        // On homepage after language selection
-        if (shouldAnimateInitialLoadOrLanguageChange) {
-          setIsNavbarVisible(false); // Hide Navbar if animations are about to play
-        } else {
-          setIsNavbarVisible(true);  // Show Navbar if no animations (e.g., already completed or not applicable)
-        }
+    if (pathname === '/') {
+      if (shouldAnimateHeroIntro) {
+        setIsNavbarVisible(false); // Hide Navbar if animations are about to play
+      } else if (!isSubtitleAnimationComplete && initialLoadAnimatedRef.current) {
+        // This handles the state where animations *were* triggered (initialLoadAnimatedRef is true),
+        // are currently playing (shouldAnimateHeroIntro might be false if animation completed quickly or after one cycle),
+        // but the subtitle isn't done yet. Navbar should remain hidden.
+        setIsNavbarVisible(false);
       } else {
-        // On other pages, Navbar should be visible
+        // Animations are not set to trigger, or they are complete.
         setIsNavbarVisible(true);
       }
+    } else {
+      // On other pages, Navbar should be visible
+      setIsNavbarVisible(true);
     }
-  }, [
-    isClientReady,
-    initialLanguageSelectedByUser,
-    pathname,
-    shouldAnimateInitialLoadOrLanguageChange,
-    setIsNavbarVisible,
-    language // Re-evaluate if language changes (which might affect shouldAnimate... flag)
-  ]);
+  }, [isClientReady, pathname, shouldAnimateHeroIntro, isSubtitleAnimationComplete, setIsNavbarVisible, language]);
 
 
   useEffect(() => {
-    if (!initialLanguageSelectedByUser) {
-      setIsFooterVisible(false); 
-      return; 
-    }
-
     const aboutSection = aboutMeRef.current;
     if (!isClientReady || !aboutSection) {
       if (pathname === '/') {
@@ -116,11 +111,11 @@ export default function HomePage() {
     return () => {
       observer.disconnect();
     };
-  }, [isClientReady, initialLanguageSelectedByUser, setIsFooterVisible, aboutMeRef, pathname]);
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
 
 
   useEffect(() => {
-    if (!isClientReady || !initialLanguageSelectedByUser) return;
+    if (!isClientReady) return;
 
     const hash = window.location.hash;
     if (!hash) return; 
@@ -128,25 +123,27 @@ export default function HomePage() {
     const id = hash.substring(1);
     let scrollTimer: NodeJS.Timeout;
 
+    const attemptScroll = () => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    
     if (id === 'projects') {
       if (!isLoadingProjects) { 
-        scrollTimer = setTimeout(() => {
-          const element = document.getElementById('projects');
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }
-        }, 300); 
+        scrollTimer = setTimeout(attemptScroll, 300); 
       }
-    } else {
-      if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
-        return;
+    } else { // For #about or other sections
+      if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
+        // If animations are running and subtitle isn't done, wait.
+        // This ensures scrolling happens after the intro is mostly settled.
+        // A more robust way might be to listen for a specific animation end event.
+        // For now, we rely on isSubtitleAnimationComplete.
+      } else {
+        // Animations are not playing, or subtitle is complete
+        scrollTimer = setTimeout(attemptScroll, 300);
       }
-      scrollTimer = setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 300); 
     }
 
     return () => {
@@ -156,20 +153,21 @@ export default function HomePage() {
     };
   }, [
     isClientReady,
-    initialLanguageSelectedByUser,
     pathname, 
     isLoadingProjects, 
     isSubtitleAnimationComplete, 
-    shouldAnimateInitialLoadOrLanguageChange, 
+    shouldAnimateHeroIntro, 
     language 
   ]);
 
 
   useEffect(() => {
-    if (initialLanguageSelectedByUser && shouldAnimateInitialLoadOrLanguageChange) {
+    // This effect ensures that if shouldAnimateHeroIntro is true (meaning animations are intended),
+    // isSubtitleAnimationComplete is reset. This is crucial for re-triggering typing animation on language change.
+    if (shouldAnimateHeroIntro) {
         setIsSubtitleAnimationComplete(false);
     }
-  }, [translationsForLanguage.home.hero.subtitle, shouldAnimateInitialLoadOrLanguageChange, initialLanguageSelectedByUser]);
+  }, [shouldAnimateHeroIntro]);
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -180,7 +178,7 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    if (!initialLanguageSelectedByUser) return;
+    if (!isClientReady) return; // Wait for client (and language) to be ready
 
     const fetchProjects = async () => {
       setIsLoadingProjects(true);
@@ -194,7 +192,7 @@ export default function HomePage() {
       }
     };
     fetchProjects();
-  }, [initialLanguageSelectedByUser]);
+  }, [isClientReady]); // Fetch projects once client is ready
 
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   let currentCumulativeLineBaseDelay = 0;
@@ -204,7 +202,7 @@ export default function HomePage() {
   const letterAnimationDurationConst = 0.5;
   const delayBetweenWordsConst = 0.15;
 
-  if (shouldAnimateInitialLoadOrLanguageChange) {
+  if (shouldAnimateHeroIntro) {
     heroFullTitleLines.forEach((lineText) => {
         const currentLineStartOffset = currentCumulativeLineBaseDelay;
         lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
@@ -239,10 +237,10 @@ export default function HomePage() {
         }
     });
   }
-  const subtitleTypingStartDelay = shouldAnimateInitialLoadOrLanguageChange ? maxTitleAnimationOverallEndTime + 0.5 : 0;
+  const subtitleTypingStartDelay = shouldAnimateHeroIntro ? maxTitleAnimationOverallEndTime + 0.5 : 0;
 
 
-  const heroTitleElements = shouldAnimateInitialLoadOrLanguageChange ? (
+  const heroTitleElements = shouldAnimateHeroIntro ? (
     heroFullTitleLines.map((lineText, lineIndex) => {
       const currentLineAnimProps = lineAnimationProps[lineIndex];
       if (!currentLineAnimProps) return null;
@@ -268,10 +266,10 @@ export default function HomePage() {
     ))
   );
 
-  const subtitleElement = shouldAnimateInitialLoadOrLanguageChange ? (
+  const subtitleElement = shouldAnimateHeroIntro ? (
     <p className="text-4xl md:text-5xl text-foreground/80 max-w-full md:max-w-3xl mb-12 min-h-[7em] whitespace-pre-line">
       <TypingAnimation
-        key={heroSubtitle}
+        key={heroSubtitle} // Key change will re-trigger animation
         text={heroSubtitle || ""}
         speed={30}
         startDelay={subtitleTypingStartDelay}
@@ -279,6 +277,7 @@ export default function HomePage() {
         onComplete={() => {
           setIsSubtitleAnimationComplete(true);
           if (pathname === '/') setIsNavbarVisible(true); 
+          setShouldAnimateHeroIntro(false); // Turn off animation trigger after completion
         }}
       />
     </p>
@@ -291,41 +290,10 @@ export default function HomePage() {
   if (!isClientReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
+         {/* Minimal loading state, or a skeleton if preferred */}
       </div>
     );
   }
-
-  if (!initialLanguageSelectedByUser) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center">
-        <div className="mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-4">
-            Hola! / Hello!
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground">
-            Por favor, selecciona tu idioma / Please select your language
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-6">
-          <Button
-            size="lg"
-            className="px-10 py-6 text-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-            onClick={() => handleInitialLanguageSelect('ES')}
-          >
-            Español
-          </Button>
-          <Button
-            size="lg"
-            className="px-10 py-6 text-lg bg-accent hover:bg-accent/90 text-accent-foreground"
-            onClick={() => handleInitialLanguageSelect('EN')}
-          >
-            English
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
 
   return (
     <div className="container mx-auto"> 
@@ -335,7 +303,7 @@ export default function HomePage() {
             {heroTitleElements}
           </h1>
           {subtitleElement}
-          {(isSubtitleAnimationComplete || !shouldAnimateInitialLoadOrLanguageChange) && (
+          {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-10">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-2xl px-10 py-5">
                 <Link href="/#projects">
@@ -395,4 +363,3 @@ export default function HomePage() {
     </div>
   );
 }
-
