@@ -72,11 +72,14 @@ export default function HomePage() {
     const hasAnimatedThisSession = sessionStorage.getItem('portfolioAceHeroAnimatedThisSession') === 'true';
 
     if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
+      // Language changed, force animation and reset session flag
       sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'false');
       setShouldAnimateHeroIntro(true);
     } else if (!hasAnimatedThisSession) {
+      // Language is the same, but hasn't animated this session yet
       setShouldAnimateHeroIntro(true);
     } else {
+      // Language is the same, and has already animated this session
       setShouldAnimateHeroIntro(false);
     }
 
@@ -159,7 +162,8 @@ export default function HomePage() {
 
 
   const handleSubtitleEmphasisTypingComplete = () => {
-    if (!shouldAnimateHeroIntro && !isHeroSettled && !isClientReady) return;
+    if (!isClientReady) return; // Ensure client is ready before proceeding
+    if (!shouldAnimateHeroIntro && !isHeroSettled) return; // Guard against premature calls if animations were skipped
 
     setIsSubtitleTypingEmphasized(false); // Ensure TypingAnimation stops rendering
     setIsSubtitleTypingEmphasizedComplete(true);
@@ -167,13 +171,12 @@ export default function HomePage() {
     setIsTitleSlidingUp(true);
     setIsTitleSlidingDown(false);
 
-    // This delay is for the subtitle to resize and fade OUT, and title to slide up.
-    // After this, isHeroSettled will become true, triggering subtitle to fade IN.
     const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
     const timer = setTimeout(() => {
-      setIsHeroSettled(true); // This will trigger the subtitle to fade IN to opacity-80
-      setShouldAnimateHeroIntro(false);
-      if (isClientReady) {
+      setIsHeroSettled(true); 
+      // Set shouldAnimateHeroIntro to false only AFTER hero is settled and session flag can be set
+      setShouldAnimateHeroIntro(false); 
+      if (isClientReady) { // Double check client readiness before sessionStorage access
         sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
       }
     }, settleDelay);
@@ -195,14 +198,17 @@ export default function HomePage() {
         if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
         } else if (heroAnimationsDoneOrSkipped) {
-            setShouldNavbarContentBeVisible(false);
+            // Start with navbar hidden, then fade it in after a delay
+            setShouldNavbarContentBeVisible(false); 
             navbarAnimationTimeoutRef.current = setTimeout(() => {
                 setShouldNavbarContentBeVisible(true);
-            }, 1000);
+            }, 1000); // Delay before Navbar content fades in
         } else {
+             // Default to hidden if conditions not met (e.g. initial load before decisions)
             setShouldNavbarContentBeVisible(false);
         }
     } else {
+        // For all other pages, navbar content should be visible immediately
         setShouldNavbarContentBeVisible(true);
     }
 
@@ -212,12 +218,12 @@ export default function HomePage() {
         }
     };
   }, [
-      isClientReady,
-      pathname,
-      shouldAnimateHeroIntro,
-      isHeroSettled,
+      isClientReady, 
+      pathname, 
+      shouldAnimateHeroIntro, 
+      isHeroSettled, 
       setShouldNavbarContentBeVisible,
-      language
+      language // Re-evaluate if language changes, as it might reset shouldAnimateHeroIntro
   ]);
 
 
@@ -235,19 +241,21 @@ export default function HomePage() {
         setIsFooterVisible(entry.isIntersecting);
       },
       {
-        threshold: 0.1,
+        threshold: 0.1, // Footer becomes visible when 10% of AboutMe is in view
       }
     );
 
     observer.observe(aboutSection);
+    // Check initial visibility without waiting for scroll
     const rect = aboutSection.getBoundingClientRect();
     const isInitiallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
     setIsFooterVisible(isInitiallyVisible);
 
+
     return () => {
       observer.disconnect();
     };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
+  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]); // Added aboutMeRef and pathname
 
 
   useEffect(() => {
@@ -267,13 +275,13 @@ export default function HomePage() {
     };
 
     if (id === 'projects') {
-      if (!isLoadingProjects) {
-        scrollTimer = setTimeout(attemptScroll, 300);
+      // If scrolling to projects, wait for projects to load AND hero animations to settle (if they ran)
+      if (!isLoadingProjects && (isHeroSettled || !shouldAnimateHeroIntro)) {
+        scrollTimer = setTimeout(attemptScroll, 300); // Delay for layout to stabilize
       }
     } else {
-      if (shouldAnimateHeroIntro && !isHeroSettled) {
-        // Wait if animations are running
-      } else {
+      // For other sections (like 'about'), wait for hero animations to settle (if they ran)
+      if (isHeroSettled || !shouldAnimateHeroIntro) {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     }
@@ -286,12 +294,12 @@ export default function HomePage() {
       }
     };
   }, [
-    isClientReady,
-    pathname,
-    isLoadingProjects,
-    isHeroSettled,
-    shouldAnimateHeroIntro,
-    language
+    isClientReady, 
+    pathname, // React to pathname changes
+    isLoadingProjects, 
+    isHeroSettled, 
+    shouldAnimateHeroIntro, 
+    language // Also re-evaluate on language change for robustness
   ]);
 
 
@@ -319,40 +327,44 @@ export default function HomePage() {
             internalDurationOfThisLine += (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
             if (i < words.length - 1) {
               let actualInterWordDelay = delayBetweenWordsConst;
+              // Special case for "Ideas Into" or "Ideas En" to have zero delay
               if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
-                  actualInterWordDelay = 0;
+                  actualInterWordDelay = 0; 
               }
               internalDurationOfThisLine += actualInterWordDelay;
             }
           }
         }
+        // Adjust cumulative delay based on line content and animation
         if (words.length > 0) {
-            currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3;
+            currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3; // Example staggering logic for lines
         } else {
-            currentCumulativeLineBaseDelay += 0.3;
+            currentCumulativeLineBaseDelay += 0.3; // Shorter delay for empty lines if any
         }
     });
   }
 
   let heroTitleContent;
   if (shouldAnimateHeroIntro && !isTitleRevealComplete && !isTitleSlidingDown && !isTitleSlidingUp && !isHeroSettled) {
+    // Only render WordRevealAnimation if it's the initial reveal part of the animation
     heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => {
       const currentLineAnimProps = lineAnimationProps[lineIndex];
-      if (!currentLineAnimProps) return null;
+      if (!currentLineAnimProps) return null; // Should not happen if logic is correct
       return (
         <WordRevealAnimation
-          key={`${language}-line-${lineIndex}-${lineText}`}
+          key={`${language}-line-${lineIndex}-${lineText}`} // Ensure key changes with language and text
           text={lineText || ""}
           lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-          delayBetweenWords={0.15}
+          delayBetweenWords={0.15} // Standard delay between words
           letterStaggerDelay={0.04}
           letterAnimationDuration={0.5}
           style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          className="block"
+          className="block" // Ensure each line is a block for proper layout
         />
       );
     });
   } else {
+    // Render static text for title if not in initial reveal or if animations are skipped/completed
     heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => (
       <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
         {lineText}
@@ -365,8 +377,11 @@ export default function HomePage() {
     if (!shouldAnimateHeroIntro) return 'opacity-80'; // Not animating, normal visibility
     if (isHeroSettled) return 'opacity-80'; // Animation done, normal visibility
 
-    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized) return 'opacity-100'; // Emphasized and typing, full opacity
-    if (isSubtitleReturning) return 'opacity-0'; // Fading out during return (will transition from 100 to 0)
+    // During emphasis or typing emphasized, it should be fully visible
+    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized) return 'opacity-100';
+    
+    // When returning, it fades out (targets opacity-0)
+    if (isSubtitleReturning) return 'opacity-0'; 
     
     // Default to hidden if in an intermediate animation phase before emphasis or after return but before settled
     return 'opacity-0';
@@ -374,24 +389,27 @@ export default function HomePage() {
 
   const subtitleContent = () => {
     if (shouldAnimateHeroIntro && isClientReady) {
+      // Placeholder during emphasis before typing to prevent text flash
       if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
-        return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />; // Placeholder during emphasis before typing
+        return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
       }
+      // Typing animation for emphasized subtitle
       if (isSubtitleTypingEmphasized) { // isSubtitleTypingEmphasized will be set to false onComplete by handleSubtitleEmphasisTypingComplete
         return (
           <TypingAnimation
-            key={`${heroSubtitle}-${language}-emphasized`}
+            key={`${heroSubtitle}-${language}-emphasized`} // Key changes with text and language
             text={heroSubtitle || ""}
-            speed={50}
-            startDelay={0}
+            speed={50} // Slower speed
+            startDelay={0} // Start immediately when this state is true
             onComplete={handleSubtitleEmphasisTypingComplete}
-            punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-            punctuationPauseFactor={7}
+            punctuationChars={['.', ',', '!', '?', ';', ':', '\n']} // Default punctuation
+            punctuationPauseFactor={7} // Default pause factor
           />
         );
       }
     }
-    return heroSubtitle; // Default to static text
+    // Default to static text if not animating or if typing is complete
+    return heroSubtitle;
   };
 
 
@@ -404,38 +422,48 @@ export default function HomePage() {
         setProjects(fetchedProjects);
       } catch (error) {
         console.error("Failed to fetch projects:", error);
+        // Optionally set projects to an empty array or handle error state
       } finally {
         setIsLoadingProjects(false);
       }
     };
     fetchProjects();
-  }, [isClientReady]);
+  }, [isClientReady]); // Depend on isClientReady to fetch only on client
 
 
   if (!isClientReady) {
+    // Render a minimal loading state or nothing until the client is ready
+    // This helps prevent hydration mismatches and ensures animations behave as expected.
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
+        {/* Optionally, a very simple global loading spinner could go here if desired,
+            but LoadingSpinnerOverlay is handled in RootLayout based on LoadingContext */}
       </div>
     );
   }
 
   return (
     <div className="container mx-auto">
+      {/* Hero Section */}
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-16 md:pb-20">
         <div className="flex flex-col items-center max-w-4xl w-full">
+          {/* Hero Title */}
           <h1 className={cn(
             "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center",
+            // Conditional animation classes
             { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
+            // Keep title hidden if subtitle is emphasized and title is not yet sliding up (unless hero is settled)
             { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
             { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
           )}
-          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }} // Base visibility
           >
             {heroTitleContent}
           </h1>
 
+          {/* Hero Subtitle */}
           <p className={cn(
-              "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
+              "max-w-full md:max-w-3xl mb-10 whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition", // Removed min-h-[6em]
               // Size, position, weight based on states
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
                 ? "text-3xl md:text-4xl font-bold -translate-y-44" // Emphasized state
@@ -447,6 +475,7 @@ export default function HomePage() {
             {subtitleContent()}
           </p>
 
+          {/* Hero Buttons - Appear when hero is settled or if intro animation is skipped */}
           {(isHeroSettled || !shouldAnimateHeroIntro) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
@@ -474,16 +503,17 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Projects Section - Conditional rendering based on loading state */}
       {isLoadingProjects ? (
          <section id="projects-loading" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
-           <h2
+           <h2 
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
            >
              {projectsSectionTitleText}
            </h2>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             {[1, 2, 3].map((i) => (
+             {[1, 2, 3].map((i) => ( // Placeholder for 3 cards
                <div key={i} className="flex flex-col space-y-3">
                  <Skeleton className="h-[200px] w-full rounded-xl" />
                  <div className="space-y-2">
@@ -491,8 +521,8 @@ export default function HomePage() {
                    <Skeleton className="h-4 w-1/2" />
                  </div>
                  <div className="flex justify-between items-center pt-2">
-                   <Skeleton className="h-8 w-20" />
-                   <Skeleton className="h-8 w-24" />
+                   <Skeleton className="h-8 w-20" /> {/* For LikeButton */}
+                   <Skeleton className="h-8 w-24" /> {/* For View More Button */}
                  </div>
                </div>
              ))}
