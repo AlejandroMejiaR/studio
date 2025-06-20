@@ -166,7 +166,7 @@ const translations: Record<Language, AppTranslations> = {
     home: {
       hero: {
         fullTitle: ["Transformando", "Ideas En", "Mundos", "Interactivos"],
-        subtitle: "Hola, soy Alejandro. Diseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
+        subtitle: "Hola! Soy Alejandro.\nDiseño y desarrollo experiencias interactivas integrando game design, UX e IA generativa.\n\nExplora mi trabajo — construyamos algo increíble juntos.",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
@@ -317,3 +317,4 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
+
