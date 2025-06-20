@@ -52,7 +52,7 @@ export default function HomePage() {
   const titleSlideDownAnimationDuration = 500;
   const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
-  const subtitleReturnAnimationDuration = 300; // Same as emphasis
+  const subtitleReturnAnimationDuration = 300; // Same as emphasis. This duration covers the fade-out & resize. The fade-in will take another 300ms.
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -71,20 +71,15 @@ export default function HomePage() {
 
     const hasAnimatedThisSession = sessionStorage.getItem('portfolioAceHeroAnimatedThisSession') === 'true';
 
-    // If language changes, we always want to re-animate for the new language.
-    // We set the session flag to 'false' to allow the animation for the new language.
     if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
       sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'false');
       setShouldAnimateHeroIntro(true);
     } else if (!hasAnimatedThisSession) {
-      // If language hasn't changed, and it hasn't animated this session yet.
       setShouldAnimateHeroIntro(true);
     } else {
-      // Language hasn't changed, AND it has already animated this session.
       setShouldAnimateHeroIntro(false);
     }
 
-    // Update previous language for the next render cycle.
     if (previousLanguageRef.current !== language) {
       previousLanguageRef.current = language;
     }
@@ -96,7 +91,6 @@ export default function HomePage() {
     clearAnimationTimeouts();
 
     if (shouldAnimateHeroIntro && isClientReady) {
-      // Reset all animation phase states
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
       setIsSubtitleEmphasizing(false);
@@ -106,7 +100,6 @@ export default function HomePage() {
       setIsTitleSlidingUp(false);
       setIsHeroSettled(false);
 
-      // Calculate WordRevealAnimation total time
       const heroFullTitleLinesForCalc = translationsForLanguage.home.hero.fullTitle;
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
@@ -116,7 +109,7 @@ export default function HomePage() {
         if (words.length > 0) {
           for (let i = 0; i < words.length; i++) {
             const word = words[i];
-            lineDuration += (word.length > 0 ? (word.length - 1) * 0.04 : 0) + 0.5; // letterStagger + letterDuration
+            lineDuration += (word.length > 0 ? (word.length - 1) * 0.04 : 0) + 0.5;
             if (i < words.length - 1) {
               let actualInterWordDelay = 0.15;
               if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
@@ -132,34 +125,30 @@ export default function HomePage() {
         }
         cumulativeDelay += (words.length > 0 ? lineDuration * 0.5 : 0) + 0.3;
       });
-      const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000; // Added small buffer
+      const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000;
 
-      // 1. After title WordRevealAnimation completes
       const timer1 = setTimeout(() => {
         setIsTitleRevealComplete(true);
         setIsTitleSlidingDown(true);
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
 
-      // 2. After title slides down
       const timer2 = setTimeout(() => {
         setIsSubtitleEmphasizing(true);
       }, titleWordRevealDuration + titleSlideDownAnimationDuration);
       animationTimersRef.current.push(timer2);
 
-      // 3. After subtitle emphasizes (transition), start typing
       const timer3 = setTimeout(() => {
         setIsSubtitleTypingEmphasized(true);
       }, titleWordRevealDuration + titleSlideDownAnimationDuration + subtitleEmphasisAnimationDuration);
       animationTimersRef.current.push(timer3);
 
     } else if (!shouldAnimateHeroIntro && isClientReady) {
-      // If animations are explicitly skipped or already finished, set to settled state
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
-      setIsSubtitleTypingEmphasizedComplete(true); // Assume typing is done if skipped
+      setIsSubtitleTypingEmphasizedComplete(true);
       setIsSubtitleReturning(false);
       setIsTitleSlidingUp(false);
       setIsHeroSettled(true);
@@ -170,17 +159,20 @@ export default function HomePage() {
 
 
   const handleSubtitleEmphasisTypingComplete = () => {
-    if (!shouldAnimateHeroIntro && !isHeroSettled) return; // Prevent updates if animation was reset/skipped or already settled by skip logic
+    if (!shouldAnimateHeroIntro && !isHeroSettled && !isClientReady) return;
 
+    setIsSubtitleTypingEmphasized(false); // Ensure TypingAnimation stops rendering
     setIsSubtitleTypingEmphasizedComplete(true);
-    setIsSubtitleReturning(true);
+    setIsSubtitleReturning(true); // This triggers resize + fade-out to opacity-0
     setIsTitleSlidingUp(true);
-    setIsTitleSlidingDown(false); // Ensure it's visually "gone" before sliding up
+    setIsTitleSlidingDown(false);
 
+    // This delay is for the subtitle to resize and fade OUT, and title to slide up.
+    // After this, isHeroSettled will become true, triggering subtitle to fade IN.
     const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
     const timer = setTimeout(() => {
-      setIsHeroSettled(true);
-      setShouldAnimateHeroIntro(false); // Animation sequence complete
+      setIsHeroSettled(true); // This will trigger the subtitle to fade IN to opacity-80
+      setShouldAnimateHeroIntro(false);
       if (isClientReady) {
         sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
       }
@@ -203,17 +195,14 @@ export default function HomePage() {
         if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
         } else if (heroAnimationsDoneOrSkipped) {
-            // Navbar content should become visible after a delay if hero is settled or animation is skipped
-            setShouldNavbarContentBeVisible(false); // Initially hide
+            setShouldNavbarContentBeVisible(false);
             navbarAnimationTimeoutRef.current = setTimeout(() => {
                 setShouldNavbarContentBeVisible(true);
-            }, 1000); // Delay for navbar content to appear
+            }, 1000);
         } else {
-             // Default to hidden if conditions not met (e.g., initial state before decisions)
             setShouldNavbarContentBeVisible(false);
         }
     } else {
-        // For all other pages, navbar content is immediately visible
         setShouldNavbarContentBeVisible(true);
     }
 
@@ -228,7 +217,7 @@ export default function HomePage() {
       shouldAnimateHeroIntro,
       isHeroSettled,
       setShouldNavbarContentBeVisible,
-      language // Re-evaluate if language changes, as this might reset shouldAnimateHeroIntro
+      language
   ]);
 
 
@@ -282,9 +271,8 @@ export default function HomePage() {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     } else {
-      // For other sections (like #about), scroll after hero animations are done or skipped
       if (shouldAnimateHeroIntro && !isHeroSettled) {
-        // Wait if animations are running for #about or other non-project sections
+        // Wait if animations are running
       } else {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
@@ -299,11 +287,11 @@ export default function HomePage() {
     };
   }, [
     isClientReady,
-    pathname, // Added pathname to re-evaluate if on a different page but hash remains
+    pathname,
     isLoadingProjects,
     isHeroSettled,
     shouldAnimateHeroIntro,
-    language // Re-evaluate on language change as content might shift
+    language
   ]);
 
 
@@ -313,7 +301,6 @@ export default function HomePage() {
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
-  // WordRevealAnimation props
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   if (shouldAnimateHeroIntro && !isTitleRevealComplete) {
     let currentCumulativeLineBaseDelay = 0;
@@ -373,6 +360,40 @@ export default function HomePage() {
     ));
   }
 
+  const getSubtitleOpacityClass = () => {
+    if (!isClientReady) return 'opacity-0'; // Hidden during SSR or before client ready
+    if (!shouldAnimateHeroIntro) return 'opacity-80'; // Not animating, normal visibility
+    if (isHeroSettled) return 'opacity-80'; // Animation done, normal visibility
+
+    if (isSubtitleEmphasizing || isSubtitleTypingEmphasized) return 'opacity-100'; // Emphasized and typing, full opacity
+    if (isSubtitleReturning) return 'opacity-0'; // Fading out during return (will transition from 100 to 0)
+    
+    // Default to hidden if in an intermediate animation phase before emphasis or after return but before settled
+    return 'opacity-0';
+  };
+
+  const subtitleContent = () => {
+    if (shouldAnimateHeroIntro && isClientReady) {
+      if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
+        return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />; // Placeholder during emphasis before typing
+      }
+      if (isSubtitleTypingEmphasized) { // isSubtitleTypingEmphasized will be set to false onComplete by handleSubtitleEmphasisTypingComplete
+        return (
+          <TypingAnimation
+            key={`${heroSubtitle}-${language}-emphasized`}
+            text={heroSubtitle || ""}
+            speed={50}
+            startDelay={0}
+            onComplete={handleSubtitleEmphasisTypingComplete}
+            punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
+            punctuationPauseFactor={7}
+          />
+        );
+      }
+    }
+    return heroSubtitle; // Default to static text
+  };
+
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -392,10 +413,8 @@ export default function HomePage() {
 
 
   if (!isClientReady) {
-    // Minimal content for server render or before client hydration, helps prevent layout shifts
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        {/* You can put a very simple static loader here if needed, but often just empty is fine */}
       </div>
     );
   }
@@ -417,43 +436,19 @@ export default function HomePage() {
 
           <p className={cn(
               "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
-              // Styles for emphasized state (moved up, larger, bolder, fully opaque)
-              (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-44"
-                // Styles for normal state (original position, smaller, normal weight, slightly transparent)
-                : "text-xl md:text-2xl font-normal opacity-80 translate-y-0",
-              {
-                // Explicitly ensure it returns to translate-y-0 when returning
-                'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
-                // Hide subtitle unless it's in an active visible phase of its animation, or hero is settled
-                'opacity-0': shouldAnimateHeroIntro &&
-                             !isHeroSettled && // If hero is settled, always show (unless its the placeholder below)
-                             !isSubtitleEmphasizing &&
-                             !isSubtitleTypingEmphasized &&
-                             !(isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) && // When complete but not yet returning
-                             !isSubtitleReturning,
-              }
+              // Size, position, weight based on states
+              (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
+                ? "text-3xl md:text-4xl font-bold -translate-y-44" // Emphasized state
+                : "text-xl md:text-2xl font-normal translate-y-0", // Normal state (target for returning and settled)
+              getSubtitleOpacityClass() // Opacity controlled by helper function
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
-            { (shouldAnimateHeroIntro && isSubtitleEmphasizing && !isSubtitleTypingEmphasized) ?
-                <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} /> // Placeholder during emphasis transition before typing
-              : (shouldAnimateHeroIntro && isSubtitleTypingEmphasized) ?
-                  <TypingAnimation
-                    key={`${heroSubtitle}-${language}-emphasized`}
-                    text={heroSubtitle || ""}
-                    speed={50}
-                    startDelay={0}
-                    onComplete={handleSubtitleEmphasisTypingComplete}
-                    punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-                    punctuationPauseFactor={7}
-                  />
-                : heroSubtitle // Static text for all other cases (settled, no animation, returning phase etc.)
-            }
+            {subtitleContent()}
           </p>
 
           {(isHeroSettled || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn mt-8">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
