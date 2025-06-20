@@ -398,38 +398,40 @@ export default function HomePage() {
               "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
               // Styles for emphasized state (moved up, larger, bolder, fully opaque)
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-36" // MOVED UP MORE
+                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-44" // MOVED UP MORE
                 // Styles for normal state (original position, smaller, normal weight, slightly transparent)
                 : "text-xl md:text-2xl font-normal opacity-80 translate-y-0",
               {
-                // Explicitly ensure it returns to translate-y-0 when returning (overrides -translate-y-36 from above if needed)
+                // Explicitly ensure it returns to translate-y-0 when returning
                 'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
-                // Hide subtitle before it's time to emphasize during active animation sequence
+                // Hide subtitle unless it's in an active visible phase of its animation, or hero is settled
                 'opacity-0': shouldAnimateHeroIntro &&
-                             !isSubtitleEmphasizing &&
-                             !isSubtitleTypingEmphasized &&
-                             !(isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) && // if complete and not returning, it should be visible
-                             !isSubtitleReturning && // if returning, it should be visible
-                             !isHeroSettled, // if settled, it should be visible
+                             !(isSubtitleEmphasizing ||
+                               isSubtitleTypingEmphasized ||
+                               (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) ||
+                               isSubtitleReturning ||
+                               isHeroSettled),
               }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
-            {shouldAnimateHeroIntro && isSubtitleTypingEmphasized ? (
-              <TypingAnimation
-                key={`${heroSubtitle}-${language}-emphasized`}
-                text={heroSubtitle || ""}
-                speed={30}
-                startDelay={0}
-                onComplete={handleSubtitleEmphasisTypingComplete}
-              />
-            ) : (
-              heroSubtitle // Render static text, visibility controlled by opacity and animation states
-            )}
+            { (shouldAnimateHeroIntro && (isSubtitleEmphasizing || isSubtitleTypingEmphasized)) ?
+                (isSubtitleTypingEmphasized ?
+                  <TypingAnimation
+                    key={`${heroSubtitle}-${language}-emphasized`}
+                    text={heroSubtitle || ""}
+                    speed={30}
+                    startDelay={0}
+                    onComplete={handleSubtitleEmphasisTypingComplete}
+                  />
+                  : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} /> // Placeholder during emphasis transition before typing
+                )
+              : heroSubtitle // Static text for all other cases (settled, no animation, returning phase etc.)
+            }
           </p>
 
           {(isHeroSettled || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-0 animate-fadeIn">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
               <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
