@@ -303,7 +303,7 @@ export default function HomePage() {
             Hola! / Hello!
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground">
-            Please select your language / Por favor, selecciona tu idioma
+            Por favor, selecciona tu idioma / Please select your language
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-6">
