@@ -174,8 +174,6 @@ export default function HomePage() {
 
   const handleSubtitleEmphasisTypingComplete = () => {
     if (!isClientReady) return;
-    // This check prevents the logic from running if animations were skipped or already completed
-    if (!shouldAnimateHeroIntro && !isHeroSettled && !isSubtitleReadyToFadeIn) return;
 
     // Mark typing as complete to show the full static text.
     setIsSubtitleTypingEmphasized(false);
@@ -429,41 +427,38 @@ export default function HomePage() {
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
 
-    if (shouldAnimateHeroIntro) {
-      // During typing, show typing animation
-      if (isSubtitleTypingEmphasized) {
-        return (
-          <TypingAnimation
-            key={`${heroSubtitle}-${language}-emphasized`}
-            text={heroSubtitle || ""}
-            speed={50}
-            startDelay={0}
-            onComplete={handleSubtitleEmphasisTypingComplete}
-            punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-            punctuationPauseFactor={7}
-          />
-        );
-      }
-      // If emphasizing but not yet typing, show a placeholder to allow container to animate
-      if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
-         return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-      }
-      // If typing is complete (which sets isSubtitleTypingEmphasizedComplete), 
-      // or if hero is settled AND subtitle is ready to fade in, show the static text.
-      // This covers the "return" phase (where opacity is 0 from getSubtitleOpacityClass) 
-      // and the final "settled and visible" phase.
-      if (isSubtitleTypingEmphasizedComplete || (isHeroSettled && isSubtitleReadyToFadeIn)) {
-        return heroSubtitle;
-      }
-      // Otherwise (e.g., title reveal, title slide down), show placeholder.
-      return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    }
-    
-    // If animations are completely skipped or finished from a previous session
-    if (!shouldAnimateHeroIntro && isClientReady) {
+    // If animations are skipped, show the content when ready.
+    if (!shouldAnimateHeroIntro) {
       return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     }
-    return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+  
+    // If we're in the typing phase, show the typing animation.
+    if (isSubtitleTypingEmphasized) {
+      return (
+        <TypingAnimation
+          key={`${heroSubtitle}-${language}-emphasized`}
+          text={heroSubtitle || ""}
+          speed={50}
+          startDelay={0}
+          onComplete={handleSubtitleEmphasisTypingComplete}
+          punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
+          punctuationPauseFactor={7}
+        />
+      );
+    }
+  
+    // For all other animation states (before typing, during the pause, during the return, and during the final fade-in),
+    // render the static heroSubtitle text. Its visibility will be controlled by the opacity class on the parent <p>.
+    // This prevents re-mounting the text node, which can break CSS transitions.
+    // However, if the container is meant to be visible but empty (e.g., during isSubtitleEmphasizing before typing),
+    // we still need a placeholder to give the container height.
+    if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
+        return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    }
+
+    // In all other cases where the animation is running, but we're not typing, render the final text.
+    // The opacity class on the parent <p> will handle making it visible or invisible.
+    return heroSubtitle;
   };
 
 
@@ -588,3 +583,4 @@ export default function HomePage() {
 
 
     
+
