@@ -232,4 +232,13 @@ body {
     color: hsl(var(--accent)); /* Ensures correct initial accent color for dark theme */
     animation-name: wordInitialAccentToFinalColorDark;
   }
+
+  /* Navbar fade-in animation */
+  @keyframes fadeInNavbarDelayed {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeInNavbarDelayed {
+    animation: fadeInNavbarDelayed 0.5s ease-out forwards;
+  }
 }

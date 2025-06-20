@@ -10,18 +10,19 @@ import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LoadingProvider } from '@/contexts/LoadingContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
-import { NavbarVisibilityProvider, useNavbarVisibility } from '@/contexts/NavbarVisibilityContext'; // Added
+import { NavbarVisibilityProvider, useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useState } from 'react'; // Added useState
 import { useLoading } from '@/contexts/LoadingContext';
+import { cn } from '@/lib/utils';
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isPageLoading, loadingText, hideLoading } = useLoading();
   const { isClientReady } = useLanguage();
   const { isFooterVisible } = useFooter();
-  const { isNavbarVisible } = useNavbarVisibility(); // Added
+  const { isNavbarVisible, isNavbarReadyToAnimateIn } = useNavbarVisibility(); // Added isNavbarReadyToAnimateIn
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -38,13 +39,17 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        {isNavbarVisible && <Navbar />} {/* Conditionally render Navbar */}
+        {isNavbarVisible && (
+          <div className={cn(pathname === '/' && isNavbarReadyToAnimateIn && 'animate-fadeInNavbarDelayed')}>
+            <Navbar />
+          </div>
+        )}
         <main className="flex-grow">
           <Suspense fallback={<div></div>}>
             {children}
           </Suspense>
         </main>
-        {isFooterVisible && <Footer />} {/* Conditionally render Footer */}
+        {isFooterVisible && <Footer />}
       </div>
       <ScrollToTopButton />
       <Toaster />
@@ -89,7 +94,7 @@ export default function RootLayout({
         <LanguageProvider>
           <LoadingProvider>
             <FooterProvider>
-              <NavbarVisibilityProvider> {/* Wrap with NavbarVisibilityProvider */}
+              <NavbarVisibilityProvider>
                 <LayoutClientLogic>
                   {children}
                 </LayoutClientLogic>

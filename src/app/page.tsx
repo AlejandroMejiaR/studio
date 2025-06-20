@@ -26,39 +26,34 @@ export default function HomePage() {
     getEnglishTranslation
   } = useLanguage();
   const { setIsFooterVisible } = useFooter();
-  const { setIsNavbarVisible } = useNavbarVisibility();
+  const { setIsNavbarVisible, setNavbarReadyToAnimateIn } = useNavbarVisibility(); // Added setNavbarReadyToAnimateIn
   const aboutMeRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
+  const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null); // For Navbar animation delay
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
   
-  // This flag determines if the full hero intro animation plays.
-  // It should play on initial load and on language change.
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
   const previousLanguageRef = useRef<Language | undefined>();
-  const initialLoadAnimatedRef = useRef(false); // Tracks if initial load animation has been triggered
+  const initialLoadAnimatedRef = useRef(false);
 
 
   useEffect(() => {
     if (isClientReady) {
       if (!initialLoadAnimatedRef.current) {
-        // First meaningful render after client is ready
         setShouldAnimateHeroIntro(true);
-        setIsSubtitleAnimationComplete(false); // Ensure subtitle also re-animates or resets
+        setIsSubtitleAnimationComplete(false);
         initialLoadAnimatedRef.current = true;
       } else if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
-        // Language has changed (and it's not the very first load animation cycle)
         setShouldAnimateHeroIntro(true);
-        setIsSubtitleAnimationComplete(false); // Ensure subtitle also re-animates or resets
+        setIsSubtitleAnimationComplete(false);
       }
-      // Only update previousLanguageRef if language actually changed or on initial setup
       if (previousLanguageRef.current !== language) {
         previousLanguageRef.current = language;
       }
     } else {
-      // Client not ready, ensure animations are off.
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
@@ -66,23 +61,49 @@ export default function HomePage() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    if (pathname === '/') {
-      if (shouldAnimateHeroIntro) {
-        setIsNavbarVisible(false); // Hide Navbar if animations are about to play
-      } else if (!isSubtitleAnimationComplete && initialLoadAnimatedRef.current) {
-        // This handles the state where animations *were* triggered (initialLoadAnimatedRef is true),
-        // are currently playing (shouldAnimateHeroIntro might be false if animation completed quickly or after one cycle),
-        // but the subtitle isn't done yet. Navbar should remain hidden.
-        setIsNavbarVisible(false);
-      } else {
-        // Animations are not set to trigger, or they are complete.
-        setIsNavbarVisible(true);
-      }
-    } else {
-      // On other pages, Navbar should be visible
-      setIsNavbarVisible(true);
+    if (navbarAnimationTimeoutRef.current) {
+        clearTimeout(navbarAnimationTimeoutRef.current);
+        navbarAnimationTimeoutRef.current = null;
     }
-  }, [isClientReady, pathname, shouldAnimateHeroIntro, isSubtitleAnimationComplete, setIsNavbarVisible, language]);
+
+    if (pathname === '/') {
+        const heroAnimationsAreDoneOrSkipped = isSubtitleAnimationComplete || !shouldAnimateHeroIntro;
+
+        if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
+            // Animations are actively running (or about to run) and not yet finished
+            setIsNavbarVisible(false);
+            setNavbarReadyToAnimateIn(false);
+        } else if (heroAnimationsAreDoneOrSkipped) {
+            // Animations have finished OR they were skipped
+            setIsNavbarVisible(true); // Make Navbar part of layout
+            navbarAnimationTimeoutRef.current = setTimeout(() => {
+                setNavbarReadyToAnimateIn(true); // Trigger fade-in animation after delay
+            }, 1000); // 1-second delay
+        } else {
+            // Fallback for any intermediate states during animation cycles if needed
+            setIsNavbarVisible(false);
+            setNavbarReadyToAnimateIn(false);
+        }
+    } else {
+        // Not on the homepage
+        setIsNavbarVisible(true);
+        setNavbarReadyToAnimateIn(false); // No special animation
+    }
+
+    return () => {
+        if (navbarAnimationTimeoutRef.current) {
+            clearTimeout(navbarAnimationTimeoutRef.current);
+        }
+    };
+  }, [
+      isClientReady,
+      pathname,
+      shouldAnimateHeroIntro,
+      isSubtitleAnimationComplete,
+      setIsNavbarVisible,
+      setNavbarReadyToAnimateIn,
+      language
+  ]);
 
 
   useEffect(() => {
@@ -134,14 +155,10 @@ export default function HomePage() {
       if (!isLoadingProjects) { 
         scrollTimer = setTimeout(attemptScroll, 300); 
       }
-    } else { // For #about or other sections
+    } else { 
       if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
-        // If animations are running and subtitle isn't done, wait.
-        // This ensures scrolling happens after the intro is mostly settled.
-        // A more robust way might be to listen for a specific animation end event.
-        // For now, we rely on isSubtitleAnimationComplete.
+        // Wait if animations are running
       } else {
-        // Animations are not playing, or subtitle is complete
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     }
@@ -162,8 +179,6 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    // This effect ensures that if shouldAnimateHeroIntro is true (meaning animations are intended),
-    // isSubtitleAnimationComplete is reset. This is crucial for re-triggering typing animation on language change.
     if (shouldAnimateHeroIntro) {
         setIsSubtitleAnimationComplete(false);
     }
@@ -178,7 +193,7 @@ export default function HomePage() {
 
 
   useEffect(() => {
-    if (!isClientReady) return; // Wait for client (and language) to be ready
+    if (!isClientReady) return;
 
     const fetchProjects = async () => {
       setIsLoadingProjects(true);
@@ -192,7 +207,7 @@ export default function HomePage() {
       }
     };
     fetchProjects();
-  }, [isClientReady]); // Fetch projects once client is ready
+  }, [isClientReady]);
 
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   let currentCumulativeLineBaseDelay = 0;
@@ -267,22 +282,21 @@ export default function HomePage() {
   );
 
   const subtitleElement = shouldAnimateHeroIntro ? (
-    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line">
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line">
       <TypingAnimation
-        key={heroSubtitle} // Key change will re-trigger animation
+        key={heroSubtitle} 
         text={heroSubtitle || ""}
         speed={30}
         startDelay={subtitleTypingStartDelay}
         style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
         onComplete={() => {
           setIsSubtitleAnimationComplete(true);
-          if (pathname === '/') setIsNavbarVisible(true); 
-          setShouldAnimateHeroIntro(false); // Turn off animation trigger after completion
+          setShouldAnimateHeroIntro(false);
         }}
       />
     </p>
   ) : (
-    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
       {heroSubtitle}
     </p>
   );
@@ -290,7 +304,6 @@ export default function HomePage() {
   if (!isClientReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-         {/* Minimal loading state, or a skeleton if preferred */}
       </div>
     );
   }
@@ -299,13 +312,13 @@ export default function HomePage() {
     <div className="container mx-auto"> 
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
         <div className="flex flex-col items-center max-w-3xl w-full">
-          <h1 className="font-headline text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem] font-bold mb-6 text-foreground dark:text-foreground">
+          <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold mb-4 text-foreground dark:text-foreground">
             {heroTitleElements}
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-8">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-8 py-4">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-6">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-7 py-3">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
@@ -316,13 +329,13 @@ export default function HomePage() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-xl px-8 py-4"
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-7 py-3"
               >
                 <Link href="/#about">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {aboutMeButtonText}
                   </span>
-                  <ArrowDown size={28} className="ml-2" />
+                  <ArrowDown size={24} className="ml-2" />
                 </Link>
               </Button>
             </div>
