@@ -19,7 +19,15 @@ import { usePathname } from 'next/navigation';
 
 
 export default function HomePage() {
-  const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { 
+    language, 
+    setLanguage, 
+    translationsForLanguage, 
+    isClientReady, 
+    getEnglishTranslation,
+    initialLanguageSelectedByUser,
+    markInitialLanguageSelected
+  } = useLanguage();
   const { setIsFooterVisible } = useFooter();
   const aboutMeRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
@@ -27,18 +35,32 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
-  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(true);
-
-  useEffect(() => {
-    // Animations should always run on homepage load or language change.
-    setShouldAnimateInitialLoadOrLanguageChange(true);
-    setIsSubtitleAnimationComplete(false); // Reset for animations
-  }, [isClientReady, language]);
+  const [shouldAnimateInitialLoadOrLanguageChange, setShouldAnimateInitialLoadOrLanguageChange] = useState(false);
 
 
   useEffect(() => {
+    if (initialLanguageSelectedByUser) {
+      setShouldAnimateInitialLoadOrLanguageChange(true);
+      setIsSubtitleAnimationComplete(false); 
+    } else {
+      setShouldAnimateInitialLoadOrLanguageChange(false);
+    }
+  }, [initialLanguageSelectedByUser, language]);
+
+
+  const handleInitialLanguageSelect = (selectedLang: 'EN' | 'ES') => {
+    setLanguage(selectedLang);
+    markInitialLanguageSelected();
+  };
+  
+
+  useEffect(() => {
+    if (!initialLanguageSelectedByUser) {
+      setIsFooterVisible(false); 
+      return; 
+    }
+
     const aboutSection = aboutMeRef.current;
-
     if (!isClientReady || !aboutSection) {
       if (pathname === '/') {
         setIsFooterVisible(false);
@@ -56,46 +78,36 @@ export default function HomePage() {
     );
 
     observer.observe(aboutSection);
-
-    if (aboutSection) {
-        const rect = aboutSection.getBoundingClientRect();
-        const isInitiallyVisible =
-            rect.top < window.innerHeight && rect.bottom >= 0;
-        setIsFooterVisible(isInitiallyVisible);
-    }
-
+    const rect = aboutSection.getBoundingClientRect();
+    const isInitiallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+    setIsFooterVisible(isInitiallyVisible);
+    
     return () => {
       observer.disconnect();
     };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
+  }, [isClientReady, initialLanguageSelectedByUser, setIsFooterVisible, aboutMeRef, pathname]);
 
 
   useEffect(() => {
-    if (!isClientReady) return;
+    if (!isClientReady || !initialLanguageSelectedByUser) return;
 
     const hash = window.location.hash;
-    if (!hash) return; // No hash, nothing to scroll to
+    if (!hash) return; 
 
     const id = hash.substring(1);
     let scrollTimer: NodeJS.Timeout;
 
     if (id === 'projects') {
-      // Specific handling for #projects
-      if (!isLoadingProjects) { // Only attempt if projects are loaded
+      if (!isLoadingProjects) { 
         scrollTimer = setTimeout(() => {
           const element = document.getElementById('projects');
           if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
           }
-        }, 300); // Delay for DOM readiness
+        }, 300); 
       }
-      // If projects are loading, do nothing yet for #projects;
-      // this effect will re-run when isLoadingProjects changes (due to dependency array).
     } else {
-      // General handling for other hashes (e.g., #about)
       if (shouldAnimateInitialLoadOrLanguageChange && !isSubtitleAnimationComplete) {
-        // If animating and animations not done, wait for animations to complete.
-        // This effect will re-run when isSubtitleAnimationComplete changes.
         return;
       }
       scrollTimer = setTimeout(() => {
@@ -103,7 +115,7 @@ export default function HomePage() {
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 300); // Delay for DOM readiness / animation completion
+      }, 300); 
     }
 
     return () => {
@@ -113,19 +125,20 @@ export default function HomePage() {
     };
   }, [
     isClientReady,
-    pathname, // Re-evaluate when path/hash changes
-    isLoadingProjects, // Crucial for #projects
-    isSubtitleAnimationComplete, // For #about and other general hashes
-    shouldAnimateInitialLoadOrLanguageChange, // For #about and other general hashes
-    language // If content affecting layout/ids changes due to language
+    initialLanguageSelectedByUser,
+    pathname, 
+    isLoadingProjects, 
+    isSubtitleAnimationComplete, 
+    shouldAnimateInitialLoadOrLanguageChange, 
+    language 
   ]);
 
 
   useEffect(() => {
-    if (shouldAnimateInitialLoadOrLanguageChange) {
+    if (initialLanguageSelectedByUser && shouldAnimateInitialLoadOrLanguageChange) {
         setIsSubtitleAnimationComplete(false);
     }
-  }, [translationsForLanguage.home.hero.subtitle, shouldAnimateInitialLoadOrLanguageChange]);
+  }, [translationsForLanguage.home.hero.subtitle, shouldAnimateInitialLoadOrLanguageChange, initialLanguageSelectedByUser]);
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -136,6 +149,9 @@ export default function HomePage() {
 
 
   useEffect(() => {
+    // Projects are only fetched if language has been selected.
+    if (!initialLanguageSelectedByUser) return;
+
     const fetchProjects = async () => {
       setIsLoadingProjects(true);
       try {
@@ -148,7 +164,7 @@ export default function HomePage() {
       }
     };
     fetchProjects();
-  }, []);
+  }, [initialLanguageSelectedByUser]); // Fetch projects when language selection is confirmed
 
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   let currentCumulativeLineBaseDelay = 0;
@@ -223,7 +239,7 @@ export default function HomePage() {
   );
 
   const subtitleElement = shouldAnimateInitialLoadOrLanguageChange ? (
-    <p className="text-2xl md:text-3xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line">
+    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-2xl mb-10 min-h-[6em] whitespace-pre-line">
       <TypingAnimation
         key={heroSubtitle}
         text={heroSubtitle || ""}
@@ -234,27 +250,65 @@ export default function HomePage() {
       />
     </p>
   ) : (
-    <p className="text-2xl md:text-3xl text-foreground/80 max-w-full md:max-w-xl mb-10 min-h-[5em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+    <p className="text-3xl md:text-4xl text-foreground/80 max-w-full md:max-w-2xl mb-10 min-h-[6em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
       {heroSubtitle}
     </p>
   );
 
+  if (!isClientReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        {/* Basic placeholder while client readiness is being determined by LanguageProvider */}
+      </div>
+    );
+  }
+
+  if (!initialLanguageSelectedByUser) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-6 text-center">
+        <div className="mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold text-primary dark:text-foreground mb-4">
+            Welcome / Bienvenido
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground">
+            Please select your language / Por favor, selecciona tu idioma
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-6">
+          <Button
+            size="lg"
+            className="px-10 py-6 text-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+            onClick={() => handleInitialLanguageSelect('ES')}
+          >
+            Español
+          </Button>
+          <Button
+            size="lg"
+            className="px-10 py-6 text-lg bg-accent hover:bg-accent/90 text-accent-foreground"
+            onClick={() => handleInitialLanguageSelect('EN')}
+          >
+            English
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
-    <div className="container mx-auto"> {/* Uses container for consistent padding */}
+    <div className="container mx-auto"> 
       {/* Hero Section */}
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
-        {/* Text Content Block - Centered */}
-        <div className="flex flex-col items-center max-w-3xl w-full"> {/* Centered and max-width for readability */}
-          <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 text-foreground dark:text-foreground">
+        <div className="flex flex-col items-center max-w-3xl w-full">
+          <h1 className="font-headline text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mb-6 text-foreground dark:text-foreground">
             {heroTitleElements}
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateInitialLoadOrLanguageChange) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-xl px-8 py-4">
                 <Link href="/#projects">
-                  <span className="text-lg" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
                   </span>
                 </Link>
@@ -263,13 +317,13 @@ export default function HomePage() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-xl px-8 py-4"
               >
                 <Link href="/#about">
-                  <span className="text-lg" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {aboutMeButtonText}
                   </span>
-                  <ArrowDown size={24} className="ml-2" />
+                  <ArrowDown size={28} className="ml-2" />
                 </Link>
               </Button>
             </div>
@@ -304,7 +358,6 @@ export default function HomePage() {
       ) : (
         <ProjectList projects={projects} />
       )}
-      {/* Assign ref to AboutMe section wrapper */}
       <section ref={aboutMeRef} id="about">
         <AboutMe />
       </section>

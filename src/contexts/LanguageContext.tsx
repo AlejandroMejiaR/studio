@@ -237,6 +237,8 @@ interface LanguageContextType {
   translationsForLanguage: AppTranslations;
   isClientReady: boolean;
   getEnglishTranslation: (keyPath: (translations: AppTranslations) => string | string[] | undefined) => string | string[] | undefined;
+  initialLanguageSelectedByUser: boolean;
+  markInitialLanguageSelected: () => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -248,15 +250,30 @@ const getInitialLanguage = (): Language => {
       return storedLanguage;
     }
   }
-  return 'ES'; // Default language changed to Spanish
+  return 'ES';
 };
+
+const INITIAL_LANGUAGE_CHOSEN_KEY = 'portfolio-ace-initial-language-chosen';
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
   const [isClientReady, setIsClientReady] = useState(false);
+  const [initialLanguageSelectedByUser, setInitialLanguageSelectedByUser] = useState(false);
 
   useEffect(() => {
-    setIsClientReady(true); 
+    setIsClientReady(true);
+    if (typeof window !== 'undefined') {
+      const alreadySelected = localStorage.getItem(INITIAL_LANGUAGE_CHOSEN_KEY) === 'true';
+      setInitialLanguageSelectedByUser(alreadySelected);
+      // If already selected, ensure the language state matches localStorage,
+      // otherwise getInitialLanguage() provides the default or last explicit set.
+      if (alreadySelected) {
+        const storedLang = localStorage.getItem('portfolio-ace-language') as Language | null;
+        if (storedLang && storedLang !== language) {
+          setLanguageState(storedLang);
+        }
+      }
+    }
   }, []);
 
   const setLanguage = useCallback((lang: Language) => {
@@ -266,14 +283,21 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
+  const markInitialLanguageSelected = useCallback(() => {
+    setInitialLanguageSelectedByUser(true);
     if (typeof window !== 'undefined') {
+      localStorage.setItem(INITIAL_LANGUAGE_CHOSEN_KEY, 'true');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && isClientReady) { // ensure client ready before trying to set
       const currentStoredLanguage = localStorage.getItem('portfolio-ace-language');
       if (language !== currentStoredLanguage) {
         localStorage.setItem('portfolio-ace-language', language);
       }
     }
-  }, [language]);
+  }, [language, isClientReady]);
   
   const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | string[] | undefined) => {
     if (translations['EN']) {
@@ -285,7 +309,15 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, translationsForLanguage: translations[language], isClientReady, getEnglishTranslation }}>
+    <LanguageContext.Provider value={{ 
+        language, 
+        setLanguage, 
+        translationsForLanguage: translations[language], 
+        isClientReady, 
+        getEnglishTranslation,
+        initialLanguageSelectedByUser,
+        markInitialLanguageSelected 
+      }}>
       {children}
     </LanguageContext.Provider>
   );
