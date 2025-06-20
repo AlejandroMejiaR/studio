@@ -55,7 +55,7 @@ export default function HomePage() {
   const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
   const subtitleReturnAnimationDuration = 300;
-  const subtitleFinalFadeInDelay = 200; // Delay for subtitle's final fade-in after hero settles
+  const subtitleFinalFadeInDelay = 500; // Delay for subtitle's final fade-in after hero settles
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -421,6 +421,10 @@ export default function HomePage() {
       }
       // If hero is settled AND subtitle is ready to fade in, show the text.
       // Also, if typing is complete but we are in the "returning" phase (and thus opacity 0), show static text.
+      // Also, if it's emphasizing but not yet typing, show a placeholder.
+      if (isSubtitleEmphasizing && !isSubtitleTypingEmphasized) {
+         return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+      }
       if ((isHeroSettled && isSubtitleReadyToFadeIn) || isSubtitleTypingEmphasizedComplete) {
         return heroSubtitle;
       }
@@ -545,3 +549,5 @@ export default function HomePage() {
   );
 }
 
+
+    
