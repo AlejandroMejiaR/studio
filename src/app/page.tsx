@@ -16,6 +16,7 @@ import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
+import { cn } from '@/lib/utils';
 
 
 export default function HomePage() {
@@ -33,22 +34,42 @@ export default function HomePage() {
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
-  const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
   const previousLanguageRef = useRef<Language | undefined>();
   const initialLoadAnimatedRef = useRef(false);
+
+  // Animation sequence state flags
+  const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
+  const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
+  const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
+  const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
+  const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
+  const [isSubtitleReturning, setIsSubtitleReturning] = useState(false);
+  const [isTitleSlidingUp, setIsTitleSlidingUp] = useState(false);
+  const [isHeroSettled, setIsHeroSettled] = useState(false);
+
+  // Animation durations (ms)
+  const titleSlideDownAnimationDuration = 500;
+  const subtitleEmphasisAnimationDuration = 300; // For font size/weight transition
+  const titleSlideUpAnimationDuration = 500;
+  const subtitleReturnAnimationDuration = 300; // Same as emphasis
+
+  const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
+
+  const clearAnimationTimeouts = () => {
+    animationTimersRef.current.forEach(clearTimeout);
+    animationTimersRef.current = [];
+  };
 
 
   useEffect(() => {
     if (isClientReady) {
       if (!initialLoadAnimatedRef.current) {
         setShouldAnimateHeroIntro(true);
-        setIsSubtitleAnimationComplete(false);
         initialLoadAnimatedRef.current = true;
       } else if (previousLanguageRef.current !== undefined && previousLanguageRef.current !== language) {
-        setShouldAnimateHeroIntro(true);
-        setIsSubtitleAnimationComplete(false);
+        setShouldAnimateHeroIntro(true); // Restart full animation on language change
       }
       if (previousLanguageRef.current !== language) {
         previousLanguageRef.current = language;
@@ -57,6 +78,102 @@ export default function HomePage() {
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
+
+
+  // Master orchestrator for hero animations
+  useEffect(() => {
+    clearAnimationTimeouts();
+
+    if (shouldAnimateHeroIntro && isClientReady) {
+      // Reset all animation phase states
+      setIsTitleRevealComplete(false);
+      setIsTitleSlidingDown(false);
+      setIsSubtitleEmphasizing(false);
+      setIsSubtitleTypingEmphasized(false);
+      setIsSubtitleTypingEmphasizedComplete(false);
+      setIsSubtitleReturning(false);
+      setIsTitleSlidingUp(false);
+      setIsHeroSettled(false);
+
+      // Calculate WordRevealAnimation total time
+      const heroFullTitleLinesForCalc = translationsForLanguage.home.hero.fullTitle;
+      let calculatedMaxTitleAnimationOverallEndTime = 0;
+      let cumulativeDelay = 0;
+      heroFullTitleLinesForCalc.forEach((lineText) => {
+        const words = lineText.split(' ').filter(w => w.length > 0);
+        let lineDuration = 0;
+        if (words.length > 0) {
+          for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            lineDuration += (word.length > 0 ? (word.length - 1) * 0.04 : 0) + 0.5; // letterStagger + letterDuration
+            if (i < words.length - 1) {
+              let actualInterWordDelay = 0.15;
+              if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
+                actualInterWordDelay = 0;
+              }
+              lineDuration += actualInterWordDelay;
+            }
+          }
+        }
+        const lineEndTime = cumulativeDelay + lineDuration;
+        if (lineEndTime > calculatedMaxTitleAnimationOverallEndTime) {
+          calculatedMaxTitleAnimationOverallEndTime = lineEndTime;
+        }
+        cumulativeDelay += (words.length > 0 ? lineDuration * 0.5 : 0) + 0.3;
+      });
+      const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000; // Added small buffer
+
+      // 1. After title WordRevealAnimation completes
+      const timer1 = setTimeout(() => {
+        setIsTitleRevealComplete(true);
+        setIsTitleSlidingDown(true);
+      }, titleWordRevealDuration);
+      animationTimersRef.current.push(timer1);
+
+      // 2. After title slides down
+      const timer2 = setTimeout(() => {
+        setIsSubtitleEmphasizing(true);
+      }, titleWordRevealDuration + titleSlideDownAnimationDuration);
+      animationTimersRef.current.push(timer2);
+
+      // 3. After subtitle emphasizes (transition), start typing
+      const timer3 = setTimeout(() => {
+        setIsSubtitleTypingEmphasized(true);
+      }, titleWordRevealDuration + titleSlideDownAnimationDuration + subtitleEmphasisAnimationDuration);
+      animationTimersRef.current.push(timer3);
+
+    } else if (!shouldAnimateHeroIntro && isClientReady) {
+      // If animations are explicitly skipped or already finished, set to settled state
+      setIsTitleRevealComplete(true);
+      setIsTitleSlidingDown(false);
+      setIsSubtitleEmphasizing(false);
+      setIsSubtitleTypingEmphasized(false);
+      setIsSubtitleTypingEmphasizedComplete(true); // Assume typing is done if skipped
+      setIsSubtitleReturning(true); // or false depending on final look
+      setIsTitleSlidingUp(false); // or false
+      setIsHeroSettled(true);
+    }
+
+    return clearAnimationTimeouts;
+  }, [shouldAnimateHeroIntro, isClientReady, language, translationsForLanguage.home.hero.fullTitle]);
+
+
+  const handleSubtitleEmphasisTypingComplete = () => {
+    if (!shouldAnimateHeroIntro) return; // Prevent updates if animation was reset/skipped
+
+    setIsSubtitleTypingEmphasizedComplete(true);
+    setIsSubtitleReturning(true);
+    setIsTitleSlidingUp(true);
+    setIsTitleSlidingDown(false); // Ensure it's visually "gone" before sliding up
+
+    const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
+    const timer = setTimeout(() => {
+      setIsHeroSettled(true);
+      setShouldAnimateHeroIntro(false); // Animation sequence complete
+    }, settleDelay);
+    animationTimersRef.current.push(timer);
+  };
+
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -67,25 +184,19 @@ export default function HomePage() {
     }
 
     if (pathname === '/') {
-        const heroAnimationsAreDoneOrSkipped = isSubtitleAnimationComplete || !shouldAnimateHeroIntro;
+        const heroAnimationsDoneOrSkipped = isHeroSettled || !shouldAnimateHeroIntro;
 
-        if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
-            // Animations are actively running (or about to run) and not yet finished
+        if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
-        } else if (heroAnimationsAreDoneOrSkipped) {
-            // Animations have finished OR they were skipped
-            // Ensure Navbar content is not visible until the timeout completes
+        } else if (heroAnimationsDoneOrSkipped) {
             setShouldNavbarContentBeVisible(false); 
-
             navbarAnimationTimeoutRef.current = setTimeout(() => {
-                setShouldNavbarContentBeVisible(true); // Signal Navbar content to animate in
-            }, 1000); // 1-second delay
+                setShouldNavbarContentBeVisible(true); 
+            }, 1000);
         } else {
-            // Fallback for any intermediate states during animation cycles if needed
             setShouldNavbarContentBeVisible(false);
         }
     } else {
-        // Not on the homepage, Navbar context will handle making content visible
         setShouldNavbarContentBeVisible(true);
     }
 
@@ -93,19 +204,14 @@ export default function HomePage() {
         if (navbarAnimationTimeoutRef.current) {
             clearTimeout(navbarAnimationTimeoutRef.current);
         }
-        // When navigating away from home, ensure Navbar content is visible for the next page
-        // This is also handled by the NavbarVisibilityContext's own useEffect for pathname changes.
-        // if (pathname === '/') {
-        //   setShouldNavbarContentBeVisible(true);
-        // }
     };
   }, [
       isClientReady,
       pathname,
       shouldAnimateHeroIntro,
-      isSubtitleAnimationComplete,
+      isHeroSettled,
       setShouldNavbarContentBeVisible,
-      language // Re-run if language changes, as it might affect animation triggers
+      language
   ]);
 
 
@@ -159,12 +265,13 @@ export default function HomePage() {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     } else {
-      if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
+      if (shouldAnimateHeroIntro && !isHeroSettled) {
         // Wait if animations are running
       } else {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     }
+    animationTimersRef.current.push(scrollTimer);
 
     return () => {
       if (scrollTimer) {
@@ -175,17 +282,10 @@ export default function HomePage() {
     isClientReady,
     pathname,
     isLoadingProjects,
-    isSubtitleAnimationComplete,
+    isHeroSettled,
     shouldAnimateHeroIntro,
     language
   ]);
-
-
-  useEffect(() => {
-    if (shouldAnimateHeroIntro) {
-        setIsSubtitleAnimationComplete(false);
-    }
-  }, [shouldAnimateHeroIntro]);
 
 
   const heroFullTitleLines = isClientReady ? translationsForLanguage.home.hero.fullTitle : (getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading Title..."]);
@@ -194,10 +294,69 @@ export default function HomePage() {
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
 
+  // WordRevealAnimation props
+  const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
+  if (shouldAnimateHeroIntro && !isTitleRevealComplete) {
+    let currentCumulativeLineBaseDelay = 0;
+    const letterStaggerConst = 0.04;
+    const letterAnimationDurationConst = 0.5;
+    const delayBetweenWordsConst = 0.15;
+
+    heroFullTitleLines.forEach((lineText) => {
+        const currentLineStartOffset = currentCumulativeLineBaseDelay;
+        lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
+        const words = lineText.split(' ').filter(w => w.length > 0);
+        let internalDurationOfThisLine = 0;
+        if (words.length > 0) {
+          for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            internalDurationOfThisLine += (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
+            if (i < words.length - 1) {
+              let actualInterWordDelay = delayBetweenWordsConst;
+              if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
+                  actualInterWordDelay = 0;
+              }
+              internalDurationOfThisLine += actualInterWordDelay;
+            }
+          }
+        }
+        if (words.length > 0) {
+            currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3;
+        } else {
+            currentCumulativeLineBaseDelay += 0.3;
+        }
+    });
+  }
+
+  let heroTitleContent;
+  if (shouldAnimateHeroIntro && !isTitleRevealComplete && !isTitleSlidingDown && !isTitleSlidingUp && !isHeroSettled) {
+    heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => {
+      const currentLineAnimProps = lineAnimationProps[lineIndex];
+      if (!currentLineAnimProps) return null;
+      return (
+        <WordRevealAnimation
+          key={`${language}-line-${lineIndex}-${lineText}`}
+          text={lineText || ""}
+          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+          delayBetweenWords={0.15}
+          letterStaggerDelay={0.04}
+          letterAnimationDuration={0.5}
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          className="block"
+        />
+      );
+    });
+  } else {
+    heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => (
+      <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+        {lineText}
+      </span>
+    ));
+  }
+
 
   useEffect(() => {
     if (!isClientReady) return;
-
     const fetchProjects = async () => {
       setIsLoadingProjects(true);
       try {
@@ -212,97 +371,6 @@ export default function HomePage() {
     fetchProjects();
   }, [isClientReady]);
 
-  const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
-  let currentCumulativeLineBaseDelay = 0;
-  let maxTitleAnimationOverallEndTime = 0;
-
-  const letterStaggerConst = 0.04;
-  const letterAnimationDurationConst = 0.5;
-  const delayBetweenWordsConst = 0.15;
-
-  if (shouldAnimateHeroIntro) {
-    heroFullTitleLines.forEach((lineText) => {
-        const currentLineStartOffset = currentCumulativeLineBaseDelay;
-        lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
-
-        const words = lineText.split(' ').filter(w => w.length > 0);
-        let internalDurationOfThisLine = 0;
-        if (words.length > 0) {
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            const wordAnimTime = (word.length > 0 ? (word.length - 1) * letterStaggerConst : 0) + letterAnimationDurationConst;
-            internalDurationOfThisLine += wordAnimTime;
-
-            if (i < words.length - 1) {
-            let actualInterWordDelay = delayBetweenWordsConst;
-            if ((words[i] === "Ideas" && words[i+1] === "Into") || (words[i] === "Ideas" && words[i+1] === "En")) {
-                actualInterWordDelay = 0;
-            }
-            internalDurationOfThisLine += actualInterWordDelay;
-            }
-        }
-        }
-
-        const thisLineEndsAt = currentLineStartOffset + internalDurationOfThisLine;
-        if (thisLineEndsAt > maxTitleAnimationOverallEndTime) {
-        maxTitleAnimationOverallEndTime = thisLineEndsAt;
-        }
-
-        if (words.length > 0) {
-            currentCumulativeLineBaseDelay += internalDurationOfThisLine * 0.5 + 0.3;
-        } else {
-            currentCumulativeLineBaseDelay += 0.3;
-        }
-    });
-  }
-  const subtitleTypingStartDelay = shouldAnimateHeroIntro ? maxTitleAnimationOverallEndTime + 0.5 : 0;
-
-
-  const heroTitleElements = shouldAnimateHeroIntro ? (
-    heroFullTitleLines.map((lineText, lineIndex) => {
-      const currentLineAnimProps = lineAnimationProps[lineIndex];
-      if (!currentLineAnimProps) return null;
-
-      return (
-        <WordRevealAnimation
-          key={`${language}-line-${lineIndex}-${lineText}`}
-          text={lineText || ""}
-          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-          delayBetweenWords={delayBetweenWordsConst}
-          letterStaggerDelay={letterStaggerConst}
-          letterAnimationDuration={letterAnimationDurationConst}
-          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          className="block"
-        />
-      );
-    })
-  ) : (
-    heroFullTitleLines.map((lineText, lineIndex) => (
-      <span key={`static-line-${lineIndex}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-        {lineText}
-      </span>
-    ))
-  );
-
-  const subtitleElement = shouldAnimateHeroIntro ? (
-    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center">
-      <TypingAnimation
-        key={heroSubtitle}
-        text={heroSubtitle || ""}
-        speed={30}
-        startDelay={subtitleTypingStartDelay}
-        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-        onComplete={() => {
-          setIsSubtitleAnimationComplete(true);
-          setShouldAnimateHeroIntro(false);
-        }}
-      />
-    </p>
-  ) : (
-    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-      {heroSubtitle}
-    </p>
-  );
 
   if (!isClientReady) {
     return (
@@ -315,13 +383,46 @@ export default function HomePage() {
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-16 md:pb-20">
         <div className="flex flex-col items-center max-w-4xl w-full">
-          <h1 className="font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center">
-            {heroTitleElements}
+          <h1 className={cn(
+            "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center",
+            // Animation classes for slide down/up
+            { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
+            { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
+            { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
+          )}
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          >
+            {heroTitleContent}
           </h1>
-          {subtitleElement}
-          {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
+
+          <p className={cn(
+              "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
+              (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
+                ? "text-3xl md:text-4xl font-bold opacity-100" 
+                : "text-xl md:text-2xl font-normal opacity-80"
+            )}
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          >
+            {shouldAnimateHeroIntro && isSubtitleTypingEmphasized ? (
+              <TypingAnimation
+                key={`${heroSubtitle}-${language}-emphasized`}
+                text={heroSubtitle || ""}
+                speed={30}
+                startDelay={0} // Start immediately when isSubtitleTypingEmphasized is true
+                onComplete={handleSubtitleEmphasisTypingComplete}
+              />
+            ) : (isHeroSettled || !shouldAnimateHeroIntro) ? (
+              heroSubtitle
+            ) : (
+              // Placeholder or empty during transitions if needed
+              // For example, keep it visible but static during title animations
+              isTitleRevealComplete || isTitleSlidingDown ? heroSubtitle : ""
+            )}
+          </p>
+
+          {(isHeroSettled || !shouldAnimateHeroIntro) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
-              <Button size="md" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
@@ -329,7 +430,7 @@ export default function HomePage() {
                 </Link>
               </Button>
               <Button
-                size="md"
+                size="lg"
                 variant="outline"
                 asChild
                 className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
@@ -379,5 +480,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
