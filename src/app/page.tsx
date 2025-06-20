@@ -285,7 +285,7 @@ export default function HomePage() {
   );
 
   const subtitleElement = shouldAnimateHeroIntro ? (
-    <p className="text-lg md:text-xl text-foreground/80 max-w-full md:max-w-2xl mb-8 min-h-[5em] whitespace-pre-line text-center">
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-2xl mb-8 min-h-[5em] whitespace-pre-line text-center">
       <TypingAnimation
         key={heroSubtitle}
         text={heroSubtitle || ""}
@@ -299,7 +299,7 @@ export default function HomePage() {
       />
     </p>
   ) : (
-    <p className="text-lg md:text-xl text-foreground/80 max-w-full md:max-w-2xl mb-8 min-h-[5em] whitespace-pre-line text-center" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-2xl mb-8 min-h-[5em] whitespace-pre-line text-center" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
       {heroSubtitle}
     </p>
   );
@@ -315,13 +315,13 @@ export default function HomePage() {
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
         <div className="flex flex-col items-center max-w-3xl w-full">
-          <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-bold mb-4 text-foreground dark:text-foreground text-center">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold mb-4 text-foreground dark:text-foreground text-center">
             {heroTitleElements}
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-6">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-sm px-5 py-2">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-base px-6 py-3">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
@@ -332,13 +332,13 @@ export default function HomePage() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-sm px-5 py-2"
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-base px-6 py-3"
               >
                 <Link href="/#about">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {aboutMeButtonText}
                   </span>
-                  <ArrowDown size={18} className="ml-2" />
+                  <ArrowDown size={20} className="ml-2" />
                 </Link>
               </Button>
             </div>
