@@ -149,8 +149,8 @@ export default function HomePage() {
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true); // Assume typing is done if skipped
-      setIsSubtitleReturning(false); 
-      setIsTitleSlidingUp(false); 
+      setIsSubtitleReturning(false);
+      setIsTitleSlidingUp(false);
       setIsHeroSettled(true);
     }
 
@@ -189,9 +189,9 @@ export default function HomePage() {
         if (shouldAnimateHeroIntro && !isHeroSettled) {
             setShouldNavbarContentBeVisible(false);
         } else if (heroAnimationsDoneOrSkipped) {
-            setShouldNavbarContentBeVisible(false); 
+            setShouldNavbarContentBeVisible(false);
             navbarAnimationTimeoutRef.current = setTimeout(() => {
-                setShouldNavbarContentBeVisible(true); 
+                setShouldNavbarContentBeVisible(true);
             }, 1000);
         } else {
             setShouldNavbarContentBeVisible(false);
@@ -396,13 +396,22 @@ export default function HomePage() {
 
           <p className={cn(
               "max-w-full md:max-w-3xl mb-10 min-h-[6em] whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition",
+              // Styles for emphasized state (moved up, larger, bolder, fully opaque)
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-26" // Emphasized and moved up
-                : "text-xl md:text-2xl font-normal opacity-80 translate-y-0", // Normal and at original position
-                {
-                  // Ensure translate-y-0 is applied explicitly when returning, overriding -translate-y-26
-                  'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
-                }
+                ? "text-3xl md:text-4xl font-bold opacity-100 -translate-y-36" // MOVED UP MORE
+                // Styles for normal state (original position, smaller, normal weight, slightly transparent)
+                : "text-xl md:text-2xl font-normal opacity-80 translate-y-0",
+              {
+                // Explicitly ensure it returns to translate-y-0 when returning (overrides -translate-y-36 from above if needed)
+                'translate-y-0': isSubtitleReturning && shouldAnimateHeroIntro,
+                // Hide subtitle before it's time to emphasize during active animation sequence
+                'opacity-0': shouldAnimateHeroIntro &&
+                             !isSubtitleEmphasizing &&
+                             !isSubtitleTypingEmphasized &&
+                             !(isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) && // if complete and not returning, it should be visible
+                             !isSubtitleReturning && // if returning, it should be visible
+                             !isHeroSettled, // if settled, it should be visible
+              }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
@@ -411,13 +420,11 @@ export default function HomePage() {
                 key={`${heroSubtitle}-${language}-emphasized`}
                 text={heroSubtitle || ""}
                 speed={30}
-                startDelay={0} 
+                startDelay={0}
                 onComplete={handleSubtitleEmphasisTypingComplete}
               />
-            ) : (isHeroSettled || !shouldAnimateHeroIntro) ? (
-              heroSubtitle
             ) : (
-              isTitleRevealComplete || isTitleSlidingDown ? heroSubtitle : ""
+              heroSubtitle // Render static text, visibility controlled by opacity and animation states
             )}
           </p>
 
@@ -481,3 +488,4 @@ export default function HomePage() {
     </div>
   );
 }
+
