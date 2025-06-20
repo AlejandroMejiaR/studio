@@ -239,8 +239,7 @@ export default function HomePage() {
       isClientReady, 
       pathname, 
       shouldAnimateHeroIntro, 
-      isHeroSettled, 
-      setShouldNavbarContentBeVisible,
+      isHeroSettled,
       language // Re-evaluate if language changes, as it might restart animations
   ]);
 
@@ -455,7 +454,10 @@ export default function HomePage() {
     
     // If animations are completely skipped or finished from a previous session
     // We still respect isSubtitleReadyToFadeIn for the final appearance
-    return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    if (isHeroSettled && isSubtitleReadyToFadeIn) {
+      return heroSubtitle;
+    }
+    return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   };
 
 
@@ -575,4 +577,5 @@ export default function HomePage() {
     
 
     
+
 
