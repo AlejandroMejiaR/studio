@@ -244,8 +244,8 @@ export default function HomePage() {
       pathname, 
       shouldAnimateHeroIntro, 
       isHeroSettled,
-      language, // Re-evaluate if language changes, as it might restart animations
-      setShouldNavbarContentBeVisible
+      language // Re-evaluate if language changes, as it might restart animations
+      // setShouldNavbarContentBeVisible was removed to fix infinite loop
   ]);
 
 
@@ -412,14 +412,10 @@ export default function HomePage() {
     return 'opacity-0';
   };
   
-
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    if (!shouldAnimateHeroIntro) {
-      return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    }
-
-    if (isSubtitleTypingEmphasized) {
+    
+    if (shouldAnimateHeroIntro && isSubtitleTypingEmphasized) {
       return (
         <TypingAnimation
           key={`${heroSubtitle}-${language}-emphasized`}
@@ -433,9 +429,13 @@ export default function HomePage() {
       );
     }
   
-    // For ALL other cases in the animation sequence (pause, return, final fade-in, etc.),
+    // For ALL other cases (animations skipped, before typing, after typing, etc.)
     // render the final static text. The parent's opacity class will handle making it
-    // visible or invisible. This prevents re-mounting the text node, which can break CSS transitions.
+    // visible or invisible. This prevents re-mounting the text node.
+    if (!shouldAnimateHeroIntro) {
+      return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    }
+    
     return heroSubtitle;
   };
 
@@ -563,3 +563,6 @@ export default function HomePage() {
     
 
 
+
+
+    
