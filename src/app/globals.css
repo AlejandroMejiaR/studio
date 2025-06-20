@@ -173,7 +173,7 @@ body {
     animation-iteration-count: infinite;
   }
 
-  /* Project Title Color Fade-in Animations */
+  /* Project Title Color Fade-in Animations (Block Level - DEPRECATED if WordReveal handles color) */
   @keyframes title-color-fade-in-light {
     0% {
       opacity: 0;
@@ -204,5 +204,32 @@ body {
   }
   .dark .animate-title-color-fade-in-dark {
     animation: title-color-fade-in-dark 1s ease-out forwards;
+  }
+
+  /* New per-word color transition animations */
+  @keyframes wordInitialAccentToFinalColorLight {
+    0% { color: hsl(var(--accent)); } /* Medium Teal for light mode */
+    100% { color: hsl(var(--primary)); } /* Dark Teal/Primary text for light mode */
+  }
+
+  @keyframes wordInitialAccentToFinalColorDark {
+    0% { color: hsl(var(--accent)); } /* Electric Purple for dark mode */
+    100% { color: hsl(var(--foreground)); } /* Off-white/Foreground for dark mode */
+  }
+
+  .animate-word-accent-to-final-color {
+    /* Initial color for light mode (will be overridden in dark mode) */
+    color: hsl(var(--accent));
+    animation-name: wordInitialAccentToFinalColorLight;
+    animation-duration: 0.4s; /* Duration of the color transition */
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards; /* Keep the final color */
+    /* animation-delay is set inline by the WordRevealAnimation component */
+  }
+
+  .dark .animate-word-accent-to-final-color {
+    /* Override initial color and animation for dark mode */
+    color: hsl(var(--accent)); /* Ensures correct initial accent color for dark theme */
+    animation-name: wordInitialAccentToFinalColorDark;
   }
 }
