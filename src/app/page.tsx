@@ -55,7 +55,7 @@ export default function HomePage() {
   const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
   const titleSlideUpAnimationDuration = 500;
   const subtitleReturnAnimationDuration = 300;
-  const subtitleFinalFadeInDelay = 1000; // Delay for subtitle's final fade-in after hero settles
+  const subtitleFinalFadeInDelay = 5000; // Delay for subtitle's final fade-in after hero settles
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -557,5 +557,7 @@ export default function HomePage() {
   );
 }
 
+
+    
 
     
