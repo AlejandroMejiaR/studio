@@ -241,55 +241,39 @@ export default function HomePage() {
 
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="container mx-auto px-4"> {/* Changed from max-w-7xl to container */}
       {/* Hero Section */}
-      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center md:justify-between">
-          {/* Left Column: Title, Subtitle, Buttons */}
-          <div className="md:w-1/2 flex flex-col text-left">
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground text-left">
-              {heroTitleElements}
-            </h1>
-            {subtitleElement}
-            {(isSubtitleAnimationComplete || !shouldAnimateInitialLoadOrLanguageChange) && (
-              <div className="flex flex-col sm:flex-row justify-start items-center gap-4 animate-fadeIn">
-                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                  <Link href="/#projects">
-                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                      {viewWorkButtonText}
-                    </span>
-                  </Link>
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
-                >
-                  <Link href="/#about">
-                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                      {aboutMeButtonText}
-                    </span>
-                    <ArrowDown size={20} className="ml-2" />
-                  </Link>
-                </Button>
-              </div>
-            )}
-          </div>
-
-          {/* Right Column: Image */}
-          <div className="md:w-1/2 flex justify-center md:justify-end items-center md:ml-[150px]">
-            <div className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 aspect-square relative rounded-lg overflow-hidden shadow-lg bg-muted/30 mx-auto md:mx-0">
-              <Image
-                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//ChatGPT%20Image%20Jun%2015,%202025,%2010_43_19%20PM.png"
-                alt="Digital Experiences Placeholder"
-                fill
-                className="object-contain"
-                sizes="(max-width: 767px) 256px, (max-width: 1023px) 320px, 384px"
-                data-ai-hint="robot laptop"
-              />
+      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
+        {/* Text Content Block */}
+        <div className="flex flex-col items-center max-w-3xl w-full">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground dark:text-foreground">
+            {heroTitleElements}
+          </h1>
+          {subtitleElement}
+          {(isSubtitleAnimationComplete || !shouldAnimateInitialLoadOrLanguageChange) && (
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <Link href="/#projects">
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {viewWorkButtonText}
+                  </span>
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                asChild
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)]"
+              >
+                <Link href="/#about">
+                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {aboutMeButtonText}
+                  </span>
+                  <ArrowDown size={20} className="ml-2" />
+                </Link>
+              </Button>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
