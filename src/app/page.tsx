@@ -19,22 +19,22 @@ import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 
 
 export default function HomePage() {
-  const { 
-    language, 
-    translationsForLanguage, 
-    isClientReady, 
+  const {
+    language,
+    translationsForLanguage,
+    isClientReady,
     getEnglishTranslation
   } = useLanguage();
   const { setIsFooterVisible } = useFooter();
-  const { setIsNavbarVisible, setNavbarReadyToAnimateIn } = useNavbarVisibility(); // Added setNavbarReadyToAnimateIn
+  const { setIsNavbarVisible, setNavbarReadyToAnimateIn } = useNavbarVisibility();
   const aboutMeRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
-  const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null); // For Navbar animation delay
+  const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
   const [isSubtitleAnimationComplete, setIsSubtitleAnimationComplete] = useState(false);
-  
+
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
   const previousLanguageRef = useRef<Language | undefined>();
   const initialLoadAnimatedRef = useRef(false);
@@ -57,7 +57,7 @@ export default function HomePage() {
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
-  
+
   useEffect(() => {
     if (!isClientReady) return;
 
@@ -75,9 +75,13 @@ export default function HomePage() {
             setNavbarReadyToAnimateIn(false);
         } else if (heroAnimationsAreDoneOrSkipped) {
             // Animations have finished OR they were skipped
-            setIsNavbarVisible(true); // Make Navbar part of layout
+            // Ensure Navbar is not part of the layout until the timeout completes
+            setIsNavbarVisible(false);
+            setNavbarReadyToAnimateIn(false);
+
             navbarAnimationTimeoutRef.current = setTimeout(() => {
-                setNavbarReadyToAnimateIn(true); // Trigger fade-in animation after delay
+                setIsNavbarVisible(true);      // Make Navbar part of layout now
+                setNavbarReadyToAnimateIn(true); // And signal it's ready for animation
             }, 1000); // 1-second delay
         } else {
             // Fallback for any intermediate states during animation cycles if needed
@@ -87,7 +91,7 @@ export default function HomePage() {
     } else {
         // Not on the homepage
         setIsNavbarVisible(true);
-        setNavbarReadyToAnimateIn(false); // No special animation
+        setNavbarReadyToAnimateIn(false); // No special animation for Navbar on other pages
     }
 
     return () => {
@@ -102,7 +106,7 @@ export default function HomePage() {
       isSubtitleAnimationComplete,
       setIsNavbarVisible,
       setNavbarReadyToAnimateIn,
-      language
+      language // Re-run if language changes, as it might affect animation triggers
   ]);
 
 
@@ -128,7 +132,7 @@ export default function HomePage() {
     const rect = aboutSection.getBoundingClientRect();
     const isInitiallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
     setIsFooterVisible(isInitiallyVisible);
-    
+
     return () => {
       observer.disconnect();
     };
@@ -139,7 +143,7 @@ export default function HomePage() {
     if (!isClientReady) return;
 
     const hash = window.location.hash;
-    if (!hash) return; 
+    if (!hash) return;
 
     const id = hash.substring(1);
     let scrollTimer: NodeJS.Timeout;
@@ -150,12 +154,12 @@ export default function HomePage() {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     };
-    
+
     if (id === 'projects') {
-      if (!isLoadingProjects) { 
-        scrollTimer = setTimeout(attemptScroll, 300); 
+      if (!isLoadingProjects) {
+        scrollTimer = setTimeout(attemptScroll, 300);
       }
-    } else { 
+    } else {
       if (shouldAnimateHeroIntro && !isSubtitleAnimationComplete) {
         // Wait if animations are running
       } else {
@@ -170,11 +174,11 @@ export default function HomePage() {
     };
   }, [
     isClientReady,
-    pathname, 
-    isLoadingProjects, 
-    isSubtitleAnimationComplete, 
-    shouldAnimateHeroIntro, 
-    language 
+    pathname,
+    isLoadingProjects,
+    isSubtitleAnimationComplete,
+    shouldAnimateHeroIntro,
+    language
   ]);
 
 
@@ -282,9 +286,9 @@ export default function HomePage() {
   );
 
   const subtitleElement = shouldAnimateHeroIntro ? (
-    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line">
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line text-center">
       <TypingAnimation
-        key={heroSubtitle} 
+        key={heroSubtitle}
         text={heroSubtitle || ""}
         speed={30}
         startDelay={subtitleTypingStartDelay}
@@ -296,7 +300,7 @@ export default function HomePage() {
       />
     </p>
   ) : (
-    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+    <p className="text-xl md:text-2xl text-foreground/80 max-w-full md:max-w-3xl mb-8 min-h-[5em] whitespace-pre-line text-center" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
       {heroSubtitle}
     </p>
   );
@@ -309,16 +313,16 @@ export default function HomePage() {
   }
 
   return (
-    <div className="container mx-auto"> 
+    <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center py-12">
         <div className="flex flex-col items-center max-w-3xl w-full">
-          <h1 className="font-headline text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold mb-4 text-foreground dark:text-foreground">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] font-bold mb-4 text-foreground dark:text-foreground text-center">
             {heroTitleElements}
           </h1>
           {subtitleElement}
           {(isSubtitleAnimationComplete || !shouldAnimateHeroIntro) && (
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 animate-fadeIn mt-6">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-7 py-3">
+              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-base px-6 py-2.5">
                 <Link href="/#projects">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {viewWorkButtonText}
@@ -329,13 +333,13 @@ export default function HomePage() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-7 py-3"
+                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-base px-6 py-2.5"
               >
                 <Link href="/#about">
                   <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                     {aboutMeButtonText}
                   </span>
-                  <ArrowDown size={24} className="ml-2" />
+                  <ArrowDown size={20} className="ml-2" />
                 </Link>
               </Button>
             </div>
@@ -376,3 +380,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
