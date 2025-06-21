@@ -199,7 +199,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 1000); // Pause for 1 second
+    }, 2000); // Pause for 2 seconds
 
     animationTimersRef.current.push(delayTimer);
   }, [isClientReady]);
