@@ -199,7 +199,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 3000); // Increased pause to 3 seconds
+    }, 3000); // Pause for 3 seconds
 
     animationTimersRef.current.push(delayTimer);
   }, [isClientReady]);
@@ -423,22 +423,20 @@ export default function HomePage() {
       );
     }
   
-    // During the pause, after typing but before settling, render the fully typed text.
+    // During the pause, after typing but before settling, render the fully typed text statically.
+    // This avoids using a second TypingAnimation component, which caused the render loop.
     if (isSubtitleTypingEmphasizedComplete) {
+      const parts = heroSubtitle.split(/(UX|AI|IA|Game Design)/g).filter(Boolean);
       return (
-        <TypingAnimation
-          key={`${heroSubtitle}-${language}-emphasized-complete`}
-          text={heroSubtitle || ""}
-          speed={0} // Type instantly
-          startDelay={0}
-          // No onComplete needed here
-          highlightedWords={[
-            { word: 'UX', className: 'font-bold text-accent' },
-            { word: 'IA', className: 'font-bold text-accent' },
-            { word: 'AI', className: 'font-bold text-accent' },
-            { word: 'Game Design', className: 'font-bold text-accent' },
-          ]}
-        />
+        <>
+          {parts.map((part, index) => {
+            const isHighlight = ['UX', 'AI', 'IA', 'Game Design'].includes(part);
+            if (isHighlight) {
+              return <span key={index} className="font-bold text-accent">{part}</span>;
+            }
+            return <Fragment key={index}>{part}</Fragment>;
+          })}
+        </>
       );
     }
   
@@ -611,7 +609,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
