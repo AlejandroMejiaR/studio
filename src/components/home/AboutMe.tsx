@@ -12,23 +12,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Gamepad2, Component, Code, Sparkles } from 'lucide-react';
+import { Gamepad2, Component, Code, Sparkles, Languages } from 'lucide-react';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
   const skills = [
-    { name: 'Game Design', type: 'icon' as const, icon: Gamepad2 },
-    { name: 'UX Design', type: 'icon' as const, icon: Component },
-    { name: 'Unity', type: 'logo' as const, logoLight: 'UnityClaro.png', logoDark: 'UnityOscuro.png' },
-    { name: 'Unreal Engine', type: 'logo' as const, logoLight: 'UnrealClaro.png', logoDark: 'UnrealOscuro.png' },
-    { name: 'C#', type: 'logo' as const, logo: 'c#.png' },
-    { name: 'C++', type: 'logo' as const, logo: 'c++.png' },
-    { name: 'JavaScript', type: 'logo' as const, logo: 'javascript.png' },
-    { name: 'Python', type: 'icon' as const, icon: Code },
-    { name: 'Git', type: 'logo' as const, logo: 'git.png' },
-    { name: 'Generative AI', type: 'icon' as const, icon: Sparkles },
+    // Logos
+    { name: 'Unity', type: 'logo', logoLight: 'UnityClaro.png', logoDark: 'UnityOscuro.png' },
+    { name: 'Unreal Engine', type: 'logo', logoLight: 'UnrealClaro.png', logoDark: 'UnrealOscuro.png' },
+    { name: 'C#', type: 'logo', logo: 'c.png' },
+    { name: 'C++', type: 'logo', logo: 'c++.png' },
+    { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
+    { name: 'Git', type: 'logo', logo: 'git.png' },
+    
+    // Icon + Text
+    { name: 'Game Design', type: 'icon-text', icon: Gamepad2 },
+    { name: 'UX Design', type: 'icon-text', icon: Component },
+    { name: 'Python', type: 'icon-text', icon: Code },
+    { name: 'Generative AI', type: 'icon-text', icon: Sparkles },
+    { name: 'English B2', type: 'icon-text', icon: Languages },
   ];
 
   // Determine text based on client readiness and language
@@ -94,44 +98,46 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
             >
               {skillsTitle}
             </h3>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               {skills.map((skill) => (
                 <TooltipProvider key={skill.name} delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="group relative h-16 w-16 bg-card p-3 rounded-lg flex items-center justify-center shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-                        {skill.type === 'logo' && skill.logoLight && skill.logoDark ? (
-                           <>
-                            <Image
-                                src={getSupabaseImageUrl('documents', `Logos/${skill.logoLight}`)}
-                                alt={`${skill.name} logo`}
-                                width={40}
-                                height={40}
-                                className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
-                                unoptimized={true}
-                            />
-                            <Image
-                                src={getSupabaseImageUrl('documents', `Logos/${skill.logoDark}`)}
-                                alt={`${skill.name} logo`}
-                                width={40}
-                                height={40}
-                                className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
-                                unoptimized={true}
-                            />
-                           </>
-                        ) : skill.type === 'logo' && skill.logo ? (
-                            <Image
-                                src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
-                                alt={`${skill.name} logo`}
-                                width={40}
-                                height={40}
-                                className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 dark:filter dark:invert"
-                                unoptimized={true}
-                            />
-                        ) : skill.type === 'icon' ? (
-                            <skill.icon className="h-10 w-10 text-muted-foreground transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:text-accent" />
-                        ) : null}
-                      </div>
+                      {skill.type === 'logo' ? (
+                          <div className="group relative h-16 w-16 flex items-center justify-center p-2 rounded-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                              {skill.logoLight && skill.logoDark ? (
+                                  <>
+                                      <Image
+                                          src={getSupabaseImageUrl('documents', `Logos/${skill.logoLight}`)}
+                                          alt={`${skill.name} logo`}
+                                          width={48} height={48}
+                                          className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
+                                          unoptimized={true}
+                                      />
+                                      <Image
+                                          src={getSupabaseImageUrl('documents', `Logos/${skill.logoDark}`)}
+                                          alt={`${skill.name} logo`}
+                                          width={48} height={48}
+                                          className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
+                                          unoptimized={true}
+                                      />
+                                  </>
+                              ) : (
+                                  <Image
+                                      src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
+                                      alt={`${skill.name} logo`}
+                                      width={48} height={48}
+                                      className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                      unoptimized={true}
+                                  />
+                              )}
+                          </div>
+                      ) : ( // skill.type === 'icon-text'
+                          <div className="group relative bg-card p-3 rounded-lg flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 h-24 w-24 text-center">
+                            <skill.icon className="h-8 w-8 text-muted-foreground transition-colors duration-300 group-hover:text-accent" />
+                            <span className="text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:text-accent">{skill.name}</span>
+                          </div>
+                      )}
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>{skill.name}</p>
@@ -139,9 +145,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                   </Tooltip>
                 </TooltipProvider>
               ))}
-              <div className="bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-                English B2
-              </div>
             </div>
           </div>
         </div>
