@@ -70,6 +70,7 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
+  const [isTitleHiddenAfterAnimation, setIsTitleHiddenAfterAnimation] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -93,6 +94,7 @@ export default function HomePage() {
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
+      setIsTitleHiddenAfterAnimation(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -127,11 +129,17 @@ export default function HomePage() {
 
       const timer1 = setTimeout(() => {
         setIsTitleRevealComplete(true);
-        setIsTitleSlidingDown(true); // Triggers the fade-out animation
+        setIsTitleSlidingDown(true);
+
+        const hideTimer = setTimeout(() => {
+          setIsTitleHiddenAfterAnimation(true);
+        }, titleSlideDownAnimationDuration);
+        animationTimersRef.current.push(hideTimer);
+
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
       
-      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50; // 50ms buffer
+      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50;
       const timer2 = setTimeout(() => {
         setIsSubtitleEmphasizing(true);
       }, textSwitchTime);
@@ -469,6 +477,7 @@ export default function HomePage() {
                   "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                   {
                     'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
+                    'invisible': isTitleHiddenAfterAnimation,
                   }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
@@ -585,6 +594,8 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
 
