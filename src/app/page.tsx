@@ -345,26 +345,37 @@ export default function HomePage() {
     });
   }
   
-  const highlightedWordsConfig = {
-    EN: [
-      "Let's bring your idea to the digital world", 'digital experiences', 'designing', 'developing', 'UX', 'AI', 'Game Design'
-    ],
-    ES: [
-      'Llevemos tu idea al mundo digital', 'experiencias digitales', 'diseño', 'desarrollo', 'UX', 'IA', 'Game Design'
-    ]
+  const colorAnimatedWordsConfig = {
+    EN: ['UX', 'AI', 'Game Design'],
+    ES: ['UX', 'IA', 'Game Design']
   };
-  const phrasesToHighlight = highlightedWordsConfig[language];
-  const highlightRegex = new RegExp(`(${phrasesToHighlight.join('|')})`, 'g');
+  const boldWordsConfig = {
+    EN: ['designing', 'developing', 'digital experiences', "Let's bring your idea to the digital world!"],
+    ES: ['diseño', 'desarrollo', 'experiencias digitales', '¡Llevemos tu idea al mundo digital!']
+  };
+
+  const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
+  const phrasesToBold = boldWordsConfig[language];
+  
+  const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
+  const stylingRegex = new RegExp(`(${allStyledPhrases.join('|')})`, 'g');
 
 
   const AnimatedSubtitle = ({ text }: { text: string }) => {
-    const parts = text.split(highlightRegex);
+    const parts = text.split(stylingRegex);
     return (
       <>
         {parts.map((part, index) => {
-          if (phrasesToHighlight.includes(part)) {
+          if (phrasesToColorAnimate.includes(part)) {
             return (
               <span key={index} className="animate-text-pulse font-bold text-accent">
+                {part}
+              </span>
+            );
+          }
+          if (phrasesToBold.includes(part)) {
+            return (
+              <span key={index} className="font-bold text-foreground/90">
                 {part}
               </span>
             );
@@ -383,6 +394,10 @@ export default function HomePage() {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   
     if (isSubtitleTypingEmphasized) {
+       const highlightedWordsForTyping = [
+        ...phrasesToColorAnimate.map(word => ({ word, className: 'font-bold text-accent' })),
+        ...phrasesToBold.map(word => ({ word, className: 'font-bold text-foreground/90' })),
+      ];
       return (
         <TypingAnimation
           key={`${heroSubtitle}-${language}-emphasized`}
@@ -391,18 +406,21 @@ export default function HomePage() {
           startDelay={0}
           onComplete={handleSubtitleEmphasisTypingComplete}
           punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-          highlightedWords={phrasesToHighlight.map(word => ({ word, className: 'font-bold text-accent' }))}
+          highlightedWords={highlightedWordsForTyping}
         />
       );
     }
   
     if (isSubtitleTypingEmphasizedComplete) {
-      const parts = heroSubtitle.split(highlightRegex).filter(Boolean);
+      const parts = heroSubtitle.split(stylingRegex).filter(Boolean);
       return (
         <>
           {parts.map((part, index) => {
-            if (phrasesToHighlight.includes(part)) {
+            if (phrasesToColorAnimate.includes(part)) {
               return <span key={index} className="font-bold text-accent">{part}</span>;
+            }
+            if (phrasesToBold.includes(part)) {
+              return <span key={index} className="font-bold text-foreground/90">{part}</span>;
             }
             return <Fragment key={index}>{part}</Fragment>;
           })}
@@ -595,3 +613,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+  
