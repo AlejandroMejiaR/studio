@@ -130,12 +130,6 @@ export default function HomePage() {
       const timer1 = setTimeout(() => {
         setIsTitleRevealComplete(true);
         setIsTitleSlidingDown(true);
-
-        const hideTimer = setTimeout(() => {
-          setIsTitleHiddenAfterAnimation(true);
-        }, titleSlideDownAnimationDuration);
-        animationTimersRef.current.push(hideTimer);
-
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
       
@@ -191,6 +185,14 @@ export default function HomePage() {
 
     animationTimersRef.current.push(pauseTimer);
 }, [isClientReady]);
+
+
+  const handleTitleAnimationEnd = (e: React.AnimationEvent<HTMLHeadingElement>) => {
+      // The keyframe name is defined in globals.css
+      if (e.animationName === 'slideDownFadeOut') {
+          setIsTitleHiddenAfterAnimation(true);
+      }
+  };
 
 
   useEffect(() => {
@@ -480,6 +482,7 @@ export default function HomePage() {
                     'invisible': isTitleHiddenAfterAnimation,
                   }
               )}
+              onAnimationEnd={handleTitleAnimationEnd}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
               >
                 {
@@ -594,6 +597,8 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
 
