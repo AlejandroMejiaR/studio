@@ -128,7 +128,6 @@ export default function HomePage() {
       const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.5) * 1000;
   
       const masterTimeout = setTimeout(() => {
-        // console.log(`[${new Date().toISOString()}] Triggering title slide-down fade-out.`);
         setIsTitleSlidingDown(true);
   
         const subtitleTimer = setTimeout(() => {
@@ -159,7 +158,7 @@ export default function HomePage() {
     }
   
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage, subtitleEmphasisAnimationDuration]);
+  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
   
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
@@ -172,11 +171,11 @@ export default function HomePage() {
         // After pause, hide the large subtitle and switch layout
         setIsSubtitleEmphasizing(false);
         setIsSubtitleTypingEmphasizedComplete(false);
-        // setIsHeroSettled(true); // DEBUG: Temporarily commented out to prevent title from being hidden
+        setIsHeroSettled(true);
 
         // After a brief moment for the DOM to update, fade in the final content
         const finalFadeInTimer = setTimeout(() => {
-            // setIsFinalContentVisible(true); // DEBUG: Also paused
+            setIsFinalContentVisible(true);
         }, 100);
         animationTimersRef.current.push(finalFadeInTimer);
 
