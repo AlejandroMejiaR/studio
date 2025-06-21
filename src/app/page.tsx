@@ -200,7 +200,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 3000); // 3-second delay
+    }, 1000); // 1-second delay
 
     animationTimersRef.current.push(delayTimer);
   };
@@ -400,30 +400,36 @@ export default function HomePage() {
 
   const getSubtitleOpacityClass = () => {
     if (!isClientReady) return 'opacity-0';
+  
+    // When animations are skipped, fade in after a delay
     if (!shouldAnimateHeroIntro) {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
   
+    // Fade out during return animation
     if (isSubtitleReturning) return 'opacity-0';
     
+    // When hero has settled, fade in after a delay
     if (isHeroSettled) {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
     
+    // Stay opaque during emphasized typing and the subsequent pause
     if (isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
       return 'opacity-100';
     }
     
+    // Otherwise, be invisible
     return 'opacity-0';
   };
   
   const AnimatedSubtitle = ({ text }: { text: string }) => {
-    const parts = text.split(/(UX|IA|Game Design)/g);
+    const parts = text.split(/(UX|AI|IA|Game Design)/g);
   
     return (
       <>
         {parts.map((part, index) => {
-          if (part === 'UX' || part === 'IA' || part === 'Game Design') {
+          if (part === 'UX' || part === 'AI' || part === 'IA' || part === 'Game Design') {
             return (
               <span key={index} className="animate-text-pulse font-bold">
                 {part}
@@ -452,7 +458,14 @@ export default function HomePage() {
         />
       );
     }
-    return <AnimatedSubtitle text={heroSubtitle} />;
+  
+    // If typing is complete, or if animations are skipped, show the static styled text
+    if ((shouldAnimateHeroIntro && isSubtitleTypingEmphasizedComplete) || !shouldAnimateHeroIntro) {
+      return <AnimatedSubtitle text={heroSubtitle} />;
+    }
+  
+    // Otherwise render the static text without special styling (it will be invisible anyway)
+    return heroSubtitle;
   };
 
 
