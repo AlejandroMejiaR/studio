@@ -55,11 +55,11 @@ export default function HomePage() {
 
       const navigationEntries = performance.getEntriesByType("navigation");
       const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
-      const hasAnimatedInSession = sessionStorage.getItem('hasAnimatedInSession');
+      const hasAnimatedInSession = sessionStorage.getItem(`hasAnimatedInSession_${language}`);
 
       if (navigationType === 'reload' || !hasAnimatedInSession) {
         setShouldAnimateHeroIntro(true);
-        sessionStorage.setItem('hasAnimatedInSession', 'true');
+        sessionStorage.setItem(`hasAnimatedInSession_${language}`, 'true');
       } else {
         setShouldAnimateHeroIntro(false);
       }
@@ -81,7 +81,7 @@ export default function HomePage() {
   const [isSubtitleReadyToFadeIn, setIsSubtitleReadyToFadeIn] = useState(false);
 
   // State to hold the currently displayed title text
-  const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.fullTitle);
+  const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.animatingTitle);
 
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
@@ -424,7 +424,6 @@ export default function HomePage() {
     }
   
     // During the pause, after typing but before settling, render the fully typed text statically.
-    // This avoids using a second TypingAnimation component, which caused the render loop.
     if (isSubtitleTypingEmphasizedComplete) {
       const parts = heroSubtitle.split(/(UX|AI|IA|Game Design)/g).filter(Boolean);
       return (
@@ -469,6 +468,9 @@ export default function HomePage() {
     );
   }
 
+  // Derived state for animation phase clarity
+  const isSubtitlePhase = (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isHeroSettled;
+
   return (
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300">
@@ -486,9 +488,10 @@ export default function HomePage() {
             <h1 className={cn(
                 "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
-                !isTitleSlidingDown && shouldAnimateHeroIntro
-                  ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
-                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
+                // Corrected font size logic
+                shouldAnimateHeroIntro && !isSubtitlePhase
+                  ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl' // Bigger initial size
+                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl', // Final smaller size
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
                 { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
