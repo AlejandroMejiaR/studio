@@ -417,7 +417,6 @@ export default function HomePage() {
           startDelay={0}
           onComplete={handleSubtitleEmphasisTypingComplete}
           punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-          punctuationPauseFactor={7}
           highlightedWords={[
             { word: 'UX', className: 'font-bold text-accent' },
             { word: 'IA', className: 'font-bold text-accent' },
@@ -492,8 +491,11 @@ export default function HomePage() {
               (isHeroSettled || !shouldAnimateHeroIntro) ? "lg:w-1/2" : "w-full"
           )}>
             <h1 className={cn(
-                "font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 text-foreground dark:text-foreground",
+                "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
+                !isTitleSlidingDown && shouldAnimateHeroIntro
+                  ? 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl'
+                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
                 { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
@@ -541,7 +543,7 @@ export default function HomePage() {
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
                   ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full"
-                  : "text-lg md:text-xl font-normal translate-y-0 max-w-full md:max-w-3xl",
+                  : "text-base md:text-lg font-normal translate-y-0 max-w-full md:max-w-3xl",
                 isSubtitleTypingEmphasized ? 'lg:max-w-xl' : 'max-w-full md:max-w-3xl',
                 getSubtitleOpacityClass() 
               )}
