@@ -35,7 +35,7 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
-  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
+  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(true);
 
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
@@ -64,24 +64,6 @@ export default function HomePage() {
   };
 
   
-  // NEW: Simplified and robust effect to determine if animation should run.
-  // It runs once per session, or if the language is changed.
-  useEffect(() => {
-    if (!isClientReady) return;
-
-    const hasAnimatedThisSession = sessionStorage.getItem('portfolioAceHeroAnimatedThisSession') === 'true';
-    const lastLanguage = sessionStorage.getItem('portfolioAceLastLanguage');
-
-    if (!hasAnimatedThisSession || lastLanguage !== language) {
-        setShouldAnimateHeroIntro(true);
-        sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
-        sessionStorage.setItem('portfolioAceLastLanguage', language);
-    } else {
-        setShouldAnimateHeroIntro(false);
-    }
-  }, [isClientReady, language]);
-
-
   // Master orchestrator for hero animations
   useEffect(() => {
     clearAnimationTimeouts();
@@ -178,7 +160,6 @@ export default function HomePage() {
         const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
         const timer = setTimeout(() => {
           setIsHeroSettled(true);
-          // We no longer set shouldAnimateHeroIntro to false here, as it's controlled by the new effect.
           const fadeInTimer = setTimeout(() => {
             setIsSubtitleReadyToFadeIn(true);
           }, subtitleFinalFadeInDelay);
