@@ -1,4 +1,3 @@
-
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
@@ -51,7 +50,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     // This component now renders its content directly.
     // id="about" is also handled by the wrapping section in page.tsx
     <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20">
-      <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-start">
+      <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-center">
         <div className="md:col-span-1 flex justify-center md:justify-start">
           <Card className="w-full max-w-sm shadow-xl">
             <CardContent className="p-0">
