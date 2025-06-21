@@ -131,7 +131,7 @@ export default function HomePage() {
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
 
-      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration;
+      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50; // 50ms buffer
       const timer2 = setTimeout(() => {
         setIsTitleSlidingDown(false); // Reset to remove persistent animation class
         setIsSubtitleEmphasizing(true);
@@ -586,8 +586,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
-
