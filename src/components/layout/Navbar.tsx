@@ -1,4 +1,3 @@
-
 "use client";
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
@@ -138,7 +137,12 @@ const Navbar = () => {
 
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[rgb(200,200,200)] dark:border-[rgb(70,70,70)] bg-background/80 backdrop-blur-sm">
+    <header className={cn(
+      "sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm transition-colors duration-500 ease-in-out",
+      shouldNavbarContentBeVisible
+        ? "border-[rgb(200,200,200)] dark:border-[rgb(70,70,70)]"
+        : "border-transparent"
+    )}>
       <div className={cn(
           "container flex h-16 items-center justify-between",
           pathname === '/' && !shouldNavbarContentBeVisible && "opacity-0",
