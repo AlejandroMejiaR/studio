@@ -57,12 +57,12 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
       return;
     }
 
-    let animationFinished = false;
     if (displayedText.length < text.length) {
-      setIsTypingComplete(false);
+      setIsTypingComplete(false); // Ensure it's false while typing
       
       let currentSpeed = speed;
-      if (displayedText.length > 0 && punctuationChars.includes(displayedText[displayedText.length - 1])) {
+      // Check the character that was just typed for punctuation to add a pause.
+      if (displayedText.length > 0 && punctuationChars.includes(text[displayedText.length - 1])) {
         currentSpeed = speed * punctuationPauseFactor;
       }
 
@@ -71,19 +71,21 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
       }, currentSpeed);
       return () => clearTimeout(timeoutId);
     } else {
+      // Typing is complete or text is empty.
       if (text.length > 0) {
         if (!isTypingComplete) {
+          // This block should only ever run ONCE when typing finishes to prevent loops.
           setIsTypingComplete(true);
-          animationFinished = true;
+          onComplete?.(); // Safely call onComplete here.
         }
       } else {
-        setIsTypingComplete(false);
+        // Text is empty, so reset state.
+        if (isTypingComplete) setIsTypingComplete(false);
         if (displayedText !== '') setDisplayedText('');
       }
     }
-    if(animationFinished && onComplete) {
-        onComplete();
-    }
+    // The dependency array is intentionally causing a controlled loop for the typing effect.
+    // The logic inside the effect handles the start and stop conditions to prevent an infinite loop.
   }, [displayedText, text, speed, isReadyToStart, onComplete, isTypingComplete, punctuationChars, punctuationPauseFactor]);
 
   const renderTextWithHighlights = () => {
