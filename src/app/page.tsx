@@ -535,9 +535,8 @@ export default function HomePage() {
                 "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-base md:text-lg" : "text-center",
                 (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
-                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full"
+                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-xl"
                   : "font-normal translate-y-0 max-w-full md:max-w-3xl",
-                isSubtitleTypingEmphasized ? 'lg:max-w-xl' : 'max-w-full md:max-w-3xl',
                 getSubtitleOpacityClass() 
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
