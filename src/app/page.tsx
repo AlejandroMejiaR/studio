@@ -77,6 +77,9 @@ export default function HomePage() {
   const [isHeroSettled, setIsHeroSettled] = useState(false);
   const [isSubtitleReadyToFadeIn, setIsSubtitleReadyToFadeIn] = useState(false);
 
+  // State to hold the currently displayed title text
+  const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.fullTitle);
+
 
   // Animation durations (ms)
   const titleSlideDownAnimationDuration = 500;
@@ -96,6 +99,8 @@ export default function HomePage() {
   // Master orchestrator for hero animations
   useEffect(() => {
     clearAnimationTimeouts();
+    const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
+    const finalTitle = translationsForLanguage.home.hero.fullTitle;
 
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
@@ -107,12 +112,11 @@ export default function HomePage() {
       setIsTitleSlidingUp(false);
       setIsHeroSettled(false);
       setIsSubtitleReadyToFadeIn(false);
+      setHeroDisplayTitle(animatingTitle); // Set the initial animating title
 
-
-      const heroAnimatingTitleLinesForCalc = translationsForLanguage.home.hero.animatingTitle;
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
-      heroAnimatingTitleLinesForCalc.forEach((lineText) => {
+      animatingTitle.forEach((lineText) => {
         const words = lineText.split(' ').filter(w => w.length > 0);
         let lineDuration = 0;
         if (words.length > 0) {
@@ -142,14 +146,16 @@ export default function HomePage() {
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
 
+      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration;
       const timer2 = setTimeout(() => {
         setIsSubtitleEmphasizing(true);
-      }, titleWordRevealDuration + titleSlideDownAnimationDuration);
+        setHeroDisplayTitle(finalTitle); // Switch the title text while it's invisible
+      }, textSwitchTime);
       animationTimersRef.current.push(timer2);
 
       const timer3 = setTimeout(() => {
         setIsSubtitleTypingEmphasized(true);
-      }, titleWordRevealDuration + titleSlideDownAnimationDuration + subtitleEmphasisAnimationDuration);
+      }, textSwitchTime + subtitleEmphasisAnimationDuration);
       animationTimersRef.current.push(timer3);
 
     } else if (!shouldAnimateHeroIntro && isClientReady) {
@@ -162,6 +168,7 @@ export default function HomePage() {
       setIsSubtitleReturning(false);
       setIsTitleSlidingUp(false);
       setIsHeroSettled(true);
+      setHeroDisplayTitle(finalTitle); // Ensure final title is set
 
       setIsSubtitleReadyToFadeIn(false);
 
@@ -319,7 +326,6 @@ export default function HomePage() {
 
 
   const animatingTitleLines = translationsForLanguage.home.hero.animatingTitle;
-  const finalTitleLines = translationsForLanguage.home.hero.fullTitle;
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
@@ -495,7 +501,7 @@ export default function HomePage() {
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
             >
               {
-                shouldAnimateHeroIntro && !isTitleSlidingDown && !isTitleSlidingUp && !isHeroSettled ? (
+                shouldAnimateHeroIntro && !isTitleRevealComplete ? (
                     animatingTitleLines.map((lineText, lineIndex) => {
                         const currentLineAnimProps = lineAnimationProps[lineIndex];
                         if (!currentLineAnimProps) return null; 
@@ -513,7 +519,7 @@ export default function HomePage() {
                         );
                       })
                 ) : (
-                    finalTitleLines.map((lineText, lineIndex) => (
+                    heroDisplayTitle.map((lineText, lineIndex) => (
                         <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                           {lineText}
                         </span>
@@ -608,3 +614,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
