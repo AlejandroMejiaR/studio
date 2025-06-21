@@ -46,26 +46,16 @@ export default function HomePage() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    const navigationEntries = performance.getEntriesByType('navigation');
-    const isReload = navigationEntries.length > 0 &&
-                    (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
+    const hasAnimatedKey = `portfolio_ace_animated_${language}`;
+    const hasAnimatedInSession = sessionStorage.getItem(hasAnimatedKey);
 
-    const hasAnimatedInSessionKey = `hasAnimatedInSession_${language}`;
-
-    // If it's a hard reload, clear the flag for the current language to force re-animation.
-    if (isReload) {
-      sessionStorage.removeItem(hasAnimatedInSessionKey);
-    }
-
-    const hasAnimated = sessionStorage.getItem(hasAnimatedInSessionKey);
-
-    // Animate only if the flag is not set for the current language.
-    // This now covers: first visit, hard reload (flag removed), and language change (new key).
-    if (!hasAnimated) {
+    if (!hasAnimatedInSession) {
+      // It's the first visit for this language in this session, or a language change.
       setShouldAnimateHeroIntro(true);
-      sessionStorage.setItem(hasAnimatedInSessionKey, 'true');
+      // Set the flag so it doesn't animate again for this language.
+      sessionStorage.setItem(hasAnimatedKey, 'true');
     } else {
-      // Flag exists, so it's an internal navigation. Skip animation.
+      // The animation has already been shown.
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
