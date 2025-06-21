@@ -42,26 +42,22 @@ export default function HomePage() {
 
   // Default to false. The effect will decide if it should be true.
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
-  const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (!isClientReady) return;
 
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
+    const navigationEntries = performance.getEntriesByType("navigation");
+    const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
+    
+    // Language-specific key to re-trigger animation on language change
+    const hasAnimatedInSessionKey = `hasAnimatedInSession_${language}`;
+    const hasAnimatedInSession = sessionStorage.getItem(hasAnimatedInSessionKey);
 
-      const navigationEntries = performance.getEntriesByType("navigation");
-      const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
-      const hasAnimatedInSession = sessionStorage.getItem(`hasAnimatedInSession_${language}`);
-
-      if (navigationType === 'reload' || !hasAnimatedInSession) {
-        setShouldAnimateHeroIntro(true);
-        sessionStorage.setItem(`hasAnimatedInSession_${language}`, 'true');
-      } else {
-        setShouldAnimateHeroIntro(false);
-      }
-    } else {
+    if (navigationType === 'reload' || !hasAnimatedInSession) {
       setShouldAnimateHeroIntro(true);
+      sessionStorage.setItem(hasAnimatedInSessionKey, 'true');
+    } else {
+      setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
 
@@ -350,7 +346,7 @@ export default function HomePage() {
     ES: ['UX', 'IA', 'Game Design']
   };
   const boldWordsConfig = {
-    EN: ["Hello!", 'designing', 'developing', 'digital experiences', "Let's bring your idea to the digital world!"],
+    EN: ["Hello!", 'design', 'development', 'digital experiences', "Let's bring your idea to the digital world!"],
     ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales', '¡Llevemos tu idea al mundo digital!']
   };
 
