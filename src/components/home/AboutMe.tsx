@@ -130,8 +130,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                                     alt={`${skill.name} logo`}
                                     width={48} height={48}
                                     className={cn(
-                                      "object-contain transition-transform duration-300 ease-in-out group-hover:scale-110",
-                                      skill.name === 'C#' && 'scale-[1.75]'
+                                      "object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
                                     )}
                                     unoptimized={true}
                                 />
@@ -174,5 +173,3 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
 AboutMe.displayName = 'AboutMe'; // Add display name for React Developer Tools
 
 export default AboutMe;
-
-    
