@@ -12,7 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Gamepad2, Component, Code, Sparkles, Languages } from 'lucide-react';
+import { Gamepad2, Component, Sparkles, Languages } from 'lucide-react';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
@@ -25,12 +25,12 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     { name: 'C#', type: 'logo', logo: 'c.png' },
     { name: 'C++', type: 'logo', logo: 'c++.png' },
     { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
+    { name: 'Python', type: 'logo', logo: 'pyhton.png' },
     { name: 'Git', type: 'logo', logo: 'git.png' },
     
     // Icon + Text
     { name: 'Game Design', type: 'icon-text', icon: Gamepad2 },
     { name: 'UX Design', type: 'icon-text', icon: Component },
-    { name: 'Python', type: 'icon-text', icon: Code },
     { name: 'Generative AI', type: 'icon-text', icon: Sparkles },
     { name: 'English B2', type: 'icon-text', icon: Languages },
   ];
@@ -98,53 +98,67 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
             >
               {skillsTitle}
             </h3>
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-              {skills.map((skill) => (
-                <TooltipProvider key={skill.name} delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      {skill.type === 'logo' ? (
-                          <div className="group relative h-16 w-16 flex items-center justify-center p-2 rounded-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
-                              {skill.logoLight && skill.logoDark ? (
-                                  <>
-                                      <Image
-                                          src={getSupabaseImageUrl('documents', `Logos/${skill.logoLight}`)}
-                                          alt={`${skill.name} logo`}
-                                          width={48} height={48}
-                                          className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
-                                          unoptimized={true}
-                                      />
-                                      <Image
-                                          src={getSupabaseImageUrl('documents', `Logos/${skill.logoDark}`)}
-                                          alt={`${skill.name} logo`}
-                                          width={48} height={48}
-                                          className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
-                                          unoptimized={true}
-                                      />
-                                  </>
-                              ) : (
-                                  <Image
-                                      src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
-                                      alt={`${skill.name} logo`}
-                                      width={48} height={48}
-                                      className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
-                                      unoptimized={true}
-                                  />
-                              )}
-                          </div>
-                      ) : ( // skill.type === 'icon-text'
-                          <div className="group relative bg-card p-3 rounded-lg flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 h-24 w-24 text-center">
-                            <skill.icon className="h-8 w-8 text-muted-foreground transition-colors duration-300 group-hover:text-accent" />
-                            <span className="text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:text-accent">{skill.name}</span>
-                          </div>
-                      )}
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{skill.name}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ))}
+            <div className="space-y-4">
+              {/* Row for Logos */}
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                {skills.filter(skill => skill.type === 'logo').map((skill) => (
+                  <TooltipProvider key={skill.name} delayDuration={100}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="group relative h-16 w-16 flex items-center justify-center p-2 rounded-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                            {skill.logoLight && skill.logoDark ? (
+                                <>
+                                    <Image
+                                        src={getSupabaseImageUrl('documents', `Logos/${skill.logoLight}`)}
+                                        alt={`${skill.name} logo`}
+                                        width={48} height={48}
+                                        className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
+                                        unoptimized={true}
+                                    />
+                                    <Image
+                                        src={getSupabaseImageUrl('documents', `Logos/${skill.logoDark}`)}
+                                        alt={`${skill.name} logo`}
+                                        width={48} height={48}
+                                        className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
+                                        unoptimized={true}
+                                    />
+                                </>
+                            ) : (
+                                <Image
+                                    src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
+                                    alt={`${skill.name} logo`}
+                                    width={48} height={48}
+                                    className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                    unoptimized={true}
+                                />
+                            )}
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{skill.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
+              </div>
+              {/* Row for Icon-Text Cards */}
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                {skills.filter(skill => skill.type === 'icon-text').map((skill) => (
+                  <TooltipProvider key={skill.name} delayDuration={100}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="group relative bg-card p-3 rounded-lg flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 h-24 w-24 text-center">
+                          <skill.icon className="h-8 w-8 text-muted-foreground transition-colors duration-300 group-hover:text-accent" />
+                          <span className="text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:text-accent">{skill.name}</span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{skill.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ))}
+              </div>
             </div>
           </div>
         </div>
