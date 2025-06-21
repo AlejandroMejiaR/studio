@@ -350,15 +350,15 @@ export default function HomePage() {
     ES: ['UX', 'IA', 'Game Design']
   };
   const boldWordsConfig = {
-    EN: ['designing', 'developing', 'digital experiences', "Let's bring your idea to the digital world!"],
-    ES: ['diseño', 'desarrollo', 'experiencias digitales', '¡Llevemos tu idea al mundo digital!']
+    EN: ["Hello!", 'designing', 'developing', 'digital experiences', "Let's bring your idea to the digital world!"],
+    ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales', '¡Llevemos tu idea al mundo digital!']
   };
 
   const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
   const phrasesToBold = boldWordsConfig[language];
   
   const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
-  const stylingRegex = new RegExp(`(${allStyledPhrases.join('|')})`, 'g');
+  const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
 
 
   const AnimatedSubtitle = ({ text }: { text: string }) => {
@@ -615,3 +615,5 @@ export default function HomePage() {
 }
 
   
+
+    
