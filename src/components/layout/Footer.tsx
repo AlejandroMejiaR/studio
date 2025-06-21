@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Github, Linkedin, Mail } from 'lucide-react';
@@ -39,10 +38,9 @@ const Footer = () => {
 
 
   const handleNavigationToHomeSection = () => {
-    if (pathname.startsWith('/projects/')) {
-      showLoading(returningHomeText);
-    }
-    // Navigation will be handled by the Link component's href
+    // No-op. Navigation is handled by Link's href.
+    // The goal is a seamless transition back to the homepage sections
+    // without showing a loading indicator.
   };
 
   return (

@@ -93,15 +93,13 @@ const Navbar = () => {
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
-    if (pathname !== '/') {
-      showLoading(returningHomeText);
-    }
+    // No-op. Navigation is handled by Link's href.
+    // We are intentionally not showing a loading spinner to ensure
+    // a smooth client-side navigation that doesn't re-trigger animations.
   };
 
   const handleMobileHomeNavigation = () => {
-    if (pathname !== '/') {
-      showLoading(returningHomeText);
-    }
+    // We only need to close the mobile menu on navigation.
     setIsMobileMenuOpen(false);
   };
 
