@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef, Fragment } from 'react';
+import { useEffect, useState, useRef, Fragment, useCallback } from 'react';
 import type { Project } from '@/types';
 import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import AboutMe from '@/components/home/AboutMe';
@@ -17,6 +17,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
+
+
+// Animation durations (ms) moved outside the component to be true constants
+const titleSlideDownAnimationDuration = 500;
+const subtitleEmphasisAnimationDuration = 300;
+const titleSlideUpAnimationDuration = 500;
+const subtitleReturnAnimationDuration = 300;
+const subtitleFinalFadeInDelay = 500;
 
 
 export default function HomePage() {
@@ -42,25 +50,20 @@ export default function HomePage() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    // This combined effect handles both initial load and language changes.
     if (isInitialMount.current) {
-      // This is the first render cycle for this component mount.
       isInitialMount.current = false;
 
       const navigationEntries = performance.getEntriesByType("navigation");
       const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
       const hasAnimatedInSession = sessionStorage.getItem('hasAnimatedInSession');
 
-      // Animate on reload or if it's the very first visit in the session.
       if (navigationType === 'reload' || !hasAnimatedInSession) {
         setShouldAnimateHeroIntro(true);
         sessionStorage.setItem('hasAnimatedInSession', 'true');
       } else {
-        // This is an internal navigation back to home, so skip animation.
         setShouldAnimateHeroIntro(false);
       }
     } else {
-      // This is a language change, not the initial mount.
       setShouldAnimateHeroIntro(true);
     }
   }, [isClientReady, language]);
@@ -80,13 +83,6 @@ export default function HomePage() {
   // State to hold the currently displayed title text
   const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.fullTitle);
 
-
-  // Animation durations (ms)
-  const titleSlideDownAnimationDuration = 500;
-  const subtitleEmphasisAnimationDuration = 300; // For font size/weight/transform transition
-  const titleSlideUpAnimationDuration = 500;
-  const subtitleReturnAnimationDuration = 300;
-  const subtitleFinalFadeInDelay = 500; // Delay for subtitle's final fade-in after a short delay
 
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -182,7 +178,7 @@ export default function HomePage() {
   }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
 
 
-  const handleSubtitleEmphasisTypingComplete = () => {
+  const handleSubtitleEmphasisTypingComplete = useCallback(() => {
     if (!isClientReady) return;
 
     setIsSubtitleTypingEmphasized(false);
@@ -206,7 +202,7 @@ export default function HomePage() {
     }, 3000); // Increased pause to 3 seconds
 
     animationTimersRef.current.push(delayTimer);
-  };
+  }, [isClientReady]);
 
 
   useEffect(() => {
@@ -428,7 +424,6 @@ export default function HomePage() {
     }
   
     // During the pause, after typing but before settling, render the fully typed text.
-    // The TypingAnimation component will hold the completed text on screen.
     if (isSubtitleTypingEmphasizedComplete) {
       return (
         <TypingAnimation
@@ -540,10 +535,10 @@ export default function HomePage() {
           )}>
             <p className={cn(
                 "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
-                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
+                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-base md:text-lg" : "text-center",
                 (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
                   ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full"
-                  : "text-base md:text-lg font-normal translate-y-0 max-w-full md:max-w-3xl",
+                  : "font-normal translate-y-0 max-w-full md:max-w-3xl",
                 isSubtitleTypingEmphasized ? 'lg:max-w-xl' : 'max-w-full md:max-w-3xl',
                 getSubtitleOpacityClass() 
               )}
