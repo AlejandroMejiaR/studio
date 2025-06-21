@@ -385,17 +385,18 @@ export default function HomePage() {
 
   const getSubtitleOpacityClass = () => {
     if (!isClientReady) return 'opacity-0';
-    if (!shouldAnimateHeroIntro) {
-        return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
+  
+    // Final state (settled or skipped animation) should always be checked first.
+    if (isHeroSettled || !shouldAnimateHeroIntro) {
+      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
-    // During animation
+  
+    // During the animation sequence...
     if (isSubtitleTypingEmphasized) return 'opacity-100'; // Visible while typing
     if (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) return 'opacity-100'; // Visible during the pause
     if (isSubtitleReturning) return 'opacity-0'; // Fades out when returning
-    if (isHeroSettled) {
-        return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
-    }
-    return 'opacity-0'; // Default to invisible
+  
+    return 'opacity-0'; // Default to invisible for other phases (e.g., before typing starts)
   };
   
   const AnimatedSubtitle = ({ text }: { text: string }) => {
@@ -419,8 +420,14 @@ export default function HomePage() {
 
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    
-    if (shouldAnimateHeroIntro && isSubtitleTypingEmphasized) {
+  
+    // Render the final, styled subtitle if animations are skipped or complete.
+    if (!shouldAnimateHeroIntro || isHeroSettled) {
+      return <AnimatedSubtitle text={heroSubtitle} />;
+    }
+  
+    // Render the typing animation when it's active.
+    if (isSubtitleTypingEmphasized) {
       return (
         <TypingAnimation
           key={`${heroSubtitle}-${language}-emphasized`}
@@ -440,10 +447,27 @@ export default function HomePage() {
       );
     }
   
-    if (!shouldAnimateHeroIntro || isHeroSettled || isSubtitleTypingEmphasizedComplete) {
-      return <AnimatedSubtitle text={heroSubtitle} />;
+    // During the pause, after typing but before settling, render the fully typed text.
+    // The TypingAnimation component will hold the completed text on screen.
+    if (isSubtitleTypingEmphasizedComplete) {
+      return (
+        <TypingAnimation
+          key={`${heroSubtitle}-${language}-emphasized-complete`}
+          text={heroSubtitle || ""}
+          speed={0} // Type instantly
+          startDelay={0}
+          // No onComplete needed here
+          highlightedWords={[
+            { word: 'UX', className: 'font-bold text-accent' },
+            { word: 'IA', className: 'font-bold text-accent' },
+            { word: 'AI', className: 'font-bold text-accent' },
+            { word: 'Game Design', className: 'font-bold text-accent' },
+          ]}
+        />
+      );
     }
-
+  
+    // For any other intermediate state (like returning, or before typing), show nothing.
     return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   };
 
