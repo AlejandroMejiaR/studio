@@ -40,37 +40,37 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
-  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
+  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
   const prevLanguageRef = useRef<Language | null>(null);
 
   useEffect(() => {
     if (!isClientReady) return;
 
+    const previousLanguage = prevLanguageRef.current;
+    const languageHasChanged = previousLanguage !== null && previousLanguage !== language;
+
+    // Use a session flag to track if the page has been visited.
+    // This is simpler than language-specific flags and works because
+    // a language change will always trigger the animation regardless.
     const initialLoadKey = 'portfolio_ace_initial_load_animated';
     const hasAnimatedOnInitialLoad = sessionStorage.getItem(initialLoadKey);
-    const previousLanguage = prevLanguageRef.current;
 
-    // It's a language change if a previous language was tracked and it's different from the current one.
-    const languageHasChanged = previousLanguage !== null && previousLanguage !== language;
-    
-    // It's the very first load in this tab/session.
-    const isFirstLoadInSession = !hasAnimatedOnInitialLoad;
-
-    if (languageHasChanged || isFirstLoadInSession) {
-      setShouldAnimateHeroIntro(true);
-      // If it was the first load, set the flag so this condition isn't met again for this session
-      // on subsequent navigations within the same tab.
-      if (isFirstLoadInSession) {
-        sessionStorage.setItem(initialLoadKey, 'true');
-      }
+    if (languageHasChanged) {
+        // Always animate on language change.
+        setShouldAnimateHeroIntro(true);
+    } else if (!hasAnimatedOnInitialLoad) {
+        // If language hasn't changed, animate only if it's the first visit this session.
+        setShouldAnimateHeroIntro(true);
     } else {
-      setShouldAnimateHeroIntro(false);
+        // Otherwise, don't animate (e.g., navigating back from a project).
+        setShouldAnimateHeroIntro(false);
     }
 
-    // After checking, update the ref to the current language for the next render.
+    // Update the language ref for the next render's comparison.
     prevLanguageRef.current = language;
 
   }, [isClientReady, language]);
+
 
 
   // Animation sequence state flags
@@ -94,10 +94,19 @@ export default function HomePage() {
   
   // Master orchestrator for hero animations
   useEffect(() => {
+    // Don't run until the decision to animate has been made.
+    if (shouldAnimateHeroIntro === null || !isClientReady) {
+      return;
+    }
+  
     clearAnimationTimeouts();
     const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
   
-    if (shouldAnimateHeroIntro && isClientReady) {
+    if (shouldAnimateHeroIntro) {
+      // Set the session flag as soon as we decide to animate.
+      const initialLoadKey = 'portfolio_ace_initial_load_animated';
+      sessionStorage.setItem(initialLoadKey, 'true');
+
       // Reset all animation states at the beginning
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
@@ -153,7 +162,7 @@ export default function HomePage() {
   
       animationTimersRef.current.push(masterTimeout);
   
-    } else if (!shouldAnimateHeroIntro && isClientReady) {
+    } else { // shouldAnimateHeroIntro is false
       // Animations are skipped, go directly to the final state
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false); // Don't run the slide-down animation
@@ -210,6 +219,12 @@ export default function HomePage() {
     };
 
     if (pathname === '/') {
+        // Null means the decision hasn't been made yet, keep navbar hidden.
+        if (shouldAnimateHeroIntro === null) {
+            setNavbarVisibility(false);
+            return;
+        }
+
         const heroAnimationsDoneOrSkipped = isHeroSettled || !shouldAnimateHeroIntro;
 
         if (shouldAnimateHeroIntro && !isHeroSettled) {
@@ -287,11 +302,11 @@ export default function HomePage() {
     };
 
     if (id === 'projects') {
-      if (!isLoadingProjects && (isHeroSettled || !shouldAnimateHeroIntro)) {
+      if (!isLoadingProjects && (isHeroSettled || shouldAnimateHeroIntro === false)) {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     } else {
-      if (isHeroSettled || !shouldAnimateHeroIntro) {
+      if (isHeroSettled || shouldAnimateHeroIntro === false) {
         scrollTimer = setTimeout(attemptScroll, 300);
       }
     }
@@ -395,7 +410,7 @@ export default function HomePage() {
 
   // Derived state for animation phase clarity
   const isSubtitlePhase = (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isHeroSettled;
-  const isFinalLayout = isHeroSettled || !shouldAnimateHeroIntro;
+  const isFinalLayout = isHeroSettled || shouldAnimateHeroIntro === false;
 
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
@@ -461,7 +476,7 @@ export default function HomePage() {
   }, [isClientReady]); 
 
 
-  if (!isClientReady) {
+  if (!isClientReady || shouldAnimateHeroIntro === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
       </div>
