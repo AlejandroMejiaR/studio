@@ -69,7 +69,6 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
-  const [isTitleFadeOutComplete, setIsTitleFadeOutComplete] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -89,17 +88,18 @@ export default function HomePage() {
   useEffect(() => {
     clearAnimationTimeouts();
     const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
-
+  
     if (shouldAnimateHeroIntro && isClientReady) {
+      // Reset all animation states at the beginning
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
-      setIsTitleFadeOutComplete(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
       setIsHeroSettled(false);
       setIsFinalContentVisible(false);
-
+  
+      // Calculate the total duration of the title word reveal animation
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
       animatingTitle.forEach((lineText) => {
@@ -125,45 +125,47 @@ export default function HomePage() {
         cumulativeDelay += (words.length > 0 ? lineDuration * 0.5 : 0) + 0.3;
       });
       const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000;
-
-      // Timer to start the title slide-down. The onAnimationEnd event will handle the next step.
+  
+      // Timer to start the title slide-down animation
       const timer1 = setTimeout(() => {
         setIsTitleRevealComplete(true);
         setIsTitleSlidingDown(true);
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
 
+      // Timer to start the subtitle sequence *after* the title has faded out
+      const titleFadeOutDuration = 500; // Duration of the slideDownFadeOut animation
+      const subtitleStartTime = titleWordRevealDuration + titleFadeOutDuration;
+      
+      const timer2 = setTimeout(() => {
+        setIsSubtitleEmphasizing(true);
+        
+        const timer3 = setTimeout(() => {
+          setIsSubtitleTypingEmphasized(true);
+        }, subtitleEmphasisAnimationDuration);
+        animationTimersRef.current.push(timer3);
+
+      }, subtitleStartTime);
+      animationTimersRef.current.push(timer2);
+  
     } else if (!shouldAnimateHeroIntro && isClientReady) {
-      // Animations are skipped
+      // Animations are skipped, go directly to the final state
       setIsTitleRevealComplete(true);
-      setIsTitleSlidingDown(false);
+      setIsTitleSlidingDown(false); // Don't run the slide-down animation
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
       setIsHeroSettled(true);
-
+  
       const fadeInTimer = setTimeout(() => {
         setIsFinalContentVisible(true);
       }, 500);
       animationTimersRef.current.push(fadeInTimer);
     }
-
+  
     return clearAnimationTimeouts;
   }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
-
-  // This effect starts the subtitle animation sequence *after* the title fade-out is complete.
-  useEffect(() => {
-      if (isTitleFadeOutComplete) {
-          // Now that the title fade-out is officially complete, start the subtitle sequence.
-          setIsSubtitleEmphasizing(true); // Show the container for the typing animation
-
-          const timer3 = setTimeout(() => {
-              setIsSubtitleTypingEmphasized(true);
-          }, subtitleEmphasisAnimationDuration);
-          animationTimersRef.current.push(timer3);
-      }
-  }, [isTitleFadeOutComplete]);
-
+  
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
     if (!isClientReady) return;
@@ -187,15 +189,6 @@ export default function HomePage() {
 
     animationTimersRef.current.push(pauseTimer);
 }, [isClientReady]);
-
-
-  // New handler for when the title's fade-out animation ends
-  const handleTitleFadeOutComplete = (event: React.AnimationEvent<HTMLHeadingElement>) => {
-    // Ensure we're responding only to the fade-out animation ending
-    if (event.animationName === 'slideDownFadeOut') {
-        setIsTitleFadeOutComplete(true);
-    }
-  };
 
 
   useEffect(() => {
@@ -485,7 +478,6 @@ export default function HomePage() {
                   }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-              onAnimationEnd={handleTitleFadeOutComplete}
               >
                 {
                   animatingTitleLines.map((lineText, lineIndex) => {
@@ -599,5 +591,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
