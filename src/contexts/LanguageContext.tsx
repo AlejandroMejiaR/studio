@@ -1,4 +1,3 @@
-
 'use client';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
@@ -89,7 +88,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "About Me",
-      paragraph1: "Hello! I’m an aspiring Multimedia Engineer based in Bogotá, Colombia. I focus on interactive application development and interaction design (UX). My journey in tech is fueled by a love of problem-solving and by shaping digital solutions that are as functional as they are visually compelling.",
+      paragraph1: "Hello! I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.",
       paragraph2: "When I’m not coding, you’ll probably find me exploring new technology trends or enjoying a good cup of coffee. I strongly believe in continuous learning and am always looking to expand my skill set—open to new challenges and collaborations.",
       skillsTitle: "My Skills",
       technologiesTitle: "Technologies",
@@ -150,7 +149,7 @@ const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "Sobre mí",
-      paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tan funcionales como visualmente atractivas.",
+      paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia, actualmente cursando el 10º semestre en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tanto funcionales como visualmente atractivas.",
       paragraph2: "Cuando no estoy programando, probablemente me encuentres explorando nuevas tendencias tecnológicas o disfrutando de una buena taza de café. Creo firmemente en el aprendizaje continuo y siempre estoy buscando ampliar mis habilidades, abierto a nuevos desafíos y colaboraciones.",
       skillsTitle: "Mis Habilidades",
       technologiesTitle: "Tecnologías",
