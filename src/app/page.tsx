@@ -70,7 +70,6 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
-  const [isTitleHiddenAfterAnimation, setIsTitleHiddenAfterAnimation] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -94,7 +93,6 @@ export default function HomePage() {
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
-      setIsTitleHiddenAfterAnimation(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -185,14 +183,6 @@ export default function HomePage() {
 
     animationTimersRef.current.push(pauseTimer);
 }, [isClientReady]);
-
-
-  const handleTitleAnimationEnd = (e: React.AnimationEvent<HTMLHeadingElement>) => {
-      // The keyframe name is defined in globals.css
-      if (e.animationName === 'slideDownFadeOut') {
-          setIsTitleHiddenAfterAnimation(true);
-      }
-  };
 
 
   useEffect(() => {
@@ -474,36 +464,36 @@ export default function HomePage() {
                   />
                </div>
             ) : (
-              <h1 className={cn(
-                  "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                  "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
+              !isSubtitlePhase && (
+                <h1 className={cn(
+                    "font-headline font-bold mb-8 text-foreground dark:text-foreground",
+                    "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
+                    {
+                      'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
+                    }
+                )}
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
+                >
                   {
-                    'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
-                    'invisible': isTitleHiddenAfterAnimation,
+                    animatingTitleLines.map((lineText, lineIndex) => {
+                        const currentLineAnimProps = lineAnimationProps[lineIndex];
+                        if (!currentLineAnimProps) return null; 
+                        return (
+                          <WordRevealAnimation
+                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                            text={lineText || ""}
+                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                            delayBetweenWords={0.15} 
+                            letterStaggerDelay={0.04}
+                            letterAnimationDuration={0.5}
+                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                            className="block" 
+                          />
+                        );
+                      })
                   }
-              )}
-              onAnimationEnd={handleTitleAnimationEnd}
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
-              >
-                {
-                  animatingTitleLines.map((lineText, lineIndex) => {
-                      const currentLineAnimProps = lineAnimationProps[lineIndex];
-                      if (!currentLineAnimProps) return null; 
-                      return (
-                        <WordRevealAnimation
-                          key={`${language}-animating-line-${lineIndex}-${lineText}`} 
-                          text={lineText || ""}
-                          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-                          delayBetweenWords={0.15} 
-                          letterStaggerDelay={0.04}
-                          letterAnimationDuration={0.5}
-                          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                          className="block" 
-                        />
-                      );
-                    })
-                }
-              </h1>
+                </h1>
+              )
             )}
           </div>
 
