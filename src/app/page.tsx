@@ -133,7 +133,7 @@ export default function HomePage() {
 
       const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50; // 50ms buffer
       const timer2 = setTimeout(() => {
-        setIsTitleSlidingDown(false); // Reset to remove persistent animation class
+        // setIsTitleSlidingDown(false); // DO NOT reset, allow animation class to persist
         setIsSubtitleEmphasizing(true);
       }, textSwitchTime);
       animationTimersRef.current.push(timer2);
@@ -469,8 +469,7 @@ export default function HomePage() {
               <h1 className={cn(
                   "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                   "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
-                  { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-                  { 'opacity-0': isSubtitlePhase && shouldAnimateHeroIntro }
+                  { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
               >
@@ -586,3 +585,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
