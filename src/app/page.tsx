@@ -398,7 +398,7 @@ export default function HomePage() {
     ES: ['UX', 'IA', 'Game Design']
   };
   const boldWordsConfig = {
-    EN: ["Hello!", 'design', 'development', 'digital experiences'],
+    EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
     ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales']
   };
 
@@ -417,7 +417,7 @@ export default function HomePage() {
         {parts.map((part, index) => {
            if (part === phraseToLink) {
             return (
-              <Link key={index} href="/#about" className="font-bold text-foreground/90 underline hover:text-accent transition-colors duration-200">
+              <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                 {part}
               </Link>
             );
@@ -453,7 +453,7 @@ export default function HomePage() {
        const highlightedWordsForTyping = [
         ...phrasesToColorAnimate.map(word => ({ word, className: 'font-bold text-accent' })),
         ...phrasesToBold.map(word => ({ word, className: 'font-bold text-foreground/90' })),
-        { word: phraseToLink, className: 'font-bold text-foreground/90 underline' }
+        { word: phraseToLink, className: 'font-bold text-foreground/90' }
       ];
       return (
         <TypingAnimation
@@ -475,7 +475,7 @@ export default function HomePage() {
           {parts.map((part, index) => {
             if (part === phraseToLink) {
               return (
-                <Link key={index} href="/#about" className="font-bold text-foreground/90 underline hover:text-accent transition-colors duration-200">
+                <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                   {part}
                 </Link>
               );
