@@ -109,10 +109,10 @@ export default function HomePage() {
       setIsSubtitleReadyToFadeIn(false);
 
 
-      const heroFullTitleLinesForCalc = translationsForLanguage.home.hero.fullTitle;
+      const heroAnimatingTitleLinesForCalc = translationsForLanguage.home.hero.animatingTitle;
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
-      heroFullTitleLinesForCalc.forEach((lineText) => {
+      heroAnimatingTitleLinesForCalc.forEach((lineText) => {
         const words = lineText.split(' ').filter(w => w.length > 0);
         let lineDuration = 0;
         if (words.length > 0) {
@@ -318,7 +318,8 @@ export default function HomePage() {
   ]);
 
 
-  const heroFullTitleLines = translationsForLanguage.home.hero.fullTitle;
+  const animatingTitleLines = translationsForLanguage.home.hero.animatingTitle;
+  const finalTitleLines = translationsForLanguage.home.hero.fullTitle;
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
@@ -331,7 +332,7 @@ export default function HomePage() {
     const letterAnimationDurationConst = 0.5;
     const delayBetweenWordsConst = 0.15;
 
-    heroFullTitleLines.forEach((lineText) => {
+    animatingTitleLines.forEach((lineText) => {
         const currentLineStartOffset = currentCumulativeLineBaseDelay;
         lineAnimationProps.push({ lineBaseDelay: currentLineStartOffset, text: lineText });
         const words = lineText.split(' ').filter(w => w.length > 0);
@@ -355,32 +356,6 @@ export default function HomePage() {
             currentCumulativeLineBaseDelay += 0.3; 
         }
     });
-  }
-
-  let heroTitleContent;
-  if (shouldAnimateHeroIntro && !isTitleRevealComplete && !isTitleSlidingDown && !isTitleSlidingUp && !isHeroSettled) {
-    heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => {
-      const currentLineAnimProps = lineAnimationProps[lineIndex];
-      if (!currentLineAnimProps) return null; 
-      return (
-        <WordRevealAnimation
-          key={`${language}-line-${lineIndex}-${lineText}`} 
-          text={lineText || ""}
-          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-          delayBetweenWords={0.15} 
-          letterStaggerDelay={0.04}
-          letterAnimationDuration={0.5}
-          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          className="block" 
-        />
-      );
-    });
-  } else {
-    heroTitleContent = heroFullTitleLines.map((lineText, lineIndex) => (
-      <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-        {lineText}
-      </span>
-    ));
   }
 
   const getSubtitleOpacityClass = () => {
@@ -519,7 +494,32 @@ export default function HomePage() {
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
             >
-                {heroTitleContent}
+              {
+                shouldAnimateHeroIntro && !isTitleSlidingDown && !isTitleSlidingUp && !isHeroSettled ? (
+                    animatingTitleLines.map((lineText, lineIndex) => {
+                        const currentLineAnimProps = lineAnimationProps[lineIndex];
+                        if (!currentLineAnimProps) return null; 
+                        return (
+                          <WordRevealAnimation
+                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                            text={lineText || ""}
+                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                            delayBetweenWords={0.15} 
+                            letterStaggerDelay={0.04}
+                            letterAnimationDuration={0.5}
+                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                            className="block" 
+                          />
+                        );
+                      })
+                ) : (
+                    finalTitleLines.map((lineText, lineIndex) => (
+                        <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                          {lineText}
+                        </span>
+                      ))
+                )
+              }
             </h1>
           </div>
 
