@@ -199,7 +199,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 3000); // Pause for 3 seconds
+    }, 1000); // Pause for 1 second
 
     animationTimersRef.current.push(delayTimer);
   }, [isClientReady]);
@@ -424,7 +424,7 @@ export default function HomePage() {
     }
   
     // During the pause, after typing but before settling, render the fully typed text statically.
-    if (isSubtitleTypingEmphasizedComplete) {
+    if (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) {
       const parts = heroSubtitle.split(/(UX|AI|IA|Game Design)/g).filter(Boolean);
       return (
         <>
@@ -489,11 +489,11 @@ export default function HomePage() {
                 "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 // Corrected font size logic
-                shouldAnimateHeroIntro && !isSubtitlePhase
+                shouldAnimateHeroIntro && !isSubtitlePhase && !isHeroSettled
                   ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl' // Bigger initial size
                   : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl', // Final smaller size
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-                { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
+                { 'opacity-0': (isSubtitlePhase && !isTitleSlidingUp) && shouldAnimateHeroIntro },
                 { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
