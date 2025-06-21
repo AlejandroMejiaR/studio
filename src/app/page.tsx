@@ -35,7 +35,36 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
-  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(true);
+  // Default to false. The effect will decide if it should be true.
+  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
+  const isInitialMount = useRef(true);
+
+  useEffect(() => {
+    if (!isClientReady) return;
+
+    // This combined effect handles both initial load and language changes.
+    if (isInitialMount.current) {
+      // This is the first render cycle for this component mount.
+      isInitialMount.current = false;
+
+      const navigationEntries = performance.getEntriesByType("navigation");
+      const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
+      const hasAnimatedInSession = sessionStorage.getItem('hasAnimatedInSession');
+
+      // Animate on reload or if it's the very first visit in the session.
+      if (navigationType === 'reload' || !hasAnimatedInSession) {
+        setShouldAnimateHeroIntro(true);
+        sessionStorage.setItem('hasAnimatedInSession', 'true');
+      } else {
+        // This is an internal navigation back to home, so skip animation.
+        setShouldAnimateHeroIntro(false);
+      }
+    } else {
+      // This is a language change, not the initial mount.
+      setShouldAnimateHeroIntro(true);
+    }
+  }, [isClientReady, language]);
+
 
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
