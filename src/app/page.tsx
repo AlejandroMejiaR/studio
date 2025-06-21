@@ -470,7 +470,6 @@ export default function HomePage() {
                   "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                   "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                   { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-                  { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
                   { 'opacity-0': isSubtitlePhase && shouldAnimateHeroIntro }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
@@ -591,3 +590,4 @@ export default function HomePage() {
     
 
     
+
