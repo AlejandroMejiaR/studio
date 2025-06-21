@@ -249,6 +249,7 @@ export default function HomePage() {
       pathname, 
       shouldAnimateHeroIntro, 
       isHeroSettled,
+      setShouldNavbarContentBeVisible,
       language // Re-evaluate if language changes, as it might restart animations
   ]);
 
@@ -403,26 +404,20 @@ export default function HomePage() {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
   
-    // During the return phase, it should be fading out
     if (isSubtitleReturning) return 'opacity-0';
-  
-    // After settling, its visibility is controlled by the final fade-in state
+    
     if (isHeroSettled) {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
     
-    // During the typing animation or the pause after, it should be visible
     if (isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
       return 'opacity-100';
     }
     
-    // Default to invisible in any other intermediate state
     return 'opacity-0';
   };
   
-  // Helper component to render the subtitle with special styling
   const AnimatedSubtitle = ({ text }: { text: string }) => {
-    // Regex to split by the target words while keeping them
     const parts = text.split(/(UX|IA|Game Design)/g);
   
     return (
@@ -457,10 +452,6 @@ export default function HomePage() {
         />
       );
     }
-  
-    // For all other cases (animations skipped, after typing, final settled state),
-    // render the final text with the special animations applied.
-    // The parent's opacity class will handle making it visible or invisible.
     return <AnimatedSubtitle text={heroSubtitle} />;
   };
 
@@ -491,55 +482,79 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto">
-      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-16 md:pb-20">
-        <div className="flex flex-col items-center max-w-5xl w-full">
-          <h1 className={cn(
-            "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center",
-            { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-            { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
-            { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
-          )}
-          style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
-          >
-            {heroTitleContent}
-          </h1>
-
-          <p className={cn(
-              "mb-10 whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition", 
-              (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full md:max-w-5xl" 
-                : "text-xl md:text-2xl font-normal translate-y-0 max-w-full md:max-w-3xl", 
-              getSubtitleOpacityClass() 
+      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20">
+        <div className={cn(
+          "w-full max-w-5xl flex",
+          (isHeroSettled || !shouldAnimateHeroIntro)
+              ? "flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12"
+              : "flex-col items-center"
+        )}>
+          {/* --- LEFT COLUMN (Title) --- */}
+          <div className={cn(
+              "transition-all duration-300",
+              (isHeroSettled || !shouldAnimateHeroIntro) ? "lg:w-1/2" : "w-full"
+          )}>
+            <h1 className={cn(
+                "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground",
+                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
+                { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
+                { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
+                { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
             )}
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          >
-            {subtitleContent()}
-          </p>
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
+            >
+                {heroTitleContent}
+            </h1>
+          </div>
 
-          {(isHeroSettled || !shouldAnimateHeroIntro) && (
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-6 animate-fadeIn">
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
-                <Link href="/#projects">
-                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                    {viewWorkButtonText}
-                  </span>
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
-              >
-                <Link href="/#about">
-                  <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                    {aboutMeButtonText}
-                  </span>
-                  <ArrowDown size={24} className="ml-3" />
-                </Link>
-              </Button>
-            </div>
-          )}
+          {/* --- RIGHT COLUMN (Subtitle & Buttons) --- */}
+          <div className={cn(
+              "transition-all duration-300 flex flex-col",
+              (isHeroSettled || !shouldAnimateHeroIntro) 
+                  ? "lg:w-1/2 items-center lg:items-start" 
+                  : "w-full items-center"
+          )}>
+            <p className={cn(
+                "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
+                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
+                (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
+                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full"
+                  : "text-xl md:text-2xl font-normal translate-y-0 max-w-full md:max-w-3xl", 
+                getSubtitleOpacityClass() 
+              )}
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+            >
+              {subtitleContent()}
+            </p>
+
+            {(isHeroSettled || !shouldAnimateHeroIntro) && (
+              <div className={cn(
+                  "flex flex-col sm:flex-row gap-6 animate-fadeIn",
+                  (isHeroSettled || !shouldAnimateHeroIntro) ? "justify-center lg:justify-start" : "justify-center"
+              )}>
+                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
+                  <Link href="/#projects">
+                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                      {viewWorkButtonText}
+                    </span>
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  asChild
+                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
+                >
+                  <Link href="/#about">
+                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                      {aboutMeButtonText}
+                    </span>
+                    <ArrowDown size={24} className="ml-3" />
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -576,5 +591,7 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
