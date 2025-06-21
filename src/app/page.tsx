@@ -8,6 +8,7 @@ import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
@@ -76,10 +77,6 @@ export default function HomePage() {
   const [isFinalContentVisible, setIsFinalContentVisible] = useState(false);
 
 
-  // State to hold the currently displayed title text
-  const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.animatingTitle);
-
-
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
   const clearAnimationTimeouts = () => {
@@ -92,7 +89,6 @@ export default function HomePage() {
   useEffect(() => {
     clearAnimationTimeouts();
     const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
-    const finalTitle = translationsForLanguage.home.hero.fullTitle;
 
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
@@ -102,7 +98,6 @@ export default function HomePage() {
       setIsSubtitleTypingEmphasizedComplete(false);
       setIsHeroSettled(false);
       setIsFinalContentVisible(false);
-      setHeroDisplayTitle(animatingTitle); // Set the initial animating title
 
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
@@ -140,7 +135,6 @@ export default function HomePage() {
       const timer2 = setTimeout(() => {
         setIsTitleSlidingDown(false); // Reset to remove persistent animation class
         setIsSubtitleEmphasizing(true);
-        setHeroDisplayTitle(finalTitle); // Switch the title text while it's invisible
       }, textSwitchTime);
       animationTimersRef.current.push(timer2);
 
@@ -157,7 +151,6 @@ export default function HomePage() {
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
       setIsHeroSettled(true);
-      setHeroDisplayTitle(finalTitle); // Ensure final title is set
 
       const fadeInTimer = setTimeout(() => {
         setIsFinalContentVisible(true);
@@ -450,63 +443,65 @@ export default function HomePage() {
               ? "flex-col lg:flex-row items-center gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
-          {/* --- LEFT COLUMN (Title) --- */}
+          {/* --- LEFT COLUMN (Title or Image) --- */}
           <div className={cn(
-              "transition-all duration-300",
+              "transition-all duration-300 flex justify-center",
               isFinalLayout 
-                ? { "lg:w-7/12": language === 'EN', "lg:w-1/2": language === 'ES' }
+                ? "lg:w-1/2"
                 : "w-full",
               isSubtitlePhase && shouldAnimateHeroIntro && 'hidden'
           )}>
-            <h1 className={cn(
-                "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                isSubtitlePhase || isFinalLayout
-                  ? "text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center lg:text-left" 
-                  : "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
-                { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-                { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
-                { 'opacity-0': (isSubtitlePhase || (isHeroSettled && !isFinalContentVisible)) && shouldAnimateHeroIntro },
-                { 'animate-fadeIn': isFinalContentVisible }
+            {isFinalLayout ? (
+               <div className={cn(
+                  "relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto lg:mx-0",
+                  isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
+               )}>
+                  <Image
+                    src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/WhatsApp%20Image%202025-01-24%20at%207.15.31%20PM.jpeg"
+                    alt="A photo of Alejandro Mejia Rojas"
+                    fill
+                    className="rounded-full object-cover shadow-2xl"
+                    sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 24rem"
+                    priority
+                  />
+               </div>
+            ) : (
+              <h1 className={cn(
+                  "font-headline font-bold mb-8 text-foreground dark:text-foreground",
+                  "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
+                  { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
+                  { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
+                  { 'opacity-0': isSubtitlePhase && shouldAnimateHeroIntro }
+              )}
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
+              >
+                {
+                  animatingTitleLines.map((lineText, lineIndex) => {
+                      const currentLineAnimProps = lineAnimationProps[lineIndex];
+                      if (!currentLineAnimProps) return null; 
+                      return (
+                        <WordRevealAnimation
+                          key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                          text={lineText || ""}
+                          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                          delayBetweenWords={0.15} 
+                          letterStaggerDelay={0.04}
+                          letterAnimationDuration={0.5}
+                          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                          className="block" 
+                        />
+                      );
+                    })
+                }
+              </h1>
             )}
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
-            >
-              {
-                shouldAnimateHeroIntro && !isTitleRevealComplete ? (
-                    animatingTitleLines.map((lineText, lineIndex) => {
-                        const currentLineAnimProps = lineAnimationProps[lineIndex];
-                        if (!currentLineAnimProps) return null; 
-                        return (
-                          <WordRevealAnimation
-                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
-                            text={lineText || ""}
-                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-                            delayBetweenWords={0.15} 
-                            letterStaggerDelay={0.04}
-                            letterAnimationDuration={0.5}
-                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                            className="block" 
-                          />
-                        );
-                      })
-                ) : (
-                    heroDisplayTitle.map((lineText, lineIndex) => (
-                        <span key={`static-line-${lineIndex}-${language}`} className="block" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                          {lineText}
-                        </span>
-                      ))
-                )
-              }
-            </h1>
           </div>
 
           {/* --- RIGHT COLUMN (Subtitle & Buttons) --- */}
           <div className={cn(
               "transition-all duration-300 flex flex-col",
               isFinalLayout 
-                  ? { 
-                      "lg:w-5/12 items-center lg:items-start": language === 'EN',
-                      "lg:w-1/2 items-center lg:items-start": language === 'ES',
-                    }
+                  ? "lg:w-1/2 items-center lg:items-start"
                   : "w-full items-center"
           )}>
             <p className={cn(
