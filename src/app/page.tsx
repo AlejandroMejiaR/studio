@@ -439,27 +439,29 @@ export default function HomePage() {
 
   // Derived state for animation phase clarity
   const isSubtitlePhase = (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isHeroSettled;
+  const isFinalLayout = isHeroSettled || !shouldAnimateHeroIntro;
 
   return (
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300">
         <div className={cn(
           "w-full max-w-5xl flex",
-          (isHeroSettled || !shouldAnimateHeroIntro)
-              ? "flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-12"
+          isFinalLayout
+              ? "flex-col lg:flex-row items-center gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Title) --- */}
           <div className={cn(
               "transition-all duration-300",
-              (isHeroSettled || !shouldAnimateHeroIntro) ? "lg:w-1/2" : "w-full"
+              isFinalLayout 
+                ? { "lg:w-7/12": language === 'EN', "lg:w-1/2": language === 'ES' }
+                : "w-full"
           )}>
             <h1 className={cn(
                 "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
-                shouldAnimateHeroIntro && !isTitleSlidingDown && !isHeroSettled
-                  ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'
-                  : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl',
+                isFinalLayout 
+                  ? "text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center lg:text-left" 
+                  : "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': (isSubtitlePhase || (isHeroSettled && !isFinalContentVisible)) && shouldAnimateHeroIntro },
@@ -499,15 +501,20 @@ export default function HomePage() {
           {/* --- RIGHT COLUMN (Subtitle & Buttons) --- */}
           <div className={cn(
               "transition-all duration-300 flex flex-col",
-              (isHeroSettled || !shouldAnimateHeroIntro) 
-                  ? "lg:w-1/2 items-center lg:items-start" 
+              isFinalLayout 
+                  ? { 
+                      "lg:w-5/12 items-center lg:items-start": language === 'EN',
+                      "lg:w-1/2 items-center lg:items-start": language === 'ES',
+                    }
                   : "w-full items-center"
           )}>
             <p className={cn(
                 "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
-                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-xl md:text-2xl" : "text-center",
+                isFinalLayout
+                  ? "text-center lg:text-left text-2xl md:text-3xl"
+                  : "text-center",
                 isSubtitlePhase && shouldAnimateHeroIntro
-                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-xl"
+                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-2xl"
                   : "font-normal translate-y-0 max-w-full md:max-w-3xl",
                 
                 // Visibility Logic
@@ -519,10 +526,10 @@ export default function HomePage() {
               {subtitleContent()}
             </p>
 
-            {(isHeroSettled || !shouldAnimateHeroIntro) && (
+            {isFinalLayout && (
               <div className={cn(
                   "flex flex-col sm:flex-row gap-6",
-                  (isHeroSettled || !shouldAnimateHeroIntro) ? "justify-center lg:justify-start" : "justify-center",
+                  "justify-center lg:justify-start",
                    isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
               )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
