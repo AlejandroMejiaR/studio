@@ -459,7 +459,7 @@ export default function HomePage() {
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 shouldAnimateHeroIntro && !isTitleSlidingDown && !isHeroSettled
                   ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'
-                  : 'text-5xl sm:text-6xl md:text-7xl',
+                  : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl',
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': (isSubtitlePhase || (isHeroSettled && !isFinalContentVisible)) && shouldAnimateHeroIntro },
@@ -505,7 +505,7 @@ export default function HomePage() {
           )}>
             <p className={cn(
                 "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
-                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-lg md:text-xl" : "text-center",
+                (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-xl md:text-2xl" : "text-center",
                 isSubtitlePhase && shouldAnimateHeroIntro
                   ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-xl"
                   : "font-normal translate-y-0 max-w-full md:max-w-3xl",
