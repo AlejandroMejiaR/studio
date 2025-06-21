@@ -70,7 +70,6 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
-  const [isTitleHidden, setIsTitleHidden] = useState(false); // New state to solve race condition
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -94,7 +93,6 @@ export default function HomePage() {
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
-      setIsTitleHidden(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -133,14 +131,6 @@ export default function HomePage() {
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
       
-      // Timer to hide the title element *after* its animation is complete
-      const hideTitleTime = titleWordRevealDuration + titleSlideDownAnimationDuration;
-      const timerHide = setTimeout(() => {
-        setIsTitleHidden(true); // This will apply `display: none`
-      }, hideTitleTime);
-      animationTimersRef.current.push(timerHide);
-
-
       const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50; // 50ms buffer
       const timer2 = setTimeout(() => {
         setIsSubtitleEmphasizing(true);
@@ -156,7 +146,6 @@ export default function HomePage() {
       // Animations are skipped
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false);
-      setIsTitleHidden(true);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
@@ -480,7 +469,6 @@ export default function HomePage() {
                   "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                   {
                     'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
-                    'hidden': isTitleHidden, // Apply hidden after animation
                   }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
@@ -597,6 +585,8 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
 
