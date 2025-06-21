@@ -46,23 +46,26 @@ export default function HomePage() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    // Use a language-specific key to allow re-animation on language change.
-    const hasAnimatedInSessionKey = `hasAnimatedInSession_${language}`;
-    const hasAnimatedInSession = sessionStorage.getItem(hasAnimatedInSessionKey);
-
-    // Also check for a hard page reload.
     const navigationEntries = performance.getEntriesByType('navigation');
-    const isReload = navigationEntries.length > 0 && 
-                     (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
+    const isReload = navigationEntries.length > 0 &&
+                    (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
 
-    // We animate IF it's a hard reload OR if the flag for the current language
-    // has not been set in the session storage yet.
-    if (isReload || !hasAnimatedInSession) {
+    const hasAnimatedInSessionKey = `hasAnimatedInSession_${language}`;
+
+    // If it's a hard reload, clear the flag for the current language to force re-animation.
+    if (isReload) {
+      sessionStorage.removeItem(hasAnimatedInSessionKey);
+    }
+
+    const hasAnimated = sessionStorage.getItem(hasAnimatedInSessionKey);
+
+    // Animate only if the flag is not set for the current language.
+    // This now covers: first visit, hard reload (flag removed), and language change (new key).
+    if (!hasAnimated) {
       setShouldAnimateHeroIntro(true);
-      // Set the flag in session storage so it doesn't run again on internal navigation.
       sessionStorage.setItem(hasAnimatedInSessionKey, 'true');
     } else {
-      // Flag is already set, so we are navigating back internally. Skip animation.
+      // Flag exists, so it's an internal navigation. Skip animation.
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
@@ -615,7 +618,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
