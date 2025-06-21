@@ -22,16 +22,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getEnglishTranslation(t => t.aboutMe.paragraph1);
   const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getEnglishTranslation(t => t.aboutMe.paragraph2);
   
-  const experienceCardTitle = isClientReady ? translationsForLanguage.aboutMe.experienceCard.title : getEnglishTranslation(t => t.aboutMe.experienceCard.title);
-  const experienceCardDetail = isClientReady ? translationsForLanguage.aboutMe.experienceCard.detail : getEnglishTranslation(t => t.aboutMe.experienceCard.detail);
-
-  const projectsCardTitle = isClientReady ? translationsForLanguage.aboutMe.projectsCard.title : getEnglishTranslation(t => t.aboutMe.projectsCard.title);
-  const projectsCardDetailNumber = isClientReady ? translationsForLanguage.aboutMe.projectsCard.detailNumber : getEnglishTranslation(t => t.aboutMe.projectsCard.detailNumber);
-  const projectsCardDetailText = isClientReady ? translationsForLanguage.aboutMe.projectsCard.detailText : getEnglishTranslation(t => t.aboutMe.projectsCard.detailText);
-  
-  const focusCardTitle = isClientReady ? translationsForLanguage.aboutMe.focusCard.title : getEnglishTranslation(t => t.aboutMe.focusCard.title);
-  const focusCardDetail = isClientReady ? translationsForLanguage.aboutMe.focusCard.detail : getEnglishTranslation(t => t.aboutMe.focusCard.detail);
-
   const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getEnglishTranslation(t => t.aboutMe.skillsTitle);
   const downloadCVButtonText = isClientReady ? translationsForLanguage.aboutMe.downloadCVButton : getEnglishTranslation(t => t.aboutMe.downloadCVButton);
 
@@ -91,74 +81,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
           >
             {paragraph2}
           </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader className="items-center sm:items-start">
-                <Brain size={32} className="text-accent mb-2" />
-                <CardTitle 
-                  className="text-lg font-headline text-primary dark:text-foreground"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {experienceCardTitle}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-left">
-                <p 
-                  className="text-lg font-bold text-accent"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {experienceCardDetail}
-                </p>
-                <p className="text-sm text-muted-foreground"></p>
-              </CardContent>
-            </Card>
-            <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader className="items-center sm:items-start">
-                <DraftingCompass size={32} className="text-accent mb-2" />
-                <CardTitle 
-                  className="text-lg font-headline text-primary dark:text-foreground"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {projectsCardTitle}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-left">
-                <p 
-                  className="text-2xl font-bold text-accent"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {projectsCardDetailNumber}
-                </p>
-                <p 
-                  className="text-sm text-muted-foreground"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {projectsCardDetailText}
-                </p>
-              </CardContent>
-            </Card>
-             <Card className="bg-secondary/30 dark:bg-[hsl(270,30%,20%)]">
-              <CardHeader className="items-center sm:items-start">
-                <Sparkles size={32} className="text-accent mb-2" />
-                <CardTitle 
-                  className="text-lg font-headline text-primary dark:text-foreground"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {focusCardTitle}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-left">
-                <p 
-                  className="text-lg font-semibold text-accent"
-                  style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {focusCardDetail}
-                </p>
-                <p className="text-sm text-muted-foreground"></p>
-              </CardContent>
-            </Card>
-          </div>
           
           <div>
             <h3 
