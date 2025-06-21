@@ -138,7 +138,7 @@ const Navbar = () => {
 
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 w-full border-b border-black dark:border-white bg-background/80 backdrop-blur-sm">
       <div className={cn(
           "container flex h-16 items-center justify-between",
           pathname === '/' && !shouldNavbarContentBeVisible && "opacity-0",
