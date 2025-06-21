@@ -127,24 +127,21 @@ export default function HomePage() {
       // The total duration needs to account for the final word's color transition (0.4s) + a small buffer.
       const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.5) * 1000;
   
-      // Timer to start the title slide-down animation
-      const timer1 = setTimeout(() => {
-        setIsTitleRevealComplete(true);
-        console.log(`[${new Date().toISOString()}] Triggering title slide-down fade-out.`);
+      const masterTimeout = setTimeout(() => {
+        // console.log(`[${new Date().toISOString()}] Triggering title slide-down fade-out.`);
         setIsTitleSlidingDown(true);
-      }, titleWordRevealDuration);
-      animationTimersRef.current.push(timer1);
-
-      // Timer to start the subtitle sequence after the title has finished fading out
-      const titleFadeOutDuration = 500; // Duration of the 'slideDownFadeOut' animation
-      const timer2 = setTimeout(() => {
-        setIsSubtitleEmphasizing(true);
-        const timer3 = setTimeout(() => {
+  
+        const subtitleTimer = setTimeout(() => {
+          setIsSubtitleEmphasizing(true);
+          const typingTimer = setTimeout(() => {
             setIsSubtitleTypingEmphasized(true);
-        }, subtitleEmphasisAnimationDuration);
-        animationTimersRef.current.push(timer3);
-      }, titleWordRevealDuration + titleFadeOutDuration);
-      animationTimersRef.current.push(timer2);
+          }, subtitleEmphasisAnimationDuration);
+          animationTimersRef.current.push(typingTimer);
+        }, 500); // Wait for fade-out to complete
+        animationTimersRef.current.push(subtitleTimer);
+      }, titleWordRevealDuration); 
+  
+      animationTimersRef.current.push(masterTimeout);
   
     } else if (!shouldAnimateHeroIntro && isClientReady) {
       // Animations are skipped, go directly to the final state
@@ -162,7 +159,7 @@ export default function HomePage() {
     }
   
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
+  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage, subtitleEmphasisAnimationDuration]);
   
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
@@ -175,11 +172,11 @@ export default function HomePage() {
         // After pause, hide the large subtitle and switch layout
         setIsSubtitleEmphasizing(false);
         setIsSubtitleTypingEmphasizedComplete(false);
-        setIsHeroSettled(true);
+        // setIsHeroSettled(true); // DEBUG: Temporarily commented out to prevent title from being hidden
 
         // After a brief moment for the DOM to update, fade in the final content
         const finalFadeInTimer = setTimeout(() => {
-            setIsFinalContentVisible(true);
+            // setIsFinalContentVisible(true); // DEBUG: Also paused
         }, 100);
         animationTimersRef.current.push(finalFadeInTimer);
 
