@@ -126,7 +126,8 @@ export default function HomePage() {
         }
         cumulativeDelay += (words.length > 0 ? lineDuration * 0.5 : 0) + 0.3;
       });
-      const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000;
+      // The total duration needs to account for the final word's color transition (0.4s) + a small buffer.
+      const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.5) * 1000;
   
       // Timer to start the title slide-down animation
       const timer1 = setTimeout(() => {
@@ -480,7 +481,6 @@ export default function HomePage() {
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               onAnimationEnd={(e) => {
-                // Ensure we only trigger this for the intended animation
                 if (e.animationName.includes('slideDownFadeOut')) {
                   console.log(`[${new Date().toISOString()}] onAnimationEnd fired for slideDownFadeOut.`);
                   setIsTitleFadeOutFinished(true);
