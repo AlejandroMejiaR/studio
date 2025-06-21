@@ -187,7 +187,7 @@ export default function HomePage() {
         }, 100);
         animationTimersRef.current.push(finalFadeInTimer);
 
-    }, 2000); // 2-second pause
+    }, 1000); // 1-second pause
 
     animationTimersRef.current.push(pauseTimer);
 }, [isClientReady]);
