@@ -172,6 +172,22 @@ body {
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
+  
+  /* New text pulse animation for subtitle */
+  @keyframes text-pulse-light {
+    0%, 100% { color: hsl(var(--foreground) / 0.8); }
+    50% { color: hsl(var(--accent)); }
+  }
+  @keyframes text-pulse-dark {
+    0%, 100% { color: hsl(var(--foreground) / 0.8); }
+    50% { color: hsl(var(--accent)); }
+  }
+  .animate-text-pulse {
+    animation: text-pulse-light 3s infinite ease-in-out;
+  }
+  .dark .animate-text-pulse {
+    animation-name: text-pulse-dark;
+  }
 
   /* Project Title Color Fade-in Animations (Block Level - DEPRECATED if WordReveal handles color) */
   @keyframes title-color-fade-in-light {
@@ -260,7 +276,7 @@ body {
   }
 
   .subtitle-emphasis-transition {
-    transition-property: font-size, font-weight, opacity, transform; /* Added transform */
+    transition-property: font-size, font-weight, opacity, transform, max-width; /* Added max-width */
     transition-duration: 0.3s; /* Matches subtitleEmphasisAnimationDuration */
     transition-timing-function: ease-in-out;
   }

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Fragment } from 'react';
 import type { Project } from '@/types';
 import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import AboutMe from '@/components/home/AboutMe';
@@ -179,7 +179,7 @@ export default function HomePage() {
     setIsSubtitleTypingEmphasized(false);
     setIsSubtitleTypingEmphasizedComplete(true);
 
-    // Wait for 1 second before starting the 'return' animation.
+    // Wait for 3 seconds before starting the 'return' animation.
     const delayTimer = setTimeout(() => {
         setIsSubtitleReturning(true); // Start return (resize/reposition + fade-out)
         setIsTitleSlidingUp(true); // Start title slide up
@@ -200,7 +200,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 1000); // 1-second delay
+    }, 3000); // 3-second delay
 
     animationTimersRef.current.push(delayTimer);
   };
@@ -214,24 +214,29 @@ export default function HomePage() {
         navbarAnimationTimeoutRef.current = null;
     }
 
+    // This function must not be in the dependency array
+    const setNavbarVisibility = (isVisible: boolean) => {
+        setShouldNavbarContentBeVisible(isVisible);
+    };
+
     if (pathname === '/') {
         const heroAnimationsDoneOrSkipped = isHeroSettled || !shouldAnimateHeroIntro;
 
         if (shouldAnimateHeroIntro && !isHeroSettled) {
-            setShouldNavbarContentBeVisible(false);
+            setNavbarVisibility(false);
         } else if (heroAnimationsDoneOrSkipped) {
             // If animations are done or skipped, ensure navbar starts hidden and fades in after a delay
-            setShouldNavbarContentBeVisible(false); 
+            setNavbarVisibility(false); 
             navbarAnimationTimeoutRef.current = setTimeout(() => {
-                setShouldNavbarContentBeVisible(true);
+                setNavbarVisibility(true);
             }, 1000); // Delay for navbar fade-in
         } else {
              // Default to hidden if conditions aren't met (e.g., initial state before logic runs)
-            setShouldNavbarContentBeVisible(false);
+            setNavbarVisibility(false);
         }
     } else {
         // For all other pages, navbar should be immediately visible
-        setShouldNavbarContentBeVisible(true);
+        setNavbarVisibility(true);
     }
 
     return () => {
@@ -245,7 +250,6 @@ export default function HomePage() {
       shouldAnimateHeroIntro, 
       isHeroSettled,
       language // Re-evaluate if language changes, as it might restart animations
-      // setShouldNavbarContentBeVisible was removed to fix infinite loop
   ]);
 
 
@@ -398,20 +402,59 @@ export default function HomePage() {
     if (!shouldAnimateHeroIntro) {
       return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
-
-    // Highest priority: if returning or settled but not ready for final fade, it's invisible.
+  
+    // During the return phase, it should be fading out
     if (isSubtitleReturning) return 'opacity-0';
-    if (isHeroSettled) return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
-
-    // During typing or the post-typing pause, it's fully visible.
+  
+    // After settling, its visibility is controlled by the final fade-in state
+    if (isHeroSettled) {
+      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
+    }
+    
+    // During the typing animation or the pause after, it should be visible
     if (isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
       return 'opacity-100';
     }
-
-    // Default to invisible for any other animation phase (title reveal, container moving, etc.)
+    
+    // Default to invisible in any other intermediate state
     return 'opacity-0';
   };
   
+  // Helper component to render the subtitle with special styling
+  const AnimatedSubtitle = ({ text }: { text: string }) => {
+    // Regex to split by the target phrases while keeping them in the array
+    const parts = text.split(/(Impulsadas por IA|Driven by AI|Game Design)/g);
+  
+    return (
+      <>
+        {parts.map((part, index) => {
+          if (part === 'Impulsadas por IA') {
+            return (
+              <span key={index} className="animate-text-pulse">
+                Impulsadas por <span className="font-bold">IA</span>
+              </span>
+            );
+          }
+          if (part === 'Driven by AI') {
+            return (
+              <span key={index} className="animate-text-pulse">
+                Driven by <span className="font-bold">AI</span>
+              </span>
+            );
+          }
+          if (part === 'Game Design') {
+            return (
+              <span key={index} className="font-bold text-accent">
+                {part}
+              </span>
+            );
+          }
+          return <Fragment key={index}>{part}</Fragment>;
+        })}
+      </>
+    );
+  };
+
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
@@ -429,14 +472,10 @@ export default function HomePage() {
       );
     }
   
-    // For ALL other cases (animations skipped, before typing, after typing, etc.)
-    // render the final static text. The parent's opacity class will handle making it
-    // visible or invisible. This prevents re-mounting the text node.
-    if (!shouldAnimateHeroIntro) {
-      return isSubtitleReadyToFadeIn ? heroSubtitle : <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    }
-    
-    return heroSubtitle;
+    // For all other cases (animations skipped, after typing, final settled state),
+    // render the final text with the special animations applied.
+    // The parent's opacity class will handle making it visible or invisible.
+    return <AnimatedSubtitle text={heroSubtitle} />;
   };
 
 
@@ -480,10 +519,10 @@ export default function HomePage() {
           </h1>
 
           <p className={cn(
-              "max-w-full md:max-w-3xl mb-10 whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition", 
+              "mb-10 whitespace-pre-line text-center text-foreground/80 subtitle-emphasis-transition", 
               (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
-                ? "text-3xl md:text-4xl font-bold -translate-y-44" 
-                : "text-xl md:text-2xl font-normal translate-y-0", 
+                ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full md:max-w-5xl" 
+                : "text-xl md:text-2xl font-normal translate-y-0 max-w-full md:max-w-3xl", 
               getSubtitleOpacityClass() 
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
@@ -551,18 +590,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-    
-
-    
-
-
-
-
-    
-
-
-
-
-    
