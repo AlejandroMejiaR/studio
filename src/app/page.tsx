@@ -103,6 +103,9 @@ export default function HomePage() {
     const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
   
     if (shouldAnimateHeroIntro) {
+      // Scroll to top to ensure animation is visible
+      window.scrollTo(0, 0);
+      
       // Set the session flag as soon as we decide to animate for this language.
       const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
       sessionStorage.setItem(initialLoadAnimatedKey, 'true');
