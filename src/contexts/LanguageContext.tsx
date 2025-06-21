@@ -169,7 +169,7 @@ const translations: Record<Language, AppTranslations> = {
       hero: {
         animatingTitle: ["Transformando", "Ideas En", "Mundos", "Interactivos"],
         fullTitle: ["¡Llevemos tu idea", "al mundo digital!"],
-        subtitle: "¡Hola! Soy Alejandro\n\nDiseño y desarrollo experiencias digitales\n\nCentradas en UX\nImpulsadas por IA\nPotenciadas con Game Design",
+        subtitle: "¡Hola! Soy Alejandro\n\nMe enfoco en el diseño y desarrollo de experiencias digitales\n\nCentradas en UX\nImpulsadas por IA\nPotenciadas con Game Design",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
