@@ -152,7 +152,6 @@ const Navbar = () => {
         <Link
           href="/"
           className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80"
-          prefetch={false}
           onClick={handleHomeNavigation}
         >
           {navbarIsMounted ? (
@@ -172,7 +171,6 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
-              prefetch={false}
               onClick={handleHomeNavigation}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
@@ -278,7 +276,6 @@ const Navbar = () => {
                       href={link.href}
                       className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 ease-in-out"
                       onClick={handleMobileHomeNavigation}
-                      prefetch={false}
                     >
                       <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                         {navLinkText(link.labelKey)}
@@ -296,3 +293,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+    

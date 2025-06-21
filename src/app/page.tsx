@@ -46,17 +46,23 @@ export default function HomePage() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    const navigationEntries = performance.getEntriesByType("navigation");
-    const navigationType = navigationEntries.length > 0 ? (navigationEntries[0] as PerformanceNavigationTiming).type : '';
-    
-    // Language-specific key to re-trigger animation on language change
+    // Use a language-specific key to allow re-animation on language change.
     const hasAnimatedInSessionKey = `hasAnimatedInSession_${language}`;
     const hasAnimatedInSession = sessionStorage.getItem(hasAnimatedInSessionKey);
 
-    if (navigationType === 'reload' || !hasAnimatedInSession) {
+    // Also check for a hard page reload.
+    const navigationEntries = performance.getEntriesByType('navigation');
+    const isReload = navigationEntries.length > 0 && 
+                     (navigationEntries[0] as PerformanceNavigationTiming).type === 'reload';
+
+    // We animate IF it's a hard reload OR if the flag for the current language
+    // has not been set in the session storage yet.
+    if (isReload || !hasAnimatedInSession) {
       setShouldAnimateHeroIntro(true);
+      // Set the flag in session storage so it doesn't run again on internal navigation.
       sessionStorage.setItem(hasAnimatedInSessionKey, 'true');
     } else {
+      // Flag is already set, so we are navigating back internally. Skip animation.
       setShouldAnimateHeroIntro(false);
     }
   }, [isClientReady, language]);
@@ -609,3 +615,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
