@@ -4,12 +4,30 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
 import React from 'react'; // Import React for forwardRef
+import { getSupabaseImageUrl } from '@/lib/supabase';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
-  const skills = ['Game Design', 'UX Design', 'Unity', 'Unreal Engine', 'C#', 'C++', 'JS', 'Python', 'Git', 'Generative AI', 'English B2'];
+  const skills = [
+    { name: 'Game Design', logo: 'gamedesign.svg' },
+    { name: 'UX Design', logo: 'uxdesign.svg' },
+    { name: 'Unity', logo: 'unity.svg' },
+    { name: 'Unreal Engine', logo: 'unreal.svg' },
+    { name: 'C#', logo: 'csharp.svg' },
+    { name: 'C++', logo: 'cpp.svg' },
+    { name: 'JavaScript', logo: 'javascript.svg' },
+    { name: 'Python', logo: 'python.svg' },
+    { name: 'Git', logo: 'git.svg' },
+    { name: 'Generative AI', logo: 'ai.svg' },
+  ];
 
   // Determine text based on client readiness and language
   const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
@@ -29,7 +47,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
           <Card className="w-full max-w-sm shadow-xl">
             <CardContent className="p-0">
               <Image
-                src="https://placehold.co/400x500/122624/F2F2F2.png?text=Your+Photo"
+                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//WhatsApp%20Image%202025-01-24%20at%207.15.31%20PM.jpeg"
                 alt="Alejandro Mejia Rojas"
                 width={400}
                 height={500}
@@ -69,17 +87,36 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
           
           <div>
             <h3 
-              className="font-headline text-2xl font-semibold text-primary mb-4 dark:text-foreground"
+              className="font-headline text-2xl font-semibold text-primary mb-6 dark:text-foreground"
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             >
               {skillsTitle}
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap items-center gap-4">
               {skills.map((skill) => (
-                <span key={skill} className="bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-                  {skill}
-                </span>
+                <TooltipProvider key={skill.name} delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="group relative h-16 w-16 bg-card p-3 rounded-lg flex items-center justify-center shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
+                        <Image
+                          src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
+                          alt={`${skill.name} logo`}
+                          width={40}
+                          height={40}
+                          className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 dark:filter dark:invert"
+                          unoptimized={true}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{skill.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               ))}
+              <div className="bg-accent text-accent-foreground px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+                English B2
+              </div>
             </div>
           </div>
         </div>
