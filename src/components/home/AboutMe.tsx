@@ -1,4 +1,3 @@
-
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
