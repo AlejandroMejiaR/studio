@@ -422,29 +422,15 @@ export default function HomePage() {
   
   // Helper component to render the subtitle with special styling
   const AnimatedSubtitle = ({ text }: { text: string }) => {
-    // Regex to split by the target phrases while keeping them in the array
-    const parts = text.split(/(Impulsadas por IA|Driven by AI|Game Design)/g);
+    // Regex to split by the target words while keeping them
+    const parts = text.split(/(UX|IA|Game Design)/g);
   
     return (
       <>
         {parts.map((part, index) => {
-          if (part === 'Impulsadas por IA') {
+          if (part === 'UX' || part === 'IA' || part === 'Game Design') {
             return (
-              <span key={index} className="animate-text-pulse">
-                Impulsadas por <span className="font-bold">IA</span>
-              </span>
-            );
-          }
-          if (part === 'Driven by AI') {
-            return (
-              <span key={index} className="animate-text-pulse">
-                Driven by <span className="font-bold">AI</span>
-              </span>
-            );
-          }
-          if (part === 'Game Design') {
-            return (
-              <span key={index} className="font-bold text-accent">
+              <span key={index} className="animate-text-pulse font-bold">
                 {part}
               </span>
             );
@@ -506,7 +492,7 @@ export default function HomePage() {
   return (
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-16 md:pb-20">
-        <div className="flex flex-col items-center max-w-4xl w-full">
+        <div className="flex flex-col items-center max-w-5xl w-full">
           <h1 className={cn(
             "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground text-center",
             { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
@@ -590,3 +576,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
