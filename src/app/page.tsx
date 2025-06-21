@@ -21,7 +21,6 @@ import { cn } from '@/lib/utils';
 
 
 // Animation durations (ms) moved outside the component to be true constants
-const titleSlideDownAnimationDuration = 500;
 const subtitleEmphasisAnimationDuration = 300;
 
 
@@ -70,7 +69,7 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
-  const [isTitleFadeOutComplete, setIsTitleFadeOutComplete] = useState(false); // New state to mark title fadeout completion
+  const [isTitleFadeOutComplete, setIsTitleFadeOutComplete] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -94,7 +93,7 @@ export default function HomePage() {
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
-      setIsTitleFadeOutComplete(false); // Reset new state
+      setIsTitleFadeOutComplete(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -600,13 +599,5 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
 
     
