@@ -22,9 +22,6 @@ import { cn } from '@/lib/utils';
 // Animation durations (ms) moved outside the component to be true constants
 const titleSlideDownAnimationDuration = 500;
 const subtitleEmphasisAnimationDuration = 300;
-const titleSlideUpAnimationDuration = 500;
-const subtitleReturnAnimationDuration = 300;
-const subtitleFinalFadeInDelay = 500;
 
 
 export default function HomePage() {
@@ -75,10 +72,9 @@ export default function HomePage() {
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
-  const [isSubtitleReturning, setIsSubtitleReturning] = useState(false);
-  const [isTitleSlidingUp, setIsTitleSlidingUp] = useState(false);
   const [isHeroSettled, setIsHeroSettled] = useState(false);
-  const [isSubtitleReadyToFadeIn, setIsSubtitleReadyToFadeIn] = useState(false);
+  const [isFinalContentVisible, setIsFinalContentVisible] = useState(false);
+
 
   // State to hold the currently displayed title text
   const [heroDisplayTitle, setHeroDisplayTitle] = useState(translationsForLanguage.home.hero.animatingTitle);
@@ -104,10 +100,8 @@ export default function HomePage() {
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
-      setIsSubtitleReturning(false);
-      setIsTitleSlidingUp(false);
       setIsHeroSettled(false);
-      setIsSubtitleReadyToFadeIn(false);
+      setIsFinalContentVisible(false);
       setHeroDisplayTitle(animatingTitle); // Set the initial animating title
 
       let calculatedMaxTitleAnimationOverallEndTime = 0;
@@ -161,16 +155,12 @@ export default function HomePage() {
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
-      setIsSubtitleReturning(false);
-      setIsTitleSlidingUp(false);
       setIsHeroSettled(true);
       setHeroDisplayTitle(finalTitle); // Ensure final title is set
 
-      setIsSubtitleReadyToFadeIn(false);
-
       const fadeInTimer = setTimeout(() => {
-        setIsSubtitleReadyToFadeIn(true);
-      }, subtitleFinalFadeInDelay);
+        setIsFinalContentVisible(true);
+      }, 500);
       animationTimersRef.current.push(fadeInTimer);
     }
 
@@ -182,27 +172,24 @@ export default function HomePage() {
     if (!isClientReady) return;
 
     setIsSubtitleTypingEmphasized(false);
-    setIsSubtitleTypingEmphasizedComplete(true);
+    setIsSubtitleTypingEmphasizedComplete(true); // Keep the large subtitle visible for the pause
 
-    const delayTimer = setTimeout(() => {
-        setIsSubtitleReturning(true);
-        setIsTitleSlidingUp(true);
-        setIsTitleSlidingDown(false);
+    const pauseTimer = setTimeout(() => {
+        // After pause, hide the large subtitle and switch layout
+        setIsSubtitleEmphasizing(false);
+        setIsSubtitleTypingEmphasizedComplete(false);
+        setIsHeroSettled(true);
 
-        const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
-        const timer = setTimeout(() => {
-          setIsHeroSettled(true);
-          const fadeInTimer = setTimeout(() => {
-            setIsSubtitleReadyToFadeIn(true);
-          }, subtitleFinalFadeInDelay);
-          animationTimersRef.current.push(fadeInTimer);
+        // After a brief moment for the DOM to update, fade in the final content
+        const finalFadeInTimer = setTimeout(() => {
+            setIsFinalContentVisible(true);
+        }, 100);
+        animationTimersRef.current.push(finalFadeInTimer);
 
-        }, settleDelay);
-        animationTimersRef.current.push(timer);
-    }, 2000); // Pause for 2 seconds
+    }, 2000); // 2-second pause
 
-    animationTimersRef.current.push(delayTimer);
-  }, [isClientReady]);
+    animationTimersRef.current.push(pauseTimer);
+}, [isClientReady]);
 
 
   useEffect(() => {
@@ -359,22 +346,6 @@ export default function HomePage() {
         }
     });
   }
-
-  const getSubtitleOpacityClass = () => {
-    if (!isClientReady) return 'opacity-0';
-  
-    // Final state (settled or skipped animation) should always be checked first.
-    if (isHeroSettled || !shouldAnimateHeroIntro) {
-      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
-    }
-  
-    // During the animation sequence...
-    if (isSubtitleTypingEmphasized) return 'opacity-100'; // Visible while typing
-    if (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) return 'opacity-100'; // Visible during the pause
-    if (isSubtitleReturning) return 'opacity-0'; // Fades out when returning
-  
-    return 'opacity-0'; // Default to invisible for other phases (e.g., before typing starts)
-  };
   
   const AnimatedSubtitle = ({ text }: { text: string }) => {
     const parts = text.split(/(UX|AI|IA|Game Design)/g);
@@ -398,12 +369,6 @@ export default function HomePage() {
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   
-    // Render the final, styled subtitle if animations are skipped or complete.
-    if (!shouldAnimateHeroIntro || isHeroSettled) {
-      return <AnimatedSubtitle text={heroSubtitle} />;
-    }
-  
-    // Render the typing animation when it's active.
     if (isSubtitleTypingEmphasized) {
       return (
         <TypingAnimation
@@ -423,8 +388,7 @@ export default function HomePage() {
       );
     }
   
-    // During the pause, after typing but before settling, render the fully typed text statically.
-    if (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) {
+    if (isSubtitleTypingEmphasizedComplete) {
       const parts = heroSubtitle.split(/(UX|AI|IA|Game Design)/g).filter(Boolean);
       return (
         <>
@@ -439,7 +403,11 @@ export default function HomePage() {
       );
     }
   
-    // For any other intermediate state (like returning, or before typing), show nothing.
+    // For final state or skipped animation, render the styled subtitle
+    if (isHeroSettled || !shouldAnimateHeroIntro) {
+      return <AnimatedSubtitle text={heroSubtitle} />;
+    }
+  
     return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   };
 
@@ -488,13 +456,12 @@ export default function HomePage() {
             <h1 className={cn(
                 "font-headline font-bold mb-8 text-foreground dark:text-foreground",
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
-                // Corrected font size logic
                 shouldAnimateHeroIntro && !isSubtitlePhase && !isHeroSettled
-                  ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl' // Bigger initial size
-                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl', // Final smaller size
+                  ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'
+                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
-                { 'opacity-0': (isSubtitlePhase && !isTitleSlidingUp) && shouldAnimateHeroIntro },
-                { 'animate-slide-up-fade-in': isTitleSlidingUp && shouldAnimateHeroIntro }
+                { 'opacity-0': (isSubtitlePhase || (isHeroSettled && !isFinalContentVisible)) && shouldAnimateHeroIntro },
+                { 'animate-fadeIn': isFinalContentVisible }
             )}
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
             >
@@ -537,10 +504,13 @@ export default function HomePage() {
             <p className={cn(
                 "mb-10 whitespace-pre-line text-foreground/80 subtitle-emphasis-transition", 
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left text-base md:text-lg" : "text-center",
-                (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
+                isSubtitlePhase && shouldAnimateHeroIntro
                   ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-xl"
                   : "font-normal translate-y-0 max-w-full md:max-w-3xl",
-                getSubtitleOpacityClass() 
+                
+                // Visibility Logic
+                isSubtitlePhase && shouldAnimateHeroIntro ? 'opacity-100' : 'opacity-0',
+                isFinalContentVisible && 'animate-fadeIn opacity-80'
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
             >
@@ -549,8 +519,9 @@ export default function HomePage() {
 
             {(isHeroSettled || !shouldAnimateHeroIntro) && (
               <div className={cn(
-                  "flex flex-col sm:flex-row gap-6 animate-fadeIn",
-                  (isHeroSettled || !shouldAnimateHeroIntro) ? "justify-center lg:justify-start" : "justify-center"
+                  "flex flex-col sm:flex-row gap-6",
+                  (isHeroSettled || !shouldAnimateHeroIntro) ? "justify-center lg:justify-start" : "justify-center",
+                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
               )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                   <Link href="/#projects">
