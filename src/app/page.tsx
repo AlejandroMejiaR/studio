@@ -483,7 +483,6 @@ export default function HomePage() {
                   "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                   {
                     'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
-                    'invisible': isTitleFadeOutComplete,
                   }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
