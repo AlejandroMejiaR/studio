@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Gamepad2, Component, Sparkles, Languages } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
@@ -25,7 +26,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     { name: 'C#', type: 'logo', logo: 'c.png' },
     { name: 'C++', type: 'logo', logo: 'c++.png' },
     { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
-    { name: 'Python', type: 'logo', logo: 'pyhton.png' },
+    { name: 'Python', type: 'logo', logo: 'python.png' },
     { name: 'Git', type: 'logo', logo: 'git.png' },
     
     // Icon + Text
@@ -53,7 +54,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
           <Card className="w-full max-w-sm shadow-xl">
             <CardContent className="p-0">
               <Image
-                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//WhatsApp%20Image%202025-01-24%20at%207.15.31%20PM.jpeg"
+                src={getSupabaseImageUrl('documents', 'profile-picture.jpeg')}
                 alt="Alejandro Mejia Rojas"
                 width={400}
                 height={500}
@@ -128,7 +129,10 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                                     src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
                                     alt={`${skill.name} logo`}
                                     width={48} height={48}
-                                    className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                    className={cn(
+                                      "object-contain transition-transform duration-300 ease-in-out group-hover:scale-110",
+                                      skill.name === 'C#' && 'scale-[1.75]'
+                                    )}
                                     unoptimized={true}
                                 />
                             )}
@@ -170,3 +174,5 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
 AboutMe.displayName = 'AboutMe'; // Add display name for React Developer Tools
 
 export default AboutMe;
+
+    

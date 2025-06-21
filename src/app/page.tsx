@@ -18,6 +18,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
+import { getSupabaseImageUrl } from '@/lib/supabase';
 
 
 // Animation durations (ms) moved outside the component to be true constants
@@ -551,7 +552,7 @@ export default function HomePage() {
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//WhatsApp%20Image%202025-01-24%20at%207.15.31%20PM.jpeg"
+                    src={getSupabaseImageUrl('documents', 'profile-picture.jpeg')}
                     alt="A photo of Alejandro Mejia Rojas"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
@@ -681,5 +682,7 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
