@@ -40,24 +40,36 @@ export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
-  // Default to false. The effect will decide if it should be true.
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
+  const prevLanguageRef = useRef<Language | null>(null);
 
   useEffect(() => {
     if (!isClientReady) return;
 
-    const hasAnimatedKey = `portfolio_ace_animated_${language}`;
-    const hasAnimatedInSession = sessionStorage.getItem(hasAnimatedKey);
+    const initialLoadKey = 'portfolio_ace_initial_load_animated';
+    const hasAnimatedOnInitialLoad = sessionStorage.getItem(initialLoadKey);
+    const previousLanguage = prevLanguageRef.current;
 
-    if (!hasAnimatedInSession) {
-      // It's the first visit for this language in this session, or a language change.
+    // It's a language change if a previous language was tracked and it's different from the current one.
+    const languageHasChanged = previousLanguage !== null && previousLanguage !== language;
+    
+    // It's the very first load in this tab/session.
+    const isFirstLoadInSession = !hasAnimatedOnInitialLoad;
+
+    if (languageHasChanged || isFirstLoadInSession) {
       setShouldAnimateHeroIntro(true);
-      // Set the flag so it doesn't animate again for this language.
-      sessionStorage.setItem(hasAnimatedKey, 'true');
+      // If it was the first load, set the flag so this condition isn't met again for this session
+      // on subsequent navigations within the same tab.
+      if (isFirstLoadInSession) {
+        sessionStorage.setItem(initialLoadKey, 'true');
+      }
     } else {
-      // The animation has already been shown.
       setShouldAnimateHeroIntro(false);
     }
+
+    // After checking, update the ref to the current language for the next render.
+    prevLanguageRef.current = language;
+
   }, [isClientReady, language]);
 
 
