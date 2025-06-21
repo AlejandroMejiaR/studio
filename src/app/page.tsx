@@ -367,6 +367,10 @@ export default function HomePage() {
     );
   };
 
+  // Derived state for animation phase clarity
+  const isSubtitlePhase = (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isHeroSettled;
+  const isFinalLayout = isHeroSettled || !shouldAnimateHeroIntro;
+
   const subtitleContent = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
   
@@ -405,7 +409,7 @@ export default function HomePage() {
     }
   
     // For final state or skipped animation, render the styled subtitle
-    if (isHeroSettled || !shouldAnimateHeroIntro) {
+    if (isFinalLayout) {
       return <AnimatedSubtitle text={heroSubtitle} />;
     }
   
@@ -437,10 +441,6 @@ export default function HomePage() {
     );
   }
 
-  // Derived state for animation phase clarity
-  const isSubtitlePhase = (isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isHeroSettled;
-  const isFinalLayout = isHeroSettled || !shouldAnimateHeroIntro;
-
   return (
     <div className="container mx-auto">
       <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300">
@@ -455,11 +455,12 @@ export default function HomePage() {
               "transition-all duration-300",
               isFinalLayout 
                 ? { "lg:w-7/12": language === 'EN', "lg:w-1/2": language === 'ES' }
-                : "w-full"
+                : "w-full",
+              isSubtitlePhase && shouldAnimateHeroIntro && 'hidden'
           )}>
             <h1 className={cn(
                 "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                isFinalLayout 
+                isSubtitlePhase || isFinalLayout
                   ? "text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-center lg:text-left" 
                   : "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
@@ -514,7 +515,7 @@ export default function HomePage() {
                   ? "text-center lg:text-left text-2xl md:text-3xl"
                   : "text-center",
                 isSubtitlePhase && shouldAnimateHeroIntro
-                  ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full lg:max-w-2xl"
+                  ? "text-3xl md:text-4xl font-bold max-w-full lg:max-w-2xl"
                   : "font-normal translate-y-0 max-w-full md:max-w-3xl",
                 
                 // Visibility Logic
