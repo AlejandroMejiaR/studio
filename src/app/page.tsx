@@ -440,7 +440,7 @@ export default function HomePage() {
         <div className={cn(
           "w-full max-w-5xl flex",
           isFinalLayout
-              ? "flex-col lg:flex-row items-center gap-8 lg:gap-12"
+              ? "flex-col lg:flex-row items-stretch gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Title or Image) --- */}
@@ -453,7 +453,7 @@ export default function HomePage() {
           )}>
             {isFinalLayout ? (
                <div className={cn(
-                  "relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto lg:mx-0",
+                  "relative w-64 h-80 md:w-80 md:h-96 lg:w-full lg:h-full mx-auto lg:mx-0",
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
@@ -461,7 +461,7 @@ export default function HomePage() {
                     alt="A photo of Alejandro Mejia Rojas"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
-                    sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 24rem"
+                    sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 50vw"
                     priority
                   />
                </div>
@@ -499,7 +499,7 @@ export default function HomePage() {
 
           {/* --- RIGHT COLUMN (Subtitle & Buttons) --- */}
           <div className={cn(
-              "transition-all duration-300 flex flex-col",
+              "transition-all duration-300 flex flex-col justify-center",
               isFinalLayout 
                   ? "lg:w-1/2 items-center lg:items-start"
                   : "w-full items-center"
