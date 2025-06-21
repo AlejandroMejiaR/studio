@@ -1,12 +1,7 @@
-
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, DraftingCompass, Sparkles, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { getSupabaseImageUrl } from '@/lib/supabase';
-import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
 import React from 'react'; // Import React for forwardRef
 
@@ -15,7 +10,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
   const skills = ['Game Design', 'UX Design', 'Unity', 'Unreal Engine', 'C#', 'C++', 'JS', 'Python', 'Git', 'Generative AI', 'English B2'];
-  const cvUrl = getSupabaseImageUrl('documents', 'ResumeEN.pdf');
 
   // Determine text based on client readiness and language
   const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
@@ -23,7 +17,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getEnglishTranslation(t => t.aboutMe.paragraph2);
   
   const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getEnglishTranslation(t => t.aboutMe.skillsTitle);
-  const downloadCVButtonText = isClientReady ? translationsForLanguage.aboutMe.downloadCVButton : getEnglishTranslation(t => t.aboutMe.downloadCVButton);
 
 
   return (
@@ -50,14 +43,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                   Multimedia Engineer<br />
                   <span className="text-sm">Game Design · UX</span>
                 </p>
-                <Button variant="outline" className="mt-4 w-full text-accent border-accent hover:bg-accent hover:text-accent-foreground" asChild>
-                  <a href={cvUrl} download="Alejandro_Mejia_Rojas_CV.pdf" target="_blank" rel="noopener noreferrer">
-                    <Download size={18} className="mr-2" />
-                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                      {downloadCVButtonText}
-                    </span>
-                  </a>
-                </Button>
             </div>
           </Card>
         </div>
