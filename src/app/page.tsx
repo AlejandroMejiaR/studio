@@ -446,7 +446,7 @@ export default function HomePage() {
         <div className={cn(
           "w-full max-w-5xl flex",
           (isHeroSettled || !shouldAnimateHeroIntro)
-              ? "flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12"
+              ? "flex-col lg:flex-row items-center lg:items-center gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Title) --- */}
@@ -459,8 +459,9 @@ export default function HomePage() {
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 shouldAnimateHeroIntro && !isSubtitlePhase && !isHeroSettled
                   ? 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'
-                  : 'text-4xl sm:text-5xl md:text-5xl lg:text-6xl',
+                  : 'text-4xl sm:text-5xl',
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
+                { 'opacity-0': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': (isSubtitlePhase || (isHeroSettled && !isFinalContentVisible)) && shouldAnimateHeroIntro },
                 { 'animate-fadeIn': isFinalContentVisible }
             )}
@@ -499,7 +500,7 @@ export default function HomePage() {
           <div className={cn(
               "transition-all duration-300 flex flex-col",
               (isHeroSettled || !shouldAnimateHeroIntro) 
-                  ? "lg:w-1/2 items-center lg:items-start lg:pt-20" 
+                  ? "lg:w-1/2 items-center lg:items-start" 
                   : "w-full items-center"
           )}>
             <p className={cn(
