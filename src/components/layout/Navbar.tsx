@@ -1,3 +1,4 @@
+
 "use client";
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
@@ -93,14 +94,16 @@ const Navbar = () => {
   const staggerDelay = 0.05;
 
   const handleHomeNavigation = () => {
-    // No-op. Navigation is handled by Link's href.
-    // We are intentionally not showing a loading spinner to ensure
-    // a smooth client-side navigation that doesn't re-trigger animations.
+    if (pathname !== '/') {
+      showLoading(returningHomeText);
+    }
   };
 
   const handleMobileHomeNavigation = () => {
-    // We only need to close the mobile menu on navigation.
     setIsMobileMenuOpen(false);
+    if (pathname !== '/') {
+      showLoading(returningHomeText);
+    }
   };
 
   const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (

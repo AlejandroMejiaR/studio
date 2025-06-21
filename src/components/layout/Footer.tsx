@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Github, Linkedin, Mail } from 'lucide-react';
@@ -38,9 +39,9 @@ const Footer = () => {
 
 
   const handleNavigationToHomeSection = () => {
-    // No-op. Navigation is handled by Link's href.
-    // The goal is a seamless transition back to the homepage sections
-    // without showing a loading indicator.
+    if (pathname !== '/') {
+        showLoading(returningHomeText);
+    }
   };
 
   return (
