@@ -460,7 +460,7 @@ export default function HomePage() {
                     src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//WhatsApp%20Image%202025-01-24%20at%207.15.31%20PM.jpeg"
                     alt="A photo of Alejandro Mejia Rojas"
                     fill
-                    className="rounded-2xl object-contain shadow-2xl"
+                    className="rounded-2xl object-cover shadow-2xl"
                     sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 50vw"
                     priority
                   />
