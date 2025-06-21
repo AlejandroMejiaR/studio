@@ -36,12 +36,6 @@ export default function HomePage() {
   const [isLoadingProjects, setIsLoadingProjects] = useState(true);
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState(false);
-  const [heroDisplayText, setHeroDisplayText] = useState({
-    title: getEnglishTranslation(t => t.home.hero.fullTitle) as string[] || ["Loading..."],
-    subtitle: getEnglishTranslation(t => t.home.hero.subtitle) as string || "Loading..."
-  });
-  const [isFadingOut, setIsFadingOut] = useState(false);
-
 
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
@@ -70,46 +64,22 @@ export default function HomePage() {
   };
 
   
+  // NEW: Simplified and robust effect to determine if animation should run.
+  // It runs once per session, or if the language is changed.
   useEffect(() => {
     if (!isClientReady) return;
 
     const hasAnimatedThisSession = sessionStorage.getItem('portfolioAceHeroAnimatedThisSession') === 'true';
+    const lastLanguage = sessionStorage.getItem('portfolioAceLastLanguage');
 
-    if (hasAnimatedThisSession) {
-      setShouldAnimateHeroIntro(false);
+    if (!hasAnimatedThisSession || lastLanguage !== language) {
+        setShouldAnimateHeroIntro(true);
+        sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
+        sessionStorage.setItem('portfolioAceLastLanguage', language);
     } else {
-      setShouldAnimateHeroIntro(true);
+        setShouldAnimateHeroIntro(false);
     }
-  }, [isClientReady]);
-
-
-  useEffect(() => {
-    if (!isClientReady) return;
-
-    const newTitle = translationsForLanguage.home.hero.fullTitle;
-    const newSubtitle = translationsForLanguage.home.hero.subtitle;
-
-    // If text is already what it should be, do nothing.
-    if (heroDisplayText.title.join('') === newTitle.join('') && heroDisplayText.subtitle === newSubtitle) {
-      return;
-    }
-
-    // Don't run fade transition if the main animation sequence is still going
-    if(shouldAnimateHeroIntro) {
-      setHeroDisplayText({ title: newTitle, subtitle: newSubtitle });
-      return;
-    }
-
-    setIsFadingOut(true);
-
-    const fadeOutTimer = setTimeout(() => {
-      setHeroDisplayText({ title: newTitle, subtitle: newSubtitle });
-      setIsFadingOut(false);
-    }, 300); // This duration should match the CSS transition duration
-
-    return () => clearTimeout(fadeOutTimer);
-
-  }, [language, translationsForLanguage, isClientReady, shouldAnimateHeroIntro, heroDisplayText]);
+  }, [isClientReady, language]);
 
 
   // Master orchestrator for hero animations
@@ -128,7 +98,7 @@ export default function HomePage() {
       setIsSubtitleReadyToFadeIn(false);
 
 
-      const heroFullTitleLinesForCalc = heroDisplayText.title;
+      const heroFullTitleLinesForCalc = translationsForLanguage.home.hero.fullTitle;
       let calculatedMaxTitleAnimationOverallEndTime = 0;
       let cumulativeDelay = 0;
       heroFullTitleLinesForCalc.forEach((lineText) => {
@@ -191,7 +161,7 @@ export default function HomePage() {
     }
 
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, heroDisplayText.title]);
+  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
 
 
   const handleSubtitleEmphasisTypingComplete = () => {
@@ -208,10 +178,7 @@ export default function HomePage() {
         const settleDelay = Math.max(titleSlideUpAnimationDuration, subtitleReturnAnimationDuration);
         const timer = setTimeout(() => {
           setIsHeroSettled(true);
-          setShouldAnimateHeroIntro(false);
-          if (isClientReady) {
-            sessionStorage.setItem('portfolioAceHeroAnimatedThisSession', 'true');
-          }
+          // We no longer set shouldAnimateHeroIntro to false here, as it's controlled by the new effect.
           const fadeInTimer = setTimeout(() => {
             setIsSubtitleReadyToFadeIn(true);
           }, subtitleFinalFadeInDelay);
@@ -219,7 +186,7 @@ export default function HomePage() {
 
         }, settleDelay);
         animationTimersRef.current.push(timer);
-    }, 1000);
+    }, 3000); // Increased pause to 3 seconds
 
     animationTimersRef.current.push(delayTimer);
   };
@@ -341,8 +308,8 @@ export default function HomePage() {
   ]);
 
 
-  const heroFullTitleLines = heroDisplayText.title;
-  const heroSubtitle = heroDisplayText.subtitle;
+  const heroFullTitleLines = translationsForLanguage.home.hero.fullTitle;
+  const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
@@ -409,16 +376,16 @@ export default function HomePage() {
   const getSubtitleOpacityClass = () => {
     if (!isClientReady) return 'opacity-0';
     if (!shouldAnimateHeroIntro) {
-      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
+        return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
-    if (isSubtitleReturning) return 'opacity-0';
+    // During animation
+    if (isSubtitleTypingEmphasized) return 'opacity-100'; // Visible while typing
+    if (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning) return 'opacity-100'; // Visible during the pause
+    if (isSubtitleReturning) return 'opacity-0'; // Fades out when returning
     if (isHeroSettled) {
-      return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
+        return isSubtitleReadyToFadeIn ? 'opacity-80' : 'opacity-0';
     }
-    if (isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) {
-      return 'opacity-100';
-    }
-    return 'opacity-0';
+    return 'opacity-0'; // Default to invisible
   };
   
   const AnimatedSubtitle = ({ text }: { text: string }) => {
@@ -463,11 +430,7 @@ export default function HomePage() {
       );
     }
   
-    if (isHeroSettled || !shouldAnimateHeroIntro) {
-      return <AnimatedSubtitle text={heroSubtitle} />;
-    }
-    
-    if(shouldAnimateHeroIntro && isSubtitleTypingEmphasizedComplete){
+    if (!shouldAnimateHeroIntro || isHeroSettled || isSubtitleTypingEmphasizedComplete) {
       return <AnimatedSubtitle text={heroSubtitle} />;
     }
 
@@ -501,10 +464,7 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto">
-      <section className={cn(
-        "min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300",
-        isFadingOut && 'opacity-0'
-      )}>
+      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300">
         <div className={cn(
           "w-full max-w-5xl flex",
           (isHeroSettled || !shouldAnimateHeroIntro)
