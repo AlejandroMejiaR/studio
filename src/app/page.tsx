@@ -70,6 +70,7 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
+  const [isTitleFadeOutComplete, setIsTitleFadeOutComplete] = useState(false); // New state to mark title fadeout completion
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -93,6 +94,7 @@ export default function HomePage() {
     if (shouldAnimateHeroIntro && isClientReady) {
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
+      setIsTitleFadeOutComplete(false); // Reset new state
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -125,22 +127,12 @@ export default function HomePage() {
       });
       const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.1) * 1000;
 
+      // Timer to start the title slide-down. The onAnimationEnd event will handle the next step.
       const timer1 = setTimeout(() => {
         setIsTitleRevealComplete(true);
         setIsTitleSlidingDown(true);
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
-      
-      const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration + 50;
-      const timer2 = setTimeout(() => {
-        setIsSubtitleEmphasizing(true);
-      }, textSwitchTime);
-      animationTimersRef.current.push(timer2);
-
-      const timer3 = setTimeout(() => {
-        setIsSubtitleTypingEmphasized(true);
-      }, textSwitchTime + subtitleEmphasisAnimationDuration);
-      animationTimersRef.current.push(timer3);
 
     } else if (!shouldAnimateHeroIntro && isClientReady) {
       // Animations are skipped
@@ -159,6 +151,19 @@ export default function HomePage() {
 
     return clearAnimationTimeouts;
   }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
+
+  // This effect starts the subtitle animation sequence *after* the title fade-out is complete.
+  useEffect(() => {
+      if (isTitleFadeOutComplete) {
+          // Now that the title fade-out is officially complete, start the subtitle sequence.
+          setIsSubtitleEmphasizing(true); // Show the container for the typing animation
+
+          const timer3 = setTimeout(() => {
+              setIsSubtitleTypingEmphasized(true);
+          }, subtitleEmphasisAnimationDuration);
+          animationTimersRef.current.push(timer3);
+      }
+  }, [isTitleFadeOutComplete]);
 
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
@@ -183,6 +188,15 @@ export default function HomePage() {
 
     animationTimersRef.current.push(pauseTimer);
 }, [isClientReady]);
+
+
+  // New handler for when the title's fade-out animation ends
+  const handleTitleFadeOutComplete = (event: React.AnimationEvent<HTMLHeadingElement>) => {
+    // Ensure we're responding only to the fade-out animation ending
+    if (event.animationName === 'slideDownFadeOut') {
+        setIsTitleFadeOutComplete(true);
+    }
+  };
 
 
   useEffect(() => {
@@ -464,36 +478,36 @@ export default function HomePage() {
                   />
                </div>
             ) : (
-              !isSubtitlePhase && (
-                <h1 className={cn(
-                    "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                    "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
-                    {
-                      'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
-                    }
-                )}
-                style={{ visibility: isClientReady ? 'visible' : 'hidden' }} 
-                >
+              <h1 className={cn(
+                  "font-headline font-bold mb-8 text-foreground dark:text-foreground",
+                  "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
                   {
-                    animatingTitleLines.map((lineText, lineIndex) => {
-                        const currentLineAnimProps = lineAnimationProps[lineIndex];
-                        if (!currentLineAnimProps) return null; 
-                        return (
-                          <WordRevealAnimation
-                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
-                            text={lineText || ""}
-                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-                            delayBetweenWords={0.15} 
-                            letterStaggerDelay={0.04}
-                            letterAnimationDuration={0.5}
-                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                            className="block" 
-                          />
-                        );
-                      })
+                    'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro,
+                    'invisible': isTitleFadeOutComplete,
                   }
-                </h1>
-              )
+              )}
+              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+              onAnimationEnd={handleTitleFadeOutComplete}
+              >
+                {
+                  animatingTitleLines.map((lineText, lineIndex) => {
+                      const currentLineAnimProps = lineAnimationProps[lineIndex];
+                      if (!currentLineAnimProps) return null; 
+                      return (
+                        <WordRevealAnimation
+                          key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                          text={lineText || ""}
+                          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                          delayBetweenWords={0.15} 
+                          letterStaggerDelay={0.04}
+                          letterAnimationDuration={0.5}
+                          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                          className="block" 
+                        />
+                      );
+                    })
+                }
+              </h1>
             )}
           </div>
 
