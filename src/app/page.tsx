@@ -138,6 +138,7 @@ export default function HomePage() {
 
       const textSwitchTime = titleWordRevealDuration + titleSlideDownAnimationDuration;
       const timer2 = setTimeout(() => {
+        setIsTitleSlidingDown(false); // Reset to remove persistent animation class
         setIsSubtitleEmphasizing(true);
         setHeroDisplayTitle(finalTitle); // Switch the title text while it's invisible
       }, textSwitchTime);
