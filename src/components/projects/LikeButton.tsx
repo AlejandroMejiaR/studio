@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { getProjectLikes, incrementProjectLike, decrementProjectLike, hasSessionLiked, setSessionLiked } from '@/lib/firebase';
+import { getProjectLikes, incrementProjectLike, decrementProjectLike, hasClientLiked, setClientLiked } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext'; // Added
 
@@ -29,7 +29,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
             const fetchedLikes = await getProjectLikes(projectId);
             setLikes(fetchedLikes);
         }
-        setIsLiked(hasSessionLiked(projectId));
+        setIsLiked(hasClientLiked(projectId));
       } catch (error) {
         console.error("Error fetching initial like data:", error);
         // Set to initialLikes or 0 if fetch fails
@@ -49,7 +49,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       let newLikesCount;
       if (isLiked) {
         newLikesCount = await decrementProjectLike(projectId);
-        setSessionLiked(projectId, false);
+        setClientLiked(projectId, false);
         setIsLiked(false);
         toast({ 
           title: translationsForLanguage.likeButton.unlikedTitle, 
@@ -57,7 +57,7 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
         });
       } else {
         newLikesCount = await incrementProjectLike(projectId);
-        setSessionLiked(projectId, true);
+        setClientLiked(projectId, true);
         setIsLiked(true);
         toast({ 
           title: translationsForLanguage.likeButton.likedTitle, 

@@ -184,32 +184,31 @@ export const decrementProjectLike = (projectId: string): Promise<number> => {
 };
 
 
-// Session-based like tracking (client-side)
+// Client-side like tracking using localStorage for persistence across sessions
 const LIKED_PROJECTS_KEY = 'portfolioAce_likedProjects';
 
-export const hasSessionLiked = (projectId: string): boolean => {
+export const hasClientLiked = (projectId: string): boolean => {
   if (typeof window === 'undefined') return false;
   try {
-    const likedProjects = JSON.parse(sessionStorage.getItem(LIKED_PROJECTS_KEY) || '{}');
+    const likedProjects = JSON.parse(localStorage.getItem(LIKED_PROJECTS_KEY) || '{}');
     return !!likedProjects[projectId];
   } catch (error) {
-    console.error("Error reading liked projects from session storage:", error);
+    console.error("Error reading liked projects from local storage:", error);
     return false;
   }
 };
 
-export const setSessionLiked = (projectId: string, liked: boolean): void => {
+export const setClientLiked = (projectId: string, liked: boolean): void => {
   if (typeof window === 'undefined') return;
   try {
-    const likedProjects = JSON.parse(sessionStorage.getItem(LIKED_PROJECTS_KEY) || '{}');
+    const likedProjects = JSON.parse(localStorage.getItem(LIKED_PROJECTS_KEY) || '{}');
     if (liked) {
       likedProjects[projectId] = true;
     } else {
       delete likedProjects[projectId];
     }
-    sessionStorage.setItem(LIKED_PROJECTS_KEY, JSON.stringify(likedProjects));
+    localStorage.setItem(LIKED_PROJECTS_KEY, JSON.stringify(likedProjects));
   } catch (error) {
-    console.error("Error saving liked projects to session storage:", error);
+    console.error("Error saving liked projects to local storage:", error);
   }
 };
-
