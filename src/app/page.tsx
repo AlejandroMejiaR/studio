@@ -492,7 +492,7 @@ export default function HomePage() {
               (isHeroSettled || !shouldAnimateHeroIntro) ? "lg:w-1/2" : "w-full"
           )}>
             <h1 className={cn(
-                "font-headline text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8rem] font-bold mb-8 text-foreground dark:text-foreground",
+                "font-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8 text-foreground dark:text-foreground",
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 { 'animate-slide-down-fade-out': isTitleSlidingDown && shouldAnimateHeroIntro },
                 { 'opacity-0': ((isSubtitleEmphasizing || isSubtitleTypingEmphasized || isSubtitleTypingEmphasizedComplete) && !isTitleSlidingUp && !isHeroSettled) && shouldAnimateHeroIntro },
@@ -533,7 +533,7 @@ export default function HomePage() {
           <div className={cn(
               "transition-all duration-300 flex flex-col",
               (isHeroSettled || !shouldAnimateHeroIntro) 
-                  ? "lg:w-1/2 items-center lg:items-start" 
+                  ? "lg:w-1/2 items-center lg:items-start lg:pt-20" 
                   : "w-full items-center"
           )}>
             <p className={cn(
@@ -541,7 +541,7 @@ export default function HomePage() {
                 (isHeroSettled || !shouldAnimateHeroIntro) ? "text-center lg:text-left" : "text-center",
                 (isSubtitleEmphasizing || isSubtitleTypingEmphasized || (isSubtitleTypingEmphasizedComplete && !isSubtitleReturning && !isHeroSettled)) && shouldAnimateHeroIntro
                   ? "text-3xl md:text-4xl font-bold -translate-y-44 max-w-full"
-                  : "text-xl md:text-2xl font-normal translate-y-0 max-w-full md:max-w-3xl",
+                  : "text-lg md:text-xl font-normal translate-y-0 max-w-full md:max-w-3xl",
                 isSubtitleTypingEmphasized ? 'lg:max-w-xl' : 'max-w-full md:max-w-3xl',
                 getSubtitleOpacityClass() 
               )}
@@ -614,5 +614,7 @@ export default function HomePage() {
     </div>
   );
 }
+
+    
 
     
