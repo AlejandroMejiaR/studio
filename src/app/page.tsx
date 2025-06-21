@@ -69,7 +69,6 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
-  const [isTitleFadeOutFinished, setIsTitleFadeOutFinished] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -94,7 +93,6 @@ export default function HomePage() {
       // Reset all animation states at the beginning
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
-      setIsTitleFadeOutFinished(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -136,12 +134,22 @@ export default function HomePage() {
         setIsTitleSlidingDown(true);
       }, titleWordRevealDuration);
       animationTimersRef.current.push(timer1);
+
+      // Timer to start the subtitle sequence after the title has finished fading out
+      const titleFadeOutDuration = 500; // Duration of the 'slideDownFadeOut' animation
+      const timer2 = setTimeout(() => {
+        setIsSubtitleEmphasizing(true);
+        const timer3 = setTimeout(() => {
+            setIsSubtitleTypingEmphasized(true);
+        }, subtitleEmphasisAnimationDuration);
+        animationTimersRef.current.push(timer3);
+      }, titleWordRevealDuration + titleFadeOutDuration);
+      animationTimersRef.current.push(timer2);
   
     } else if (!shouldAnimateHeroIntro && isClientReady) {
       // Animations are skipped, go directly to the final state
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false); // Don't run the slide-down animation
-      setIsTitleFadeOutFinished(true); // Mark as finished
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
@@ -156,20 +164,6 @@ export default function HomePage() {
     return clearAnimationTimeouts;
   }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
   
-
-  // This effect chains the subtitle animation to the completion of the title's fade-out.
-  useEffect(() => {
-    if (isTitleFadeOutFinished) {
-      console.log(`[${new Date().toISOString()}] Title fade-out finished, starting subtitle sequence.`);
-      setIsSubtitleEmphasizing(true);
-      
-      const timer3 = setTimeout(() => {
-        setIsSubtitleTypingEmphasized(true);
-      }, subtitleEmphasisAnimationDuration);
-      animationTimersRef.current.push(timer3);
-    }
-  }, [isTitleFadeOutFinished]);
-
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
     if (!isClientReady) return;
@@ -480,12 +474,6 @@ export default function HomePage() {
                   { 'animate-slide-down-fade-out': isTitleSlidingDown }
               )}
               style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-              onAnimationEnd={(e) => {
-                if (e.animationName.includes('slideDownFadeOut')) {
-                  console.log(`[${new Date().toISOString()}] onAnimationEnd fired for slideDownFadeOut.`);
-                  setIsTitleFadeOutFinished(true);
-                }
-              }}
               >
                 {
                   animatingTitleLines.map((lineText, lineIndex) => {
