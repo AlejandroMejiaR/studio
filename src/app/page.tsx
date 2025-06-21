@@ -126,21 +126,22 @@ export default function HomePage() {
         }
         cumulativeDelay += (words.length > 0 ? lineDuration * 0.5 : 0) + 0.3;
       });
-      // The total duration needs to account for the final word's color transition (0.4s) + a small buffer.
+      // The total duration needs to account for the final word's color transition (0.4s) + a safety buffer.
       const titleWordRevealDuration = (calculatedMaxTitleAnimationOverallEndTime + 0.5) * 1000;
   
       const masterTimeout = setTimeout(() => {
         setIsTitleSlidingDown(true);
   
-        const subtitleTimer = setTimeout(() => {
+        // Wait for the slide-down animation (500ms) to finish before proceeding
+        const afterFadeOutTimer = setTimeout(() => {
+          setIsTitleHidden(true); // Hide title when it's faded out
           setIsSubtitleEmphasizing(true);
-          setIsTitleHidden(true); // Hide title when paragraph animation starts
           const typingTimer = setTimeout(() => {
             setIsSubtitleTypingEmphasized(true);
           }, subtitleEmphasisAnimationDuration);
           animationTimersRef.current.push(typingTimer);
-        }, 500); // Wait for fade-out to complete
-        animationTimersRef.current.push(subtitleTimer);
+        }, 500); 
+        animationTimersRef.current.push(afterFadeOutTimer);
       }, titleWordRevealDuration); 
   
       animationTimersRef.current.push(masterTimeout);
@@ -344,13 +345,24 @@ export default function HomePage() {
     });
   }
   
+  const highlightedWordsConfig = {
+    EN: [
+      "Let's bring your idea to the digital world", 'digital experiences', 'designing', 'developing', 'UX', 'AI', 'Game Design'
+    ],
+    ES: [
+      'Llevemos tu idea al mundo digital', 'experiencias digitales', 'diseño', 'desarrollo', 'UX', 'IA', 'Game Design'
+    ]
+  };
+  const phrasesToHighlight = highlightedWordsConfig[language];
+  const highlightRegex = new RegExp(`(${phrasesToHighlight.join('|')})`, 'g');
+
+
   const AnimatedSubtitle = ({ text }: { text: string }) => {
-    const parts = text.split(/(UX|AI|IA|Game Design)/g);
-  
+    const parts = text.split(highlightRegex);
     return (
       <>
         {parts.map((part, index) => {
-          if (part === 'UX' || part === 'AI' || part === 'IA' || part === 'Game Design') {
+          if (phrasesToHighlight.includes(part)) {
             return (
               <span key={index} className="animate-text-pulse font-bold text-accent">
                 {part}
@@ -379,23 +391,17 @@ export default function HomePage() {
           startDelay={0}
           onComplete={handleSubtitleEmphasisTypingComplete}
           punctuationChars={['.', ',', '!', '?', ';', ':', '\n']}
-          highlightedWords={[
-            { word: 'UX', className: 'font-bold text-accent' },
-            { word: 'IA', className: 'font-bold text-accent' },
-            { word: 'AI', className: 'font-bold text-accent' },
-            { word: 'Game Design', className: 'font-bold text-accent' },
-          ]}
+          highlightedWords={phrasesToHighlight.map(word => ({ word, className: 'font-bold text-accent' }))}
         />
       );
     }
   
     if (isSubtitleTypingEmphasizedComplete) {
-      const parts = heroSubtitle.split(/(UX|AI|IA|Game Design)/g).filter(Boolean);
+      const parts = heroSubtitle.split(highlightRegex).filter(Boolean);
       return (
         <>
           {parts.map((part, index) => {
-            const isHighlight = ['UX', 'AI', 'IA', 'Game Design'].includes(part);
-            if (isHighlight) {
+            if (phrasesToHighlight.includes(part)) {
               return <span key={index} className="font-bold text-accent">{part}</span>;
             }
             return <Fragment key={index}>{part}</Fragment>;
