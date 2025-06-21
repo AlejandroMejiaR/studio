@@ -27,6 +27,7 @@ export interface AppTranslations {
     title: string;
     paragraph1: string;
     paragraph2: string;
+    workTogether: string;
     skillsTitle: string;
     technologiesTitle: string;
   };
@@ -89,7 +90,8 @@ const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "About Me",
       paragraph1: "Hello! I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.",
-      paragraph2: "When I’m not coding, you’ll probably find me exploring new technology trends or enjoying a good cup of coffee. I strongly believe in continuous learning and am always looking to expand my skill set—open to new challenges and collaborations.",
+      paragraph2: "I'm always learning, open to new challenges and collaborations.",
+      workTogether: "Let's Work Together.",
       skillsTitle: "My Skills",
       technologiesTitle: "Technologies",
     },
@@ -150,7 +152,8 @@ const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "Sobre mí",
       paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia, actualmente cursando el 10º semestre en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tanto funcionales como visualmente atractivas.",
-      paragraph2: "Cuando no estoy programando, probablemente me encuentres explorando nuevas tendencias tecnológicas o disfrutando de una buena taza de café. Creo firmemente en el aprendizaje continuo y siempre estoy buscando ampliar mis habilidades, abierto a nuevos desafíos y colaboraciones.",
+      paragraph2: "Siempre estoy en constante aprendizaje, abierto a nuevos desafíos y colaboraciones.",
+      workTogether: "Trabajemos Juntos.",
       skillsTitle: "Mis Habilidades",
       technologiesTitle: "Tecnologías",
     },

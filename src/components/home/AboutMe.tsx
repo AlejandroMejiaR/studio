@@ -20,6 +20,14 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
   const skills = [
+    // Icon + Text
+    { name: 'Game Design', type: 'icon-text', icon: Gamepad2 },
+    { name: 'UX Design', type: 'icon-text', icon: Component },
+    { name: 'Generative AI', type: 'icon-text', icon: Sparkles },
+    { name: 'English B2', type: 'icon-text', icon: Languages },
+  ];
+  
+  const technologies = [
     // Logos
     { name: 'Unity', type: 'logo', logoLight: 'UnityClaro.png', logoDark: 'UnityOscuro.png' },
     { name: 'Unreal Engine', type: 'logo', logoLight: 'UnrealClaro.png', logoDark: 'UnrealOscuro.png' },
@@ -28,18 +36,13 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
     { name: 'Python', type: 'logo', logo: 'python.png' },
     { name: 'Git', type: 'logo', logo: 'git.png' },
-    
-    // Icon + Text
-    { name: 'Game Design', type: 'icon-text', icon: Gamepad2 },
-    { name: 'UX Design', type: 'icon-text', icon: Component },
-    { name: 'Generative AI', type: 'icon-text', icon: Sparkles },
-    { name: 'English B2', type: 'icon-text', icon: Languages },
   ];
 
   // Determine text based on client readiness and language
   const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
   const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getEnglishTranslation(t => t.aboutMe.paragraph1);
   const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getEnglishTranslation(t => t.aboutMe.paragraph2);
+  const workTogetherText = isClientReady ? translationsForLanguage.aboutMe.workTogether : getEnglishTranslation(t => t.aboutMe.workTogether);
   const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getEnglishTranslation(t => t.aboutMe.skillsTitle);
   const technologiesTitle = isClientReady ? translationsForLanguage.aboutMe.technologiesTitle : getEnglishTranslation(t => t.aboutMe.technologiesTitle);
 
@@ -88,7 +91,13 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
             className="text-lg text-foreground/80 mb-8 leading-relaxed"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
-            {paragraph2}
+            {paragraph2}{' '}
+            <a 
+              href="mailto:alejandro197mejia@gmail.com" 
+              className="font-bold text-accent hover:text-accent/90 no-underline transition-colors"
+            >
+              {workTogetherText}
+            </a>
           </p>
           
           <div>
@@ -99,7 +108,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
               {skillsTitle}
             </h3>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-8">
-              {skills.filter(skill => skill.type === 'icon-text').map((skill) => (
+              {skills.map((skill) => (
                 <TooltipProvider key={skill.name} delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -123,7 +132,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
               {technologiesTitle}
             </h3>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-              {skills.filter(skill => skill.type === 'logo').map((skill) => (
+              {technologies.map((skill) => (
                 <TooltipProvider key={skill.name} delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
