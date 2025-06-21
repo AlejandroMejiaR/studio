@@ -69,6 +69,7 @@ export default function HomePage() {
   // Animation sequence state flags
   const [isTitleRevealComplete, setIsTitleRevealComplete] = useState(false);
   const [isTitleSlidingDown, setIsTitleSlidingDown] = useState(false);
+  const [isTitleHidden, setIsTitleHidden] = useState(false);
   const [isSubtitleEmphasizing, setIsSubtitleEmphasizing] = useState(false);
   const [isSubtitleTypingEmphasized, setIsSubtitleTypingEmphasized] = useState(false);
   const [isSubtitleTypingEmphasizedComplete, setIsSubtitleTypingEmphasizedComplete] = useState(false);
@@ -93,6 +94,7 @@ export default function HomePage() {
       // Reset all animation states at the beginning
       setIsTitleRevealComplete(false);
       setIsTitleSlidingDown(false);
+      setIsTitleHidden(false);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(false);
@@ -132,6 +134,7 @@ export default function HomePage() {
   
         const subtitleTimer = setTimeout(() => {
           setIsSubtitleEmphasizing(true);
+          setIsTitleHidden(true); // Hide title when paragraph animation starts
           const typingTimer = setTimeout(() => {
             setIsSubtitleTypingEmphasized(true);
           }, subtitleEmphasisAnimationDuration);
@@ -146,6 +149,7 @@ export default function HomePage() {
       // Animations are skipped, go directly to the final state
       setIsTitleRevealComplete(true);
       setIsTitleSlidingDown(false); // Don't run the slide-down animation
+      setIsTitleHidden(true);
       setIsSubtitleEmphasizing(false);
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
@@ -464,32 +468,34 @@ export default function HomePage() {
                   />
                </div>
             ) : (
-              <h1 className={cn(
-                  "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                  "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
-                  { 'animate-slide-down-fade-out': isTitleSlidingDown }
-              )}
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-              >
-                {
-                  animatingTitleLines.map((lineText, lineIndex) => {
-                      const currentLineAnimProps = lineAnimationProps[lineIndex];
-                      if (!currentLineAnimProps) return null; 
-                      return (
-                        <WordRevealAnimation
-                          key={`${language}-animating-line-${lineIndex}-${lineText}`} 
-                          text={lineText || ""}
-                          lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-                          delayBetweenWords={0.15} 
-                          letterStaggerDelay={0.04}
-                          letterAnimationDuration={0.5}
-                          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                          className="block" 
-                        />
-                      );
-                    })
-                }
-              </h1>
+              !isTitleHidden && (
+                <h1 className={cn(
+                    "font-headline font-bold mb-8 text-foreground dark:text-foreground",
+                    "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
+                    { 'animate-slide-down-fade-out': isTitleSlidingDown }
+                )}
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                >
+                  {
+                    animatingTitleLines.map((lineText, lineIndex) => {
+                        const currentLineAnimProps = lineAnimationProps[lineIndex];
+                        if (!currentLineAnimProps) return null; 
+                        return (
+                          <WordRevealAnimation
+                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                            text={lineText || ""}
+                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                            delayBetweenWords={0.15} 
+                            letterStaggerDelay={0.04}
+                            letterAnimationDuration={0.5}
+                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                            className="block" 
+                          />
+                        );
+                      })
+                  }
+                </h1>
+              )
             )}
           </div>
 
