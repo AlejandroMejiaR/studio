@@ -34,6 +34,7 @@ export default function HomePage() {
   const { setIsFooterVisible } = useFooter();
   const { setShouldNavbarContentBeVisible } = useNavbarVisibility();
   const aboutMeRef = useRef<HTMLElement | null>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -45,32 +46,31 @@ export default function HomePage() {
 
   useEffect(() => {
     if (!isClientReady) return;
-
+  
     const previousLanguage = prevLanguageRef.current;
     const languageHasChanged = previousLanguage !== null && previousLanguage !== language;
-
-    // Use a session flag to track if the page has been visited.
-    // This is simpler than language-specific flags and works because
-    // a language change will always trigger the animation regardless.
-    const initialLoadKey = 'portfolio_ace_initial_load_animated';
-    const hasAnimatedOnInitialLoad = sessionStorage.getItem(initialLoadKey);
-
+  
+    // Always animate on language change.
     if (languageHasChanged) {
-        // Always animate on language change.
-        setShouldAnimateHeroIntro(true);
-    } else if (!hasAnimatedOnInitialLoad) {
-        // If language hasn't changed, animate only if it's the first visit this session.
-        setShouldAnimateHeroIntro(true);
+      setShouldAnimateHeroIntro(true);
     } else {
+      // Use a session flag specific to the current language to track if the animation has played.
+      const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
+      const hasAnimatedOnInitialLoad = sessionStorage.getItem(initialLoadAnimatedKey);
+  
+      if (!hasAnimatedOnInitialLoad) {
+        // If it's the first visit for this language in this session, animate.
+        setShouldAnimateHeroIntro(true);
+      } else {
         // Otherwise, don't animate (e.g., navigating back from a project).
         setShouldAnimateHeroIntro(false);
+      }
     }
-
+  
     // Update the language ref for the next render's comparison.
     prevLanguageRef.current = language;
-
+  
   }, [isClientReady, language]);
-
 
 
   // Animation sequence state flags
@@ -103,9 +103,9 @@ export default function HomePage() {
     const animatingTitle = translationsForLanguage.home.hero.animatingTitle;
   
     if (shouldAnimateHeroIntro) {
-      // Set the session flag as soon as we decide to animate.
-      const initialLoadKey = 'portfolio_ace_initial_load_animated';
-      sessionStorage.setItem(initialLoadKey, 'true');
+      // Set the session flag as soon as we decide to animate for this language.
+      const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
+      sessionStorage.setItem(initialLoadAnimatedKey, 'true');
 
       // Reset all animation states at the beginning
       setIsTitleRevealComplete(false);
@@ -179,8 +179,27 @@ export default function HomePage() {
     }
   
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage]);
+  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage, language]);
   
+  // Effect to lock scroll and manage focus during animation
+  useEffect(() => {
+    const isAnimating = shouldAnimateHeroIntro === true && !isHeroSettled;
+
+    if (isAnimating) {
+      document.body.classList.add('no-scroll');
+      if (heroSectionRef.current) {
+        heroSectionRef.current.focus({ preventScroll: true });
+      }
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Cleanup function to ensure the class is removed if the component unmounts
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [shouldAnimateHeroIntro, isHeroSettled]);
+
 
   const handleSubtitleEmphasisTypingComplete = useCallback(() => {
     if (!isClientReady) return;
@@ -485,7 +504,11 @@ export default function HomePage() {
 
   return (
     <div className="container mx-auto">
-      <section className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300">
+      <section 
+        ref={heroSectionRef}
+        tabIndex={-1}
+        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300 outline-none"
+      >
         <div className={cn(
           "w-full max-w-5xl flex",
           isFinalLayout
