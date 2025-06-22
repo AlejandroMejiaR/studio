@@ -56,7 +56,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
           <Card className="w-full max-w-sm shadow-xl">
             <CardContent className="p-0">
               <Image
-                src={getSupabaseImageUrl('documents', 'profile-picture.jpeg')}
+                src={getSupabaseImageUrl('documents', 'profile-picture.png')}
                 alt="Alejandro Mejia Rojas"
                 width={400}
                 height={500}
