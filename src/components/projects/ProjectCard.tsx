@@ -42,7 +42,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         onClick={handleProjectLinkClick}
         className="block"
       >
-        <div className="relative aspect-square w-full">
+        <div className="relative aspect-video w-full">
             <Image
               src={project.thumbnailUrl}
               alt={titleToDisplay}
@@ -54,7 +54,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       </Link>
 
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-4 pt-2 flex-grow space-y-2">
+        <CardContent className="p-4 space-y-1 flex-grow">
           <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
@@ -69,7 +69,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-4 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-4 flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
             {project.category && (
