@@ -283,10 +283,4 @@ body {
     transition-duration: 0.3s; /* Matches subtitleEmphasisAnimationDuration */
     transition-timing-function: ease-in-out;
   }
-
-  /* New mask for project card images */
-  .image-fade-mask {
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  }
 }
