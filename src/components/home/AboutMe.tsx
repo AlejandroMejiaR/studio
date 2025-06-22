@@ -33,8 +33,9 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     { name: 'C#', type: 'logo', logo: 'c.png' },
     { name: 'C++', type: 'logo', logo: 'c++.png' },
     { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
-    { name: 'Python', type: 'logo', logo: 'python.png' },
+    { name: 'python', type: 'logo', logo: 'python.png' },
     { name: 'Git', type: 'logo', logo: 'git.png' },
+    { name: 'Figma', type: 'logo', logo: 'Figma.png' },
   ];
 
   // Determine text based on client readiness and language
