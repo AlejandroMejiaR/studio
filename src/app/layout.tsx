@@ -22,12 +22,18 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isPageLoading, loadingText, hideLoading } = useLoading();
   const { isClientReady } = useLanguage();
   const { isFooterVisible } = useFooter();
-  // const { isNavbarVisible, isNavbarReadyToAnimateIn } = useNavbarVisibility(); // Removed, Navbar controls its own content visibility
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // This effect runs on every navigation and forces the viewport to the top.
+    // It's crucial for a good UX when navigating back and forth between pages.
     window.scrollTo(0, 0);
+  }, [pathname, searchParams]);
+  
+  useEffect(() => {
+    // This effect handles the loading overlay, hiding it once the client is ready
+    // after a navigation change.
     if (isClientReady) {
         hideLoading();
     }
@@ -61,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true}>
       <head>
         <script
           dangerouslySetInnerHTML={{
