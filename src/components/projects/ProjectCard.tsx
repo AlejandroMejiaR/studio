@@ -47,24 +47,30 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               src={project.thumbnailUrl}
               alt={titleToDisplay}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               className="object-cover"
             />
         </div>
       </Link>
 
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-3 space-y-1 flex-grow">
-          <CardTitle className="font-headline text-base mb-1 text-primary dark:text-foreground">
-            <Link 
-              href={`/projects/${project.slug}`}
-              onClick={handleProjectLinkClick}
-              className="hover:text-accent transition-colors"
-            >
-              {titleToDisplay}
-            </Link>
-          </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-2 text-xs">
+        <CardContent className="p-4 space-y-2 flex-grow">
+          <div className="flex justify-between items-start gap-2">
+            <CardTitle className="font-headline text-lg text-primary dark:text-foreground">
+              <Link 
+                href={`/projects/${project.slug}`}
+                onClick={handleProjectLinkClick}
+                className="hover:text-accent transition-colors"
+              >
+                {titleToDisplay}
+              </Link>
+            </CardTitle>
+            {project.category && (
+              <Badge className="text-xs bg-accent text-accent-foreground shrink-0">{project.category}</Badge>
+            )}
+          </div>
+          
+          <CardDescription className="text-foreground/70 line-clamp-2 text-sm">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
@@ -72,12 +78,6 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         <CardFooter className="p-3 flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
-            {project.category && (
-              <Badge variant="secondary" className="text-xs">{project.category}</Badge>
-            )}
-            {project.category && project.technologies && project.technologies.length > 0 && (
-                <span className="text-muted-foreground mx-1">-</span>
-            )}
             {project.technologies.slice(0, technologiesToShow).map((tech) => (
               <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
             ))}
