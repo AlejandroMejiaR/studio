@@ -70,7 +70,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         </div>
       </Link>
 
-      <div className="flex flex-col justify-between flex-grow">
+      <div className="flex flex-col flex-grow">
         <CardContent className="p-4 space-y-2 flex-grow">
           <div className="flex justify-between items-start gap-2">
             <CardTitle className="font-headline text-xl text-primary dark:text-foreground">
@@ -87,7 +87,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
             )}
           </div>
           
-          <CardDescription className="text-foreground/70 line-clamp-2 text-base">
+          <CardDescription className="text-foreground/70 text-base">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
