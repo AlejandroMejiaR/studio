@@ -21,7 +21,8 @@ export interface AppTranslations {
       viewWork: string;
       aboutMe: string;
     };
-    projectsSectionTitle: string;
+    featuredProjectsTitle: string;
+    viewMoreProjects: string;
   };
   aboutMe: {
     title: string;
@@ -92,7 +93,8 @@ const translations: Record<Language, AppTranslations> = {
         viewWork: "View My Work",
         aboutMe: "About Me",
       },
-      projectsSectionTitle: "My Projects",
+      featuredProjectsTitle: "Featured Projects",
+      viewMoreProjects: "View More Projects",
     },
     aboutMe: {
       title: "About Me",
@@ -161,7 +163,8 @@ const translations: Record<Language, AppTranslations> = {
         viewWork: "Ver Mi Trabajo",
         aboutMe: "Sobre Mí",
       },
-      projectsSectionTitle: "Mis Proyectos",
+      featuredProjectsTitle: "Proyectos Destacados",
+      viewMoreProjects: "Ver Más Proyectos",
     },
     aboutMe: {
       title: "Sobre mí",

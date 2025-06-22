@@ -3,17 +3,18 @@
 
 import type { Project } from '@/types';
 import ProjectCard from './ProjectCard';
-import { getProjectLikes } from '@/lib/firebase'; // For client-side fetching of initial likes
+import { getProjectLikes } from '@/lib/firebase';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 
 interface ProjectListProps {
   projects: Project[];
 }
 
-// Helper function to fetch all likes, can be moved to a service file if used elsewhere
 async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
   if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
     console.warn("Firebase projectId is not configured. Likes will be mocked.");
@@ -49,41 +50,43 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const [isLoadingLikes, setIsLoadingLikes] = useState(true);
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
+  const featuredProjects = projects.slice(0, 4);
+
   useEffect(() => {
     const fetchLikes = async () => {
-      if (projects && projects.length > 0) {
+      if (featuredProjects && featuredProjects.length > 0) {
         setIsLoadingLikes(true);
-        const projectIds = projects.map(p => p.id);
+        const projectIds = featuredProjects.map(p => p.id);
         try {
           const likes = await getAllProjectLikes(projectIds);
           setInitialLikesMap(likes);
         } catch (error) {
           console.error("Error fetching all project likes in ProjectList component:", error);
-          // Set all to 0 or handle as per your app's needs
           setInitialLikesMap(projectIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {}));
         } finally {
           setIsLoadingLikes(false);
         }
       } else {
-        setIsLoadingLikes(false); // No projects, no likes to load
+        setIsLoadingLikes(false);
       }
     };
 
     fetchLikes();
   }, [projects]);
   
-  const projectsSectionTitleText = isClientReady 
-    ? translationsForLanguage.home.projectsSectionTitle 
-    : getEnglishTranslation(t => t.home.projectsSectionTitle);
+  const featuredProjectsTitleText = isClientReady 
+    ? translationsForLanguage.home.featuredProjectsTitle 
+    : getEnglishTranslation(t => t.home.featuredProjectsTitle);
+
+  const viewMoreProjectsText = isClientReady 
+    ? translationsForLanguage.home.viewMoreProjects
+    : getEnglishTranslation(t => t.home.viewMoreProjects);
 
   const noProjectsText = isClientReady 
     ? translationsForLanguage.projectList.noProjects 
     : getEnglishTranslation(t => t.projectList.noProjects);
 
-  if (isLoadingLikes && projects.length > 0) {
-    // The loading state for ProjectList doesn't need its own title, 
-    // as HomePage.tsx handles the title when ProjectList itself is loading projects.
-    // This skeleton is for when ProjectList is mounted but still fetching *likes*.
+  if (isLoadingLikes && featuredProjects.length > 0) {
     return (
       <section 
         id="projects" 
@@ -93,10 +96,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
         >
-          {projectsSectionTitleText}
+          {featuredProjectsTitleText}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {featuredProjects.map((project) => (
             <div key={project.id} className="flex flex-col space-y-3">
               <Skeleton className="h-[200px] w-full rounded-xl" />
               <div className="space-y-2">
@@ -104,8 +107,8 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                 <Skeleton className="h-4 w-1/2" />
               </div>
               <div className="flex justify-between items-center pt-2">
-                <Skeleton className="h-8 w-20" /> {/* For LikeButton */}
-                <Skeleton className="h-8 w-24" /> {/* For View More Button */}
+                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-8 w-24" />
               </div>
             </div>
           ))}
@@ -123,25 +126,39 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
         style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
       >
-        {projectsSectionTitleText}
+        {featuredProjectsTitleText}
       </h2>
-      {projects.length === 0 ? (
+      {featuredProjects.length === 0 ? (
         <p 
-          className="text-lg text-muted-foreground"
+          className="text-lg text-muted-foreground text-center"
           style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
         >
           {noProjectsText}
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
-              initialLikes={initialLikesMap[project.id] ?? 0} 
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {featuredProjects.map((project) => (
+              <ProjectCard 
+                key={project.id} 
+                project={project} 
+                initialLikes={initialLikesMap[project.id] ?? 0} 
+              />
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <Link 
+              href="/projects"
+              className="inline-flex items-center text-lg font-semibold text-accent hover:text-accent/90 transition-colors group"
+            >
+              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                {viewMoreProjectsText}
+              </span>
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </>
       )}
     </section>
   );

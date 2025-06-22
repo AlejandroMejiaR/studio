@@ -355,7 +355,7 @@ export default function HomePage() {
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
-  const projectsSectionTitleText = isClientReady ? translationsForLanguage.home.projectsSectionTitle : getEnglishTranslation(t => t.home.projectsSectionTitle) as string || "My Projects";
+  const featuredProjectsTitleText = isClientReady ? translationsForLanguage.home.featuredProjectsTitle : getEnglishTranslation(t => t.home.featuredProjectsTitle) as string || "Featured Projects";
 
   const lineAnimationProps: { lineBaseDelay: number; text: string }[] = [];
   if (shouldAnimateHeroIntro && !isTitleRevealComplete) {
@@ -655,10 +655,10 @@ export default function HomePage() {
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
            >
-             {projectsSectionTitleText}
+             {featuredProjectsTitleText}
            </h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             {[1, 2, 3].map((i) => ( 
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             {[1, 2, 3, 4].map((i) => ( 
                <div key={i} className="flex flex-col space-y-3">
                  <Skeleton className="h-[200px] w-full rounded-xl" />
                  <div className="space-y-2">
@@ -682,9 +682,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    
-
-    
-
-
