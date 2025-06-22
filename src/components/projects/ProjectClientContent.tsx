@@ -64,7 +64,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectCli
   
   const otherProjects = allProjects
     .filter(p => p.id !== project.id)
-    .slice(0, 4);
+    .slice(0, 3);
 
   const titleLetterStaggerConst = 0.04;
   const titleLetterAnimationDurationConst = 0.5; // Adjusted from 0

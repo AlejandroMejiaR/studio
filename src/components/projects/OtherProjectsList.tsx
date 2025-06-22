@@ -75,7 +75,7 @@ const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
       </h2>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: projects.length }).map((_, i) => (
              <div key={i} className="flex flex-col space-y-3">
                 <Skeleton className="w-full aspect-[10/7] rounded-xl" />
@@ -99,7 +99,7 @@ const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <ProjectCard 
               key={project.id} 
