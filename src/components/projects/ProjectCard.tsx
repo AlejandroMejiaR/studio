@@ -32,7 +32,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
 
-  const technologiesToShow = 4;
+  const technologiesToShow = 3;
 
   return (
     <Card className="flex flex-col h-full shadow-lg transition-all duration-300">
@@ -53,7 +53,6 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
                 className="object-cover"
               />
           </div>
-          <Badge variant="secondary" className="absolute top-4 right-4 bg-accent/90 backdrop-blur-sm text-accent-foreground text-sm">{project.category}</Badge>
         </Link>
       </div>
 
@@ -75,13 +74,19 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
 
         <CardFooter className="p-4 pt-2 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          <div className="flex flex-wrap justify-end gap-1.5 flex-1 ml-4">
+          <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
+            {project.category && (
+              <Badge variant="secondary" className="text-xs bg-accent/80 text-accent-foreground">{project.category}</Badge>
+            )}
+            {project.category && project.technologies && project.technologies.length > 0 && (
+                <span className="text-muted-foreground mx-1">-</span>
+            )}
             {project.technologies.slice(0, technologiesToShow).map((tech) => (
-              <Badge key={tech} variant="secondary" className="text-xs">{tech}</Badge>
+              <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
             ))}
             {project.technologies.length > technologiesToShow && (
               <Badge variant="outline" className="text-xs">
-                +{project.technologies.length - technologiesToShow} more
+                +{project.technologies.length - technologiesToShow}
               </Badge>
             )}
           </div>
