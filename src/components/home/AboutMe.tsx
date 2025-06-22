@@ -88,10 +88,15 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
             {paragraph1}
           </p>
           <p 
-            className="text-lg text-foreground/80 mb-8 leading-relaxed"
+            className="text-lg text-foreground/80 mb-2 leading-relaxed"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
           >
-            {paragraph2}{' '}
+            {paragraph2}
+          </p>
+          <p 
+            className="text-lg mb-8"
+            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          >
             <a 
               href="mailto:alejandro197mejia@gmail.com" 
               className="font-bold text-accent hover:text-accent/90 no-underline transition-colors"
