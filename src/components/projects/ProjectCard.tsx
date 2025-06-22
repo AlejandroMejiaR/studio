@@ -65,8 +65,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
 
       {/* Content Container below */}
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-6 flex-grow">
-          <CardTitle className="font-headline text-3xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
+        <CardContent className="p-4 flex-grow">
+          <CardTitle className="font-headline text-2xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -74,7 +74,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               {titleToDisplay}
             </Link>
           </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-3 text-base mb-6">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-sm mb-4">
             {shortDescriptionToDisplay}
           </CardDescription>
           <div>
@@ -96,7 +96,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </div>
         </CardContent>
 
-        <CardFooter className="p-6 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-4 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10 text-base">
             <Link 
