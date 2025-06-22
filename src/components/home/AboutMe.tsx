@@ -11,20 +11,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Gamepad2, Component, Sparkles, Languages } from 'lucide-react';
+import { Gamepad2, Component, Sparkles, Languages, Code2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
-  const skills = [
-    // Icon + Text
-    { name: 'Game Design', type: 'icon-text', icon: Gamepad2 },
-    { name: 'UX Design', type: 'icon-text', icon: Component },
-    { name: 'Generative AI', type: 'icon-text', icon: Sparkles },
-    { name: 'English B2', type: 'icon-text', icon: Languages },
-  ];
+  const skills = isClientReady ? [
+    { name: translationsForLanguage.aboutMe.skills.gameDesign, icon: Gamepad2 },
+    { name: translationsForLanguage.aboutMe.skills.uxDesign, icon: Component },
+    { name: translationsForLanguage.aboutMe.skills.generativeAI, icon: Sparkles },
+    { name: translationsForLanguage.aboutMe.skills.coding, icon: Code2 },
+    { name: translationsForLanguage.aboutMe.skills.englishB2, icon: Languages },
+  ] : [];
   
   const technologies = [
     // Logos

@@ -30,6 +30,13 @@ export interface AppTranslations {
     workTogether: string;
     skillsTitle: string;
     technologiesTitle: string;
+    skills: {
+      gameDesign: string;
+      uxDesign: string;
+      generativeAI: string;
+      englishB2: string;
+      coding: string;
+    };
   };
   projectCard: {
     viewMore: string;
@@ -94,6 +101,13 @@ const translations: Record<Language, AppTranslations> = {
       workTogether: "Let's Work Together.",
       skillsTitle: "My Skills",
       technologiesTitle: "Technologies",
+      skills: {
+        gameDesign: "Game Design",
+        uxDesign: "UX Design",
+        generativeAI: "Generative AI",
+        englishB2: "English B2",
+        coding: "Coding",
+      },
     },
     projectCard: {
       viewMore: "View More",
@@ -156,6 +170,13 @@ const translations: Record<Language, AppTranslations> = {
       workTogether: "Trabajemos Juntos.",
       skillsTitle: "Mis Habilidades",
       technologiesTitle: "Tecnologías",
+      skills: {
+        gameDesign: "Diseño de Juegos",
+        uxDesign: "Diseño UX",
+        generativeAI: "IA Generativa",
+        englishB2: "Inglés B2",
+        coding: "Programación",
+      },
     },
     projectCard: {
       viewMore: "Ver más",
