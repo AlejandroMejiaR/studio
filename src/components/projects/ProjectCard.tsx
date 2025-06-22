@@ -35,14 +35,14 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 3;
 
   return (
-    <Card className="flex flex-col h-full shadow-md transition-all duration-300 overflow-hidden hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
+    <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
       <Link 
         href={`/projects/${project.slug}`} 
         aria-label={`View details for ${titleToDisplay}`}
         onClick={handleProjectLinkClick}
         className="block"
       >
-        <div className="relative h-60 w-full">
+        <div className="relative aspect-square w-full">
             <Image
               src={project.thumbnailUrl}
               alt={titleToDisplay}
@@ -69,7 +69,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-4 pt-0 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-4 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
             {project.category && (
