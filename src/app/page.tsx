@@ -344,12 +344,8 @@ export default function HomePage() {
       
       const element = document.getElementById(id);
       if (element) {
-          // A small timeout can help ensure the element is painted.
-          const scrollTimer = setTimeout(() => {
-            // Using 'auto' for instant scrolling as requested.
-            element.scrollIntoView({ behavior: 'auto' });
-          }, 100);
-          animationTimersRef.current.push(scrollTimer);
+        // Using 'smooth' for the scrolling effect.
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     };
 
@@ -357,10 +353,10 @@ export default function HomePage() {
     handleScrollToHash();
 
     // Add event listener for subsequent hash changes (e.g., clicking another anchor link).
-    window.addEventListener('hashchange', handleScrollToHash);
+    window.addEventListener('hashchange', handleScrollToHash, false);
 
     return () => {
-      window.removeEventListener('hashchange', handleScrollToHash);
+      window.removeEventListener('hashchange', handleScrollToHash, false);
     };
   }, [
     isClientReady,
