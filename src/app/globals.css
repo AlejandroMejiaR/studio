@@ -112,7 +112,7 @@ body {
     overflow: hidden;
   }
   section {
-    @apply py-20 md:py-24 lg:py-32;
+    @apply py-24 md:py-32 lg:py-40;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;

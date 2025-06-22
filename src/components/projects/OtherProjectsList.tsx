@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project } from '@/types';
@@ -65,7 +66,7 @@ const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
   }
   
   return (
-    <section className="mt-16 md:mt-20 lg:mt-24 pt-12">
+    <section>
       <h2 
         className="font-headline text-3xl md:text-4xl font-bold text-primary mb-12 dark:text-foreground text-center"
         style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
