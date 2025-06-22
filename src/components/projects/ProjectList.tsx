@@ -94,7 +94,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
   const loadingAllProjectsText = isClientReady
     ? translationsForLanguage.loadingScreen.loadingAllProjects
-    : getEnglishTranslation(t => t.loadingScreen.loadingAllProjects) || "Loading All Projects...";
+    : getEnglishTranslation(t => t.loadingScreen.loadingAllProjects) || ["Loading All Projects..."];
 
   const noProjectsText = isClientReady 
     ? translationsForLanguage.projectList.noProjects 

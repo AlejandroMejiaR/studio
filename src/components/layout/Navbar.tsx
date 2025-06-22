@@ -89,7 +89,7 @@ const Navbar = () => {
 
   const returningHomeText = isClientReady
     ? translationsForLanguage.loadingScreen.returningHome
-    : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
+    : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
 
   const staggerDelay = 0.05;
 
@@ -124,11 +124,11 @@ const Navbar = () => {
     </h1>
   ) : ( 
     <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")} style={{ visibility: 'hidden' }}>
-      {(getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")).split('').map((letter, index) => (
+      {((getEnglishTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Brand" : "Brand Name")).split('').map((letter, index) => (
         <span
           key={index}
           className="inline-block"
-          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")).length - 1 - index) * staggerDelay)}s` }}
+          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Brand" : "Brand Name")).length - 1 - index) * staggerDelay}s` }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </span>
@@ -293,5 +293,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-    

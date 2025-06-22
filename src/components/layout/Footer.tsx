@@ -15,7 +15,7 @@ const Footer = () => {
 
   const returningHomeText = isClientReady
     ? translationsForLanguage.loadingScreen.returningHome
-    : getEnglishTranslation(t => t.loadingScreen.returningHome) || "Returning to Home...";
+    : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
 
   const portfolioTitleText = isClientReady
     ? translationsForLanguage.footer.portfolioTitle

@@ -21,7 +21,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
 
   const loadingProjectText = isClientReady 
     ? translationsForLanguage.loadingScreen.loadingProject 
-    : getEnglishTranslation(t => t.loadingScreen.loadingProject) || "Loading Project...";
+    : getEnglishTranslation(t => t.loadingScreen.loadingProject) || ["Loading Project..."];
 
   const handleProjectLinkClick = () => {
     showLoading(loadingProjectText);

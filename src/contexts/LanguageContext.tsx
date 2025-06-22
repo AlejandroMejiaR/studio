@@ -1,3 +1,4 @@
+
 'use client';
 import type { ReactNode } from 'react';
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
@@ -63,10 +64,10 @@ export interface AppTranslations {
     errorDescription: string;
   };
   loadingScreen: {
-    defaultText: string;
-    loadingProject: string;
-    returningHome: string;
-    loadingAllProjects: string;
+    defaultText: string[];
+    loadingProject: string[];
+    returningHome: string[];
+    loadingAllProjects: string[];
   };
   footer: {
     portfolioTitle: string;
@@ -140,10 +141,10 @@ const translations: Record<Language, AppTranslations> = {
       errorDescription: "Could not update like status. Please try again.",
     },
     loadingScreen: {
-      defaultText: "Loading...",
-      loadingProject: "Loading Project...",
-      returningHome: "Returning to Home...",
-      loadingAllProjects: "Loading All Projects...",
+      defaultText: ["Loading...", "Please wait...", "Processing..."],
+      loadingProject: ["Loading Project...", "Unveiling masterpiece...", "Almost there..."],
+      returningHome: ["Returning to Home...", "Heading back...", "Just a moment..."],
+      loadingAllProjects: ["Loading All Projects...", "Gathering portfolio...", "Preparing the gallery..."],
     },
     footer: {
       portfolioTitle: "Portfolio",
@@ -215,10 +216,10 @@ const translations: Record<Language, AppTranslations> = {
       errorDescription: "No se pudo actualizar el estado de 'me gusta'. Por favor, inténtalo de nuevo.",
     },
     loadingScreen: {
-      defaultText: "Cargando...",
-      loadingProject: "Cargando Proyecto...",
-      returningHome: "Volviendo al Inicio...",
-      loadingAllProjects: "Cargando Todos los Proyectos...",
+      defaultText: ["Cargando...", "Por favor, espera...", "Procesando..."],
+      loadingProject: ["Cargando Proyecto...", "Revelando obra maestra...", "Casi listo..."],
+      returningHome: ["Volviendo al Inicio...", "Regresando...", "Un momento..."],
+      loadingAllProjects: ["Cargando Proyectos...", "Reuniendo portafolio...", "Preparando la galería..."],
     },
     footer: {
       portfolioTitle: "Portafolio",
@@ -238,7 +239,7 @@ interface LanguageContextType {
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
   isClientReady: boolean;
-  getEnglishTranslation: (keyPath: (translations: AppTranslations) => string | string[] | undefined) => string | string[] | undefined;
+  getEnglishTranslation: <T>(keyPath: (translations: AppTranslations) => T) => T | undefined;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -290,7 +291,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
   
-  const getEnglishTranslation = useCallback((keyPath: (translations: AppTranslations) => string | string[] | undefined) => {
+  const getEnglishTranslation = useCallback(<T,>(keyPath: (translations: AppTranslations) => T) => {
     if (translations['EN']) {
       const value = keyPath(translations['EN']);
       return value;
