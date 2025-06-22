@@ -19,10 +19,10 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
 
   const skills = isClientReady ? [
+    { name: translationsForLanguage.aboutMe.skills.coding, icon: Code2 },
     { name: translationsForLanguage.aboutMe.skills.gameDesign, icon: Gamepad2 },
     { name: translationsForLanguage.aboutMe.skills.uxDesign, icon: Component },
     { name: translationsForLanguage.aboutMe.skills.generativeAI, icon: Sparkles },
-    { name: translationsForLanguage.aboutMe.skills.coding, icon: Code2 },
     { name: translationsForLanguage.aboutMe.skills.englishB2, icon: Languages },
   ] : [];
   
