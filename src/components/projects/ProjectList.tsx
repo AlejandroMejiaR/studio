@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 
 interface ProjectListProps {
@@ -51,6 +52,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   
   const [visibleCount, setVisibleCount] = useState(3);
+  const [showAllProjectsButton, setShowAllProjectsButton] = useState(false);
   const displayedProjects = projects.slice(0, visibleCount);
 
   useEffect(() => {
@@ -83,6 +85,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const viewMoreProjectsText = isClientReady 
     ? translationsForLanguage.home.viewMoreProjects
     : getEnglishTranslation(t => t.home.viewMoreProjects);
+  
+  const viewAllProjectsText = isClientReady
+    ? translationsForLanguage.home.buttons.viewAllProjects
+    : getEnglishTranslation(t => t.home.buttons.viewAllProjects);
 
   const noProjectsText = isClientReady 
     ? translationsForLanguage.projectList.noProjects 
@@ -90,6 +96,9 @@ const ProjectList = ({ projects }: ProjectListProps) => {
 
   const handleViewMore = () => {
     setVisibleCount(prevCount => Math.min(prevCount + 3, projects.length));
+    if (!showAllProjectsButton) {
+      setShowAllProjectsButton(true);
+    }
   };
 
   const isInitialLoading = isLoadingLikes && visibleCount === 3;
@@ -115,9 +124,12 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-2/3" />
               </div>
-              <div className="flex justify-between items-center p-4 pt-0">
+              <div className="flex justify-between items-center p-4 border-t">
                 <Skeleton className="h-9 w-24" /> 
-                <Skeleton className="h-5 w-20" /> 
+                <div className="flex items-center gap-2">
+                    <Skeleton className="h-5 w-10" /> 
+                    <Skeleton className="h-5 w-10" /> 
+                </div>
               </div>
             </div>
           ))}
@@ -156,8 +168,8 @@ const ProjectList = ({ projects }: ProjectListProps) => {
             ))}
           </div>
 
-          {visibleCount < projects.length && (
-            <div className="mt-12 text-center">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            {visibleCount < projects.length && (
               <Button
                 variant="outline"
                 size="lg"
@@ -169,8 +181,23 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                 </span>
                 <ArrowDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
               </Button>
-            </div>
-          )}
+            )}
+
+            {showAllProjectsButton && (
+                <Button
+                    size="lg"
+                    asChild
+                    className="group bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6"
+                >
+                    <Link href="/projects">
+                        <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                            {viewAllProjectsText}
+                        </span>
+                        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                </Button>
+            )}
+          </div>
         </>
       )}
     </section>
