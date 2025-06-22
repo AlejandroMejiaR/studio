@@ -54,7 +54,7 @@ export const LoadingProvider = ({ children }: { children: ReactNode }) => {
       intervalRef.current = setInterval(() => {
         currentIndex = (currentIndex + 1) % messageQueue.length;
         setLoadingText(messageQueue[currentIndex]);
-      }, 2500); // Change text every 2.5 seconds
+      }, 1000); // Change text every 1 second
     }
     
     // Cleanup function
