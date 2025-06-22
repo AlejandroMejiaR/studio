@@ -548,7 +548,7 @@ export default function HomePage() {
       <section 
         ref={heroSectionRef}
         tabIndex={-1}
-        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-16 md:pb-20 transition-opacity duration-300 outline-none"
+        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center pt-10 pb-40 transition-opacity duration-300 outline-none"
       >
         <div className={cn(
           "w-full max-w-5xl flex",
@@ -667,7 +667,7 @@ export default function HomePage() {
       </section>
 
       {isLoadingProjects ? (
-         <section id="projects-loading" className="min-h-[calc(100vh-4rem)] flex flex-col justify-center">
+         <section id="projects-loading">
            <h2 
             className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
