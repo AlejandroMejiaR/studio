@@ -569,8 +569,8 @@ export default function HomePage() {
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src={getSupabaseImageUrl('documents', 'profile-picture.png')}
-                    alt="A photo of Alejandro Mejia Rojas"
+                    src={getSupabaseImageUrl('documents', 'Hero.png')}
+                    alt="Hero Image"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
                     sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 50vw"
