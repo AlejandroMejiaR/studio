@@ -27,6 +27,7 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (isClientReady) {
         hideLoading();
     }
