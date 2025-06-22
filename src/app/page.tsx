@@ -33,7 +33,7 @@ export default function HomePage() {
     getEnglishTranslation
   } = useLanguage();
   const { setIsFooterVisible } = useFooter();
-  const { setShouldNavbarContentBeVisible } = useNavbarVisibility();
+  const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
   const aboutMeRef = useRef<HTMLElement | null>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
@@ -175,6 +175,7 @@ export default function HomePage() {
       setIsSubtitleTypingEmphasized(false);
       setIsSubtitleTypingEmphasizedComplete(true);
       setIsHeroSettled(true);
+      setShowLanguageHint(true);
   
       const fadeInTimer = setTimeout(() => {
         setIsFinalContentVisible(true);
@@ -183,7 +184,7 @@ export default function HomePage() {
     }
   
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage, language]);
+  }, [shouldAnimateHeroIntro, isClientReady, translationsForLanguage, language, setShowLanguageHint]);
   
   // Effect to lock scroll and manage focus during animation
   useEffect(() => {
@@ -216,6 +217,7 @@ export default function HomePage() {
         setIsSubtitleEmphasizing(false);
         setIsSubtitleTypingEmphasizedComplete(false);
         setIsHeroSettled(true);
+        setShowLanguageHint(true);
 
         // After a brief moment for the DOM to update, fade in the final content
         const finalFadeInTimer = setTimeout(() => {
@@ -226,7 +228,7 @@ export default function HomePage() {
     }, 1000); // 1-second pause
 
     animationTimersRef.current.push(pauseTimer);
-}, [isClientReady]);
+}, [isClientReady, setShowLanguageHint]);
 
 
   useEffect(() => {

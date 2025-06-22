@@ -283,4 +283,15 @@ body {
     transition-duration: 0.3s; /* Matches subtitleEmphasisAnimationDuration */
     transition-timing-function: ease-in-out;
   }
+
+  /* Tooltip animation */
+  @keyframes fadeInThenOut {
+    0% { opacity: 0; }
+    14% { opacity: 1; } /* ~0.5s fade-in */
+    86% { opacity: 1; } /* ~3s hold */
+    100% { opacity: 0; } /* ~0.5s fade-out */
+  }
+  .animate-fadeInThenOut {
+    animation: fadeInThenOut 3.5s ease-in-out forwards;
+  }
 }

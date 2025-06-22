@@ -12,6 +12,7 @@ import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
+import LanguageSwitcherTooltip from './LanguageSwitcherTooltip';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,7 +22,7 @@ const Navbar = () => {
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
   const isMobile = useIsMobile();
-  const { shouldNavbarContentBeVisible } = useNavbarVisibility();
+  const { shouldNavbarContentBeVisible, showLanguageHint, setShowLanguageHint } = useNavbarVisibility();
 
   const [animateBrandName, setAnimateBrandName] = useState(true);
 
@@ -178,22 +179,28 @@ const Navbar = () => {
               </span>
             </Link>
           ))}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleLanguage}
-            aria-label="Toggle language"
-            className="h-9 px-2 hover:bg-accent/10 flex items-center"
-          >
-            <Languages className="h-5 w-5 text-foreground/80" />
-            <span
-              key={`desktop-lang-indicator-${currentLanguageDisplay}`}
-              className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLanguage}
+              aria-label="Toggle language"
+              className="h-9 px-2 hover:bg-accent/10 flex items-center"
             >
-              {currentLanguageDisplay}
-            </span>
-          </Button>
+              <Languages className="h-5 w-5 text-foreground/80" />
+              <span
+                key={`desktop-lang-indicator-${currentLanguageDisplay}`}
+                className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+              >
+                {currentLanguageDisplay}
+              </span>
+            </Button>
+            <LanguageSwitcherTooltip
+              show={showLanguageHint}
+              onClose={() => setShowLanguageHint(false)}
+            />
+          </div>
           <Button
             variant="ghost"
             size="icon"
@@ -211,22 +218,28 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleLanguage}
-            aria-label="Toggle language"
-            className="h-9 px-2 hover:bg-accent/10 flex items-center"
-          >
-            <Languages className="h-5 w-5 text-foreground/80" />
-            <span
-              key={`mobile-lang-indicator-${currentLanguageDisplay}`}
-              className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleLanguage}
+              aria-label="Toggle language"
+              className="h-9 px-2 hover:bg-accent/10 flex items-center"
             >
-              {currentLanguageDisplay}
-            </span>
-          </Button>
+              <Languages className="h-5 w-5 text-foreground/80" />
+              <span
+                key={`mobile-lang-indicator-${currentLanguageDisplay}`}
+                className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+              >
+                {currentLanguageDisplay}
+              </span>
+            </Button>
+            <LanguageSwitcherTooltip
+              show={showLanguageHint}
+              onClose={() => setShowLanguageHint(false)}
+            />
+          </div>
           <Button
             variant="ghost"
             size="icon"
