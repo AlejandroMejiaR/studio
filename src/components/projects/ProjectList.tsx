@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project } from '@/types';
@@ -6,8 +7,8 @@ import { getProjectLikes } from '@/lib/firebase';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ArrowDown } from 'lucide-react';
 
 
 interface ProjectListProps {
@@ -48,20 +49,22 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const [initialLikesMap, setInitialLikesMap] = useState<Record<string, number>>({});
   const [isLoadingLikes, setIsLoadingLikes] = useState(true);
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-
-  const featuredProjects = projects.slice(0, 3);
+  
+  const [visibleCount, setVisibleCount] = useState(3);
+  const displayedProjects = projects.slice(0, visibleCount);
 
   useEffect(() => {
-    const fetchLikes = async () => {
-      if (featuredProjects && featuredProjects.length > 0) {
+    const fetchAllLikes = async () => {
+      if (projects && projects.length > 0) {
         setIsLoadingLikes(true);
-        const projectIds = featuredProjects.map(p => p.id);
+        const projectIds = projects.map(p => p.id);
         try {
           const likes = await getAllProjectLikes(projectIds);
           setInitialLikesMap(likes);
         } catch (error) {
           console.error("Error fetching all project likes in ProjectList component:", error);
-          setInitialLikesMap(projectIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {}));
+          const emptyLikesMap = projectIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
+          setInitialLikesMap(emptyLikesMap);
         } finally {
           setIsLoadingLikes(false);
         }
@@ -70,7 +73,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
       }
     };
 
-    fetchLikes();
+    fetchAllLikes();
   }, [projects]);
   
   const featuredProjectsTitleText = isClientReady 
@@ -85,7 +88,13 @@ const ProjectList = ({ projects }: ProjectListProps) => {
     ? translationsForLanguage.projectList.noProjects 
     : getEnglishTranslation(t => t.projectList.noProjects);
 
-  if (isLoadingLikes && featuredProjects.length > 0) {
+  const handleViewMore = () => {
+    setVisibleCount(prevCount => Math.min(prevCount + 3, projects.length));
+  };
+
+  const isInitialLoading = isLoadingLikes && visibleCount === 3;
+
+  if (isInitialLoading && projects.length > 0) {
     return (
       <section 
         id="projects" 
@@ -98,16 +107,17 @@ const ProjectList = ({ projects }: ProjectListProps) => {
           {featuredProjectsTitleText}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredProjects.map((project) => (
-            <div key={project.id} className="flex flex-col space-y-3">
-              <Skeleton className="h-[200px] w-full rounded-xl" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex flex-col space-y-3">
+              <Skeleton className="w-full aspect-square rounded-xl" />
+              <div className="space-y-2 p-4">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
               </div>
-              <div className="flex justify-between items-center pt-2">
-                <Skeleton className="h-8 w-20" /> 
-                <Skeleton className="h-8 w-24" /> 
+              <div className="flex justify-between items-center p-4 pt-0">
+                <Skeleton className="h-9 w-24" /> 
+                <Skeleton className="h-5 w-20" /> 
               </div>
             </div>
           ))}
@@ -127,7 +137,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
       >
         {featuredProjectsTitleText}
       </h2>
-      {featuredProjects.length === 0 ? (
+      {displayedProjects.length === 0 ? (
         <p 
           className="text-lg text-muted-foreground text-center"
           style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
@@ -137,7 +147,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProjects.map((project) => (
+            {displayedProjects.map((project) => (
               <ProjectCard 
                 key={project.id} 
                 project={project} 
@@ -146,17 +156,21 @@ const ProjectList = ({ projects }: ProjectListProps) => {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
-            <Link 
-              href="/projects"
-              className="inline-flex items-center text-lg font-semibold text-accent hover:text-accent/90 transition-colors group"
-            >
-              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                {viewMoreProjectsText}
-              </span>
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+          {visibleCount < projects.length && (
+            <div className="mt-12 text-center">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={handleViewMore}
+                className="group border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-accent dark:hover:text-accent-foreground text-lg px-10 py-6"
+              >
+                <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                  {viewMoreProjectsText}
+                </span>
+                <ArrowDown className="ml-2 h-5 w-5 transition-transform group-hover:translate-y-1" />
+              </Button>
+            </div>
+          )}
         </>
       )}
     </section>
