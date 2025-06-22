@@ -41,22 +41,22 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 4;
 
   return (
-    <Card className="group flex flex-col h-full shadow-lg hover:shadow-xl transition-all duration-300">
+    <Card className="flex flex-col h-full shadow-lg transition-all duration-300">
       {/* Image Container on top */}
-      <div className="relative overflow-hidden rounded-t-lg">
+      <div className="relative rounded-t-lg">
         <Link 
           href={`/projects/${project.slug}`} 
           aria-label={`View details for ${titleToDisplay}`}
           onClick={handleProjectLinkClick}
           className="block"
         >
-          <div className="relative aspect-video w-full overflow-hidden">
+          <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
               <Image
                 src={project.thumbnailUrl}
                 alt={titleToDisplay}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-300"
               />
           </div>
           <Badge variant="secondary" className="absolute top-4 right-4 bg-accent/90 backdrop-blur-sm text-accent-foreground text-sm">{project.category}</Badge>
@@ -65,8 +65,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
 
       {/* Content Container below */}
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-4 flex-grow">
-          <CardTitle className="font-headline text-2xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
+        <CardContent className="p-4 flex-grow space-y-2">
+          <CardTitle className="font-headline text-xl mb-1 text-primary dark:text-foreground transition-colors">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -74,21 +74,21 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               {titleToDisplay}
             </Link>
           </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-2 text-sm mb-4">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-sm leading-tight">
             {shortDescriptionToDisplay}
           </CardDescription>
           <div>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-xs text-muted-foreground mb-2">
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {technologiesLabelText}
               </span>
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {project.technologies.slice(0, technologiesToShow).map((tech) => (
-                <Badge key={tech} variant="secondary" className="text-sm">{tech}</Badge>
+                <Badge key={tech} variant="secondary" className="text-xs">{tech}</Badge>
               ))}
               {project.technologies.length > technologiesToShow && (
-                <Badge variant="outline" className="text-sm">
+                <Badge variant="outline" className="text-xs">
                   +{project.technologies.length - technologiesToShow} more
                 </Badge>
               )}
@@ -96,9 +96,9 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </div>
         </CardContent>
 
-        <CardFooter className="p-4 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-4 pt-2 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10 text-base">
+          <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
