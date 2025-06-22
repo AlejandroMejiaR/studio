@@ -35,29 +35,28 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 3;
 
   return (
-    <Card className="flex flex-col h-full shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
+    <Card className="flex flex-col h-full shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 overflow-hidden">
       <Link 
         href={`/projects/${project.slug}`} 
         aria-label={`View details for ${titleToDisplay}`}
         onClick={handleProjectLinkClick}
         className="block"
       >
-        <div className="relative rounded-t-lg">
-            <div className="relative h-36 w-full overflow-hidden rounded-t-lg">
-                <Image
-                  src={project.thumbnailUrl}
-                  alt={titleToDisplay}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover"
-                />
-            </div>
+        <div className="relative h-48 w-full">
+            <Image
+              src={project.thumbnailUrl}
+              alt={titleToDisplay}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover"
+            />
+            <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-card to-transparent" />
         </div>
       </Link>
 
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-3 flex-grow space-y-1">
-          <CardTitle className="font-headline text-md mb-1 text-primary dark:text-foreground">
+        <CardContent className="p-4 flex-grow space-y-2">
+          <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -65,12 +64,12 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               {titleToDisplay}
             </Link>
           </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-2 text-xs leading-tight">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-sm">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-3 pt-1 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-4 pt-2 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
             {project.category && (
