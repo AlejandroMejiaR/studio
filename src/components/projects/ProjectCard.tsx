@@ -43,7 +43,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         className="block"
       >
         <div className="relative rounded-t-lg">
-            <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
+            <div className="relative h-36 w-full overflow-hidden rounded-t-lg">
                 <Image
                   src={project.thumbnailUrl}
                   alt={titleToDisplay}
@@ -56,8 +56,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       </Link>
 
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-4 flex-grow space-y-1">
-          <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
+        <CardContent className="p-3 flex-grow space-y-1">
+          <CardTitle className="font-headline text-md mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -70,11 +70,11 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-3 pt-2 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-3 pt-1 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
             {project.category && (
-              <Badge variant="secondary" className="text-xs bg-accent/80 text-accent-foreground">{project.category}</Badge>
+              <Badge variant="secondary" className="text-xs">{project.category}</Badge>
             )}
             {project.category && project.technologies && project.technologies.length > 0 && (
                 <span className="text-muted-foreground mx-1">-</span>
