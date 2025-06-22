@@ -31,9 +31,10 @@ const LanguageSwitcherTooltip = ({ show, onClose }: LanguageSwitcherTooltipProps
       className={cn(
         "absolute z-[100] flex w-max max-w-xs items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground shadow-lg whitespace-nowrap",
         "animate-fadeInThenOut",
-        "top-full left-1/2 mt-3 -translate-x-1/2" // Centered below
+        "top-full left-1/2 mt-3 -translate-x-1/2" // Positioned below
       )}
     >
+      {/* Arrow pointing up */}
       <div className="absolute bottom-full left-1/2 -translate-x-1/2 h-0 w-0 border-x-8 border-x-transparent border-b-[8px] border-b-primary"></div>
       <span>{translationsForLanguage.nav.changeLanguageHint}</span>
     </div>
