@@ -591,7 +591,7 @@ export default function HomePage() {
       </section>
 
       <ProjectList projects={projects} />
-      <section id="about">
+      <section id="about" className="pt-[100px] pb-[80px]">
         <AboutMe />
       </section>
     </div>
