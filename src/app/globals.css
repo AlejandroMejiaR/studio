@@ -115,7 +115,7 @@ body {
     overflow: hidden;
   }
   section {
-    @apply py-32 md:py-40 lg:py-48 scroll-mt-16;
+    @apply pt-24 pb-32 md:pt-32 md:pb-40 lg:pt-40 lg:pb-48 scroll-mt-16;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
