@@ -90,7 +90,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
       >
         <h2 
-            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
+            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
             style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
         >
           {projectsSectionTitleText}
@@ -120,7 +120,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
       className="min-h-[calc(100vh-4rem)] flex flex-col justify-center py-12 md:py-16 lg:py-20"
     >
       <h2 
-        className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground"
+        className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
         style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
       >
         {projectsSectionTitleText}
