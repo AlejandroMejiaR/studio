@@ -35,14 +35,14 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 3;
 
   return (
-    <Card className="flex flex-col h-full shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 overflow-hidden">
+    <Card className="flex flex-col h-full shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 overflow-hidden">
       <Link 
         href={`/projects/${project.slug}`} 
         aria-label={`View details for ${titleToDisplay}`}
         onClick={handleProjectLinkClick}
         className="block"
       >
-        <div className="relative h-48 w-full">
+        <div className="relative h-60 w-full">
             <Image
               src={project.thumbnailUrl}
               alt={titleToDisplay}
@@ -55,8 +55,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       </Link>
 
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-4 flex-grow space-y-2">
-          <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
+        <CardContent className="p-4 flex-grow space-y-3">
+          <CardTitle className="font-headline text-xl mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -64,7 +64,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               {titleToDisplay}
             </Link>
           </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-2 text-sm">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-base">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
