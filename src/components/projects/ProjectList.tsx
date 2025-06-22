@@ -49,7 +49,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const [isLoadingLikes, setIsLoadingLikes] = useState(true);
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
-  const featuredProjects = projects.slice(0, 4);
+  const featuredProjects = projects.slice(0, 3);
 
   useEffect(() => {
     const fetchLikes = async () => {
@@ -97,7 +97,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         >
           {featuredProjectsTitleText}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredProjects.map((project) => (
             <div key={project.id} className="flex flex-col space-y-3">
               <Skeleton className="h-[200px] w-full rounded-xl" />
@@ -136,7 +136,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProjects.map((project) => (
               <ProjectCard 
                 key={project.id} 
