@@ -35,7 +35,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 3;
 
   return (
-    <Card className="flex flex-col h-full shadow-lg transition-all duration-300">
+    <Card className="flex flex-col h-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:border-accent">
       {/* Image Container on top */}
       <div className="relative rounded-t-lg">
         <Link 
@@ -58,8 +58,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
 
       {/* Content Container below */}
       <div className="flex flex-col justify-between flex-grow">
-        <CardContent className="p-4 flex-grow space-y-2">
-          <CardTitle className="font-headline text-xl mb-1 text-primary dark:text-foreground">
+        <CardContent className="p-4 flex-grow space-y-1">
+          <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -67,12 +67,12 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               {titleToDisplay}
             </Link>
           </CardTitle>
-          <CardDescription className="text-foreground/70 line-clamp-2 text-sm leading-tight">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-xs leading-tight">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-4 pt-2 mt-auto flex justify-between items-center border-t">
+        <CardFooter className="p-3 pt-2 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
             {project.category && (
