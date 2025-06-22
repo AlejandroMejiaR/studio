@@ -25,14 +25,23 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let app: FirebaseApp;
-if (!getApps().length) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApps()[0];
-}
+let app: FirebaseApp | undefined;
+let db: Firestore | undefined;
 
-const db: Firestore = getFirestore(app);
+// Only initialize Firebase if projectId is provided
+if (firebaseConfig.projectId) {
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApps()[0];
+  }
+  db = getFirestore(app);
+} else {
+  // This warning will be logged on the server during build/dev and on the client.
+  console.warn(
+    'Firebase projectId is not configured. Firebase features will be disabled and data will be mocked.'
+  );
+}
 
 // Helper to convert Firestore data to Project type
 const mapDocToProject = (docId: string, data: any): Project => {
@@ -85,8 +94,8 @@ const mapDocToProject = (docId: string, data: any): Project => {
 };
 
 export const getAllProjectsFromFirestore = async (): Promise<Project[]> => {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.warn("Firebase projectId is not configured. Returning empty projects array.");
+  if (!db) {
+    console.warn("Firebase is not configured. Returning empty projects array.");
     return [];
   }
   try {
@@ -105,8 +114,8 @@ export const getAllProjectsFromFirestore = async (): Promise<Project[]> => {
 };
 
 export const getProjectBySlugFromFirestore = async (slug: string): Promise<Project | undefined> => {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.warn("Firebase projectId is not configured. Returning undefined for project.");
+  if (!db) {
+    console.warn("Firebase is not configured. Returning undefined for project.");
     return undefined;
   }
   try {
@@ -125,8 +134,7 @@ export const getProjectBySlugFromFirestore = async (slug: string): Promise<Proje
 };
 
 export const getProjectLikes = async (projectId: string): Promise<number> => {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.warn("Firebase projectId is not configured. Mocking likes.");
+  if (!db) {
     return Math.floor(Math.random() * 100); // Mock likes
   }
   try {
@@ -143,12 +151,10 @@ export const getProjectLikes = async (projectId: string): Promise<number> => {
 };
 
 const updateLikesInFirestore = async (projectId: string, amount: number): Promise<number> => {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.warn("Firebase projectId is not configured. Likes will not be updated in Firestore.");
-    // Attempt to read current "mocked" likes if needed, or just simulate
-    // For simplicity, let's assume we don't have a persistent mock store for likes.
-    // This part won't be accurate without actual storage or more complex mocking.
-    return amount; // Or some other mocked logic
+  if (!db) {
+    // Mock like update without being noisy in the console
+    const currentLikes = Math.floor(Math.random() * 100);
+    return Math.max(0, currentLikes + amount);
   }
 
   const projectRef = doc(db, 'projects', projectId);
@@ -174,7 +180,7 @@ const updateLikesInFirestore = async (projectId: string, amount: number): Promis
   } catch (error) {
     console.error(`Error updating likes for project ${projectId} in Firestore:`, error);
     // Fallback: try to return current likes if update fails
-    const currentLikes = await getProjectLikes(projectId); // This might re-trigger mocked likes if ID not configured
+    const currentLikes = await getProjectLikes(projectId);
     return currentLikes;
   }
 };
