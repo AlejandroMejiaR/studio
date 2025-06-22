@@ -63,7 +63,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectCli
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
   
   const otherProjects = allProjects
-    .filter(p => p.id !== project.id)
+    .filter(p => p.id !== project.id) // This line ensures the current project is excluded
     .slice(0, 3);
 
   const titleLetterStaggerConst = 0.04;
