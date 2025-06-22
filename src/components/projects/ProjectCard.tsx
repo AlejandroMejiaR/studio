@@ -42,7 +42,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         onClick={handleProjectLinkClick}
         className="block"
       >
-        <div className="relative h-32 w-full">
+        <div className="relative w-full aspect-square">
             <Image
               src={project.thumbnailUrl}
               alt={titleToDisplay}

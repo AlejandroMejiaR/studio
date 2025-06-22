@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Project } from '@/types';
@@ -98,7 +97,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         >
           {featuredProjectsTitleText}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProjects.map((project) => (
             <div key={project.id} className="flex flex-col space-y-3">
               <Skeleton className="h-[200px] w-full rounded-xl" />
@@ -107,8 +106,8 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                 <Skeleton className="h-4 w-1/2" />
               </div>
               <div className="flex justify-between items-center pt-2">
-                <Skeleton className="h-8 w-20" />
-                <Skeleton className="h-8 w-24" />
+                <Skeleton className="h-8 w-20" /> 
+                <Skeleton className="h-8 w-24" /> 
               </div>
             </div>
           ))}
@@ -137,7 +136,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
         </p>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProjects.map((project) => (
               <ProjectCard 
                 key={project.id} 
