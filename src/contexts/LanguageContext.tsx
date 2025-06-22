@@ -54,6 +54,7 @@ export interface AppTranslations {
     keyFeaturesOutcomes: string;
     liveDemoButton: string;
     viewCodeButton: string;
+    otherProjectsTitle: string;
   };
   likeButton: {
     unlikedTitle: string;
@@ -131,6 +132,7 @@ const translations: Record<Language, AppTranslations> = {
       keyFeaturesOutcomes: "Key Features & Outcomes",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
+      otherProjectsTitle: "Other Projects",
     },
     likeButton: {
       unlikedTitle: "Unliked!",
@@ -206,6 +208,7 @@ const translations: Record<Language, AppTranslations> = {
       keyFeaturesOutcomes: "Características Clave y Resultados",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
+      otherProjectsTitle: "Otros Proyectos",
     },
     likeButton: {
       unlikedTitle: "¡Ya no me gusta!",

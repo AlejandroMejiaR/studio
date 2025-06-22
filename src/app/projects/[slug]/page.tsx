@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getProjectBySlugFromFirestore, getProjectLikes } from '@/lib/firebase';
+import { getProjectBySlugFromFirestore, getProjectLikes, getAllProjectsFromFirestore } from '@/lib/firebase';
 import ProjectClientContent from '@/components/projects/ProjectClientContent';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
@@ -50,7 +50,11 @@ export async function generateMetadata(
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const slug = params.slug;
-  const project = await getProjectBySlugFromFirestore(slug);
+
+  const [project, allProjects] = await Promise.all([
+    getProjectBySlugFromFirestore(slug),
+    getAllProjectsFromFirestore()
+  ]);
 
   if (!project) {
     notFound();
@@ -60,7 +64,11 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      <ProjectClientContent project={project} initialLikes={initialLikes} />
+      <ProjectClientContent 
+        project={project} 
+        initialLikes={initialLikes}
+        allProjects={allProjects}
+      />
     </div>
   );
 }
