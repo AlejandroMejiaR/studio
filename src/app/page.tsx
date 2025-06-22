@@ -325,46 +325,48 @@ export default function HomePage() {
   }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
 
 
+  // This new effect handles scrolling to anchors (#about, #projects) reliably.
   useEffect(() => {
     if (!isClientReady) return;
 
-    const hash = window.location.hash;
-    if (!hash) return;
+    const handleScrollToHash = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
 
-    const id = hash.substring(1);
-    let scrollTimer: NodeJS.Timeout;
+      const id = hash.substring(1);
 
-    const attemptScroll = () => {
+      // Wait until the page is "settled" before trying to scroll.
+      const isReadyToScroll = isHeroSettled || shouldAnimateHeroIntro === false;
+      if (!isReadyToScroll) return;
+
+      // For the projects section, also wait for projects to be loaded.
+      if (id === 'projects' && isLoadingProjects) return;
+      
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+          // A small timeout can help ensure the element is painted.
+          const scrollTimer = setTimeout(() => {
+            // Using 'auto' for instant scrolling as requested.
+            element.scrollIntoView({ behavior: 'auto' });
+          }, 100);
+          animationTimersRef.current.push(scrollTimer);
       }
     };
 
-    if (id === 'projects') {
-      if (!isLoadingProjects && (isHeroSettled || shouldAnimateHeroIntro === false)) {
-        scrollTimer = setTimeout(attemptScroll, 300);
-      }
-    } else {
-      if (isHeroSettled || shouldAnimateHeroIntro === false) {
-        scrollTimer = setTimeout(attemptScroll, 300);
-      }
-    }
-    if(scrollTimer) animationTimersRef.current.push(scrollTimer);
+    // Run once on initial load or when readiness state changes.
+    handleScrollToHash();
 
+    // Add event listener for subsequent hash changes (e.g., clicking another anchor link).
+    window.addEventListener('hashchange', handleScrollToHash);
 
     return () => {
-      if (scrollTimer) {
-        clearTimeout(scrollTimer);
-      }
+      window.removeEventListener('hashchange', handleScrollToHash);
     };
   }, [
-    isClientReady, 
-    pathname, 
-    isLoadingProjects, 
-    isHeroSettled, 
-    shouldAnimateHeroIntro, 
-    language
+    isClientReady,
+    isHeroSettled,
+    shouldAnimateHeroIntro,
+    isLoadingProjects,
   ]);
 
 
@@ -666,33 +668,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {isLoadingProjects ? (
-         <section id="projects-loading">
-           <h2 
-            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-           >
-             {featuredProjectsTitleText}
-           </h2>
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-             {[1, 2, 3].map((i) => ( 
-               <div key={i} className="flex flex-col space-y-3">
-                 <Skeleton className="h-[200px] w-full rounded-xl" />
-                 <div className="space-y-2">
-                   <Skeleton className="h-4 w-3/4" />
-                   <Skeleton className="h-4 w-1/2" />
-                 </div>
-                 <div className="flex justify-between items-center pt-2">
-                   <Skeleton className="h-8 w-20" /> 
-                   <Skeleton className="h-8 w-24" /> 
-                 </div>
-               </div>
-             ))}
-           </div>
-         </section>
-      ) : (
-        <ProjectList projects={projects} />
-      )}
+      <ProjectList projects={projects} />
       <section ref={aboutMeRef} id="about">
         <AboutMe />
       </section>
