@@ -78,6 +78,7 @@ const mapDocToProject = (docId: string, data: any): Project => {
     galleryImages: data.galleryImagePaths ? data.galleryImagePaths.map((path: string) => getSupabaseImageUrl('projects', path)) : [],
     liveUrl: data.liveUrl || undefined,
     repoUrl: data.repoUrl || undefined,
+    priority: data.priority,
     en: finalEnData,
     es: finalEsData,
   };
@@ -92,6 +93,10 @@ export const getAllProjectsFromFirestore = async (): Promise<Project[]> => {
     const projectsCol = collection(db, 'projects');
     const projectSnapshot = await getDocs(projectsCol);
     const projectList = projectSnapshot.docs.map(docSnap => mapDocToProject(docSnap.id, docSnap.data()));
+    
+    // Sort projects by priority. Lower numbers first. Projects without priority go to the end.
+    projectList.sort((a, b) => (a.priority ?? 999) - (b.priority ?? 999));
+
     return projectList;
   } catch (error) {
     console.error("Error fetching all projects from Firestore:", error);

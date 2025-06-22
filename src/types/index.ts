@@ -18,6 +18,7 @@ export interface Project {
   galleryImages?: string[];
   liveUrl?: string;
   repoUrl?: string;
+  priority?: number;
 
   // Translatable content directly available
   en: ProjectTranslationDetails;
