@@ -63,7 +63,6 @@ const Footer = () => {
             </h4>
             <Link 
               href="/#projects" 
-              scroll={false}
               className="hover:text-accent transition-colors"
               onClick={handleNavigationToHomeSection}
             >
@@ -73,7 +72,6 @@ const Footer = () => {
             </Link>
             <Link 
               href="/#about" 
-              scroll={false}
               className="hover:text-accent transition-colors"
               onClick={handleNavigationToHomeSection}
             >

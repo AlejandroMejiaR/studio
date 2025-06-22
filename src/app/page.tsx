@@ -292,47 +292,6 @@ export default function HomePage() {
   ]);
 
 
-  // This new effect handles scrolling to anchors (#about, #projects) reliably.
-  useEffect(() => {
-    if (!isClientReady) return;
-
-    const handleScrollToHash = () => {
-      const hash = window.location.hash;
-      if (!hash) return;
-
-      const id = hash.substring(1);
-
-      // Wait until the page is "settled" before trying to scroll.
-      const isReadyToScroll = isHeroSettled || shouldAnimateHeroIntro === false;
-      if (!isReadyToScroll) return;
-
-      // For the projects section, also wait for projects to be loaded.
-      if (id === 'projects' && isLoadingProjects) return;
-      
-      const element = document.getElementById(id);
-      if (element) {
-        // Using 'smooth' for the scrolling effect.
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
-    // Run once on initial load or when readiness state changes.
-    handleScrollToHash();
-
-    // Add event listener for subsequent hash changes (e.g., clicking another anchor link).
-    window.addEventListener('hashchange', handleScrollToHash, false);
-
-    return () => {
-      window.removeEventListener('hashchange', handleScrollToHash, false);
-    };
-  }, [
-    isClientReady,
-    isHeroSettled,
-    shouldAnimateHeroIntro,
-    isLoadingProjects,
-  ]);
-
-
   const animatingTitleLines = translationsForLanguage.home.hero.animatingTitle;
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
@@ -400,7 +359,7 @@ export default function HomePage() {
         {parts.map((part, index) => {
            if (part === phraseToLink) {
             return (
-              <Link key={index} href="/#about" scroll={false} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+              <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                 {part}
               </Link>
             );
@@ -458,7 +417,7 @@ export default function HomePage() {
           {parts.map((part, index) => {
             if (part === phraseToLink) {
               return (
-                <Link key={index} href="/#about" scroll={false} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+                <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                   {part}
                 </Link>
               );
@@ -606,7 +565,7 @@ export default function HomePage() {
                    isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
               )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
-                  <Link href="/#projects" scroll={false}>
+                  <Link href="/#projects">
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {viewWorkButtonText}
                     </span>
@@ -618,7 +577,7 @@ export default function HomePage() {
                   asChild
                   className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
                 >
-                  <Link href="/#about" scroll={false}>
+                  <Link href="/#about">
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {aboutMeButtonText}
                     </span>

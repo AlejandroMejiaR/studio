@@ -171,7 +171,6 @@ const Navbar = () => {
             <Link
               key={link.href}
               href={link.href}
-              scroll={false}
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
               onClick={handleHomeNavigation}
             >
@@ -288,7 +287,6 @@ const Navbar = () => {
                     <Link
                       key={link.href}
                       href={link.href}
-                      scroll={false}
                       className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 ease-in-out"
                       onClick={handleMobileHomeNavigation}
                     >
