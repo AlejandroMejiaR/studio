@@ -7,6 +7,7 @@ import { getAllProjectsFromFirestore, getProjectLikes } from '@/lib/firebase';
 import ProjectCard from '@/components/projects/ProjectCard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import BackButton from '@/components/layout/BackButton';
 
 // Reusable function to fetch all likes, similar to ProjectList
 async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
@@ -61,12 +62,15 @@ export default function AllProjectsPage() {
 
   return (
     <div className="container mx-auto py-12 md:py-16 lg:py-20">
-      <h1 
-        className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
-        style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-      >
-        {allProjectsTitleText}
-      </h1>
+       <div className="relative mb-12 flex items-center justify-center">
+        <BackButton className="absolute left-0 top-1/2 -translate-y-1/2" />
+        <h1 
+          className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-center"
+          style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+        >
+          {allProjectsTitleText}
+        </h1>
+      </div>
 
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

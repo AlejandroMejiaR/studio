@@ -27,6 +27,7 @@ import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import OtherProjectsList from './OtherProjectsList';
 import React from 'react';
+import BackButton from '../layout/BackButton';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -74,26 +75,30 @@ const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectCli
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
-        <h1
-          className={cn(
-            "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-left",
-            showGallery || showCaseStudy ? "mb-8" : "mb-0"
-          )}
-        >
-          {isClientReady ? (
-            <WordRevealAnimation
-              key={`title-${titleToDisplay}-${language}`}
-              text={titleToDisplay || ""}
-              lineBaseDelay={titleBaseDelay}
-              delayBetweenWords={titleDelayBetweenWordsConst}
-              letterStaggerDelay={titleLetterStaggerConst}
-              letterAnimationDuration={titleLetterAnimationDurationConst}
-              className="block"
-            />
-          ) : (
-            <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
-          )}
-        </h1>
+        <div className="relative">
+          <BackButton className="absolute left-0 top-1/2 -translate-y-1/2 hidden sm:inline-flex" />
+          <h1
+            className={cn(
+              "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-center sm:text-left sm:pl-16",
+              showGallery || showCaseStudy ? "mb-8" : "mb-0"
+            )}
+          >
+            {isClientReady ? (
+              <WordRevealAnimation
+                key={`title-${titleToDisplay}-${language}`}
+                text={titleToDisplay || ""}
+                lineBaseDelay={titleBaseDelay}
+                delayBetweenWords={titleDelayBetweenWordsConst}
+                letterStaggerDelay={titleLetterStaggerConst}
+                letterAnimationDuration={titleLetterAnimationDurationConst}
+                className="block"
+              />
+            ) : (
+              <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
+            )}
+          </h1>
+        </div>
+
 
         {(showGallery || showCaseStudy) && (
           <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pt-0">

@@ -13,6 +13,7 @@ export interface AppTranslations {
     about: string;
     mobileMenuTitle: string;
     changeLanguageHint: string;
+    goBack: string;
   };
   home: {
     hero: {
@@ -92,6 +93,7 @@ const translations: Record<Language, AppTranslations> = {
       about: "About",
       mobileMenuTitle: "Mobile Navigation Menu",
       changeLanguageHint: "Change Language",
+      goBack: "Go Back",
     },
     home: {
       hero: {
@@ -169,6 +171,7 @@ const translations: Record<Language, AppTranslations> = {
       about: "Sobre mí",
       mobileMenuTitle: "Menú de Navegación Móvil",
       changeLanguageHint: "Cambiar Idioma",
+      goBack: "Regresar",
     },
     home: {
       hero: {
