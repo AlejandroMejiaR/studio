@@ -35,28 +35,26 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 3;
 
   return (
-    <Card className="flex flex-col h-full shadow-lg transition-all duration-300 ease-in-out hover:scale-105 hover:border-accent">
-      {/* Image Container on top */}
-      <div className="relative rounded-t-lg">
-        <Link 
-          href={`/projects/${project.slug}`} 
-          aria-label={`View details for ${titleToDisplay}`}
-          onClick={handleProjectLinkClick}
-          className="block"
-        >
-          <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
-              <Image
-                src={project.thumbnailUrl}
-                alt={titleToDisplay}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-              />
-          </div>
-        </Link>
-      </div>
+    <Card className="flex flex-col h-full shadow-md transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
+      <Link 
+        href={`/projects/${project.slug}`} 
+        aria-label={`View details for ${titleToDisplay}`}
+        onClick={handleProjectLinkClick}
+        className="block"
+      >
+        <div className="relative rounded-t-lg">
+            <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
+                <Image
+                  src={project.thumbnailUrl}
+                  alt={titleToDisplay}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                />
+            </div>
+        </div>
+      </Link>
 
-      {/* Content Container below */}
       <div className="flex flex-col justify-between flex-grow">
         <CardContent className="p-4 flex-grow space-y-1">
           <CardTitle className="font-headline text-lg mb-1 text-primary dark:text-foreground">
