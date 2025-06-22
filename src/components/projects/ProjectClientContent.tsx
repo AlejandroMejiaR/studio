@@ -96,7 +96,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectCli
         </h1>
 
         {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12 pt-0">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pt-0">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
               {showGallery && (
