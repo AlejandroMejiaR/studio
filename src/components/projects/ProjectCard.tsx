@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -72,7 +73,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       <div className="flex flex-col justify-between flex-grow">
         <CardContent className="p-4 space-y-2 flex-grow">
           <div className="flex justify-between items-start gap-2">
-            <CardTitle className="font-headline text-lg text-primary dark:text-foreground">
+            <CardTitle className="font-headline text-xl text-primary dark:text-foreground">
               <Link 
                 href={`/projects/${project.slug}`}
                 onClick={handleProjectLinkClick}
@@ -82,11 +83,11 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
               </Link>
             </CardTitle>
             {project.category && (
-              <Badge className="text-xs bg-accent text-accent-foreground shrink-0">{project.category}</Badge>
+              <Badge className="text-xs bg-accent hover:bg-accent text-accent-foreground shrink-0">{project.category}</Badge>
             )}
           </div>
           
-          <CardDescription className="text-foreground/70 line-clamp-2 text-sm">
+          <CardDescription className="text-foreground/70 line-clamp-2 text-base">
             {shortDescriptionToDisplay}
           </CardDescription>
         </CardContent>
