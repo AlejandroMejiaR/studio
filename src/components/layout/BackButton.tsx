@@ -22,7 +22,7 @@ export default function BackButton({ className }: { className?: string }) {
       className={className}
       aria-label={goBackText}
     >
-      <ArrowLeft className="h-6 w-6" />
+      <ArrowLeft className="h-6 w-6" strokeWidth={2.5} />
     </Button>
   );
 }
