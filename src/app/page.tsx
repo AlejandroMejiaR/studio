@@ -13,7 +13,6 @@ import { ArrowDown } from 'lucide-react';
 import TypingAnimation from '@/components/effects/TypingAnimation';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
-import { useFooter } from '@/contexts/FooterContext';
 import { Skeleton } from '@/components/ui/skeleton';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
@@ -32,9 +31,7 @@ export default function HomePage() {
     isClientReady,
     getEnglishTranslation
   } = useLanguage();
-  const { setIsFooterVisible } = useFooter();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
-  const aboutMeRef = useRef<HTMLElement | null>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -295,36 +292,6 @@ export default function HomePage() {
   ]);
 
 
-  useEffect(() => {
-    const aboutSection = aboutMeRef.current;
-    if (!isClientReady || !aboutSection) {
-      if (pathname === '/') {
-        setIsFooterVisible(false);
-      }
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFooterVisible(entry.isIntersecting);
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(aboutSection);
-    const rect = aboutSection.getBoundingClientRect();
-    const isInitiallyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
-    setIsFooterVisible(isInitiallyVisible);
-
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [isClientReady, setIsFooterVisible, aboutMeRef, pathname]);
-
-
   // This new effect handles scrolling to anchors (#about, #projects) reliably.
   useEffect(() => {
     if (!isClientReady) return;
@@ -433,7 +400,7 @@ export default function HomePage() {
         {parts.map((part, index) => {
            if (part === phraseToLink) {
             return (
-              <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+              <Link key={index} href="/#about" scroll={false} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                 {part}
               </Link>
             );
@@ -491,7 +458,7 @@ export default function HomePage() {
           {parts.map((part, index) => {
             if (part === phraseToLink) {
               return (
-                <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+                <Link key={index} href="/#about" scroll={false} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                   {part}
                 </Link>
               );
@@ -639,7 +606,7 @@ export default function HomePage() {
                    isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
               )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
-                  <Link href="/#projects">
+                  <Link href="/#projects" scroll={false}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {viewWorkButtonText}
                     </span>
@@ -651,7 +618,7 @@ export default function HomePage() {
                   asChild
                   className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
                 >
-                  <Link href="/#about">
+                  <Link href="/#about" scroll={false}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {aboutMeButtonText}
                     </span>
@@ -665,7 +632,7 @@ export default function HomePage() {
       </section>
 
       <ProjectList projects={projects} />
-      <section ref={aboutMeRef} id="about">
+      <section id="about">
         <AboutMe />
       </section>
     </div>
