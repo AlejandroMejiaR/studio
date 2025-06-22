@@ -166,7 +166,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                                   width={48} height={48}
                                   className={cn(
                                     "object-contain transition-transform duration-300 ease-in-out group-hover:scale-110",
-                                    skill.name === 'Figma' && 'p-1'
+                                    skill.name === 'Figma' && 'p-2'
                                   )}
                                   unoptimized={true}
                               />
