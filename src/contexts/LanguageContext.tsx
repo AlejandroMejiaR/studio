@@ -66,6 +66,7 @@ export interface AppTranslations {
     defaultText: string;
     loadingProject: string;
     returningHome: string;
+    loadingAllProjects: string;
   };
   footer: {
     portfolioTitle: string;
@@ -73,6 +74,9 @@ export interface AppTranslations {
     quickLinksTitle: string;
     projectsLink: string;
     aboutMeLink: string;
+  };
+  allProjectsPage: {
+    title: string;
   };
 }
 
@@ -139,6 +143,7 @@ const translations: Record<Language, AppTranslations> = {
       defaultText: "Loading...",
       loadingProject: "Loading Project...",
       returningHome: "Returning to Home...",
+      loadingAllProjects: "Loading All Projects...",
     },
     footer: {
       portfolioTitle: "Portfolio",
@@ -146,6 +151,9 @@ const translations: Record<Language, AppTranslations> = {
       quickLinksTitle: "Quick Links",
       projectsLink: "Projects",
       aboutMeLink: "About Me",
+    },
+    allProjectsPage: {
+      title: "All Projects",
     },
   },
   ES: {
@@ -210,6 +218,7 @@ const translations: Record<Language, AppTranslations> = {
       defaultText: "Cargando...",
       loadingProject: "Cargando Proyecto...",
       returningHome: "Volviendo al Inicio...",
+      loadingAllProjects: "Cargando Todos los Proyectos...",
     },
     footer: {
       portfolioTitle: "Portafolio",
@@ -217,6 +226,9 @@ const translations: Record<Language, AppTranslations> = {
       quickLinksTitle: "Enlaces Rápidos",
       projectsLink: "Proyectos",
       aboutMeLink: "Sobre Mí",
+    },
+    allProjectsPage: {
+      title: "Todos los Proyectos",
     },
   },
 };

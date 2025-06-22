@@ -55,8 +55,8 @@ export default function AllProjectsPage() {
   }, []);
 
   const allProjectsTitleText = isClientReady 
-    ? translationsForLanguage.nav.projects
-    : getEnglishTranslation(t => t.nav.projects) || "Projects";
+    ? translationsForLanguage.allProjectsPage.title
+    : getEnglishTranslation(t => t.allProjectsPage.title) || "All Projects";
 
 
   return (
