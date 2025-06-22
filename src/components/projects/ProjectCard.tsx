@@ -32,8 +32,24 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
 
-  const technologiesToShow = 3;
+  // Logic to dynamically show badges to prevent wrapping
+  const maxBadgesInContainer = 4;
+  
+  // If we have a category, it takes up one badge slot.
+  const techSlotsAvailable = project.category ? maxBadgesInContainer - 1 : maxBadgesInContainer;
 
+  const numTechs = project.technologies.length;
+  let techBadgesToShow = project.technologies;
+  let remainingTechsCount = 0;
+
+  // If the number of technologies exceeds the available space, we need a "+N" badge.
+  if (numTechs > techSlotsAvailable) {
+    // The "+N" badge itself takes up one spot.
+    const numTechsToDisplay = techSlotsAvailable - 1;
+    techBadgesToShow = project.technologies.slice(0, numTechsToDisplay);
+    remainingTechsCount = numTechs - numTechsToDisplay;
+  }
+  
   return (
     <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
       <Link 
@@ -75,15 +91,15 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-3 flex justify-between items-center border-t">
+        <CardFooter className="p-4 flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
           <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
-            {project.technologies.slice(0, technologiesToShow).map((tech) => (
+            {techBadgesToShow.map((tech) => (
               <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
             ))}
-            {project.technologies.length > technologiesToShow && (
+            {remainingTechsCount > 0 && (
               <Badge variant="outline" className="text-xs">
-                +{project.technologies.length - technologiesToShow}
+                +{remainingTechsCount}
               </Badge>
             )}
           </div>
