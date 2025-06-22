@@ -41,21 +41,21 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const technologiesToShow = 4;
 
   return (
-    <Card className="group grid grid-cols-1 md:grid-cols-5 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-full">
-      {/* Image Container */}
-      <div className="md:col-span-2 relative min-h-[250px] md:h-full">
+    <Card className="group flex flex-col h-full shadow-lg hover:shadow-xl transition-all duration-300">
+      {/* Image Container on top */}
+      <div className="relative overflow-hidden rounded-t-lg">
         <Link 
           href={`/projects/${project.slug}`} 
           aria-label={`View details for ${titleToDisplay}`}
           onClick={handleProjectLinkClick}
-          className="block w-full h-full"
+          className="block"
         >
-          <div className="relative w-full h-full overflow-hidden">
+          <div className="relative aspect-video w-full overflow-hidden">
               <Image
                 src={project.thumbnailUrl}
                 alt={titleToDisplay}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 45vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
           </div>
@@ -63,8 +63,8 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
         </Link>
       </div>
 
-      {/* Content Container */}
-      <div className="md:col-span-3 flex flex-col justify-between">
+      {/* Content Container below */}
+      <div className="flex flex-col justify-between flex-grow">
         <CardContent className="p-6 flex-grow">
           <CardTitle className="font-headline text-3xl mb-2 text-primary dark:text-foreground group-hover:text-accent dark:group-hover:text-accent transition-colors">
             <Link 
