@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -6,9 +5,7 @@ import Link from 'next/link';
 import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import LikeButton from './LikeButton';
-import { ArrowRight } from 'lucide-react';
 import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -28,9 +25,6 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
   const handleProjectLinkClick = () => {
     showLoading(loadingProjectText);
   };
-
-  const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : getEnglishTranslation(t => t.projectCard.viewMore) || "View More";
-  const technologiesLabelText = isClientReady ? translationsForLanguage.projectCard.technologiesLabel : getEnglishTranslation(t => t.projectCard.technologiesLabel) || "Technologies:";
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -56,7 +50,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
                 alt={titleToDisplay}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover transition-transform duration-300"
+                className="object-cover"
               />
           </div>
           <Badge variant="secondary" className="absolute top-4 right-4 bg-accent/90 backdrop-blur-sm text-accent-foreground text-sm">{project.category}</Badge>
@@ -66,7 +60,7 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
       {/* Content Container below */}
       <div className="flex flex-col justify-between flex-grow">
         <CardContent className="p-4 flex-grow space-y-2">
-          <CardTitle className="font-headline text-xl mb-1 text-primary dark:text-foreground transition-colors">
+          <CardTitle className="font-headline text-xl mb-1 text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               onClick={handleProjectLinkClick}
@@ -77,38 +71,20 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           <CardDescription className="text-foreground/70 line-clamp-2 text-sm leading-tight">
             {shortDescriptionToDisplay}
           </CardDescription>
-          <div>
-            <p className="text-xs text-muted-foreground mb-2">
-              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                {technologiesLabelText}
-              </span>
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {project.technologies.slice(0, technologiesToShow).map((tech) => (
-                <Badge key={tech} variant="secondary" className="text-xs">{tech}</Badge>
-              ))}
-              {project.technologies.length > technologiesToShow && (
-                <Badge variant="outline" className="text-xs">
-                  +{project.technologies.length - technologiesToShow} more
-                </Badge>
-              )}
-            </div>
-          </div>
         </CardContent>
 
         <CardFooter className="p-4 pt-2 mt-auto flex justify-between items-center border-t">
           <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          <Button asChild variant="ghost" size="sm" className="text-accent hover:text-accent hover:bg-accent/10">
-            <Link 
-              href={`/projects/${project.slug}`}
-              onClick={handleProjectLinkClick}
-            >
-              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                {viewMoreText}
-              </span>
-              <ArrowRight size={16} className="ml-1" />
-            </Link>
-          </Button>
+          <div className="flex flex-wrap justify-end gap-1.5 flex-1 ml-4">
+            {project.technologies.slice(0, technologiesToShow).map((tech) => (
+              <Badge key={tech} variant="secondary" className="text-xs">{tech}</Badge>
+            ))}
+            {project.technologies.length > technologiesToShow && (
+              <Badge variant="outline" className="text-xs">
+                +{project.technologies.length - technologiesToShow} more
+              </Badge>
+            )}
+          </div>
         </CardFooter>
       </div>
     </Card>
