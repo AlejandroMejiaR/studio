@@ -11,7 +11,7 @@ interface LanguageSwitcherTooltipProps {
 }
 
 const LanguageSwitcherTooltip = ({ show, onClose }: LanguageSwitcherTooltipProps) => {
-  const { translationsForLanguage } = useLanguage();
+  const { language } = useLanguage(); // Get the current language
 
   useEffect(() => {
     if (show) {
@@ -26,6 +26,9 @@ const LanguageSwitcherTooltip = ({ show, onClose }: LanguageSwitcherTooltipProps
     return null;
   }
 
+  // Display the hint in the *opposite* language for better user guidance
+  const hintText = language === 'EN' ? 'Cambiar Idioma' : 'Change Language';
+
   return (
     <div
       className={cn(
@@ -36,7 +39,7 @@ const LanguageSwitcherTooltip = ({ show, onClose }: LanguageSwitcherTooltipProps
     >
       {/* Arrow pointing up */}
       <div className="absolute bottom-full left-1/2 -translate-x-1/2 h-0 w-0 border-x-8 border-x-transparent border-b-[8px] border-b-primary"></div>
-      <span>{translationsForLanguage.nav.changeLanguageHint}</span>
+      <span>{hintText}</span>
     </div>
   );
 };
