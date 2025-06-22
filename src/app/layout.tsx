@@ -25,19 +25,11 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // On component mount, disable the browser's automatic scroll restoration.
-  // This is the key to making our manual scrolling work reliably.
-  useEffect(() => {
-    if (window.history.scrollRestoration) {
-      window.history.scrollRestoration = 'manual';
-    }
-  }, []);
-
-  // On every navigation, manually scroll the window to the top.
-  // This now works for back/forward buttons because we disabled the default behavior.
+  // On page navigation, scroll to the top of the page.
+  // The browser's default behavior will handle scrolling for anchor links.
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname, searchParams]);
+  }, [pathname]);
   
   useEffect(() => {
     // This effect handles the loading overlay, hiding it once the client is ready
