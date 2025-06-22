@@ -25,9 +25,17 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  // On component mount, disable the browser's automatic scroll restoration.
+  // This is the key to making our manual scrolling work reliably.
   useEffect(() => {
-    // This effect runs on every navigation and forces the viewport to the top.
-    // It's crucial for a good UX when navigating back and forth between pages.
+    if (window.history.scrollRestoration) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  // On every navigation, manually scroll the window to the top.
+  // This now works for back/forward buttons because we disabled the default behavior.
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname, searchParams]);
   
