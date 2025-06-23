@@ -3,59 +3,16 @@
 
 import type { Project } from '@/types';
 import ProjectCard from './ProjectCard';
-import { getProjectLikes } from '@/lib/firebase';
-import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface OtherProjectsListProps {
   projects: Project[];
+  likes: Record<string, number>;
 }
 
-async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    return projectIds.reduce((acc, id) => {
-      acc[id] = Math.floor(Math.random() * 100);
-      return acc;
-    }, {} as Record<string, number>);
-  }
-  const results = await Promise.allSettled(
-    projectIds.map(id => getProjectLikes(id).then(likes => ({ id, likes })))
-  );
-  return results.reduce((acc, result) => {
-    if (result.status === 'fulfilled') {
-      acc[result.value.id] = result.value.likes;
-    }
-    return acc;
-  }, {} as Record<string, number>);
-}
-
-const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
-  const [likes, setLikes] = useState<Record<string, number>>({});
-  const [isLoading, setIsLoading] = useState(true);
+const OtherProjectsList = ({ projects, likes }: OtherProjectsListProps) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-
-  useEffect(() => {
-    const fetchLikes = async () => {
-      if (projects.length > 0) {
-        setIsLoading(true);
-        const projectIds = projects.map(p => p.id);
-        try {
-          const fetchedLikes = await getAllProjectLikes(projectIds);
-          setLikes(fetchedLikes);
-        } catch (error) {
-          console.error("Failed to fetch likes for other projects:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(false);
-      }
-    };
-    if (isClientReady) {
-        fetchLikes();
-    }
-  }, [projects, isClientReady]);
 
   const otherProjectsTitle = isClientReady 
     ? translationsForLanguage.projectDetails.otherProjectsTitle
@@ -65,6 +22,9 @@ const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
     return null;
   }
   
+  // Use a simple loading check based on whether the likes map is populated for the projects.
+  const isLoading = Object.keys(likes).length === 0 && projects.length > 0;
+
   return (
     <section>
       <h2 
@@ -74,7 +34,7 @@ const OtherProjectsList = ({ projects }: OtherProjectsListProps) => {
         {otherProjectsTitle}
       </h2>
 
-      {isLoading ? (
+      {isLoading && isClientReady ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: projects.length }).map((_, i) => (
              <div key={i} className="flex flex-col space-y-3">

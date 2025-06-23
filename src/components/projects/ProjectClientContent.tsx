@@ -33,6 +33,7 @@ interface ProjectClientContentProps {
   project: Project;
   initialLikes: number;
   allProjects: Project[];
+  allLikesMap: Record<string, number>;
 }
 
 const iconMap: Record<string, ElementType> = {
@@ -45,7 +46,7 @@ const iconMap: Record<string, ElementType> = {
   Factory,
 };
 
-const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectClientContentProps) => {
+const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
@@ -221,7 +222,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects }: ProjectCli
           </div>
         )}
       </div>
-      <OtherProjectsList projects={otherProjects} />
+      <OtherProjectsList projects={otherProjects} likes={allLikesMap} />
     </>
   );
 };

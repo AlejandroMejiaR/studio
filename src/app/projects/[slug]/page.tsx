@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getProjectBySlugFromFirestore, getProjectLikes, getAllProjectsFromFirestore } from '@/lib/firebase';
+import { getProjectBySlugFromFirestore, getProjectLikes, getAllProjectsFromFirestore, getAllProjectLikes } from '@/lib/firebase';
 import ProjectClientContent from '@/components/projects/ProjectClientContent';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
@@ -60,7 +60,12 @@ export default async function ProjectPage({ params }: { params: { slug: string }
     notFound();
   }
 
-  const initialLikes = await getProjectLikes(project.id);
+  // Fetch all likes in parallel for efficiency
+  const allProjectIds = allProjects.map(p => p.id);
+  const [initialLikes, allLikesMap] = await Promise.all([
+    getProjectLikes(project.id),
+    getAllProjectLikes(allProjectIds)
+  ]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -68,6 +73,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         project={project} 
         initialLikes={initialLikes}
         allProjects={allProjects}
+        allLikesMap={allLikesMap}
       />
     </div>
   );
