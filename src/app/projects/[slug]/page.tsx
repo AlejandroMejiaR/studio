@@ -28,6 +28,9 @@ export async function generateMetadata(
                       ? project.en.shortDescription
                       : project.es.shortDescription) || 'Details about this project.';
 
+  // Prioritize the first gallery image for the OpenGraph image, fallback to banner.
+  const imageUrl = project.galleryImages?.[0] || project.bannerUrl;
+
 
   return {
     title: `${title} | Portfolio Ace`,
@@ -37,7 +40,7 @@ export async function generateMetadata(
       description: description,
       images: [
         {
-          url: project.bannerUrl, // bannerUrl is not language-specific
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: title,

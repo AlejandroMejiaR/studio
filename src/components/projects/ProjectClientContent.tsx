@@ -122,6 +122,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                               sizes="(max-width: 1279px) 100vw, 1152px"
                               className="object-cover"
                               priority={index === 0}
+                              loading={index === 0 ? 'eager' : 'lazy'}
                             />
                           </div>
                         </CarouselItem>
