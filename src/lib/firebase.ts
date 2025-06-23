@@ -150,6 +150,24 @@ export const getProjectLikes = async (projectId: string): Promise<number> => {
   }
 };
 
+export async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
+  if (!db) {
+    return projectIds.reduce((acc, id) => {
+      acc[id] = Math.floor(Math.random() * 100);
+      return acc;
+    }, {} as Record<string, number>);
+  }
+  const results = await Promise.allSettled(
+    projectIds.map(id => getProjectLikes(id).then(likes => ({ id, likes })))
+  );
+  return results.reduce((acc, result) => {
+    if (result.status === 'fulfilled') {
+      acc[result.value.id] = result.value.likes;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+}
+
 const updateLikesInFirestore = async (projectId: string, amount: number): Promise<number> => {
   if (!db) {
     // Mock like update without being noisy in the console

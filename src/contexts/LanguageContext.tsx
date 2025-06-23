@@ -86,7 +86,7 @@ export interface AppTranslations {
   };
 }
 
-const translations: Record<Language, AppTranslations> = {
+export const translations: Record<Language, AppTranslations> = {
   EN: {
     brandName: "Alejandro Mejia - Multimedia Engineer",
     brandNameShort: "Alejandro Mejia",

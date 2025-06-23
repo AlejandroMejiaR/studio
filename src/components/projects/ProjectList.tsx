@@ -3,9 +3,7 @@
 
 import type { Project } from '@/types';
 import ProjectCard from './ProjectCard';
-import { getProjectLikes } from '@/lib/firebase';
 import { useEffect, useState } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, ArrowRight } from 'lucide-react';
@@ -15,70 +13,16 @@ import { useLoading } from '@/contexts/LoadingContext';
 
 interface ProjectListProps {
   projects: Project[];
+  initialLikesMap: Record<string, number>;
 }
 
-async function getAllProjectLikes(projectIds: string[]): Promise<Record<string, number>> {
-  if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-    console.warn("Firebase projectId is not configured. Likes will be mocked.");
-    return projectIds.reduce((acc, id) => {
-      acc[id] = Math.floor(Math.random() * 100);
-      return acc;
-    }, {} as Record<string, number>);
-  }
-
-  const results = await Promise.allSettled(
-    projectIds.map(async (id) => {
-      try {
-        const likes = await getProjectLikes(id);
-        return { id, likes };
-      } catch (error) {
-        console.error(`Failed to get likes for project ${id}:`, error);
-        return { id, likes: 0, error: true };
-      }
-    })
-  );
-
-  return results.reduce((acc, result) => {
-    if (result.status === 'fulfilled') {
-      acc[result.value.id] = result.value.likes;
-    }
-    return acc;
-  }, {} as Record<string, number>);
-}
-
-
-const ProjectList = ({ projects }: ProjectListProps) => {
-  const [initialLikesMap, setInitialLikesMap] = useState<Record<string, number>>({});
-  const [isLoadingLikes, setIsLoadingLikes] = useState(true);
+const ProjectList = ({ projects, initialLikesMap }: ProjectListProps) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const { showLoading } = useLoading();
   
   const [visibleCount, setVisibleCount] = useState(3);
   const [showAllProjectsButton, setShowAllProjectsButton] = useState(false);
   const displayedProjects = projects.slice(0, visibleCount);
-
-  useEffect(() => {
-    const fetchAllLikes = async () => {
-      if (projects && projects.length > 0) {
-        setIsLoadingLikes(true);
-        const projectIds = projects.map(p => p.id);
-        try {
-          const likes = await getAllProjectLikes(projectIds);
-          setInitialLikesMap(likes);
-        } catch (error) {
-          console.error("Error fetching all project likes in ProjectList component:", error);
-          const emptyLikesMap = projectIds.reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
-          setInitialLikesMap(emptyLikesMap);
-        } finally {
-          setIsLoadingLikes(false);
-        }
-      } else {
-        setIsLoadingLikes(false);
-      }
-    };
-
-    fetchAllLikes();
-  }, [projects]);
   
   const featuredProjectsTitleText = isClientReady 
     ? translationsForLanguage.home.featuredProjectsTitle 
@@ -110,43 +54,6 @@ const ProjectList = ({ projects }: ProjectListProps) => {
   const handleViewAllProjectsClick = () => {
     showLoading(loadingAllProjectsText);
   };
-
-  const isInitialLoading = isLoadingLikes && visibleCount === 3;
-
-  if (isInitialLoading && projects.length > 0) {
-    return (
-      <section 
-        id="projects" 
-        className="pt-[50px]"
-      >
-        <h2 
-            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-12 dark:text-foreground text-center"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-        >
-          {featuredProjectsTitleText}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex flex-col space-y-3">
-              <Skeleton className="w-full aspect-square rounded-xl" />
-              <div className="space-y-2 p-4">
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
-              </div>
-              <div className="flex justify-between items-center p-4 border-t">
-                <Skeleton className="h-9 w-24" /> 
-                <div className="flex items-center gap-2">
-                    <Skeleton className="h-5 w-10" /> 
-                    <Skeleton className="h-5 w-10" /> 
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section 
