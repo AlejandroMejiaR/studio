@@ -1,7 +1,7 @@
 
 import { getAllProjectsFromFirestore, getAllProjectLikes } from '@/lib/firebase';
 import ProjectCard from '@/components/projects/ProjectCard';
-import { translations } from '@/contexts/LanguageContext'; 
+import { translations } from '@/lib/translations'; 
 import BackButton from '@/components/layout/BackButton';
 import type { Project } from '@/types';
 
