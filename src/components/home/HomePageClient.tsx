@@ -16,6 +16,7 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import { getSupabaseImageUrl } from '@/lib/supabase';
+import { useFooter } from '@/contexts/FooterContext';
 
 
 // Animation durations (ms) moved outside the component to be true constants
@@ -35,6 +36,8 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
   const heroSectionRef = useRef<HTMLElement>(null);
+  const aboutSectionRef = useRef<HTMLElement>(null);
+  const { setIsFooterVisible } = useFooter();
   const pathname = usePathname();
   const navbarAnimationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -290,6 +293,33 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
       setShouldNavbarContentBeVisible
   ]);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Update footer visibility based on whether the about section is intersecting with the viewport
+        if (pathname === '/') {
+          setIsFooterVisible(entry.isIntersecting);
+        }
+      },
+      {
+        root: null, // observes intersections relative to the viewport
+        rootMargin: '0px',
+        threshold: 0.1, // trigger when 10% of the element is visible
+      }
+    );
+
+    const currentAboutSection = aboutSectionRef.current;
+    if (currentAboutSection) {
+      observer.observe(currentAboutSection);
+    }
+
+    return () => {
+      if (currentAboutSection) {
+        observer.unobserve(currentAboutSection);
+      }
+    };
+  }, [pathname, setIsFooterVisible]);
+
 
   const animatingTitleLines = translationsForLanguage.home.hero.animatingTitle;
   const heroSubtitle = translationsForLanguage.home.hero.subtitle;
@@ -474,7 +504,7 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src={getSupabaseImageUrl('documents', 'hero.webp')}
+                    src={getSupabaseImageUrl('documents', 'Hero.webp')}
                     alt="Hero Image"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
@@ -574,7 +604,7 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
       <section id="projects" className="pt-[50px]">
         <ProjectList projects={projects} initialLikesMap={initialLikesMap} />
       </section>
-      <section id="about" className="pt-[100px] pb-[80px]">
+      <section id="about" ref={aboutSectionRef} className="pt-[100px] pb-[80px]">
         <AboutMe />
       </section>
     </div>
