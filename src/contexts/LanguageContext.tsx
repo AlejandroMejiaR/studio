@@ -42,6 +42,8 @@ export interface AppTranslations {
       englishB2: string;
       coding: string;
     };
+    jobTitle: string;
+    jobSpecialization: string;
   };
   projectCard: {
     viewMore: string;
@@ -122,6 +124,8 @@ const translations: Record<Language, AppTranslations> = {
         englishB2: "English B2",
         coding: "Coding",
       },
+      jobTitle: "Multimedia Engineer",
+      jobSpecialization: "Game · UX Designer",
     },
     projectCard: {
       viewMore: "View More",
@@ -200,6 +204,8 @@ const translations: Record<Language, AppTranslations> = {
         englishB2: "Inglés B2",
         coding: "Programación",
       },
+      jobTitle: "Ingeniero en Multimedia",
+      jobSpecialization: "Game · UX Designer",
     },
     projectCard: {
       viewMore: "Ver más",

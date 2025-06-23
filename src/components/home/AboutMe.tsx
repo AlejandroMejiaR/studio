@@ -1,3 +1,4 @@
+
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
@@ -45,6 +46,9 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   const workTogetherText = isClientReady ? translationsForLanguage.aboutMe.workTogether : getEnglishTranslation(t => t.aboutMe.workTogether);
   const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getEnglishTranslation(t => t.aboutMe.skillsTitle);
   const technologiesTitle = isClientReady ? translationsForLanguage.aboutMe.technologiesTitle : getEnglishTranslation(t => t.aboutMe.technologiesTitle);
+  const jobTitleText = isClientReady ? translationsForLanguage.aboutMe.jobTitle : getEnglishTranslation(t => t.aboutMe.jobTitle);
+  const jobSpecializationText = isClientReady ? translationsForLanguage.aboutMe.jobSpecialization : getEnglishTranslation(t => t.aboutMe.jobSpecialization);
+
 
   return (
     // The outer section element is now in page.tsx and has the ref
@@ -66,9 +70,9 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
             </CardContent>
             <div className="p-6 bg-card rounded-b-lg">
                 <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Alejandro Mejia Rojas</h3>
-                <p className="text-accent">
-                  Multimedia Engineer<br />
-                  <span className="text-sm">Game Design · UX</span>
+                <p className="text-accent" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                  {jobTitleText}<br />
+                  <span className="text-sm">{jobSpecializationText}</span>
                 </p>
             </div>
           </Card>
