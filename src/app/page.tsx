@@ -493,7 +493,7 @@ export default function HomePage() {
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src={getSupabaseImageUrl('documents', 'Hero.webp')}
+                    src={getSupabaseImageUrl('documents', 'hero.webp')}
                     alt="Hero Image"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
