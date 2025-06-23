@@ -13,13 +13,7 @@ import {
   CalendarDays,
   Lightbulb,
   Target,
-  Sparkles,
-  Factory, // Keep if used in data
-  Briefcase, // Keep if used in data
-  Zap, // Keep if used in data
-  BarChart3, // Keep if used in data
 } from 'lucide-react';
-import type { ElementType } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -35,16 +29,6 @@ interface ProjectClientContentProps {
   allProjects: Project[];
   allLikesMap: Record<string, number>;
 }
-
-const iconMap: Record<string, ElementType> = {
-  Briefcase,
-  Zap,
-  BarChart3,
-  Lightbulb,
-  Target,
-  Sparkles,
-  Factory,
-};
 
 const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
