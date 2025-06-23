@@ -489,7 +489,7 @@ export default function HomePage() {
           )}>
             {isFinalLayout ? (
                <div className={cn(
-                  "relative w-64 h-80 md:w-80 md:h-96 lg:w-full lg:h-full mx-auto lg:mx-0",
+                  "relative w-64 h-80 md:w-80 md:h-96 lg:w-full lg:h-full mx-auto lg:mx-0 hidden lg:block",
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
@@ -590,7 +590,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ProjectList projects={projects} />
+      <section id="projects" className="pt-[50px]">
+        <ProjectList projects={projects} />
+      </section>
       <section id="about" className="pt-[100px] pb-[80px]">
         <AboutMe />
       </section>
