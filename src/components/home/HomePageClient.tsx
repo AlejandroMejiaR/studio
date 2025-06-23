@@ -294,17 +294,26 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
   ]);
 
   useEffect(() => {
+    // This effect is ONLY for the homepage to control the footer.
+    if (pathname !== '/') {
+      // If for some reason this component is rendered on another path,
+      // ensure footer is visible and do nothing else.
+      setIsFooterVisible(true);
+      return;
+    }
+
+    // On the homepage, footer visibility is controlled by the observer.
+    // Set initial state to false for this page view.
+    setIsFooterVisible(false);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Update footer visibility based on whether the about section is intersecting with the viewport
-        if (pathname === '/') {
-          setIsFooterVisible(entry.isIntersecting);
-        }
+        setIsFooterVisible(entry.isIntersecting);
       },
       {
-        root: null, // observes intersections relative to the viewport
+        root: null,
         rootMargin: '0px',
-        threshold: 0.1, // trigger when 10% of the element is visible
+        threshold: 0.1,
       }
     );
 
@@ -313,10 +322,12 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
       observer.observe(currentAboutSection);
     }
 
+    // When the component unmounts (e.g., navigating away), restore the footer's visibility.
     return () => {
       if (currentAboutSection) {
         observer.unobserve(currentAboutSection);
       }
+      setIsFooterVisible(true);
     };
   }, [pathname, setIsFooterVisible]);
 

@@ -12,9 +12,8 @@ interface FooterContextType {
 const FooterContext = createContext<FooterContextType | undefined>(undefined);
 
 export const FooterProvider = ({ children }: { children: ReactNode }) => {
-  // Default to true. The footer should be visible on all pages by default.
-  // Specific pages can override this if necessary, but it's no longer hidden
-  // on the homepage by default.
+  // Default to true. The footer should be visible on all pages by default,
+  // except for the homepage which has special logic to control it.
   const [isFooterVisible, setIsFooterVisible] = useState(true);
 
   return (
