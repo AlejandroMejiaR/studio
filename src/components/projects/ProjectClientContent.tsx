@@ -39,7 +39,6 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
   const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
   const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
-  const technologiesText = isClientReady ? translationsForLanguage.projectDetails.technologiesTitle : getEnglishTranslation(t => t.projectDetails.technologiesTitle);
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
   
@@ -126,13 +125,12 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                   <div className="space-y-6 flex-grow">
                     {project.technologies && project.technologies.length > 0 && (
                       <div>
-                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
-                          <Cpu className="mr-3 h-6 w-6 text-accent shrink-0" />
-                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                            {technologiesText}
-                          </span>
-                        </h3>
-                        <div className="flex flex-wrap gap-2 pl-2">
+                        {project.category && (
+                          <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1 mb-3">
+                            {project.category}
+                          </Badge>
+                        )}
+                        <div className="flex flex-wrap gap-2">
                           {project.technologies.map((tech) => (
                             <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
                               {tech}
@@ -170,7 +168,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                   </div>
 
                   <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
-                      {/* Left group: Action Buttons & Category */}
+                      {/* Left group: Action Buttons */}
                       <div className="flex flex-wrap items-center gap-3">
                         {project.liveUrl && project.liveUrl !== 'none' && (
                           <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -191,11 +189,6 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                               </span>
                             </Link>
                           </Button>
-                        )}
-                        {project.category && (
-                          <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                            {project.category}
-                          </Badge>
                         )}
                       </div>
                       
