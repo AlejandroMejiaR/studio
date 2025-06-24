@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project, ProjectTranslationDetails } from '@/types';
@@ -60,20 +61,19 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "relative flex flex-col items-start", // Default to flex-col, items-start for mobile
-            "sm:flex-row sm:items-center sm:justify-center", // Switch to row layout on sm+
+            "flex flex-col items-start", // Default to flex-col, items-start for mobile
+            "sm:flex-row sm:items-center sm:justify-start sm:gap-4", // Use flexbox for desktop alignment
             showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
             <BackButton className={cn(
-                "mb-4", // Margin bottom for mobile
-                "sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 sm:mb-0", // Absolute positioning on sm+
+                "mb-4 sm:mb-0", // Reset margin for desktop
                 "bg-accent text-accent-foreground hover:bg-accent/90"
             )} />
 
             <h1
                 className={cn(
-                "w-full text-left font-headline text-4xl font-bold", // Default left for mobile
-                "sm:text-center sm:text-5xl", // Center on sm and up
+                "w-full text-left font-headline text-4xl font-bold", // Keep full-width for mobile
+                "sm:w-auto sm:text-left sm:text-5xl", // Align left on desktop and set auto width
                 "md:text-6xl"
                 )}
             >
