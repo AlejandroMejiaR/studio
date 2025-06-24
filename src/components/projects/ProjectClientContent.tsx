@@ -52,7 +52,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
   return (
     <>
-      <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
+      <div className="mb-8 md:mb-12">
         <div className="flex items-center gap-8">
           <BackButton />
           <h1
@@ -79,26 +79,25 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
           </h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 mb-6">
-          {project.category && (
-            <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-              {project.category}
-            </Badge>
-          )}
-          {project.category && project.technologies && project.technologies.length > 0 && (
-            <span className="text-muted-foreground mx-1">-</span>
-          )}
-          {project.technologies?.map((tech) => (
-            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
-              {tech}
-            </Badge>
-          ))}
-        </div>
-
         {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 mt-10">
+          <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 mt-10">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
+               <div className="flex flex-wrap items-center gap-2 mb-6">
+                {project.category && (
+                  <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
+                    {project.category}
+                  </Badge>
+                )}
+                {project.category && project.technologies && project.technologies.length > 0 && (
+                  <span className="text-muted-foreground mx-1">-</span>
+                )}
+                {project.technologies?.map((tech) => (
+                  <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
               {showGallery && (
                 <>
                   <Carousel
@@ -138,6 +137,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
               {showCaseStudy && (
                 <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full">
                   <div className="space-y-6 flex-grow">
+                    
                     {problemStatementToDisplay && (
                       <div>
                         <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
