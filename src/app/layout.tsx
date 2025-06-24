@@ -7,14 +7,10 @@ import { Toaster } from '@/components/ui/toaster';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
-import { LoadingProvider } from '@/contexts/LoadingContext';
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
 import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
-import LoadingSpinnerOverlay from '@/components/layout/LoadingSpinnerOverlay';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, Suspense } from 'react'; 
-import { useLoading } from '@/contexts/LoadingContext';
+import { Suspense } from 'react'; 
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
@@ -33,20 +29,9 @@ const spaceGrotesk = Space_Grotesk({
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
-  const { isPageLoading, loadingText, hideLoading } = useLoading();
   const { isClientReady } = useLanguage();
   const { isFooterVisible } = useFooter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   
-  useEffect(() => {
-    // This effect runs on every route change, primarily to hide the loading overlay.
-    // Scroll behavior is now handled automatically by Next.js and the browser.
-    if (isClientReady) {
-        hideLoading();
-    }
-  }, [pathname, searchParams, hideLoading, isClientReady]); // Rerun when navigation completes.
-
   if (!isClientReady) {
     return null;
   }
@@ -64,7 +49,6 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
       </div>
       <ScrollToTopButton />
       <Toaster />
-      <LoadingSpinnerOverlay isLoading={isPageLoading} loadingText={loadingText} />
     </>
   );
 }
@@ -100,15 +84,13 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased bg-background text-foreground", inter.variable, spaceGrotesk.variable)} suppressHydrationWarning={true}>
         <LanguageProvider>
-          <LoadingProvider>
-            <FooterProvider>
-              <NavbarVisibilityProvider>
-                <LayoutClientLogic>
-                  {children}
-                </LayoutClientLogic>
-              </NavbarVisibilityProvider>
-            </FooterProvider>
-          </LoadingProvider>
+          <FooterProvider>
+            <NavbarVisibilityProvider>
+              <LayoutClientLogic>
+                {children}
+              </LayoutClientLogic>
+            </NavbarVisibilityProvider>
+          </FooterProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -1,13 +1,12 @@
 
 "use client";
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
-import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,7 +17,6 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('dark'); // Default to dark
   const [navbarIsMounted, setNavbarIsMounted] = useState(false);
-  const { showLoading } = useLoading();
   const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const pathname = usePathname();
   const isMobile = useIsMobile();
@@ -88,23 +86,10 @@ const Navbar = () => {
   const currentLanguageDisplay = isClientReady ? language : 'EN';
   const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]) || labelKey;
 
-  const returningHomeText = isClientReady
-    ? translationsForLanguage.loadingScreen.returningHome
-    : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
-
   const staggerDelay = 0.05;
 
-  const handleHomeNavigation = () => {
-    if (pathname !== '/') {
-      showLoading(returningHomeText);
-    }
-  };
-
-  const handleMobileHomeNavigation = () => {
+  const handleMobileMenuClose = () => {
     setIsMobileMenuOpen(false);
-    if (pathname !== '/') {
-      showLoading(returningHomeText);
-    }
   };
 
   const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (
@@ -153,7 +138,6 @@ const Navbar = () => {
         <Link
           href="/"
           className="flex items-center gap-3 transition-opacity duration-300 ease-in-out hover:opacity-80"
-          onClick={handleHomeNavigation}
         >
           {navbarIsMounted ? (
             <Gamepad2
@@ -172,7 +156,6 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
-              onClick={handleHomeNavigation}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {navLinkText(link.labelKey)}
@@ -270,7 +253,7 @@ const Navbar = () => {
                 <Link
                   href="/"
                   className="flex items-center gap-3 mb-8 transition-opacity duration-300 ease-in-out hover:opacity-80"
-                  onClick={handleMobileHomeNavigation}
+                  onClick={handleMobileMenuClose}
                 >
                   {navbarIsMounted ? (
                      <Gamepad2
@@ -288,7 +271,7 @@ const Navbar = () => {
                       key={link.href}
                       href={link.href}
                       className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 ease-in-out"
-                      onClick={handleMobileHomeNavigation}
+                      onClick={handleMobileMenuClose}
                     >
                       <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                         {navLinkText(link.labelKey)}

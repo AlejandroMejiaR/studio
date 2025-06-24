@@ -3,12 +3,11 @@
 
 import type { Project } from '@/types';
 import ProjectCard from './ProjectCard';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useLoading } from '@/contexts/LoadingContext';
 
 
 interface ProjectListProps {
@@ -17,7 +16,6 @@ interface ProjectListProps {
 
 const ProjectList = ({ projects }: ProjectListProps) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-  const { showLoading } = useLoading();
   
   const [visibleCount, setVisibleCount] = useState(3);
   const [showAllProjectsButton, setShowAllProjectsButton] = useState(false);
@@ -35,10 +33,6 @@ const ProjectList = ({ projects }: ProjectListProps) => {
     ? translationsForLanguage.home.buttons.viewAllProjects
     : getEnglishTranslation(t => t.home.buttons.viewAllProjects);
 
-  const loadingAllProjectsText = isClientReady
-    ? translationsForLanguage.loadingScreen.loadingAllProjects
-    : getEnglishTranslation(t => t.loadingScreen.loadingAllProjects) || ["Loading All Projects..."];
-
   const noProjectsText = isClientReady 
     ? translationsForLanguage.projectList.noProjects 
     : getEnglishTranslation(t => t.projectList.noProjects);
@@ -48,10 +42,6 @@ const ProjectList = ({ projects }: ProjectListProps) => {
     if (!showAllProjectsButton) {
       setShowAllProjectsButton(true);
     }
-  };
-
-  const handleViewAllProjectsClick = () => {
-    showLoading(loadingAllProjectsText);
   };
 
   return (
@@ -104,7 +94,7 @@ const ProjectList = ({ projects }: ProjectListProps) => {
                     asChild
                     className="group bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6"
                 >
-                    <Link href="/projects" onClick={handleViewAllProjectsClick}>
+                    <Link href="/projects">
                         <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                             {viewAllProjectsText}
                         </span>

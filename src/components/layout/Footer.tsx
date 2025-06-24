@@ -3,19 +3,11 @@
 
 import { Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const pathname = usePathname();
-  const { showLoading } = useLoading();
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-
-  const returningHomeText = isClientReady
-    ? translationsForLanguage.loadingScreen.returningHome
-    : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
 
   const portfolioTitleText = isClientReady
     ? translationsForLanguage.footer.portfolioTitle
@@ -37,13 +29,6 @@ const Footer = () => {
     ? translationsForLanguage.footer.aboutMeLink
     : getEnglishTranslation(t => t.footer.aboutMeLink) || "About Me";
 
-
-  const handleNavigationToHomeSection = () => {
-    if (pathname !== '/') {
-        showLoading(returningHomeText);
-    }
-  };
-
   return (
     <footer className="bg-footer-bg text-footer-fg py-12">
       <div className="container mx-auto px-4">
@@ -64,7 +49,6 @@ const Footer = () => {
             <Link 
               href="/#projects" 
               className="hover:text-accent transition-colors"
-              onClick={handleNavigationToHomeSection}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {projectsLinkText}
@@ -73,7 +57,6 @@ const Footer = () => {
             <Link 
               href="/#about" 
               className="hover:text-accent transition-colors"
-              onClick={handleNavigationToHomeSection}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {aboutMeLinkText}

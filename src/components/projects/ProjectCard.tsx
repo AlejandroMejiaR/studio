@@ -6,7 +6,6 @@ import Link from 'next/link';
 import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
@@ -14,16 +13,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
-  const { showLoading } = useLoading();
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
-
-  const loadingProjectText = isClientReady 
-    ? translationsForLanguage.loadingScreen.loadingProject 
-    : getEnglishTranslation(t => t.loadingScreen.loadingProject) || ["Loading Project..."];
-
-  const handleProjectLinkClick = () => {
-    showLoading(loadingProjectText);
-  };
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -54,7 +44,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       <Link 
         href={`/projects/${project.slug}`} 
         aria-label={`View details for ${titleToDisplay}`}
-        onClick={handleProjectLinkClick}
         className="block"
       >
         <div className="relative w-full aspect-[10/7]">
@@ -74,7 +63,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             <CardTitle className="font-headline text-xl text-primary dark:text-foreground">
               <Link 
                 href={`/projects/${project.slug}`}
-                onClick={handleProjectLinkClick}
                 className="hover:text-accent transition-colors"
               >
                 {titleToDisplay}

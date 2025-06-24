@@ -55,12 +55,6 @@ export interface AppTranslations {
     viewCodeButton: string;
     otherProjectsTitle: string;
   };
-  loadingScreen: {
-    defaultText: string[];
-    loadingProject: string[];
-    returningHome: string[];
-    loadingAllProjects: string[];
-  };
   footer: {
     portfolioTitle: string;
     rightsReservedText: string;
@@ -132,12 +126,6 @@ export const translations: Record<Language, AppTranslations> = {
       viewCodeButton: "View Code",
       otherProjectsTitle: "Other Projects",
     },
-    loadingScreen: {
-      defaultText: ["Loading...", "Please wait...", "Processing..."],
-      loadingProject: ["Loading Project...", "Unveiling masterpiece...", "Almost there..."],
-      returningHome: ["Returning to Home...", "Heading back...", "Just a moment..."],
-      loadingAllProjects: ["Loading All Projects...", "Gathering portfolio...", "Preparing the gallery..."],
-    },
     footer: {
       portfolioTitle: "Portfolio",
       rightsReservedText: "All rights reserved.",
@@ -204,12 +192,6 @@ export const translations: Record<Language, AppTranslations> = {
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
       otherProjectsTitle: "Otros Proyectos",
-    },
-    loadingScreen: {
-      defaultText: ["Cargando...", "Por favor, espera...", "Procesando..."],
-      loadingProject: ["Cargando Proyecto...", "Revelando obra maestra...", "Casi listo..."],
-      returningHome: ["Volviendo al Inicio...", "Regresando...", "Un momento..."],
-      loadingAllProjects: ["Cargando Proyectos...", "Reuniendo portafolio...", "Preparando la galería..."],
     },
     footer: {
       portfolioTitle: "Portafolio",
