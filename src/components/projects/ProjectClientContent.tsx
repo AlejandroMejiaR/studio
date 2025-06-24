@@ -88,9 +88,6 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                       {project.category}
                     </Badge>
                   )}
-                  {project.category && project.technologies && project.technologies.length > 0 && (
-                    <span className="text-muted-foreground mx-1">-</span>
-                  )}
                   {project.technologies?.map((tech) => (
                     <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
                       {tech}
