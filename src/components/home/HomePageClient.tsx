@@ -43,6 +43,32 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
   const prevLanguageRef = useRef<Language | null>(null);
 
+  // Effect to handle scrolling to a hash anchor on page load/navigation.
+  // This is the key fix for navigating from another page (e.g., /projects/slug)
+  // back to a specific section on the homepage.
+  useEffect(() => {
+    // Only run on the client and once the page is ready.
+    if (!isClientReady) return;
+
+    // A small delay ensures that the page has finished rendering, including any
+    // animations, before we attempt to scroll.
+    const scrollTimer = setTimeout(() => {
+      const hash = window.location.hash;
+      if (hash) {
+        const id = hash.substring(1);
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }
+    }, 150); // A slightly longer delay for robustness.
+
+    return () => clearTimeout(scrollTimer);
+  }, [isClientReady, pathname]); // Reruns if we navigate to this page.
+
   useEffect(() => {
     if (!isClientReady) return;
   
