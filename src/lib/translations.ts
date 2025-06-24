@@ -16,7 +16,6 @@ export interface AppTranslations {
     buttons: {
       viewWork: string;
       aboutMe: string;
-      viewAllProjects: string;
     };
     featuredProjectsTitle: string;
     viewMoreProjects: string;
@@ -44,7 +43,6 @@ export interface AppTranslations {
   projectDetails: {
     theChallenge: string;
     theApproach: string;
-    technologiesTitle: string;
     liveDemoButton: string;
     viewCodeButton: string;
   };
@@ -54,9 +52,6 @@ export interface AppTranslations {
     quickLinksTitle: string;
     projectsLink: string;
     aboutMeLink: string;
-  };
-  allProjectsPage: {
-    title: string;
   };
 }
 
@@ -81,7 +76,6 @@ export const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "View My Work",
         aboutMe: "About Me",
-        viewAllProjects: "View All Projects",
       },
       featuredProjectsTitle: "Featured Projects",
       viewMoreProjects: "View More Projects",
@@ -109,7 +103,6 @@ export const translations: Record<Language, AppTranslations> = {
     projectDetails: {
       theChallenge: "The Challenge",
       theApproach: "The Approach",
-      technologiesTitle: "Technologies",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
     },
@@ -119,9 +112,6 @@ export const translations: Record<Language, AppTranslations> = {
       quickLinksTitle: "Quick Links",
       projectsLink: "Projects",
       aboutMeLink: "About Me",
-    },
-    allProjectsPage: {
-      title: "All Projects",
     },
   },
   ES: {
@@ -142,7 +132,6 @@ export const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "Ver Mi Trabajo",
         aboutMe: "Sobre Mí",
-        viewAllProjects: "Ver Todos los Proyectos",
       },
       featuredProjectsTitle: "Proyectos Destacados",
       viewMoreProjects: "Ver Más Proyectos",
@@ -170,7 +159,6 @@ export const translations: Record<Language, AppTranslations> = {
     projectDetails: {
       theChallenge: "El Desafío",
       theApproach: "El Enfoque",
-      technologiesTitle: "Tecnologías",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
     },
@@ -180,9 +168,6 @@ export const translations: Record<Language, AppTranslations> = {
       quickLinksTitle: "Enlaces Rápidos",
       projectsLink: "Proyectos",
       aboutMeLink: "Sobre Mí",
-    },
-    allProjectsPage: {
-      title: "Todos los Proyectos",
     },
   },
 };
