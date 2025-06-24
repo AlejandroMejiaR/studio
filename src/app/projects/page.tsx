@@ -28,17 +28,13 @@ export default async function AllProjectsPage() {
   
   return (
     <div className="container mx-auto py-12 md:py-16 lg:py-20">
-      <div className="mb-12 flex flex-col items-start gap-4 md:flex-row md:items-center">
-        <div className="w-full md:w-auto">
-          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
-        </div>
-        <div className="w-full">
-          <h1 
-            className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left"
-          >
-            {allProjectsTitleText}
-          </h1>
-        </div>
+      <div className="mb-12 flex flex-row items-center gap-4">
+        <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
+        <h1 
+          className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left"
+        >
+          {allProjectsTitleText}
+        </h1>
       </div>
 
       {fetchedProjects.length > 0 ? (
