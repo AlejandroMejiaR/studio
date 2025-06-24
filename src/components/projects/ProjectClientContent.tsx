@@ -82,6 +82,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
           <LikeButton
             projectId={project.id}
             initialLikes={initialLikes}
+            size="icon"
             className="border-2"
           />
         </div>

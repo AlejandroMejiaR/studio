@@ -2,19 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getProjectLikes, incrementProjectLike, decrementProjectLike, hasClientLiked, setClientLiked } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { VariantProps } from 'class-variance-authority';
 
 interface LikeButtonProps {
   projectId: string;
   initialLikes?: number;
   className?: string;
+  size?: VariantProps<typeof buttonVariants>['size'];
 }
 
-const LikeButton = ({ projectId, initialLikes, className }: LikeButtonProps) => {
+const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeButtonProps) => {
   const [likes, setLikes] = useState(initialLikes ?? 0);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -80,7 +82,7 @@ const LikeButton = ({ projectId, initialLikes, className }: LikeButtonProps) => 
   return (
     <Button
       variant="outline"
-      size="sm"
+      size={size}
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
