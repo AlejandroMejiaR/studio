@@ -318,41 +318,35 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       setShouldNavbarContentBeVisible
   ]);
 
+  // This effect is ONLY for the homepage to control the footer on scroll.
   useEffect(() => {
-    // This effect is ONLY for the homepage to control the footer.
+    // The FooterProvider handles visibility on other pages. We only need to act here on the homepage.
     if (pathname !== '/') {
-      // If for some reason this component is rendered on another path,
-      // ensure footer is visible and do nothing else.
-      setIsFooterVisible(true);
-      return;
+        return;
     }
 
-    // On the homepage, footer visibility is controlled by the observer.
-    // Set initial state to false for this page view.
-    setIsFooterVisible(false);
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFooterVisible(entry.isIntersecting);
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1,
-      }
+        ([entry]) => {
+            // When the "About Me" section is in view, show the footer. Hide it otherwise.
+            setIsFooterVisible(entry.isIntersecting);
+        },
+        {
+            root: null, // observing intersections relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.1, // Fire when 10% of the section is visible
+        }
     );
 
     const currentAboutSection = aboutSectionRef.current;
     if (currentAboutSection) {
-      observer.observe(currentAboutSection);
+        observer.observe(currentAboutSection);
     }
 
-    // When the component unmounts (e.g., navigating away), restore the footer's visibility.
+    // Cleanup function to stop observing when the component unmounts or path changes.
     return () => {
-      if (currentAboutSection) {
-        observer.unobserve(currentAboutSection);
-      }
-      setIsFooterVisible(true);
+        if (currentAboutSection) {
+            observer.unobserve(currentAboutSection);
+        }
     };
   }, [pathname, setIsFooterVisible]);
 
