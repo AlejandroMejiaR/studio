@@ -14,9 +14,10 @@ interface LikeButtonProps {
   initialLikes?: number;
   className?: string;
   size?: VariantProps<typeof buttonVariants>['size'];
+  iconClassName?: string;
 }
 
-const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeButtonProps) => {
+const LikeButton = ({ projectId, initialLikes, className, size = 'sm', iconClassName }: LikeButtonProps) => {
   const [likes, setLikes] = useState(initialLikes ?? 0);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -93,12 +94,12 @@ const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeBut
       aria-label={isLiked ? "Unlike project" : "Like project"}
     >
       <Heart
-        size={32}
         className={cn(
-          "transition-colors duration-150",
+          "transition-colors duration-150 h-8 w-8",
           isLiked
             ? "fill-destructive text-destructive"
-            : "fill-transparent text-muted-foreground group-hover:fill-destructive group-hover:text-destructive"
+            : "fill-transparent text-muted-foreground group-hover:fill-destructive group-hover:text-destructive",
+          iconClassName
         )}
       />
     </Button>

@@ -55,7 +55,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
           <h1
             className={cn(
@@ -83,6 +83,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             projectId={project.id}
             initialLikes={initialLikes}
             size="icon"
+            iconClassName="h-10 w-10"
           />
         </div>
 
