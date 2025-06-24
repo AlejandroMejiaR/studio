@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Project, ProjectTranslationDetails } from '@/types';
@@ -57,7 +56,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
         <div className="flex justify-between items-center gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex-1 flex items-center gap-4">
                 <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
                 <h1
                     className={cn(
@@ -80,7 +79,11 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                 </h1>
             </div>
-            <LikeButton projectId={project.id} initialLikes={initialLikes} />
+            <LikeButton 
+              projectId={project.id} 
+              initialLikes={initialLikes} 
+              className="h-auto py-3 px-5 text-2xl border-2 [&_svg]:size-8"
+            />
         </div>
 
 

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -7,19 +6,20 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getProjectLikes, incrementProjectLike, decrementProjectLike, hasClientLiked, setClientLiked } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { useLanguage } from '@/contexts/LanguageContext'; // Added
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface LikeButtonProps {
   projectId: string;
-  initialLikes?: number; // Optional: pass initial likes to avoid fetching on first render
+  initialLikes?: number;
+  className?: string;
 }
 
-const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
+const LikeButton = ({ projectId, initialLikes, className }: LikeButtonProps) => {
   const [likes, setLikes] = useState(initialLikes ?? 0);
   const [isLiked, setIsLiked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-  const { translationsForLanguage } = useLanguage(); // Added
+  const { translationsForLanguage } = useLanguage();
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -84,10 +84,11 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
-        "flex items-center gap-2 transition-all duration-150 group", // The 'group' class here is for potential future use or other child elements if any.
+        "flex items-center gap-2 transition-all duration-150 group",
         isLiked
-          ? "text-destructive border-destructive hover:bg-destructive/10" // Liked state
-          : "text-muted-foreground border-input hover:border-accent hover:bg-background hover:text-muted-foreground" // Unliked state
+          ? "text-destructive border-destructive hover:bg-destructive/10"
+          : "text-muted-foreground border-border hover:border-accent hover:bg-background hover:text-muted-foreground",
+        className
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
@@ -97,8 +98,8 @@ const LikeButton = ({ projectId, initialLikes }: LikeButtonProps) => {
         className={cn(
           "transition-colors duration-150",
           isLiked
-            ? "fill-destructive text-destructive" // Liked state: heart is filled and stroked red
-            : "text-muted-foreground fill-none hover:fill-destructive" // Unliked: gray stroke, no fill. On SVG hover: gray stroke, red fill.
+            ? "fill-destructive text-destructive"
+            : "text-muted-foreground fill-none hover:fill-destructive"
         )}
       />
       <span>{likes}</span>
