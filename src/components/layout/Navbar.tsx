@@ -88,8 +88,27 @@ const Navbar = () => {
 
   const staggerDelay = 0.05;
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = e.currentTarget.getAttribute('href');
+    // Only handle scroll if on the homepage
+    if (pathname === '/' && href?.startsWith('/#')) {
+      e.preventDefault();
+      const targetId = href.substring(2);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // Otherwise, let Link component handle navigation
+  };
+
   const handleMobileMenuClose = () => {
     setIsMobileMenuOpen(false);
+  };
+  
+  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    handleSmoothScroll(e);
+    handleMobileMenuClose();
   };
 
   const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (
@@ -155,6 +174,7 @@ const Navbar = () => {
             <Link
               key={link.href}
               href={link.href}
+              onClick={handleSmoothScroll}
               className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
@@ -271,7 +291,7 @@ const Navbar = () => {
                       key={link.href}
                       href={link.href}
                       className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-300 ease-in-out"
-                      onClick={handleMobileMenuClose}
+                      onClick={handleMobileLinkClick}
                     >
                       <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                         {navLinkText(link.labelKey)}

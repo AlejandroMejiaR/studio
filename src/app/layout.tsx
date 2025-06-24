@@ -13,6 +13,7 @@ import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; /
 import { Suspense } from 'react'; 
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import { SmoothScrollHandler } from '@/components/layout/SmoothScrollHandler';
 
 
 const inter = Inter({
@@ -86,6 +87,7 @@ export default function RootLayout({
         <LanguageProvider>
           <FooterProvider>
             <NavbarVisibilityProvider>
+              <SmoothScrollHandler />
               <LayoutClientLogic>
                 {children}
               </LayoutClientLogic>

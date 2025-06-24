@@ -4,10 +4,24 @@
 import { Github, Linkedin, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const pathname = usePathname();
+
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = e.currentTarget.getAttribute('href');
+    if (pathname === '/' && href?.startsWith('/#')) {
+      e.preventDefault();
+      const targetId = href.substring(2);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const portfolioTitleText = isClientReady
     ? translationsForLanguage.footer.portfolioTitle
@@ -49,6 +63,7 @@ const Footer = () => {
             <Link 
               href="/#projects" 
               className="hover:text-accent transition-colors"
+              onClick={handleSmoothScroll}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {projectsLinkText}
@@ -57,6 +72,7 @@ const Footer = () => {
             <Link 
               href="/#about" 
               className="hover:text-accent transition-colors"
+              onClick={handleSmoothScroll}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {aboutMeLinkText}

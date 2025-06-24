@@ -390,6 +390,21 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
 
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = e.currentTarget.getAttribute('href');
+    if (href && href.startsWith('/#')) {
+      e.preventDefault();
+      const targetId = href.substring(2);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }
+  };
+
   const AnimatedSubtitle = ({ text }: { text: string }) => {
     const parts = text.split(stylingRegex);
     return (
@@ -397,7 +412,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {parts.map((part, index) => {
            if (part === phraseToLink) {
             return (
-              <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+              <Link key={index} href="/#about" onClick={handleSmoothScroll} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                 {part}
               </Link>
             );
@@ -455,7 +470,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           {parts.map((part, index) => {
             if (part === phraseToLink) {
               return (
-                <Link key={index} href="/#about" className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
+                <Link key={index} href="/#about" onClick={handleSmoothScroll} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
                   {part}
                 </Link>
               );
@@ -586,7 +601,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                    isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
               )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
-                  <Link href="/#projects">
+                  <Link href="/#projects" onClick={handleSmoothScroll}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {viewWorkButtonText}
                     </span>
@@ -598,7 +613,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   asChild
                   className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
                 >
-                  <Link href="/#about">
+                  <Link href="/#about" onClick={handleSmoothScroll}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                       {aboutMeButtonText}
                     </span>
