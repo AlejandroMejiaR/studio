@@ -24,10 +24,9 @@ const subtitleEmphasisAnimationDuration = 300;
 
 interface HomePageClientProps {
   projects: Project[];
-  initialLikesMap: Record<string, number>;
 }
 
-export default function HomePageClient({ projects, initialLikesMap }: HomePageClientProps) {
+export default function HomePageClient({ projects }: HomePageClientProps) {
   const {
     language,
     translationsForLanguage,
@@ -613,7 +612,7 @@ export default function HomePageClient({ projects, initialLikesMap }: HomePageCl
       </section>
 
       <section id="projects" className="pt-[50px]">
-        <ProjectList projects={projects} initialLikesMap={initialLikesMap} />
+        <ProjectList projects={projects} />
       </section>
       <section id="about" ref={aboutSectionRef} className="pt-[100px] pb-[80px]">
         <AboutMe />

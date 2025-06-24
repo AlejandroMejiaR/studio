@@ -55,14 +55,6 @@ export interface AppTranslations {
     viewCodeButton: string;
     otherProjectsTitle: string;
   };
-  likeButton: {
-    unlikedTitle: string;
-    unlikedDescription: string;
-    likedTitle: string;
-    likedDescription: string;
-    errorTitle: string;
-    errorDescription: string;
-  };
   loadingScreen: {
     defaultText: string[];
     loadingProject: string[];
@@ -140,14 +132,6 @@ export const translations: Record<Language, AppTranslations> = {
       viewCodeButton: "View Code",
       otherProjectsTitle: "Other Projects",
     },
-    likeButton: {
-      unlikedTitle: "Unliked!",
-      unlikedDescription: "You unliked this project.",
-      likedTitle: "Liked!",
-      likedDescription: "Thanks for liking this project!",
-      errorTitle: "Error",
-      errorDescription: "Could not update like status. Please try again.",
-    },
     loadingScreen: {
       defaultText: ["Loading...", "Please wait...", "Processing..."],
       loadingProject: ["Loading Project...", "Unveiling masterpiece...", "Almost there..."],
@@ -220,14 +204,6 @@ export const translations: Record<Language, AppTranslations> = {
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
       otherProjectsTitle: "Otros Proyectos",
-    },
-    likeButton: {
-      unlikedTitle: "¡Ya no me gusta!",
-      unlikedDescription: "Quitaste tu 'me gusta' de este proyecto.",
-      likedTitle: "¡Me gusta!",
-      likedDescription: "¡Gracias por darle 'me gusta' a este proyecto!",
-      errorTitle: "Error",
-      errorDescription: "No se pudo actualizar el estado de 'me gusta'. Por favor, inténtalo de nuevo.",
     },
     loadingScreen: {
       defaultText: ["Cargando...", "Por favor, espera...", "Procesando..."],

@@ -1,7 +1,7 @@
+
 "use client";
 
 import type { Project, ProjectTranslationDetails } from '@/types';
-import LikeButton from './LikeButton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
@@ -25,10 +25,9 @@ import { translations } from '@/lib/translations';
 
 interface ProjectClientContentProps {
   project: Project;
-  initialLikes: number;
 }
 
-const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
+const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
@@ -79,12 +78,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
               </span>
             )}
           </h1>
-          <LikeButton
-            projectId={project.id}
-            initialLikes={initialLikes}
-            size="icon"
-            iconClassName="h-10 w-10"
-          />
         </div>
 
 

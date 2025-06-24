@@ -6,16 +6,14 @@ import Link from 'next/link';
 import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import LikeButton from './LikeButton';
 import { useLoading } from '@/contexts/LoadingContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ProjectCardProps {
   project: Project;
-  initialLikes?: number;
 }
 
-const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
+const ProjectCard = ({ project }: ProjectCardProps) => {
   const { showLoading } = useLoading();
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
@@ -92,18 +90,15 @@ const ProjectCard = ({ project, initialLikes }: ProjectCardProps) => {
           </CardDescription>
         </CardContent>
 
-        <CardFooter className="p-4 flex justify-between items-center border-t">
-          <LikeButton projectId={project.id} initialLikes={initialLikes} />
-          <div className="flex flex-wrap items-center justify-end gap-1.5 flex-1 ml-4">
-            {techBadgesToShow.map((tech) => (
-              <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
-            ))}
-            {remainingTechsCount > 0 && (
-              <Badge variant="outline" className="text-xs">
-                +{remainingTechsCount}
-              </Badge>
-            )}
-          </div>
+        <CardFooter className="p-4 flex flex-wrap items-center justify-end gap-1.5 border-t">
+          {techBadgesToShow.map((tech) => (
+            <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
+          ))}
+          {remainingTechsCount > 0 && (
+            <Badge variant="outline" className="text-xs">
+              +{remainingTechsCount}
+            </Badge>
+          )}
         </CardFooter>
       </div>
     </Card>

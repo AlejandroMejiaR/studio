@@ -13,10 +13,9 @@ import { useLoading } from '@/contexts/LoadingContext';
 
 interface ProjectListProps {
   projects: Project[];
-  initialLikesMap: Record<string, number>;
 }
 
-const ProjectList = ({ projects, initialLikesMap }: ProjectListProps) => {
+const ProjectList = ({ projects }: ProjectListProps) => {
   const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
   const { showLoading } = useLoading();
   
@@ -80,7 +79,6 @@ const ProjectList = ({ projects, initialLikesMap }: ProjectListProps) => {
               <ProjectCard 
                 key={project.id} 
                 project={project} 
-                initialLikes={initialLikesMap[project.id] ?? 0} 
               />
             ))}
           </div>

@@ -1,5 +1,5 @@
 
-import { getAllProjectsFromFirestore, getAllProjectLikes } from '@/lib/firebase';
+import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import ProjectCard from '@/components/projects/ProjectCard';
 import { translations } from '@/lib/translations'; 
 import BackButton from '@/components/layout/BackButton';
@@ -14,12 +14,7 @@ const getTranslationsForServer = (lang: 'EN' | 'ES') => translations[lang];
 
 export default async function AllProjectsPage() {
   const fetchedProjects = await getAllProjectsFromFirestore();
-  let likes: Record<string, number> = {};
-  if (fetchedProjects.length > 0) {
-    const projectIds = fetchedProjects.map(p => p.id);
-    likes = await getAllProjectLikes(projectIds);
-  }
-
+  
   // Since this is a server component, we can't use the language context directly.
   // We'll pass down both language contents to the client components or make them language-agnostic.
   // For the title, we'll just use the English one as a server-default.
@@ -43,7 +38,6 @@ export default async function AllProjectsPage() {
             <ProjectCard 
               key={project.id} 
               project={project} 
-              initialLikes={likes[project.id] ?? 0}
             />
           ))}
         </div>
