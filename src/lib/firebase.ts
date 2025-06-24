@@ -132,3 +132,93 @@ export const getProjectBySlugFromFirestore = async (slug: string): Promise<Proje
     return undefined;
   }
 };
+
+// Client-side like tracking
+const LIKED_PROJECTS_KEY = 'portfolio-ace-liked-projects';
+
+export const hasClientLiked = (projectId: string): boolean => {
+  if (typeof window === 'undefined') return false;
+  try {
+    const likedProjects = JSON.parse(localStorage.getItem(LIKED_PROJECTS_KEY) || '[]');
+    return likedProjects.includes(projectId);
+  } catch (e) {
+    console.error('Failed to parse liked projects from localStorage', e);
+    return false;
+  }
+};
+
+export const setClientLiked = (projectId: string, liked: boolean): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    const likedProjects: string[] = JSON.parse(localStorage.getItem(LIKED_PROJECTS_KEY) || '[]');
+    const updatedLikedProjects = liked
+      ? [...new Set([...likedProjects, projectId])]
+      : likedProjects.filter(id => id !== projectId);
+    localStorage.setItem(LIKED_PROJECTS_KEY, JSON.stringify(updatedLikedProjects));
+  } catch (e) {
+    console.error('Failed to update liked projects in localStorage', e);
+  }
+};
+
+export const getProjectLikes = async (projectId: string): Promise<number> => {
+  if (!db) {
+    console.warn("Firebase is not configured. Returning 0 likes.");
+    return 0;
+  }
+  try {
+    const projectRef = doc(db, 'projects', projectId);
+    const projectSnap = await getDoc(projectRef);
+    if (projectSnap.exists()) {
+      return projectSnap.data().likes || 0;
+    }
+    return 0;
+  } catch (error) {
+    console.error(`Error fetching likes for project ${projectId}:`, error);
+    return 0;
+  }
+};
+
+export const incrementProjectLike = async (projectId: string): Promise<number> => {
+  if (!db) throw new Error("Firebase not configured.");
+  const projectRef = doc(db, 'projects', projectId);
+  try {
+    const newLikesCount = await runTransaction(db, async (transaction) => {
+      const projectDoc = await transaction.get(projectRef);
+      if (!projectDoc.exists()) {
+        throw new Error("Project document does not exist!");
+      }
+      const currentLikes = projectDoc.data().likes || 0;
+      const newCount = currentLikes + 1;
+      transaction.update(projectRef, { likes: increment(1) });
+      return newCount;
+    });
+    return newLikesCount;
+  } catch (e) {
+    console.error("Transaction failed: ", e);
+    throw e;
+  }
+};
+
+export const decrementProjectLike = async (projectId: string): Promise<number> => {
+    if (!db) throw new Error("Firebase not configured.");
+    const projectRef = doc(db, 'projects', projectId);
+    try {
+        const newLikesCount = await runTransaction(db, async (transaction) => {
+            const projectDoc = await transaction.get(projectRef);
+            if (!projectDoc.exists()) {
+                throw new Error("Document does not exist!");
+            }
+            const currentLikes = projectDoc.data().likes || 0;
+            let newCount = currentLikes;
+            if (currentLikes > 0) {
+                newCount = currentLikes - 1;
+                transaction.update(projectRef, { likes: increment(-1) });
+            }
+            return newCount;
+        });
+        return newLikesCount;
+    } catch (e) {
+        console.error("Transaction failed: ", e);
+        throw e;
+    }
+};
