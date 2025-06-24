@@ -86,7 +86,7 @@ const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeBut
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
-        "flex items-center gap-2 transition-all duration-150 group",
+        "flex items-center transition-all duration-150 group",
         isLiked
           ? "text-destructive border-destructive hover:bg-destructive/10"
           : "text-muted-foreground border-border hover:border-accent hover:bg-background hover:text-muted-foreground",
@@ -104,7 +104,6 @@ const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeBut
             : "text-muted-foreground fill-none hover:fill-destructive"
         )}
       />
-      <span>{likes}</span>
     </Button>
   );
 };
