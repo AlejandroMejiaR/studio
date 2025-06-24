@@ -38,17 +38,12 @@ export interface AppTranslations {
     jobTitle: string;
     jobSpecialization: string;
   };
-  projectCard: {
-    viewMore: string;
-    technologiesLabel: string;
-  };
   projectList: {
     noProjects: string;
   };
   projectDetails: {
     theChallenge: string;
     theApproach: string;
-    keyFeaturesOutcomes: string;
     technologiesTitle: string;
     liveDemoButton: string;
     viewCodeButton: string;
@@ -81,7 +76,7 @@ export const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        animatingTitle: ["Transforming", "Ideas Into", "Interactive", "Worlds"],
+        animatingTitle: ["Transforma", "Ideas Into", "Interactive", "Worlds"],
         subtitle: "Hello! I'm Alejandro\n\nI focus on designing and developing digital experiences\n\nCentered on UX\nDriven by AI\nPowered by Game Design\n\nLet's bring your idea to the digital world!",
       },
       buttons: {
@@ -109,17 +104,12 @@ export const translations: Record<Language, AppTranslations> = {
       jobTitle: "Multimedia Engineer",
       jobSpecialization: "Game · UX Designer",
     },
-    projectCard: {
-      viewMore: "View More",
-      technologiesLabel: "Technologies:",
-    },
     projectList: {
       noProjects: "No projects to display yet. Check back soon!",
     },
     projectDetails: {
       theChallenge: "The Challenge",
       theApproach: "The Approach",
-      keyFeaturesOutcomes: "Key Features & Outcomes",
       technologiesTitle: "Technologies",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
@@ -176,17 +166,12 @@ export const translations: Record<Language, AppTranslations> = {
       jobTitle: "Ingeniero en Multimedia",
       jobSpecialization: "Game · UX Designer",
     },
-    projectCard: {
-      viewMore: "Ver más",
-      technologiesLabel: "Tecnologías:",
-    },
     projectList: {
       noProjects: "Aún no hay proyectos para mostrar. ¡Vuelve pronto!",
     },
     projectDetails: {
       theChallenge: "El Desafío",
       theApproach: "El Enfoque",
-      keyFeaturesOutcomes: "Características Clave y Resultados",
       technologiesTitle: "Tecnologías",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
