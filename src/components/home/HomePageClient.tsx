@@ -539,7 +539,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         <div className={cn(
           "w-full max-w-5xl flex",
           isFinalLayout
-              ? "flex-col lg:flex-row items-stretch gap-8 lg:gap-12"
+              ? "flex-col lg:flex-row lg:items-start gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Title or Image) --- */}
@@ -551,7 +551,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           )}>
             {isFinalLayout ? (
                <div className={cn(
-                  "relative w-64 h-80 md:w-80 md:h-96 lg:w-full lg:h-full mx-auto lg:mx-0 hidden lg:block",
+                  "relative w-full lg:h-96 hidden lg:block",
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
@@ -559,7 +559,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     alt="Hero Image"
                     fill
                     className="object-contain filter drop-shadow-xl"
-                    sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 50vw"
+                    sizes="(max-width: 1024px) 50vw, 50vw"
                     priority
                   />
                </div>
