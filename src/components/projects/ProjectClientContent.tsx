@@ -68,9 +68,9 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
 
             <h1
                 className={cn(
-                  "w-full text-left font-headline text-4xl font-bold",
+                  "w-full font-headline text-4xl font-bold text-left",
                   "sm:text-5xl",
-                  "md:text-6xl"
+                  "md:text-6xl lg:text-left"
                 )}
             >
                 {isClientReady ? (
@@ -91,7 +91,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
 
 
         {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pt-0">
+          <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pt-0">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
               {showGallery && (
@@ -103,7 +103,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     <CarouselContent>
                       {project.galleryImages?.map((src, index) => (
                         <CarouselItem key={index} className="basis-full">
-                          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-lg shadow-md">
+                          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-lg shadow-md">
                             <Image
                               src={src}
                               alt={`${titleToDisplay} gallery image ${index + 1}`}
@@ -136,7 +136,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
 
                     {/* Right side: Category */}
                     {project.category && (
-                        <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1 shrink-0">
+                        <Badge variant="secondary" className="self-start bg-accent/80 text-accent-foreground text-sm px-3 py-1 sm:shrink-0">
                             {project.category}
                         </Badge>
                     )}
@@ -178,7 +178,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     )}
                   </div>
 
-                  <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
+                  <div className="flex flex-wrap justify-start items-center gap-4 pt-6 mt-auto">
                       {/* Left group: Action Buttons */}
                       <div className="flex flex-wrap justify-start items-center gap-3">
                         {project.liveUrl && project.liveUrl !== 'none' && (
@@ -205,9 +205,11 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                       </div>
                       
                       {/* Right group: Date */}
-                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
-                        <CalendarDays size={18} className="mr-2 text-accent" />
-                        <span>{project.date}</span>
+                      <div className="flex-grow flex justify-end items-center">
+                        <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                          <CalendarDays size={18} className="mr-2 text-accent" />
+                          <span>{project.date}</span>
+                        </div>
                       </div>
                   </div>
                 </Card>
