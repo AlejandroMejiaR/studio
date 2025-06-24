@@ -61,13 +61,10 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "flex flex-col items-start gap-4",
-            "sm:flex-row sm:items-center",
-            showGallery || showCaseStudy ? "mb-8" : "mb-0"
+          "flex items-center gap-4",
+          showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
-            <BackButton className={cn(
-                "bg-accent text-accent-foreground hover:bg-accent/90"
-            )} />
+            <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
 
             <h1
                 className={cn(
@@ -127,13 +124,9 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                       </>
                     )}
                   </Carousel>
-                  <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    {/* Left side: Technologies */}
                     <div className="flex flex-wrap items-center gap-2">
-                        {project.category && (
-                        <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                            {project.category}
-                        </Badge>
-                        )}
                         {project.technologies?.map((tech) => (
                         <Badge key={tech} variant="outline" className="border-primary/50 px-3 py-1 text-sm text-primary/90 dark:border-foreground/50 dark:text-foreground/90">
                             {tech}
@@ -141,10 +134,12 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                         ))}
                     </div>
 
-                    <div className="flex shrink-0 items-center text-base text-muted-foreground mt-4 md:mt-0">
-                      <CalendarDays size={18} className="mr-2 text-accent" />
-                      <span>{project.date}</span>
-                    </div>
+                    {/* Right side: Category */}
+                    {project.category && (
+                        <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1 shrink-0">
+                            {project.category}
+                        </Badge>
+                    )}
                   </div>
                 </>
               )}
@@ -183,28 +178,37 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     )}
                   </div>
 
-                  <div className="flex flex-wrap justify-start items-center gap-3 pt-6 mt-auto">
-                      {project.liveUrl && project.liveUrl !== 'none' && (
-                        <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                          <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                            <ExternalLink size={18} className="mr-2" />
-                            <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                              {liveDemoButtonText}
-                            </span>
-                          </Link>
-                        </Button>
-                      )}
-                      {project.repoUrl && project.repoUrl !== 'none' && (
-                        <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
-                          <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                            <Github size={18} className="mr-2 md:mr-0" />
-                            <span className="inline md:hidden" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                              {viewCodeButtonText}
-                            </span>
-                          </Link>
-                        </Button>
-                      )}
-                      <LikeButton projectId={project.id} initialLikes={initialLikes} />
+                  <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
+                      {/* Left group: Action Buttons */}
+                      <div className="flex flex-wrap justify-start items-center gap-3">
+                        {project.liveUrl && project.liveUrl !== 'none' && (
+                          <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                            <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+                              <ExternalLink size={18} className="mr-2" />
+                              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                                {liveDemoButtonText}
+                              </span>
+                            </Link>
+                          </Button>
+                        )}
+                        {project.repoUrl && project.repoUrl !== 'none' && (
+                          <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
+                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+                              <Github size={18} className="mr-2 md:mr-0" />
+                              <span className="inline md:hidden" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                                {viewCodeButtonText}
+                              </span>
+                            </Link>
+                          </Button>
+                        )}
+                        <LikeButton projectId={project.id} initialLikes={initialLikes} />
+                      </div>
+                      
+                      {/* Right group: Date */}
+                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                        <CalendarDays size={18} className="mr-2 text-accent" />
+                        <span>{project.date}</span>
+                      </div>
                   </div>
                 </Card>
               )}
