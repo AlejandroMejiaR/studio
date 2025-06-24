@@ -54,7 +54,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-8">
           <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
           <h1
             className={cn(
