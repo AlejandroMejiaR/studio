@@ -60,10 +60,10 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "flex flex-col items-center sm:flex-row sm:justify-center sm:relative",
+            "flex flex-col items-start sm:relative sm:flex-row sm:items-center sm:justify-center",
             showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
-            <BackButton className="mb-4 sm:mb-0 sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 bg-accent text-accent-foreground hover:bg-accent/90" />
+            <BackButton className="mb-4 sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 bg-accent text-accent-foreground hover:bg-accent/90" />
 
             <h1
                 className={cn(
