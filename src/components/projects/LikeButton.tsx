@@ -95,7 +95,7 @@ const LikeButton = ({ projectId, initialLikes, className, size = 'sm', iconClass
     >
       <Heart
         className={cn(
-          "transition-colors duration-150 h-8 w-8",
+          "transition-colors duration-150",
           isLiked
             ? "fill-destructive text-destructive"
             : "fill-transparent text-muted-foreground group-hover:fill-destructive group-hover:text-destructive",
