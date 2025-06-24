@@ -22,6 +22,7 @@ import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import BackButton from '../layout/BackButton';
+import { translations } from '@/lib/translations';
 
 interface ProjectClientContentProps {
   project: Project;
@@ -55,33 +56,36 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
-        <div className="flex flex-row items-center gap-4">
-            <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
-            <h1
-                className={cn(
-                  "w-full font-headline font-bold text-left",
-                  "text-4xl sm:text-5xl md:text-6xl"
-                )}
-            >
-                {isClientReady ? (
-                <WordRevealAnimation
-                    key={`title-${titleToDisplay}-${language}`}
-                    text={titleToDisplay || ""}
-                    lineBaseDelay={titleBaseDelay}
-                    delayBetweenWords={titleDelayBetweenWordsConst}
-                    letterStaggerDelay={titleLetterStaggerConst}
-                    letterAnimationDuration={titleLetterAnimationDurationConst}
-                    className="block"
-                />
-                ) : (
-                <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
-                )}
-            </h1>
+        <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
+                <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
+                <h1
+                    className={cn(
+                      "font-headline font-bold text-left",
+                      "text-4xl sm:text-5xl md:text-6xl"
+                    )}
+                >
+                    {isClientReady ? (
+                    <WordRevealAnimation
+                        key={`title-${titleToDisplay}-${language}`}
+                        text={titleToDisplay || ""}
+                        lineBaseDelay={titleBaseDelay}
+                        delayBetweenWords={titleDelayBetweenWordsConst}
+                        letterStaggerDelay={titleLetterStaggerConst}
+                        letterAnimationDuration={titleLetterAnimationDurationConst}
+                        className="block"
+                    />
+                    ) : (
+                    <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
+                    )}
+                </h1>
+            </div>
+            <LikeButton projectId={project.id} initialLikes={initialLikes} />
         </div>
 
 
         {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 pt-0">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 pt-0">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
               {showGallery && (
@@ -191,11 +195,10 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                             </Link>
                           </Button>
                         )}
-                        <LikeButton projectId={project.id} initialLikes={initialLikes} />
                       </div>
                       
                       {/* Right group: Category & Date */}
-                      <div className="flex shrink-0 items-center gap-4 text-base text-muted-foreground">
+                      <div className="flex shrink-0 items-center gap-4 text-base text-muted-foreground ml-auto">
                         {project.category && (
                           <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                             {project.category}
