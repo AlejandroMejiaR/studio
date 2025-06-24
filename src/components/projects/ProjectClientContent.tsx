@@ -59,28 +59,33 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
-        <div className="relative">
-          <BackButton className="absolute left-0 top-1/2 -translate-y-1/2" />
-          <h1
-            className={cn(
-              "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-center sm:text-left sm:pl-16",
-              showGallery || showCaseStudy ? "mb-8" : "mb-0"
-            )}
-          >
-            {isClientReady ? (
-              <WordRevealAnimation
-                key={`title-${titleToDisplay}-${language}`}
-                text={titleToDisplay || ""}
-                lineBaseDelay={titleBaseDelay}
-                delayBetweenWords={titleDelayBetweenWordsConst}
-                letterStaggerDelay={titleLetterStaggerConst}
-                letterAnimationDuration={titleLetterAnimationDurationConst}
-                className="block"
-              />
-            ) : (
-              <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
-            )}
-          </h1>
+        <div className={cn(
+            "flex flex-col sm:relative sm:items-center",
+            showGallery || showCaseStudy ? "mb-8" : "mb-0"
+        )}>
+            <div className="flex w-full justify-center sm:absolute sm:left-0 sm:top-1/2 sm:w-auto sm:-translate-y-1/2 sm:justify-start mb-4 sm:mb-0">
+                <BackButton className="text-accent" />
+            </div>
+
+            <h1
+                className={cn(
+                "w-full text-center font-headline text-4xl font-bold sm:pl-16 sm:text-left sm:text-5xl md:text-6xl"
+                )}
+            >
+                {isClientReady ? (
+                <WordRevealAnimation
+                    key={`title-${titleToDisplay}-${language}`}
+                    text={titleToDisplay || ""}
+                    lineBaseDelay={titleBaseDelay}
+                    delayBetweenWords={titleDelayBetweenWordsConst}
+                    letterStaggerDelay={titleLetterStaggerConst}
+                    letterAnimationDuration={titleLetterAnimationDurationConst}
+                    className="block"
+                />
+                ) : (
+                <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
+                )}
+            </h1>
         </div>
 
 
@@ -119,7 +124,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     )}
                   </Carousel>
                   <div className="mt-6 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-                    <div className="flex w-full items-center gap-2 flex-wrap pb-2 md:w-auto">
+                  <div className="flex w-full flex-wrap items-center gap-2 pb-2 md:w-auto">
                       {project.category && (
                         <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                           {project.category}
