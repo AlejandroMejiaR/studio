@@ -21,16 +21,16 @@ export default function BackButton({ className }: { className?: string }) {
     ? translationsForLanguage.loadingScreen.returningHome
     : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
 
-  const handleGoHome = () => {
+  const handleGoToProjects = () => {
     showLoading(returningHomeText);
-    router.push('/');
+    router.push('/#projects');
   };
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={handleGoHome}
+      onClick={handleGoToProjects}
       className={cn("flex-shrink-0", className)}
       aria-label={goBackText}
     >
