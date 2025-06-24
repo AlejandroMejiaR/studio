@@ -80,7 +80,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
         </div>
 
         {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-start gap-8 lg:gap-12 mt-10">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-12 mt-10">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
                <div className="flex flex-wrap items-center gap-2 mb-6">
