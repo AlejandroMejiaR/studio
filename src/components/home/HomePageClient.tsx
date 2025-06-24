@@ -555,7 +555,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src={getSupabaseImageUrl('documents', 'Hero.png')}
+                    src={getSupabaseImageUrl('documents', 'hero.png')}
                     alt="Hero Image"
                     fill
                     className="object-contain filter drop-shadow-xl"
