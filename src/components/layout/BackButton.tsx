@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -9,7 +9,6 @@ import { useLoading } from '@/contexts/LoadingContext';
 import { cn } from '@/lib/utils';
 
 export default function BackButton({ className }: { className?: string }) {
-  const router = useRouter();
   const { getEnglishTranslation, isClientReady, translationsForLanguage } = useLanguage();
   const { showLoading } = useLoading();
 
@@ -21,20 +20,21 @@ export default function BackButton({ className }: { className?: string }) {
     ? translationsForLanguage.loadingScreen.returningHome
     : getEnglishTranslation(t => t.loadingScreen.returningHome) || ["Returning to Home..."];
 
-  const handleGoToProjects = () => {
+  const handleNavigation = () => {
     showLoading(returningHomeText);
-    router.push('/#projects');
   };
 
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={handleGoToProjects}
       className={cn("flex-shrink-0", className)}
       aria-label={goBackText}
+      asChild
     >
-      <ArrowLeft className="h-6 w-6" strokeWidth={2.5} />
+      <Link href="/#projects" onClick={handleNavigation}>
+        <ArrowLeft className="h-6 w-6" strokeWidth={2.5} />
+      </Link>
     </Button>
   );
 }
