@@ -11,7 +11,6 @@ import {
   CalendarDays,
   Lightbulb,
   Target,
-  Cpu,
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
