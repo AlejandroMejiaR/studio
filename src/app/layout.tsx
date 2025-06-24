@@ -7,7 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
 import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
 import { Suspense } from 'react'; 
@@ -29,12 +29,7 @@ const spaceGrotesk = Space_Grotesk({
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
-  const { isClientReady } = useLanguage();
   const { isFooterVisible } = useFooter();
-  
-  if (!isClientReady) {
-    return null;
-  }
 
   return (
     <>
