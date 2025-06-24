@@ -40,18 +40,10 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const searchParams = useSearchParams();
   
   useEffect(() => {
-    // This effect runs on every route change.
-
-    // 1. Hide the loading overlay once the page has re-rendered on the client.
+    // This effect runs on every route change, primarily to hide the loading overlay.
+    // Scroll behavior is now handled automatically by Next.js and the browser.
     if (isClientReady) {
         hideLoading();
-    }
-
-    // 2. Manage scroll position.
-    // If the new URL has a hash (e.g., /#projects), let the browser handle scrolling to it.
-    // Otherwise, scroll to the top of the page. This is the standard behavior for new page loads.
-    if (!window.location.hash) {
-      window.scrollTo(0, 0);
     }
   }, [pathname, searchParams, hideLoading, isClientReady]); // Rerun when navigation completes.
 
