@@ -24,13 +24,13 @@ body {
     --primary: 175 38% 11%; /* Dark teal #122624 */
     --primary-foreground: 0 0% 98%; /* Off-white for text on primary */
 
-    --secondary: 169 43% 45%; /* Light teal #41A693 */
-    --secondary-foreground: 0 0% 98%; /* Off-white for text on secondary */
+    --secondary: 270 70% 85%; /* Lighter Purple */
+    --secondary-foreground: 270 10% 20%; /* Dark charcoal/purple */
 
     --muted: 220 10% 88%; /* Slightly darker cool grey for muted elements #DDE1E6 */
-    --muted-foreground: 175 38% 25%; /* Darker teal for muted text */
+    --muted-foreground: 270 10% 55%; /* Muted purple-grey */
 
-    --accent: 169 49% 30%; /* Medium teal #277365 */
+    --accent: 270 70% 65%; /* Electric Purple */
     --accent-foreground: 0 0% 98%; /* Off-white for text on accent */
 
     --destructive: 0 84.2% 60.2%;
@@ -38,7 +38,7 @@ body {
 
     --border: 220 10% 85%; /* Cooler, less stark border #D3D7DE */
     --input: 220 10% 90%; /* Cooler, slightly darker input background #E1E4E8 */
-    --ring: 169 49% 30%; /* Accent color for rings */
+    --ring: 270 70% 65%; /* Electric Purple */
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -48,7 +48,7 @@ body {
     --radius: 0.5rem;
 
     /* Custom variables for Portfolio Ace */
-    --footer-background: 169 47% 18%; /* Darker teal #194039 */
+    --footer-background: 270 20% 25%; /* Dark Purple */
     --footer-foreground: 0 0% 85%; /* Light grey/off-white for footer text */
 
     --sidebar-background: 220 10% 94%; /* Very light cool grey for sidebar #EDEFF2 */
@@ -230,7 +230,7 @@ body {
 
   /* New per-word color transition animations */
   @keyframes wordInitialAccentToFinalColorLight {
-    0% { color: hsl(var(--accent)); } /* Medium Teal for light mode */
+    0% { color: hsl(var(--accent)); } /* Electric Purple for light mode */
     100% { color: hsl(var(--primary)); } /* Dark Teal/Primary text for light mode */
   }
 
