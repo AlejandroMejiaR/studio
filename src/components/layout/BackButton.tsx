@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLoading } from '@/contexts/LoadingContext';
+import { cn } from '@/lib/utils';
 
 export default function BackButton({ className }: { className?: string }) {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function BackButton({ className }: { className?: string }) {
       variant="ghost"
       size="icon"
       onClick={handleGoHome}
-      className={className}
+      className={cn("flex-shrink-0", className)}
       aria-label={goBackText}
     >
       <ArrowLeft className="h-6 w-6" strokeWidth={2.5} />
