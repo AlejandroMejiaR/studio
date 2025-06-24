@@ -324,6 +324,12 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (pathname !== '/') {
         return;
     }
+    
+    // Do not set up the observer until the main content is rendered and animations are decided.
+    // This prevents the observer from attaching to a non-existent element.
+    if (shouldAnimateHeroIntro === null) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
         ([entry]) => {
@@ -348,7 +354,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             observer.unobserve(currentAboutSection);
         }
     };
-  }, [pathname, setIsFooterVisible]);
+  }, [pathname, setIsFooterVisible, shouldAnimateHeroIntro]); // Added shouldAnimateHeroIntro to dependency array
 
 
   const animatingTitleLines = translationsForLanguage.home.hero.animatingTitle;
