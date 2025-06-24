@@ -1,4 +1,3 @@
-
 export interface AppTranslations {
   brandName: string;
   brandNameShort: string;
@@ -149,7 +148,7 @@ export const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        animatingTitle: ["Transformando", "Ideas En", "Mundos", "Interactivos"],
+        animatingTitle: ["Transforma", "Ideas En", "Mundos", "Interactivos"],
         subtitle: "¡Hola! Soy Alejandro\n\nMe enfoco en el diseño y desarrollo de experiencias digitales\n\nCentradas en UX\nImpulsadas por IA\nPotenciadas con Game Design\n\n¡Llevemos tu idea al mundo digital!",
       },
       buttons: {
