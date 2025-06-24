@@ -179,12 +179,9 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                           </Button>
                         )}
                         {project.repoUrl && project.repoUrl !== 'none' && (
-                          <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
-                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                              <Github size={18} className="mr-2" />
-                              <span className="inline md:hidden" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                                {viewCodeButtonText}
-                              </span>
+                          <Button variant="outline" size="icon-sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
+                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" aria-label={viewCodeButtonText}>
+                              <Github size={18} />
                             </Link>
                           </Button>
                         )}
