@@ -83,7 +83,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
             projectId={project.id}
             initialLikes={initialLikes}
             size="icon"
-            className="border-2"
           />
         </div>
 

@@ -81,27 +81,27 @@ const LikeButton = ({ projectId, initialLikes, className, size = 'sm' }: LikeBut
 
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size={size}
       onClick={handleLike}
       disabled={isLoading}
       className={cn(
         "flex items-center transition-all duration-150 group",
         isLiked
-          ? "text-destructive border-destructive hover:bg-destructive/10"
-          : "text-muted-foreground border-border hover:border-accent hover:bg-background hover:text-muted-foreground",
+          ? "text-destructive hover:bg-destructive/10"
+          : "text-muted-foreground hover:text-destructive",
         className
       )}
       aria-pressed={isLiked}
       aria-label={isLiked ? "Unlike project" : "Like project"}
     >
       <Heart
-        size={16}
+        size={24}
         className={cn(
           "transition-colors duration-150",
           isLiked
             ? "fill-destructive text-destructive"
-            : "text-muted-foreground fill-none hover:fill-destructive"
+            : "fill-transparent group-hover:fill-destructive"
         )}
       />
     </Button>
