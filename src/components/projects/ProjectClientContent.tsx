@@ -53,14 +53,12 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
   return (
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
-        <div className="flex flex-col md:flex-row md:items-center md:gap-4">
-          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90 mb-4 md:mb-0 self-start md:self-center" />
+        <div className="flex flex-row items-center gap-4">
+          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
           <h1
               className={cn(
-                "w-full font-headline font-bold",
-                "text-left text-4xl",
-                "sm:text-5xl",
-                "md:text-6xl"
+                "w-full font-headline font-bold text-left",
+                "text-4xl sm:text-5xl md:text-6xl"
               )}
           >
               {isClientReady ? (
@@ -118,7 +116,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     {/* Left side: Technologies */}
                     <div className="flex flex-wrap items-center gap-2">
                         {project.technologies?.map((tech) => (
-                        <Badge key={tech} variant="outline" className="border-primary/50 px-3 py-1 text-sm text-primary/90 dark:border-foreground/50 dark:text-foreground/90">
+                        <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
                             {tech}
                         </Badge>
                         ))}
@@ -168,7 +166,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                     )}
                   </div>
 
-                  <div className="flex flex-wrap justify-start items-center gap-4 pt-6 mt-auto">
+                  <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
                       {/* Left group: Action Buttons */}
                       <div className="flex flex-wrap justify-start items-center gap-3">
                         {project.liveUrl && project.liveUrl !== 'none' && (
@@ -195,11 +193,9 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </div>
                       
                       {/* Right group: Date */}
-                      <div className="flex-grow flex justify-end items-center">
-                        <div className="flex shrink-0 items-center text-base text-muted-foreground">
-                          <CalendarDays size={18} className="mr-2 text-accent" />
-                          <span>{project.date}</span>
-                        </div>
+                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                        <CalendarDays size={18} className="mr-2 text-accent" />
+                        <span>{project.date}</span>
                       </div>
                   </div>
                 </Card>
