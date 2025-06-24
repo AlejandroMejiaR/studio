@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Project, ProjectTranslationDetails } from '@/types';
@@ -120,20 +119,20 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     )}
                   </Carousel>
                   <div className="mt-6 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-                    <div className="flex w-full items-center gap-2 overflow-x-auto pb-2 md:w-auto md:flex-wrap">
+                    <div className="flex w-full items-center gap-2 flex-wrap pb-2 md:w-auto">
                       {project.category && (
-                        <Badge variant="secondary" className="shrink-0 bg-accent/80 text-accent-foreground text-sm px-3 py-1">
+                        <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                           {project.category}
                         </Badge>
                       )}
                       {project.technologies?.map((tech) => (
-                        <Badge key={tech} variant="outline" className="shrink-0 border-primary/50 px-3 py-1 text-sm text-primary/90 dark:border-foreground/50 dark:text-foreground/90">
+                        <Badge key={tech} variant="outline" className="border-primary/50 px-3 py-1 text-sm text-primary/90 dark:border-foreground/50 dark:text-foreground/90">
                           {tech}
                         </Badge>
                       ))}
                     </div>
 
-                    <div className="flex items-center text-base text-muted-foreground">
+                    <div className="flex shrink-0 items-center text-base text-muted-foreground">
                       <CalendarDays size={18} className="mr-2 text-accent" />
                       <span>{project.date}</span>
                     </div>
