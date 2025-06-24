@@ -60,7 +60,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className="relative">
-          <BackButton className="absolute left-0 top-1/2 -translate-y-1/2 hidden sm:inline-flex" />
+          <BackButton className="absolute left-0 top-1/2 -translate-y-1/2" />
           <h1
             className={cn(
               "font-headline text-4xl sm:text-5xl md:text-6xl font-bold text-center sm:text-left sm:pl-16",
