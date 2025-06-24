@@ -55,7 +55,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
         <div className="flex items-center gap-8">
-          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
+          <BackButton />
           <h1
             className={cn(
               "font-headline font-bold text-left",
@@ -124,6 +124,23 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
               {showCaseStudy && (
                 <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full">
                   <div className="space-y-6 flex-grow">
+                    {project.technologies && project.technologies.length > 0 && (
+                      <div>
+                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
+                          <Cpu className="mr-3 h-6 w-6 text-accent shrink-0" />
+                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                            {technologiesText}
+                          </span>
+                        </h3>
+                        <div className="flex flex-wrap gap-2 pl-2">
+                          {project.technologies.map((tech) => (
+                            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     {problemStatementToDisplay && (
                       <div>
                         <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
@@ -150,28 +167,11 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                         </p>
                       </div>
                     )}
-                    {project.technologies && project.technologies.length > 0 && (
-                      <div>
-                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
-                          <Cpu className="mr-3 h-6 w-6 text-accent shrink-0" />
-                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                            {technologiesText}
-                          </span>
-                        </h3>
-                        <div className="flex flex-wrap gap-2 pl-2">
-                          {project.technologies.map((tech) => (
-                            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
-                      {/* Left group: Action Buttons */}
-                      <div className="flex flex-wrap justify-start items-center gap-3">
+                      {/* Left group: Action Buttons & Category */}
+                      <div className="flex flex-wrap items-center gap-3">
                         {project.liveUrl && project.liveUrl !== 'none' && (
                           <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
                             <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
@@ -192,19 +192,17 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                             </Link>
                           </Button>
                         )}
-                      </div>
-                      
-                      {/* Right group: Category & Date */}
-                      <div className="flex shrink-0 items-center gap-4 text-base text-muted-foreground ml-auto">
                         {project.category && (
                           <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
                             {project.category}
                           </Badge>
                         )}
-                        <div className="flex items-center">
-                          <CalendarDays size={18} className="mr-2 text-accent" />
-                          <span>{project.date}</span>
-                        </div>
+                      </div>
+                      
+                      {/* Right group: Date */}
+                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                        <CalendarDays size={18} className="mr-2 text-accent" />
+                        <span>{project.date}</span>
                       </div>
                   </div>
                 </Card>
