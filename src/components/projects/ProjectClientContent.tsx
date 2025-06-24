@@ -19,18 +19,15 @@ import { Card } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
-import OtherProjectsList from './OtherProjectsList';
 import React from 'react';
 import BackButton from '../layout/BackButton';
 
 interface ProjectClientContentProps {
   project: Project;
   initialLikes: number;
-  allProjects: Project[];
-  allLikesMap: Record<string, number>;
 }
 
-const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap }: ProjectClientContentProps) => {
+const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
@@ -48,45 +45,38 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay;
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
   
-  const otherProjects = allProjects
-    .filter(p => p.id !== project.id) // This line ensures the current project is excluded
-    .slice(0, 3);
-
   const titleLetterStaggerConst = 0.04;
-  const titleLetterAnimationDurationConst = 0.5; // Adjusted from 0
-  const titleDelayBetweenWordsConst = 0.1; // Adjusted from 0
+  const titleLetterAnimationDurationConst = 0.5;
+  const titleDelayBetweenWordsConst = 0.1;
   const titleBaseDelay = 0.2;
 
   return (
     <>
-      <div className="space-y-8 md:space-y-10 lg:space-y-12">
-        <div className={cn(
-          "flex items-center gap-4",
-          showGallery || showCaseStudy ? "mb-8" : "mb-0"
-        )}>
-            <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
-
-            <h1
-                className={cn(
-                  "w-full font-headline text-4xl font-bold text-left",
-                  "sm:text-5xl",
-                  "md:text-6xl lg:text-left"
-                )}
-            >
-                {isClientReady ? (
-                <WordRevealAnimation
-                    key={`title-${titleToDisplay}-${language}`}
-                    text={titleToDisplay || ""}
-                    lineBaseDelay={titleBaseDelay}
-                    delayBetweenWords={titleDelayBetweenWordsConst}
-                    letterStaggerDelay={titleLetterStaggerConst}
-                    letterAnimationDuration={titleLetterAnimationDurationConst}
-                    className="block"
-                />
-                ) : (
-                <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
-                )}
-            </h1>
+      <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
+        <div className="flex flex-col md:flex-row md:items-center md:gap-4">
+          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90 mb-4 md:mb-0 self-start md:self-center" />
+          <h1
+              className={cn(
+                "w-full font-headline font-bold",
+                "text-left text-4xl",
+                "sm:text-5xl",
+                "md:text-6xl"
+              )}
+          >
+              {isClientReady ? (
+              <WordRevealAnimation
+                  key={`title-${titleToDisplay}-${language}`}
+                  text={titleToDisplay || ""}
+                  lineBaseDelay={titleBaseDelay}
+                  delayBetweenWords={titleDelayBetweenWordsConst}
+                  letterStaggerDelay={titleLetterStaggerConst}
+                  letterAnimationDuration={titleLetterAnimationDurationConst}
+                  className="block"
+              />
+              ) : (
+              <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
+              )}
+          </h1>
         </div>
 
 
@@ -103,7 +93,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     <CarouselContent>
                       {project.galleryImages?.map((src, index) => (
                         <CarouselItem key={index} className="basis-full">
-                          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-lg shadow-md">
+                           <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-lg shadow-md">
                             <Image
                               src={src}
                               alt={`${titleToDisplay} gallery image ${index + 1}`}
@@ -136,7 +126,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
 
                     {/* Right side: Category */}
                     {project.category && (
-                        <Badge variant="secondary" className="self-start bg-accent/80 text-accent-foreground text-sm px-3 py-1 sm:shrink-0">
+                        <Badge variant="secondary" className="self-start sm:shrink-0 bg-accent/80 text-accent-foreground text-sm px-3 py-1 w-auto">
                             {project.category}
                         </Badge>
                     )}
@@ -146,9 +136,9 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
             </div>
 
             {/* Right Column: Case Study Section */}
-            <div className="w-full lg:flex-[0_0_calc(30%-1.5rem)] flex"> {/* Added flex here */}
+            <div className="w-full lg:flex-[0_0_calc(30%-1.5rem)] flex">
               {showCaseStudy && (
-                <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full"> {/* Added w-full */}
+                <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full">
                   <div className="space-y-6 flex-grow">
                     {problemStatementToDisplay && (
                       <div>
@@ -194,7 +184,7 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                         {project.repoUrl && project.repoUrl !== 'none' && (
                           <Button variant="outline" size="sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
                             <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                              <Github size={18} className="mr-2 md:mr-0" />
+                              <Github size={18} className="mr-2" />
                               <span className="inline md:hidden" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                                 {viewCodeButtonText}
                               </span>
@@ -218,7 +208,6 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
           </div>
         )}
       </div>
-      <OtherProjectsList projects={otherProjects} likes={allLikesMap} />
     </>
   );
 };
