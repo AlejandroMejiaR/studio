@@ -13,6 +13,7 @@ import {
   CalendarDays,
   Lightbulb,
   Target,
+  Cpu,
 } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
@@ -39,6 +40,7 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
 
   const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
   const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
+  const technologiesText = isClientReady ? translationsForLanguage.projectDetails.technologiesTitle : getEnglishTranslation(t => t.projectDetails.technologiesTitle);
   const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
   const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
   
@@ -54,27 +56,27 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12 mb-8 md:mb-12">
         <div className="flex flex-row items-center gap-4">
-          <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
-          <h1
-              className={cn(
-                "w-full font-headline font-bold text-left",
-                "text-4xl sm:text-5xl md:text-6xl"
-              )}
-          >
-              {isClientReady ? (
-              <WordRevealAnimation
-                  key={`title-${titleToDisplay}-${language}`}
-                  text={titleToDisplay || ""}
-                  lineBaseDelay={titleBaseDelay}
-                  delayBetweenWords={titleDelayBetweenWordsConst}
-                  letterStaggerDelay={titleLetterStaggerConst}
-                  letterAnimationDuration={titleLetterAnimationDurationConst}
-                  className="block"
-              />
-              ) : (
-              <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
-              )}
-          </h1>
+            <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
+            <h1
+                className={cn(
+                  "w-full font-headline font-bold text-left",
+                  "text-4xl sm:text-5xl md:text-6xl"
+                )}
+            >
+                {isClientReady ? (
+                <WordRevealAnimation
+                    key={`title-${titleToDisplay}-${language}`}
+                    text={titleToDisplay || ""}
+                    lineBaseDelay={titleBaseDelay}
+                    delayBetweenWords={titleDelayBetweenWordsConst}
+                    letterStaggerDelay={titleLetterStaggerConst}
+                    letterAnimationDuration={titleLetterAnimationDurationConst}
+                    className="block"
+                />
+                ) : (
+                <span style={{ visibility: 'hidden' }}>{project.en.title || "Loading..."}</span>
+                )}
+            </h1>
         </div>
 
 
@@ -112,23 +114,6 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                       </>
                     )}
                   </Carousel>
-                  <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    {/* Left side: Technologies */}
-                    <div className="flex flex-wrap items-center gap-2">
-                        {project.technologies?.map((tech) => (
-                        <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
-                            {tech}
-                        </Badge>
-                        ))}
-                    </div>
-
-                    {/* Right side: Category */}
-                    {project.category && (
-                        <Badge variant="secondary" className="self-start sm:shrink-0 bg-accent/80 text-accent-foreground text-sm px-3 py-1 w-auto">
-                            {project.category}
-                        </Badge>
-                    )}
-                  </div>
                 </>
               )}
             </div>
@@ -164,6 +149,23 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                         </p>
                       </div>
                     )}
+                    {project.technologies && project.technologies.length > 0 && (
+                      <div>
+                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
+                          <Cpu className="mr-3 h-6 w-6 text-accent shrink-0" />
+                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                            {technologiesText}
+                          </span>
+                        </h3>
+                        <div className="flex flex-wrap gap-2 pl-2">
+                          {project.technologies.map((tech) => (
+                            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
@@ -192,10 +194,17 @@ const ProjectClientContent = ({ project, initialLikes }: ProjectClientContentPro
                         <LikeButton projectId={project.id} initialLikes={initialLikes} />
                       </div>
                       
-                      {/* Right group: Date */}
-                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
-                        <CalendarDays size={18} className="mr-2 text-accent" />
-                        <span>{project.date}</span>
+                      {/* Right group: Category & Date */}
+                      <div className="flex shrink-0 items-center gap-4 text-base text-muted-foreground">
+                        {project.category && (
+                          <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
+                            {project.category}
+                          </Badge>
+                        )}
+                        <div className="flex items-center">
+                          <CalendarDays size={18} className="mr-2 text-accent" />
+                          <span>{project.date}</span>
+                        </div>
                       </div>
                   </div>
                 </Card>

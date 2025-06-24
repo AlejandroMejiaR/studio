@@ -50,6 +50,7 @@ export interface AppTranslations {
     theChallenge: string;
     theApproach: string;
     keyFeaturesOutcomes: string;
+    technologiesTitle: string;
     liveDemoButton: string;
     viewCodeButton: string;
     otherProjectsTitle: string;
@@ -134,6 +135,7 @@ export const translations: Record<Language, AppTranslations> = {
       theChallenge: "The Challenge",
       theApproach: "The Approach",
       keyFeaturesOutcomes: "Key Features & Outcomes",
+      technologiesTitle: "Technologies",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
       otherProjectsTitle: "Other Projects",
@@ -214,6 +216,7 @@ export const translations: Record<Language, AppTranslations> = {
       theChallenge: "El Desafío",
       theApproach: "El Enfoque",
       keyFeaturesOutcomes: "Características Clave y Resultados",
+      technologiesTitle: "Tecnologías",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
       otherProjectsTitle: "Otros Proyectos",
