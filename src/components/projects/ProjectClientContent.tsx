@@ -60,14 +60,21 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "flex flex-col items-start sm:relative sm:flex-row sm:items-center sm:justify-center",
+            "relative flex flex-col items-start", // Default to flex-col, items-start for mobile
+            "sm:flex-row sm:items-center sm:justify-center", // Switch to row layout on sm+
             showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
-            <BackButton className="mb-4 sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 bg-accent text-accent-foreground hover:bg-accent/90" />
+            <BackButton className={cn(
+                "mb-4", // Margin bottom for mobile
+                "sm:absolute sm:left-0 sm:top-1/2 sm:-translate-y-1/2 sm:mb-0", // Absolute positioning on sm+
+                "bg-accent text-accent-foreground hover:bg-accent/90"
+            )} />
 
             <h1
                 className={cn(
-                "w-full text-center font-headline text-4xl font-bold sm:text-center sm:text-5xl md:text-6xl"
+                "w-full text-left font-headline text-4xl font-bold", // Default left for mobile
+                "sm:text-center sm:text-5xl", // Center on sm and up
+                "md:text-6xl"
                 )}
             >
                 {isClientReady ? (
