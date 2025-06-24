@@ -38,12 +38,6 @@ function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isFooterVisible } = useFooter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  // On page navigation, scroll to the top of the page.
-  // The browser's default behavior will handle scrolling for anchor links.
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
   
   useEffect(() => {
     // This effect handles the loading overlay, hiding it once the client is ready
