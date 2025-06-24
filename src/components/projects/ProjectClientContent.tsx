@@ -61,20 +61,19 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "flex flex-col items-start", // Default to flex-col, items-start for mobile
-            "sm:flex-row sm:items-center sm:justify-start sm:gap-4", // Use flexbox for desktop alignment
+            "flex flex-col items-start gap-4",
+            "sm:flex-row sm:items-center",
             showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
             <BackButton className={cn(
-                "mb-4 sm:mb-0", // Reset margin for desktop
                 "bg-accent text-accent-foreground hover:bg-accent/90"
             )} />
 
             <h1
                 className={cn(
-                "w-full text-left font-headline text-4xl font-bold", // Keep full-width for mobile
-                "sm:w-auto sm:text-left sm:text-5xl", // Align left on desktop and set auto width
-                "md:text-6xl"
+                  "w-full text-left font-headline text-4xl font-bold",
+                  "sm:text-5xl",
+                  "md:text-6xl"
                 )}
             >
                 {isClientReady ? (
@@ -123,8 +122,8 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                     </CarouselContent>
                     {project.galleryImages && project.galleryImages.length > 1 && (
                       <>
-                        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
-                        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-card/80 hover:bg-card text-foreground border-border shadow-md" />
+                        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-accent hover:bg-accent/90 text-accent-foreground border-transparent shadow-md" />
+                        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-accent hover:bg-accent/90 text-accent-foreground border-transparent shadow-md" />
                       </>
                     )}
                   </Carousel>
