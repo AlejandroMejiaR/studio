@@ -82,20 +82,26 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
           <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12 mt-10">
             {/* Left Column: Carousel Section */}
             <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
-               <div className="flex flex-wrap items-center gap-2 mb-6">
-                {project.category && (
-                  <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                    {project.category}
-                  </Badge>
-                )}
-                {project.category && project.technologies && project.technologies.length > 0 && (
-                  <span className="text-muted-foreground mx-1">-</span>
-                )}
-                {project.technologies?.map((tech) => (
-                  <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
-                    {tech}
-                  </Badge>
-                ))}
+               <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+                <div className="flex flex-wrap items-center gap-2">
+                  {project.category && (
+                    <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
+                      {project.category}
+                    </Badge>
+                  )}
+                  {project.category && project.technologies && project.technologies.length > 0 && (
+                    <span className="text-muted-foreground mx-1">-</span>
+                  )}
+                  {project.technologies?.map((tech) => (
+                    <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                  <CalendarDays size={18} className="mr-2 text-accent" />
+                  <span>{project.date}</span>
+                </div>
               </div>
               {showGallery && (
                 <>
@@ -165,7 +171,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap justify-between items-center gap-4 pt-6 mt-auto">
+                  <div className="flex flex-wrap justify-start items-center gap-4 pt-6 mt-auto">
                       {/* Left group: Action Buttons */}
                       <div className="flex flex-wrap items-center gap-3">
                         {project.liveUrl && project.liveUrl !== 'none' && (
@@ -185,12 +191,6 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                             </Link>
                           </Button>
                         )}
-                      </div>
-                      
-                      {/* Right group: Date */}
-                      <div className="flex shrink-0 items-center text-base text-muted-foreground">
-                        <CalendarDays size={18} className="mr-2 text-accent" />
-                        <span>{project.date}</span>
                       </div>
                   </div>
                 </Card>
