@@ -47,7 +47,6 @@ export interface AppTranslations {
     technologiesTitle: string;
     liveDemoButton: string;
     viewCodeButton: string;
-    otherProjectsTitle: string;
   };
   footer: {
     portfolioTitle: string;
@@ -113,7 +112,6 @@ export const translations: Record<Language, AppTranslations> = {
       technologiesTitle: "Technologies",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
-      otherProjectsTitle: "Other Projects",
     },
     footer: {
       portfolioTitle: "Portfolio",
@@ -175,7 +173,6 @@ export const translations: Record<Language, AppTranslations> = {
       technologiesTitle: "Tecnologías",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
-      otherProjectsTitle: "Otros Proyectos",
     },
     footer: {
       portfolioTitle: "Portafolio",

@@ -19,7 +19,6 @@ import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import BackButton from '../layout/BackButton';
-import { translations } from '@/lib/translations';
 
 interface ProjectClientContentProps {
   project: Project;
