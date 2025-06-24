@@ -60,16 +60,16 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
     <>
       <div className="space-y-8 md:space-y-10 lg:space-y-12">
         <div className={cn(
-            "flex flex-col sm:relative sm:items-center",
+            "flex flex-col items-center",
             showGallery || showCaseStudy ? "mb-8" : "mb-0"
         )}>
-            <div className="flex w-full justify-center sm:absolute sm:left-0 sm:top-1/2 sm:w-auto sm:-translate-y-1/2 sm:justify-start mb-4 sm:mb-0">
-                <BackButton className="text-accent" />
+            <div className="w-full flex justify-center mb-4 sm:absolute sm:left-0 sm:top-1/2 sm:w-auto sm:-translate-y-1/2 sm:justify-start sm:mb-0">
+                <BackButton className="bg-accent text-accent-foreground hover:bg-accent/90" />
             </div>
 
             <h1
                 className={cn(
-                "w-full text-center font-headline text-4xl font-bold sm:pl-16 sm:text-left sm:text-5xl md:text-6xl"
+                "w-full text-center font-headline text-4xl font-bold sm:pl-16 sm:text-center sm:text-5xl md:text-6xl"
                 )}
             >
                 {isClientReady ? (
@@ -123,21 +123,21 @@ const ProjectClientContent = ({ project, initialLikes, allProjects, allLikesMap 
                       </>
                     )}
                   </Carousel>
-                  <div className="mt-6 flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
-                  <div className="flex w-full flex-wrap items-center gap-2 pb-2 md:w-auto">
-                      {project.category && (
+                  <div className="mt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                        {project.category && (
                         <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                          {project.category}
+                            {project.category}
                         </Badge>
-                      )}
-                      {project.technologies?.map((tech) => (
+                        )}
+                        {project.technologies?.map((tech) => (
                         <Badge key={tech} variant="outline" className="border-primary/50 px-3 py-1 text-sm text-primary/90 dark:border-foreground/50 dark:text-foreground/90">
-                          {tech}
+                            {tech}
                         </Badge>
-                      ))}
+                        ))}
                     </div>
 
-                    <div className="flex shrink-0 items-center text-base text-muted-foreground">
+                    <div className="flex shrink-0 items-center text-base text-muted-foreground mt-4 md:mt-0">
                       <CalendarDays size={18} className="mr-2 text-accent" />
                       <span>{project.date}</span>
                     </div>
