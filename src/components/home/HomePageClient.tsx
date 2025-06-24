@@ -555,10 +555,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
-                    src={getSupabaseImageUrl('documents', 'Hero.webp')}
+                    src={getSupabaseImageUrl('documents', 'Hero.png')}
                     alt="Hero Image"
                     fill
-                    className="rounded-2xl object-cover shadow-2xl"
+                    className="object-contain filter drop-shadow-xl"
                     sizes="(max-width: 768px) 16rem, (max-width: 1024px) 20rem, 50vw"
                     priority
                   />
