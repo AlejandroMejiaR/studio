@@ -24,14 +24,14 @@ body {
     --primary: 175 38% 11%; /* Dark teal #122624 */
     --primary-foreground: 0 0% 98%; /* Off-white for text on primary */
 
-    --secondary: 270 70% 85%; /* Lighter Purple */
+    --secondary: 270 20% 85%; /* Lighter Purple */
     --secondary-foreground: 270 10% 20%; /* Dark charcoal/purple */
 
     --muted: 220 10% 88%; /* Slightly darker cool grey for muted elements #DDE1E6 */
     --muted-foreground: 270 10% 55%; /* Muted purple-grey */
 
     --accent: 270 70% 65%; /* Electric Purple */
-    --accent-foreground: 0 0% 98%; /* Off-white for text on accent */
+    --accent-foreground: 175 38% 11%; /* Dark Teal for text on accent */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -80,15 +80,15 @@ body {
     --muted: 225 20% 25%;          /* Desaturated Indigo/Grey #33364D - darker */
     --muted-foreground: 225 15% 70%;   /* Lighter Grey with Indigo hint #A3A8B8 */
 
-    --accent: 270 70% 65%;         /* Electric Purple #9A52E0 */
-    --accent-foreground: 0 0% 98%; /* Off-white for text on accent */
+    --accent: 51 100% 50%;         /* Gold #FFD700 */
+    --accent-foreground: 225 30% 12%; /* Dark for text on accent */
 
     --destructive: 0 80% 65%;       /* More Saturated Red #F54D4D */
     --destructive-foreground: 0 0% 98%; /* Off-white */
 
     --border: 225 30% 20%;         /* Slightly Lighter Indigo/Navy, for subtle separation #242C47 */
     --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
-    --ring: 270 70% 65%;           /* Ring color (matches accent) */
+    --ring: 51 100% 50%;           /* Ring color (matches accent) */
 
     --footer-background: 225 30% 8%; /* Very Dark Indigo, almost black #0D101A */
     --footer-foreground: 225 15% 75%;   /* Light Grey with Indigo hint for footer text #B0B5C7 */
@@ -100,7 +100,7 @@ body {
     --sidebar-accent: 225 25% 20%;         /* Sidebar Accent (hover/active) #262C40 */
     --sidebar-accent-foreground: 0 0% 98%; /* Sidebar Accent Text */
     --sidebar-border: 225 20% 28%;         /* Sidebar Border #383D52 */
-    --sidebar-ring: 270 70% 65%;           /* Sidebar Ring (matches main accent) */
+    --sidebar-ring: 51 100% 50%;           /* Sidebar Ring (matches main accent) */
   }
 }
 
@@ -235,7 +235,7 @@ body {
   }
 
   @keyframes wordInitialAccentToFinalColorDark {
-    0% { color: hsl(var(--accent)); } /* Electric Purple for dark mode */
+    0% { color: hsl(var(--accent)); } /* Gold for dark mode */
     100% { color: hsl(var(--foreground)); } /* Off-white/Foreground for dark mode */
   }
 
