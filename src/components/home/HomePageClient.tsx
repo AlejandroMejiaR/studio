@@ -519,7 +519,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         <div className={cn(
           "w-full max-w-5xl flex",
           isFinalLayout
-              ? "flex-col lg:flex-row lg:items-center gap-8 lg:gap-12"
+              ? "flex-col lg:flex-row lg:items-center gap-8 lg:gap-16"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Subtitle & Buttons) --- */}
@@ -579,10 +579,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
           {/* --- RIGHT COLUMN (Title or Image) --- */}
           <div className={cn(
-              "transition-all duration-300 flex justify-center lg:justify-end",
-              isFinalLayout 
-                ? "lg:w-3/5"
-                : "w-full"
+              "transition-all duration-300 flex",
+              isFinalLayout
+                ? "lg:w-3/5 justify-center lg:justify-end"
+                : "w-full justify-center"
           )}>
             {isFinalLayout ? (
                <div className={cn(
@@ -596,6 +596,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     className="object-contain filter drop-shadow-xl"
                     sizes="(max-width: 1024px) 50vw, 50vw"
                     priority
+                    data-ai-hint="futuristic character"
                   />
                </div>
             ) : (
