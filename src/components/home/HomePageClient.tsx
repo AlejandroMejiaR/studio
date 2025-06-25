@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, Fragment } from 'react';
+import { useEffect, useState, useRef, Fragment, useMemo, useCallback } from 'react';
 import type { Project } from '@/types';
 import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
@@ -214,10 +214,16 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   };
   
   const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : undefined;
-  
-  const animationItems: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
 
-  if (fullHeroText) {
+  const handleAnimationComplete = useCallback(() => {
+    setAreControlsVisible(true);
+    setShouldNavbarContentBeVisible(true);
+  }, [setAreControlsVisible, setShouldNavbarContentBeVisible]);
+  
+  const animationItems = useMemo(() => {
+    const items: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
+    if (!fullHeroText) return items;
+
     const mainBlocks = fullHeroText.split('\n\n');
     
     if (mainBlocks.length >= 2) {
@@ -225,27 +231,23 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         const secondBlock = mainBlocks[1];
         const thirdBlockParts = mainBlocks[2] ? mainBlocks[2].split('\n') : [];
       
-        animationItems.push(
+        items.push(
             { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-8" },
             { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-8" }
         );
 
         if (thirdBlockParts.length > 0) {
-            animationItems.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
+            items.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
         }
         if (thirdBlockParts.length > 1) {
-            animationItems.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
+            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
         }
         if (thirdBlockParts.length > 2) {
-            animationItems.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
+            items.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
         }
     }
-  }
-
-  const handleAnimationComplete = () => {
-    setAreControlsVisible(true);
-    setShouldNavbarContentBeVisible(true);
-  };
+    return items;
+  }, [fullHeroText, language]);
   
   const StaticSubtitle = () => {
     if (!isClientReady || !fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
