@@ -213,7 +213,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     );
   };
   
-  const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : undefined;
+  const fullHeroText = useMemo(() => {
+      if (!isClientReady) return undefined;
+      return translationsForLanguage.home.hero.subtitle;
+  }, [isClientReady, translationsForLanguage]);
 
   const handleAnimationComplete = useCallback(() => {
     setAreControlsVisible(true);
@@ -292,8 +295,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             </div>
 
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-center transition-opacity duration-1000",
-              areControlsVisible ? 'opacity-100' : 'opacity-0'
+              "flex flex-col sm:flex-row gap-6 justify-center",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                   <Link href="/#projects" onClick={handleSmoothScroll}>

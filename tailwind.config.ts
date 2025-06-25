@@ -117,6 +117,10 @@ export default {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'controls-fade-in': {
+          'from': { opacity: '0', transform: 'translateY(10px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -125,6 +129,7 @@ export default {
         'slideInLeftWithTerminalBounce': 'slideInLeftWithTerminalBounce 1s ease-out forwards',
         'letter-reveal': 'letter-reveal-from-below 0.6s ease-out forwards',
         'fadeIn': 'fadeIn 0.3s ease-out forwards', // Added fadeIn animation
+        'controls-fade-in': 'controls-fade-in 1s ease-out forwards',
       },
     },
   },
