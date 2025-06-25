@@ -239,7 +239,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   <TypingAnimation
                     key={heroSubtitle}
                     text={heroSubtitle}
-                    speed={25}
+                    speed={50}
                     highlightedWords={highlightedWordsForTypingAnim}
                     punctuationPauseFactor={5}
                   />
