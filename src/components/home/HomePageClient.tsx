@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef, Fragment } from 'react';
@@ -14,6 +13,7 @@ import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import { useFooter } from '@/contexts/FooterContext';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
+import React from 'react';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -209,15 +209,23 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     );
   };
   
-  const phrasesForAnimation = isClientReady
-    ? translationsForLanguage.home.hero.subtitle
-        .split('\n\n')
-        .map((block, index) => (
-          <span key={index} className="block whitespace-pre-line">
-            {renderStyledText(block, language)}
-          </span>
-        ))
-    : [];
+  const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
+  const mainBlocks = fullHeroText.split('\n\n');
+  
+  const finalPhrases: string[] = [];
+  if (mainBlocks.length > 0) finalPhrases.push(mainBlocks[0]);
+  if (mainBlocks.length > 1) finalPhrases.push(mainBlocks[1]);
+  if (mainBlocks.length > 2) {
+      finalPhrases.push(...mainBlocks[2].split('\n'));
+  }
+
+  const animationItems = finalPhrases.length > 0 ? [
+    { content: renderStyledText(finalPhrases[0], language), delayAfter: 2000 },
+    { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000 },
+    { content: renderStyledText(finalPhrases[2], language), delayAfter: 1000 },
+    { content: renderStyledText(finalPhrases[3], language), delayAfter: 1000 },
+    { content: renderStyledText(finalPhrases[4], language), delayAfter: 0 },
+  ] : [];
 
   const StaticSubtitle = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
@@ -243,7 +251,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
               {shouldAnimateHeroIntro ? (
-                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={1600} className="gap-y-8" />
+                  <StaggeredTextAnimation items={animationItems} className="gap-y-8" />
                 ) : (
                   <StaticSubtitle />
                 )
