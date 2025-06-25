@@ -637,7 +637,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   size="lg"
                   variant="outline"
                   asChild
-                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-[hsl(270,95%,80%)] dark:hover:text-[hsl(225,30%,10%)] dark:hover:border-[hsl(270,95%,80%)] text-lg px-10 py-6"
+                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-accent dark:hover:text-accent-foreground text-lg px-10 py-6"
                 >
                   <Link href="/#about" onClick={handleSmoothScroll}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
