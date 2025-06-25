@@ -25,7 +25,7 @@ interface TypingAnimationProps {
 
 const TypingAnimation: FC<TypingAnimationProps> = ({
   text,
-  speed = 50,
+  speed = 80,
   className,
   cursorClassName = 'inline-block w-[2px] h-[1.2em] ml-1 bg-foreground animate-blink-cursor align-text-bottom',
   startDelay = 0,
