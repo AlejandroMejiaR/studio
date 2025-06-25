@@ -542,60 +542,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
               ? "flex-col lg:flex-row lg:items-center gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
-          {/* --- LEFT COLUMN (Title or Image) --- */}
-          <div className={cn(
-              "transition-all duration-300 flex justify-center",
-              isFinalLayout 
-                ? "lg:w-3/5"
-                : "w-full"
-          )}>
-            {isFinalLayout ? (
-               <div className={cn(
-                  "relative w-full lg:h-[40rem] hidden lg:block",
-                  isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
-               )}>
-                  <Image
-                    src={getSupabaseImageUrl('documents', 'H.png')}
-                    alt="Hero Image"
-                    fill
-                    className="object-contain filter drop-shadow-xl"
-                    sizes="(max-width: 1024px) 50vw, 50vw"
-                    priority
-                  />
-               </div>
-            ) : (
-              !isTitleHidden && (
-                <h1 className={cn(
-                    "font-headline font-bold mb-8 text-foreground dark:text-foreground",
-                    "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
-                    { 'animate-slide-down-fade-out': isTitleSlidingDown }
-                )}
-                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                >
-                  {
-                    animatingTitleLines.map((lineText, lineIndex) => {
-                        const currentLineAnimProps = lineAnimationProps[lineIndex];
-                        if (!currentLineAnimProps) return null; 
-                        return (
-                          <WordRevealAnimation
-                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
-                            text={lineText || ""}
-                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
-                            delayBetweenWords={0.15} 
-                            letterStaggerDelay={0.04}
-                            letterAnimationDuration={0.5}
-                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-                            className="block" 
-                          />
-                        );
-                      })
-                  }
-                </h1>
-              )
-            )}
-          </div>
-
-          {/* --- RIGHT COLUMN (Subtitle & Buttons) --- */}
+          {/* --- LEFT COLUMN (Subtitle & Buttons) --- */}
           <div className={cn(
               "transition-all duration-300 flex flex-col justify-center",
               isFinalLayout 
@@ -647,6 +594,59 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   </Link>
                 </Button>
               </div>
+            )}
+          </div>
+
+          {/* --- RIGHT COLUMN (Title or Image) --- */}
+          <div className={cn(
+              "transition-all duration-300 flex justify-center",
+              isFinalLayout 
+                ? "lg:w-3/5"
+                : "w-full"
+          )}>
+            {isFinalLayout ? (
+               <div className={cn(
+                  "relative w-full lg:h-[40rem] hidden lg:block",
+                  isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
+               )}>
+                  <Image
+                    src={getSupabaseImageUrl('documents', 'HeroFinal.png')}
+                    alt="Hero Image"
+                    fill
+                    className="object-contain filter drop-shadow-xl"
+                    sizes="(max-width: 1024px) 50vw, 50vw"
+                    priority
+                  />
+               </div>
+            ) : (
+              !isTitleHidden && (
+                <h1 className={cn(
+                    "font-headline font-bold mb-8 text-foreground dark:text-foreground",
+                    "text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center",
+                    { 'animate-slide-down-fade-out': isTitleSlidingDown }
+                )}
+                style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                >
+                  {
+                    animatingTitleLines.map((lineText, lineIndex) => {
+                        const currentLineAnimProps = lineAnimationProps[lineIndex];
+                        if (!currentLineAnimProps) return null; 
+                        return (
+                          <WordRevealAnimation
+                            key={`${language}-animating-line-${lineIndex}-${lineText}`} 
+                            text={lineText || ""}
+                            lineBaseDelay={currentLineAnimProps.lineBaseDelay}
+                            delayBetweenWords={0.15} 
+                            letterStaggerDelay={0.04}
+                            letterAnimationDuration={0.5}
+                            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
+                            className="block" 
+                          />
+                        );
+                      })
+                  }
+                </h1>
+              )
             )}
           </div>
         </div>
