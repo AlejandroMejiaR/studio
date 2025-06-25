@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface StaggeredTextItem {
     content: React.ReactNode;
@@ -11,9 +11,28 @@ interface StaggeredTextItem {
 interface StaggeredTextAnimationProps {
     items: StaggeredTextItem[];
     className?: string;
+    onComplete?: () => void;
 }
 
-const StaggeredTextAnimation: React.FC<StaggeredTextAnimationProps> = ({ items, className }) => {
+const StaggeredTextAnimation: React.FC<StaggeredTextAnimationProps> = ({ items, className, onComplete }) => {
+    const animationDuration = 500; // From .animate-slide-up-fade-in (0.5s)
+
+    useEffect(() => {
+        if (onComplete && items.length > 0) {
+            // Calculate the time until the last item *starts* animating
+            const lastItemDelay = items.slice(0, -1).reduce((acc, item) => acc + item.delayAfter, 0);
+            
+            // Total time is when the last item starts + its own animation duration
+            const totalAnimationTime = lastItemDelay + animationDuration;
+
+            const timer = setTimeout(() => {
+                onComplete();
+            }, totalAnimationTime);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [items, onComplete, animationDuration]);
+
     let cumulativeDelay = 0;
 
     return (

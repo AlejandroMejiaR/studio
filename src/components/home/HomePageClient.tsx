@@ -35,6 +35,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const prevLanguageRef = useRef<Language | null>(null);
 
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const [areControlsVisible, setAreControlsVisible] = useState(false);
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
   const clearAnimationTimeouts = () => {
@@ -95,14 +96,15 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
     if (shouldAnimateHeroIntro) {
       setIsContentVisible(false);
+      setAreControlsVisible(false); // Hide buttons/header for animation
       setShouldNavbarContentBeVisible(false);
       const timer = setTimeout(() => {
         setIsContentVisible(true);
-        setShouldNavbarContentBeVisible(true);
       }, 300);
       animationTimersRef.current.push(timer);
     } else {
       setIsContentVisible(true);
+      setAreControlsVisible(true); // Show buttons/header immediately
       setShouldNavbarContentBeVisible(true);
     }
     
@@ -169,7 +171,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
   };
   
-  const renderStyledText = (text: string, language: Language) => {
+  const renderStyledText = (text: string | undefined, language: Language) => {
     if (!text) return null;
 
     const colorAnimatedWordsConfig = {
@@ -211,39 +213,52 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     );
   };
   
-  const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
+  const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : undefined;
   
   const animationItems: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
 
   if (fullHeroText) {
-      const mainBlocks = fullHeroText.split('\n\n');
-      
-      const finalPhrases: string[] = [];
-      if (mainBlocks[0]) finalPhrases.push(mainBlocks[0]);
-      if (mainBlocks[1]) finalPhrases.push(mainBlocks[1]);
-      if (mainBlocks[2]) {
-          finalPhrases.push(...mainBlocks[2].split('\n'));
-      }
+    const mainBlocks = fullHeroText.split('\n\n');
     
-      if (finalPhrases.length >= 5) {
-          animationItems.push(
-            { content: renderStyledText(finalPhrases[0], language), delayAfter: 1700, className: "mb-8" },
-            { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000, className: "mb-8" },
-            { content: renderStyledText(finalPhrases[2], language), delayAfter: 1000 },
-            { content: renderStyledText(finalPhrases[3], language), delayAfter: 1000 },
-            { content: renderStyledText(finalPhrases[4], language), delayAfter: 0 }
-          );
-      }
+    if (mainBlocks.length >= 2) {
+        const firstBlock = mainBlocks[0];
+        const secondBlock = mainBlocks[1];
+        const thirdBlockParts = mainBlocks[2] ? mainBlocks[2].split('\n') : [];
+      
+        animationItems.push(
+            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-8" },
+            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-8" }
+        );
+
+        if (thirdBlockParts.length > 0) {
+            animationItems.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
+        }
+        if (thirdBlockParts.length > 1) {
+            animationItems.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
+        }
+        if (thirdBlockParts.length > 2) {
+            animationItems.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
+        }
+    }
   }
 
+  const handleAnimationComplete = () => {
+    setAreControlsVisible(true);
+    setShouldNavbarContentBeVisible(true);
+  };
+  
   const StaticSubtitle = () => {
-    if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    const fullText = translationsForLanguage.home.hero.subtitle;
-    return (
-      <div className="whitespace-pre-line">
-        {renderStyledText(fullText, language)}
+    if (!isClientReady || !fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    
+    const parts = fullHeroText.split('\n\n').map((block, index) => (
+      <div key={index} className={index < 2 ? 'mb-8' : ''}>
+        {block.split('\n').map((line, lineIndex) => (
+          <div key={lineIndex}>{renderStyledText(line, language)}</div>
+        ))}
       </div>
-    );
+    ));
+
+    return <>{parts}</>;
   };
 
   if (!isClientReady || shouldAnimateHeroIntro === null) {
@@ -264,14 +279,20 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium">
               {shouldAnimateHeroIntro && animationItems.length > 0 ? (
-                  <StaggeredTextAnimation items={animationItems} />
+                  <StaggeredTextAnimation
+                    items={animationItems}
+                    onComplete={handleAnimationComplete}
+                  />
                 ) : (
                   <StaticSubtitle />
                 )
               }
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className={cn(
+              "flex flex-col sm:flex-row gap-6 justify-center transition-opacity duration-500",
+              areControlsVisible ? 'opacity-100' : 'opacity-0'
+            )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
                   <Link href="/#projects" onClick={handleSmoothScroll}>
                     <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
