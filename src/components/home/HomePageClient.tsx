@@ -154,29 +154,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   
-  const phrasesConfig = {
-    EN: [
-      <span key="en-1">Hello! I'm Alejandro</span>,
-      <span key="en-2">I focus on designing and developing digital experiences</span>,
-      <div key="en-3" className="flex flex-col items-center text-center">
-        <span>Centered on <span className="animate-text-pulse font-bold text-accent">UX</span></span>
-        <span>Driven by <span className="animate-text-pulse font-bold text-accent">AI</span></span>
-        <span>Powered by <span className="animate-text-pulse font-bold text-accent">Game Design</span></span>
-      </div>
-    ],
-    ES: [
-      <span key="es-1">¡Hola! Soy Alejandro</span>,
-      <span key="es-2">Me enfoco en el diseño y desarrollo de experiencias digitales</span>,
-      <div key="es-3" className="flex flex-col items-center text-center">
-        <span>Centradas en <span className="animate-text-pulse font-bold text-accent">UX</span></span>
-        <span>Impulsadas por <span className="animate-text-pulse font-bold text-accent">IA</span></span>
-        <span>Potenciadas con <span className="animate-text-pulse font-bold text-accent">Game Design</span></span>
-      </div>
-    ]
-  };
-
-  const phrasesForAnimation = phrasesConfig[language];
-  
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
     if (href && href.startsWith('/#')) {
@@ -192,18 +169,14 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
   };
   
-  const StaticSubtitle = () => {
-    if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
-    
-    const text = translationsForLanguage.home.hero.subtitle;
-
+  const renderStyledText = (text: string, language: Language) => {
     const colorAnimatedWordsConfig = {
-        EN: ['UX', 'AI', 'Game Design'],
-        ES: ['UX', 'IA', 'Game Design']
+      EN: ['UX', 'AI', 'Game Design'],
+      ES: ['UX', 'IA', 'Game Design']
     };
     const boldWordsConfig = {
-        EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
-        ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales']
+      EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
+      ES: ["¡Hola!", "Soy Alejandro", 'diseño', 'desarrollo', 'experiencias digitales']
     };
 
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
@@ -214,7 +187,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     const parts = text.split(stylingRegex).filter(Boolean);
 
     return (
-      <>
+      <Fragment>
         {parts.map((part, index) => {
            if (phrasesToColorAnimate.includes(part)) {
             return (
@@ -232,10 +205,25 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           }
           return <Fragment key={index}>{part}</Fragment>;
         })}
-      </>
+      </Fragment>
     );
   };
+  
+  const phrasesForAnimation = isClientReady
+    ? translationsForLanguage.home.hero.subtitle
+        .split('\n\n')
+        .map((block, index) => (
+          <span key={index} className="block whitespace-pre-line">
+            {renderStyledText(block, language)}
+          </span>
+        ))
+    : [];
 
+  const StaticSubtitle = () => {
+    if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    const fullText = translationsForLanguage.home.hero.subtitle;
+    return renderStyledText(fullText, language);
+  };
 
   if (!isClientReady || shouldAnimateHeroIntro === null) {
     return (
@@ -255,7 +243,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
               {shouldAnimateHeroIntro ? (
-                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={800} />
+                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={800} className="gap-y-8" />
                 ) : (
                   <StaticSubtitle />
                 )

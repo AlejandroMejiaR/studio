@@ -10,7 +10,7 @@ interface StaggeredTextAnimationProps {
 
 const StaggeredTextAnimation: React.FC<StaggeredTextAnimationProps> = ({ phrases, staggerDuration = 400, className }) => {
     return (
-        <div className={cn("flex flex-col items-center text-center gap-y-3", className)}>
+        <div className={cn("flex flex-col items-center text-center", className)}>
             {phrases.map((phrase, index) => (
                 <div
                     key={index}
