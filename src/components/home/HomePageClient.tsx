@@ -292,7 +292,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             </div>
 
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-center transition-opacity duration-500",
+              "flex flex-col sm:flex-row gap-6 justify-center transition-opacity duration-1000",
               areControlsVisible ? 'opacity-100' : 'opacity-0'
             )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
