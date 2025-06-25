@@ -95,7 +95,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       setShouldNavbarContentBeVisible(true);
     }
     
-  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible]);
+  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible, language]);
   
   useEffect(() => {
     if (!isClientReady || shouldAnimateHeroIntro === null) return;
