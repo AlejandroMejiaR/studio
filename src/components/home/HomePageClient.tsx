@@ -225,7 +225,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   
   const animationItems = useMemo(() => {
     const items: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
-    if (!fullHeroText) return items;
+    if (!isClientReady || !fullHeroText) return items;
 
     const mainBlocks = fullHeroText.split('\n\n');
     
@@ -235,8 +235,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         const thirdBlockParts = mainBlocks[2] ? mainBlocks[2].split('\n') : [];
       
         items.push(
-            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-8" },
-            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-8" }
+            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-12" },
+            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-12" }
         );
 
         if (thirdBlockParts.length > 0) {
@@ -250,13 +250,13 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         }
     }
     return items;
-  }, [fullHeroText, language]);
+  }, [fullHeroText, language, isClientReady]);
   
   const StaticSubtitle = () => {
     if (!isClientReady || !fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const parts = fullHeroText.split('\n\n').map((block, index) => (
-      <div key={index} className={index < 2 ? 'mb-8' : ''}>
+      <div key={index} className={index < 2 ? 'mb-12' : ''}>
         {block.split('\n').map((line, lineIndex) => (
           <div key={lineIndex}>{renderStyledText(line, language)}</div>
         ))}
