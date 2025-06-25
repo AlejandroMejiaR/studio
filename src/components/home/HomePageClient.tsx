@@ -276,7 +276,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div className="container mx-auto">
       <section 
-        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-40 pb-20"
+        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-20"
       >
         <div className={cn(
           "w-full max-w-4xl transition-opacity duration-1000",
