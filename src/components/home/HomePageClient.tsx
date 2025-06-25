@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import { useFooter } from '@/contexts/FooterContext';
+import TypingAnimation from '@/components/effects/TypingAnimation';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -150,7 +151,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     };
   }, [pathname, setIsFooterVisible, shouldAnimateHeroIntro]);
 
-  const heroSubtitle = translationsForLanguage.home.hero.subtitle;
+  const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   
@@ -166,9 +167,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
   const phrasesToBold = boldWordsConfig[language];
   
-  const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
-  const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
-
+  const highlightedWordsForTypingAnim = [
+    ...phrasesToColorAnimate.map(word => ({ word, className: 'animate-text-pulse font-bold text-accent' })),
+    ...phrasesToBold.map(word => ({ word, className: 'font-bold text-foreground/90' }))
+  ];
+  
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
     if (href && href.startsWith('/#')) {
@@ -183,11 +186,14 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       }
     }
   };
-
-  const AnimatedSubtitle = ({ text }: { text: string }) => {
+  
+  const StaticSubtitle = ({ text }: { text: string }) => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
-    const parts = text.split(stylingRegex);
+    const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
+    const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
+    const parts = text.split(stylingRegex).filter(Boolean);
+
     return (
       <>
         {parts.map((part, index) => {
@@ -211,6 +217,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     );
   };
 
+
   if (!isClientReady || shouldAnimateHeroIntro === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -227,9 +234,20 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-4xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <p className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium">
-              <AnimatedSubtitle text={heroSubtitle} />
-            </p>
+            <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
+              {shouldAnimateHeroIntro ? (
+                  <TypingAnimation
+                    key={heroSubtitle}
+                    text={heroSubtitle}
+                    speed={25}
+                    highlightedWords={highlightedWordsForTypingAnim}
+                    punctuationPauseFactor={5}
+                  />
+                ) : (
+                  <StaticSubtitle text={heroSubtitle} />
+                )
+              }
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
