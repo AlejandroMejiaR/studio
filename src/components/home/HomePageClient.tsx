@@ -285,6 +285,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium">
               {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                   <StaggeredTextAnimation
+                    key={language}
                     items={animationItems}
                     onComplete={handleAnimationComplete}
                   />
