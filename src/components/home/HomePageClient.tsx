@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, useRef, Fragment } from 'react';
@@ -239,7 +238,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   <TypingAnimation
                     key={heroSubtitle}
                     text={heroSubtitle}
-                    speed={50}
+                    speed={80}
                     highlightedWords={highlightedWordsForTypingAnim}
                     punctuationPauseFactor={5}
                   />
