@@ -243,7 +243,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
               {shouldAnimateHeroIntro ? (
-                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={1200} className="gap-y-8" />
+                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={1600} className="gap-y-8" />
                 ) : (
                   <StaticSubtitle />
                 )
