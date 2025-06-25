@@ -70,7 +70,7 @@ export const translations: Record<Language, AppTranslations> = {
     },
     home: {
       hero: {
-        animatingTitle: ["Transforma", "Ideas Into", "Interactive", "Worlds"],
+        animatingTitle: ["Transform", "Ideas Into", "Interactive", "Worlds"],
         subtitle: "Hello! I'm Alejandro\n\nI focus on designing and developing digital experiences\n\nCentered on UX\nDriven by AI\nPowered by Game Design",
       },
       buttons: {
