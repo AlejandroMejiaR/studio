@@ -551,7 +551,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           )}>
             {isFinalLayout ? (
                <div className={cn(
-                  "relative w-full lg:h-[32rem] hidden lg:block",
+                  "relative w-full lg:h-[40rem] hidden lg:block",
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
