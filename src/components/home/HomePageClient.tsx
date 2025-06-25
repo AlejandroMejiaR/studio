@@ -170,6 +170,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   };
   
   const renderStyledText = (text: string, language: Language) => {
+    if (!text) return null; // Defensive check to prevent errors.
+
     const colorAnimatedWordsConfig = {
       EN: ['UX', 'AI', 'Game Design'],
       ES: ['UX', 'IA', 'Game Design']
@@ -210,22 +212,31 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   };
   
   const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
-  const mainBlocks = fullHeroText.split('\n\n');
   
-  const finalPhrases: string[] = [];
-  if (mainBlocks.length > 0) finalPhrases.push(mainBlocks[0]);
-  if (mainBlocks.length > 1) finalPhrases.push(mainBlocks[1]);
-  if (mainBlocks.length > 2) {
-      finalPhrases.push(...mainBlocks[2].split('\n'));
-  }
+  const animationItems: { content: React.ReactNode; delayAfter: number }[] = [];
 
-  const animationItems = finalPhrases.length > 0 ? [
-    { content: renderStyledText(finalPhrases[0], language), delayAfter: 2000 },
-    { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000 },
-    { content: renderStyledText(finalPhrases[2], language), delayAfter: 1000 },
-    { content: renderStyledText(finalPhrases[3], language), delayAfter: 1000 },
-    { content: renderStyledText(finalPhrases[4], language), delayAfter: 0 },
-  ] : [];
+  // This block now safely checks if fullHeroText is available before processing.
+  if (fullHeroText) {
+      const mainBlocks = fullHeroText.split('\n\n');
+      
+      const finalPhrases: string[] = [];
+      if (mainBlocks[0]) finalPhrases.push(mainBlocks[0]);
+      if (mainBlocks[1]) finalPhrases.push(mainBlocks[1]);
+      if (mainBlocks[2]) {
+          finalPhrases.push(...mainBlocks[2].split('\n'));
+      }
+    
+      // Ensure we have exactly 5 phrases to match the animation sequence
+      if (finalPhrases.length >= 5) {
+          animationItems.push(
+            { content: renderStyledText(finalPhrases[0], language), delayAfter: 2000 },
+            { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000 },
+            { content: renderStyledText(finalPhrases[2], language), delayAfter: 1000 },
+            { content: renderStyledText(finalPhrases[3], language), delayAfter: 1000 },
+            { content: renderStyledText(finalPhrases[4], language), delayAfter: 0 }
+          );
+      }
+  }
 
   const StaticSubtitle = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
@@ -250,7 +261,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
-              {shouldAnimateHeroIntro ? (
+              {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                   <StaggeredTextAnimation items={animationItems} className="gap-y-8" />
                 ) : (
                   <StaticSubtitle />
