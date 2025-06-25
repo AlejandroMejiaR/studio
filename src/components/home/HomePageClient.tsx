@@ -36,12 +36,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
   const [isContentVisible, setIsContentVisible] = useState(false);
   const [areControlsVisible, setAreControlsVisible] = useState(false);
-  const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
-
-  const clearAnimationTimeouts = useCallback(() => {
-    animationTimersRef.current.forEach(clearTimeout);
-    animationTimersRef.current = [];
-  }, []);
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -86,8 +80,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (shouldAnimateHeroIntro === null || !isClientReady) {
       return;
     }
-    
-    clearAnimationTimeouts();
 
     if (shouldAnimateHeroIntro) {
       setIsContentVisible(false);
@@ -96,15 +88,14 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       const timer = setTimeout(() => {
         setIsContentVisible(true);
       }, 300);
-      animationTimersRef.current.push(timer);
+      return () => clearTimeout(timer);
     } else {
       setIsContentVisible(true);
       setAreControlsVisible(true); // Show buttons/header immediately
       setShouldNavbarContentBeVisible(true);
     }
     
-    return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible, clearAnimationTimeouts]);
+  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible]);
   
   useEffect(() => {
     if (!isClientReady || shouldAnimateHeroIntro === null) return;
@@ -249,7 +240,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             items.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
         }
         if (thirdBlockParts.length > 1) {
-            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 0 });
+            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
         }
         if (thirdBlockParts.length > 2) {
             items.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
