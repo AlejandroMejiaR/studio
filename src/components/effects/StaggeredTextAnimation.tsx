@@ -5,6 +5,7 @@ import React from "react";
 interface StaggeredTextItem {
     content: React.ReactNode;
     delayAfter: number; // ms to wait after this item's animation STARTS before starting the next
+    className?: string;
 }
 
 interface StaggeredTextAnimationProps {
@@ -25,7 +26,7 @@ const StaggeredTextAnimation: React.FC<StaggeredTextAnimationProps> = ({ items, 
                 return (
                     <div
                         key={index}
-                        className={cn("opacity-0 animate-slide-up-fade-in")}
+                        className={cn("opacity-0 animate-slide-up-fade-in", item.className)}
                         style={{
                             animationDelay: `${currentItemDelay}ms`,
                         }}

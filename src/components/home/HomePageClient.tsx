@@ -170,7 +170,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   };
   
   const renderStyledText = (text: string, language: Language) => {
-    if (!text) return null; // Defensive check to prevent errors.
+    if (!text) return null;
 
     const colorAnimatedWordsConfig = {
       EN: ['UX', 'AI', 'Game Design'],
@@ -213,9 +213,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   
   const fullHeroText = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
   
-  const animationItems: { content: React.ReactNode; delayAfter: number }[] = [];
+  const animationItems: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
 
-  // This block now safely checks if fullHeroText is available before processing.
   if (fullHeroText) {
       const mainBlocks = fullHeroText.split('\n\n');
       
@@ -226,11 +225,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           finalPhrases.push(...mainBlocks[2].split('\n'));
       }
     
-      // Ensure we have exactly 5 phrases to match the animation sequence
       if (finalPhrases.length >= 5) {
           animationItems.push(
-            { content: renderStyledText(finalPhrases[0], language), delayAfter: 2000 },
-            { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000 },
+            { content: renderStyledText(finalPhrases[0], language), delayAfter: 1700, className: "mb-8" },
+            { content: renderStyledText(finalPhrases[1], language), delayAfter: 2000, className: "mb-8" },
             { content: renderStyledText(finalPhrases[2], language), delayAfter: 1000 },
             { content: renderStyledText(finalPhrases[3], language), delayAfter: 1000 },
             { content: renderStyledText(finalPhrases[4], language), delayAfter: 0 }
@@ -241,7 +239,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const StaticSubtitle = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     const fullText = translationsForLanguage.home.hero.subtitle;
-    return renderStyledText(fullText, language);
+    return (
+      <div className="whitespace-pre-line">
+        {renderStyledText(fullText, language)}
+      </div>
+    );
   };
 
   if (!isClientReady || shouldAnimateHeroIntro === null) {
@@ -260,9 +262,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-4xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
+            <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium">
               {shouldAnimateHeroIntro && animationItems.length > 0 ? (
-                  <StaggeredTextAnimation items={animationItems} className="gap-y-8" />
+                  <StaggeredTextAnimation items={animationItems} />
                 ) : (
                   <StaticSubtitle />
                 )
