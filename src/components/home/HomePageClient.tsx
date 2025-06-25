@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import { useFooter } from '@/contexts/FooterContext';
-import TypingAnimation from '@/components/effects/TypingAnimation';
+import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -151,26 +151,41 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     };
   }, [pathname, setIsFooterVisible, shouldAnimateHeroIntro]);
 
-  const heroSubtitle = isClientReady ? translationsForLanguage.home.hero.subtitle : '';
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
   
-  const colorAnimatedWordsConfig = {
-    EN: ['UX', 'AI', 'Game Design'],
-    ES: ['UX', 'IA', 'Game Design']
-  };
-  const boldWordsConfig = {
-    EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
-    ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales']
+  const phrasesConfig = {
+    EN: [
+      "Hello!",
+      "I'm Alejandro",
+      "I focus on",
+      "designing",
+      "and developing",
+      "digital experiences.",
+      "Centered on",
+      <span key="ux" className="animate-text-pulse font-bold text-accent">UX</span>,
+      "Driven by",
+      <span key="ai" className="animate-text-pulse font-bold text-accent">AI</span>,
+      "Powered by",
+      <span key="gd" className="animate-text-pulse font-bold text-accent">Game Design</span>
+    ],
+    ES: [
+      "¡Hola!",
+      "Soy Alejandro",
+      "Me enfoco en",
+      "el diseño",
+      "y desarrollo",
+      "de experiencias digitales.",
+      "Centradas en",
+      <span key="ux" className="animate-text-pulse font-bold text-accent">UX</span>,
+      "Impulsadas por",
+      <span key="ia" className="animate-text-pulse font-bold text-accent">IA</span>,
+      "Potenciadas con",
+      <span key="gd" className="animate-text-pulse font-bold text-accent">Game Design</span>,
+    ]
   };
 
-  const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
-  const phrasesToBold = boldWordsConfig[language];
-  
-  const highlightedWordsForTypingAnim = [
-    ...phrasesToColorAnimate.map(word => ({ word, className: 'animate-text-pulse font-bold text-accent' })),
-    ...phrasesToBold.map(word => ({ word, className: 'font-bold text-foreground/90' }))
-  ];
+  const phrasesForAnimation = phrasesConfig[language];
   
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
@@ -187,8 +202,22 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
   };
   
-  const StaticSubtitle = ({ text }: { text: string }) => {
+  const StaticSubtitle = () => {
     if (!isClientReady) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    
+    const text = translationsForLanguage.home.hero.subtitle;
+
+    const colorAnimatedWordsConfig = {
+        EN: ['UX', 'AI', 'Game Design'],
+        ES: ['UX', 'IA', 'Game Design']
+    };
+    const boldWordsConfig = {
+        EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
+        ES: ["¡Hola!", 'diseño', 'desarrollo', 'experiencias digitales']
+    };
+
+    const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
+    const phrasesToBold = boldWordsConfig[language];
     
     const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
     const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
@@ -236,15 +265,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
               {shouldAnimateHeroIntro ? (
-                  <TypingAnimation
-                    key={heroSubtitle}
-                    text={heroSubtitle}
-                    speed={80}
-                    highlightedWords={highlightedWordsForTypingAnim}
-                    punctuationPauseFactor={5}
-                  />
+                  <StaggeredTextAnimation phrases={phrasesForAnimation} />
                 ) : (
-                  <StaticSubtitle text={heroSubtitle} />
+                  <StaticSubtitle />
                 )
               }
             </div>
