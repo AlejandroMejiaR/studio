@@ -156,32 +156,22 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   
   const phrasesConfig = {
     EN: [
-      "Hello!",
-      "I'm Alejandro",
-      "I focus on",
-      "designing",
-      "and developing",
-      "digital experiences.",
-      "Centered on",
-      <span key="ux" className="animate-text-pulse font-bold text-accent">UX</span>,
-      "Driven by",
-      <span key="ai" className="animate-text-pulse font-bold text-accent">AI</span>,
-      "Powered by",
-      <span key="gd" className="animate-text-pulse font-bold text-accent">Game Design</span>
+      <span key="en-1">Hello! I'm Alejandro</span>,
+      <span key="en-2">I focus on designing and developing digital experiences</span>,
+      <div key="en-3" className="flex flex-col items-center text-center">
+        <span>Centered on <span className="animate-text-pulse font-bold text-accent">UX</span></span>
+        <span>Driven by <span className="animate-text-pulse font-bold text-accent">AI</span></span>
+        <span>Powered by <span className="animate-text-pulse font-bold text-accent">Game Design</span></span>
+      </div>
     ],
     ES: [
-      "¡Hola!",
-      "Soy Alejandro",
-      "Me enfoco en",
-      "el diseño",
-      "y desarrollo",
-      "de experiencias digitales.",
-      "Centradas en",
-      <span key="ux" className="animate-text-pulse font-bold text-accent">UX</span>,
-      "Impulsadas por",
-      <span key="ia" className="animate-text-pulse font-bold text-accent">IA</span>,
-      "Potenciadas con",
-      <span key="gd" className="animate-text-pulse font-bold text-accent">Game Design</span>,
+      <span key="es-1">¡Hola! Soy Alejandro</span>,
+      <span key="es-2">Me enfoco en el diseño y desarrollo de experiencias digitales</span>,
+      <div key="es-3" className="flex flex-col items-center text-center">
+        <span>Centradas en <span className="animate-text-pulse font-bold text-accent">UX</span></span>
+        <span>Impulsadas por <span className="animate-text-pulse font-bold text-accent">IA</span></span>
+        <span>Potenciadas con <span className="animate-text-pulse font-bold text-accent">Game Design</span></span>
+      </div>
     ]
   };
 
@@ -265,7 +255,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium whitespace-pre-line">
               {shouldAnimateHeroIntro ? (
-                  <StaggeredTextAnimation phrases={phrasesForAnimation} />
+                  <StaggeredTextAnimation phrases={phrasesForAnimation} staggerDuration={800} />
                 ) : (
                   <StaticSubtitle />
                 )
