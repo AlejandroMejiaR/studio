@@ -33,7 +33,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const pathname = usePathname();
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
-  const prevLanguageRef = useRef<Language | null>(null);
 
   const [isContentVisible, setIsContentVisible] = useState(false);
   const [areControlsVisible, setAreControlsVisible] = useState(false);
@@ -67,24 +66,19 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   useEffect(() => {
     if (!isClientReady) return;
   
-    const previousLanguage = prevLanguageRef.current;
-    const languageHasChanged = previousLanguage !== null && previousLanguage !== language;
+    // The key in sessionStorage is now language-specific.
+    const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
+    const hasAnimatedForThisLanguage = sessionStorage.getItem(initialLoadAnimatedKey);
   
-    if (languageHasChanged) {
+    if (!hasAnimatedForThisLanguage) {
+      // If we haven't animated for the current language in this session, do it now.
       setShouldAnimateHeroIntro(true);
+      // And mark it as done for this session.
+      sessionStorage.setItem(initialLoadAnimatedKey, 'true');
     } else {
-      const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
-      const hasAnimatedOnInitialLoad = sessionStorage.getItem(initialLoadAnimatedKey);
-  
-      if (!hasAnimatedOnInitialLoad) {
-        setShouldAnimateHeroIntro(true);
-        sessionStorage.setItem(initialLoadAnimatedKey, 'true');
-      } else {
-        setShouldAnimateHeroIntro(false);
-      }
+      // Otherwise, don't animate.
+      setShouldAnimateHeroIntro(false);
     }
-  
-    prevLanguageRef.current = language;
   
   }, [isClientReady, language]);
 
@@ -255,7 +249,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             items.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
         }
         if (thirdBlockParts.length > 1) {
-            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
+            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 0 });
         }
         if (thirdBlockParts.length > 2) {
             items.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
