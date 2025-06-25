@@ -38,10 +38,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const [areControlsVisible, setAreControlsVisible] = useState(false);
   const animationTimersRef = useRef<NodeJS.Timeout[]>([]);
 
-  const clearAnimationTimeouts = () => {
+  const clearAnimationTimeouts = useCallback(() => {
     animationTimersRef.current.forEach(clearTimeout);
     animationTimersRef.current = [];
-  };
+  }, []);
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -109,7 +109,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
     
     return clearAnimationTimeouts;
-  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible]);
+  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible, clearAnimationTimeouts]);
   
   useEffect(() => {
     if (!isClientReady || shouldAnimateHeroIntro === null) return;
@@ -152,6 +152,20 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         }
     };
   }, [pathname, setIsFooterVisible, shouldAnimateHeroIntro]);
+
+  useEffect(() => {
+    if (shouldAnimateHeroIntro) {
+      if (!areControlsVisible) {
+        document.body.classList.add('no-scroll');
+      } else {
+        document.body.classList.remove('no-scroll');
+      }
+    }
+    // Cleanup function to ensure scroll is always re-enabled
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [areControlsVisible, shouldAnimateHeroIntro]);
 
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
   const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
@@ -218,7 +232,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const handleAnimationComplete = useCallback(() => {
     setAreControlsVisible(true);
     setShouldNavbarContentBeVisible(true);
-  }, [setAreControlsVisible, setShouldNavbarContentBeVisible]);
+  }, [setShouldNavbarContentBeVisible]);
   
   const animationItems = useMemo(() => {
     const items: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
