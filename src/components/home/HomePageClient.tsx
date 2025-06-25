@@ -546,12 +546,12 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           <div className={cn(
               "transition-all duration-300 flex justify-center",
               isFinalLayout 
-                ? "lg:w-1/2"
+                ? "lg:w-3/5"
                 : "w-full"
           )}>
             {isFinalLayout ? (
                <div className={cn(
-                  "relative w-full lg:h-96 hidden lg:block",
+                  "relative w-full lg:h-[32rem] hidden lg:block",
                   isFinalContentVisible ? 'animate-fadeIn' : 'opacity-0'
                )}>
                   <Image
@@ -599,7 +599,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           <div className={cn(
               "transition-all duration-300 flex flex-col justify-center",
               isFinalLayout 
-                  ? "lg:w-1/2 items-center lg:items-start"
+                  ? "lg:w-2/5 items-center lg:items-start"
                   : "w-full items-center"
           )}>
             <p className={cn(
