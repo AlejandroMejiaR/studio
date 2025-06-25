@@ -235,8 +235,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         const thirdBlockParts = mainBlocks[2] ? mainBlocks[2].split('\n') : [];
       
         items.push(
-            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-12" },
-            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-12" }
+            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-16" },
+            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-16" }
         );
 
         if (thirdBlockParts.length > 0) {
@@ -256,7 +256,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!isClientReady || !fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const parts = fullHeroText.split('\n\n').map((block, index) => (
-      <div key={index} className={index < 2 ? 'mb-12' : ''}>
+      <div key={index} className={index < 2 ? 'mb-16' : ''}>
         {block.split('\n').map((line, lineIndex) => (
           <div key={lineIndex}>{renderStyledText(line, language)}</div>
         ))}
