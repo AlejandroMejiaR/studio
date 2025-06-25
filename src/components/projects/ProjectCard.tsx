@@ -4,9 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Badge, badgeVariants } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ArrowUpRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ProjectCardProps {
   project: Project;
@@ -54,7 +55,10 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             </CardTitle>
             <Link 
               href={`/projects/${project.slug}`} 
-              className="flex items-center text-xs font-semibold text-muted-foreground group-hover:text-accent shrink-0 transition-colors duration-300"
+              className={cn(
+                badgeVariants({ variant: 'secondary' }),
+                'group-hover:bg-accent group-hover:text-accent-foreground transition-colors shrink-0'
+              )}
               aria-label={`View more details for ${titleToDisplay}`}
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
