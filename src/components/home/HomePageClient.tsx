@@ -395,10 +395,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     });
   }
   
-  const linkablePhraseConfig = {
-    EN: "Let's bring your idea to the digital world!",
-    ES: "¡Llevemos tu idea al mundo digital!"
-  };
   const colorAnimatedWordsConfig = {
     EN: ['UX', 'AI', 'Game Design'],
     ES: ['UX', 'IA', 'Game Design']
@@ -410,9 +406,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
   const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
   const phrasesToBold = boldWordsConfig[language];
-  const phraseToLink = linkablePhraseConfig[language];
   
-  const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold, phraseToLink];
+  const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
   const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
 
 
@@ -436,14 +431,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     return (
       <>
         {parts.map((part, index) => {
-           if (part === phraseToLink) {
-            return (
-              <Link key={index} href="/#about" onClick={handleSmoothScroll} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
-                {part}
-              </Link>
-            );
-          }
-          if (phrasesToColorAnimate.includes(part)) {
+           if (phrasesToColorAnimate.includes(part)) {
             return (
               <span key={index} className="animate-text-pulse font-bold text-accent">
                 {part}
@@ -474,7 +462,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
        const highlightedWordsForTyping = [
         ...phrasesToColorAnimate.map(word => ({ word, className: 'font-bold text-accent' })),
         ...phrasesToBold.map(word => ({ word, className: 'font-bold text-foreground/90' })),
-        { word: phraseToLink, className: 'font-bold text-foreground/90' }
       ];
       return (
         <TypingAnimation
@@ -494,13 +481,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       return (
         <>
           {parts.map((part, index) => {
-            if (part === phraseToLink) {
-              return (
-                <Link key={index} href="/#about" onClick={handleSmoothScroll} className="font-bold text-foreground/90 hover:text-accent transition-colors duration-200">
-                  {part}
-                </Link>
-              );
-            }
             if (phrasesToColorAnimate.includes(part)) {
               return <span key={index} className="font-bold text-accent">{part}</span>;
             }
