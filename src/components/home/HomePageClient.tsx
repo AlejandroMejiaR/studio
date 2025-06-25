@@ -579,7 +579,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
           {/* --- RIGHT COLUMN (Title or Image) --- */}
           <div className={cn(
-              "transition-all duration-300 flex justify-center",
+              "transition-all duration-300 flex justify-center lg:justify-end",
               isFinalLayout 
                 ? "lg:w-3/5"
                 : "w-full"
