@@ -53,6 +53,9 @@ export interface AppTranslations {
     projectsLink: string;
     aboutMeLink: string;
   };
+  projectCard: {
+    viewMore: string;
+  };
 }
 
 export type Language = 'EN' | 'ES';
@@ -113,6 +116,9 @@ export const translations: Record<Language, AppTranslations> = {
       projectsLink: "Projects",
       aboutMeLink: "About Me",
     },
+    projectCard: {
+      viewMore: "View More",
+    },
   },
   ES: {
     brandName: "Alejandro Mejía - Ingeniero en Multimedia",
@@ -168,6 +174,9 @@ export const translations: Record<Language, AppTranslations> = {
       quickLinksTitle: "Enlaces Rápidos",
       projectsLink: "Proyectos",
       aboutMeLink: "Sobre Mí",
+    },
+    projectCard: {
+      viewMore: "Ver más",
     },
   },
 };

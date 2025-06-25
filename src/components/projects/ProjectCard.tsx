@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -7,6 +6,7 @@ import type { Project, ProjectTranslationDetails } from '@/types';
 import { Card, CardContent, CardFooter, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { ArrowUpRight } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
@@ -20,9 +20,11 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
+  const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : (getEnglishTranslation(t => t.projectCard.viewMore) || "View More");
+
 
   return (
-    <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20">
+    <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 group">
       <Link 
         href={`/projects/${project.slug}`} 
         aria-label={`View details for ${titleToDisplay}`}
@@ -50,9 +52,16 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                 {titleToDisplay}
               </Link>
             </CardTitle>
-            {project.category && (
-              <Badge className="text-xs bg-accent hover:bg-accent text-accent-foreground shrink-0">{project.category}</Badge>
-            )}
+            <Link 
+              href={`/projects/${project.slug}`} 
+              className="flex items-center text-xs font-semibold text-muted-foreground group-hover:text-accent shrink-0 transition-colors duration-300"
+              aria-label={`View more details for ${titleToDisplay}`}
+            >
+              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                {viewMoreText}
+              </span>
+              <ArrowUpRight className="ml-1 h-4 w-4" />
+            </Link>
           </div>
           
           <CardDescription className="text-foreground/70 text-base">
