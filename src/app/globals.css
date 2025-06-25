@@ -80,7 +80,7 @@ body {
     --muted: 225 20% 25%;          /* Desaturated Indigo/Grey #33364D - darker */
     --muted-foreground: 225 15% 70%;   /* Lighter Grey with Indigo hint #A3A8B8 */
 
-    --accent: 51 100% 50%;         /* Gold #FFD700 */
+    --accent: 39 100% 50%;         /* Orange #FFA500 */
     --accent-foreground: 225 30% 12%; /* Dark for text on accent */
 
     --destructive: 0 80% 65%;       /* More Saturated Red #F54D4D */
@@ -88,7 +88,7 @@ body {
 
     --border: 225 30% 20%;         /* Slightly Lighter Indigo/Navy, for subtle separation #242C47 */
     --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
-    --ring: 51 100% 50%;           /* Ring color (matches accent) */
+    --ring: 39 100% 50%;           /* Ring color (matches accent) */
 
     --footer-background: 225 30% 8%; /* Very Dark Indigo, almost black #0D101A */
     --footer-foreground: 225 15% 75%;   /* Light Grey with Indigo hint for footer text #B0B5C7 */
@@ -100,7 +100,7 @@ body {
     --sidebar-accent: 225 25% 20%;         /* Sidebar Accent (hover/active) #262C40 */
     --sidebar-accent-foreground: 0 0% 98%; /* Sidebar Accent Text */
     --sidebar-border: 225 20% 28%;         /* Sidebar Border #383D52 */
-    --sidebar-ring: 51 100% 50%;           /* Sidebar Ring (matches main accent) */
+    --sidebar-ring: 39 100% 50%;           /* Sidebar Ring (matches main accent) */
   }
 }
 
@@ -235,7 +235,7 @@ body {
   }
 
   @keyframes wordInitialAccentToFinalColorDark {
-    0% { color: hsl(var(--accent)); } /* Gold for dark mode */
+    0% { color: hsl(var(--accent)); } /* Orange for dark mode */
     100% { color: hsl(var(--foreground)); } /* Off-white/Foreground for dark mode */
   }
 
