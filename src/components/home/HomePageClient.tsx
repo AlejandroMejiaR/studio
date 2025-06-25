@@ -539,7 +539,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         <div className={cn(
           "w-full max-w-5xl flex",
           isFinalLayout
-              ? "flex-col lg:flex-row lg:items-start gap-8 lg:gap-12"
+              ? "flex-col lg:flex-row lg:items-center gap-8 lg:gap-12"
               : "flex-col items-center"
         )}>
           {/* --- LEFT COLUMN (Title or Image) --- */}
