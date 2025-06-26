@@ -51,7 +51,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                 </Link>
             </div>
             
-            <CardDescription className="text-foreground/70 text-base mt-2">
+            <CardDescription className="text-foreground/70 text-base mt-2 h-24 overflow-hidden">
                 {shortDescriptionToDisplay}
             </CardDescription>
 
@@ -60,7 +60,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                 aria-label={`View details for ${titleToDisplay}`}
                 className="block mt-4 flex-grow"
             >
-                <div className="relative w-full aspect-[10/7] rounded-md overflow-hidden">
+                <div className="relative w-full aspect-video rounded-md overflow-hidden">
                     <Image
                         src={project.thumbnailUrl}
                         alt={titleToDisplay}
@@ -72,7 +72,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             </Link>
         </CardContent>
 
-        <CardFooter className="p-4 flex flex-wrap items-center justify-between gap-2 border-t">
+        <CardFooter className="px-4 pt-2 pb-4 flex flex-wrap items-center justify-between gap-2 border-t">
             <div className="flex flex-wrap items-center gap-1.5">
                 {project.technologies.map((tech) => (
                     <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
