@@ -24,7 +24,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const viewMoreText = isClientReady ? translationsForLanguage.projectCard.viewMore : (getEnglishTranslation(t => t.projectCard.viewMore) || "View More");
 
   return (
-    <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 group">
+    <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 hover:scale-105">
       
       {/* 1. Image at the top with rounded corners */}
       <Link 
@@ -39,7 +39,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             alt={titleToDisplay}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover"
           />
         </div>
       </Link>
@@ -67,7 +67,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       </div>
       
       {/* 4. Centered "View More" button */}
-      <CardFooter className="p-4 pt-0 flex justify-center">
+      <CardFooter className="p-4 pt-0 flex justify-center mt-auto">
         <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
           <Link href={`/projects/${project.slug}`} aria-label={`View more details for ${titleToDisplay}`}>
             <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
