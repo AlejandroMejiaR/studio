@@ -41,7 +41,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
             {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-accent">
+              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-[#ffa600cc] dark:text-[#ffa600cc]">
                 {project.category}
               </Badge>
             )}
