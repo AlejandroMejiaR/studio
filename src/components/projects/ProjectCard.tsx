@@ -47,7 +47,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       {/* 2. Category & Technologies with larger badges */}
       <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
         {project.category && (
-          <Badge variant="outline" className="px-3 py-1 text-sm bg-transparent text-accent">{project.category}</Badge>
+          <Badge variant="outline" className="px-3 py-1 text-sm bg-transparent text-accent border-[#00000021] dark:border-[#fafafa26]">{project.category}</Badge>
         )}
         <div className="flex flex-wrap items-center gap-1.5 justify-end">
           {project.technologies.slice(0, 2).map((tech) => (
