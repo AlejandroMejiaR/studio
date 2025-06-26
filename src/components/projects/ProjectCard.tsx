@@ -46,7 +46,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
 
         <div className="p-4 flex-grow flex flex-col">
-            <CardTitle className="font-headline text-2xl text-primary dark:text-foreground">
+            <CardTitle className="font-headline text-2xl text-accent">
                 {titleToDisplay}
             </CardTitle>
             <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
