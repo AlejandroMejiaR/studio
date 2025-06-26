@@ -12,7 +12,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
-  const { language, translationsForLanguage, isClientReady } = useLanguage();
+  const { language, isClientReady } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
@@ -21,7 +21,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
 
   return (
-    // Wrap the card in a Link to make it all clickable by default
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
       <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-accent/30 dark:group-hover:shadow-accent/20 group-hover:scale-105">
         
@@ -36,23 +35,23 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
 
         <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
-          {project.category && (
-            <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{project.category}</Badge>
-          )}
-          <div className="flex flex-wrap items-center gap-1.5 justify-end">
-            {project.technologies.slice(0, 2).map((tech) => (
-              <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{tech}</Badge>
-            ))}
-          </div>
+            {project.category && (
+              <Badge variant="outline" className="px-3 py-1 text-sm bg-transparent text-accent border-[#00000021] dark:border-[#fafafa26]">{project.category}</Badge>
+            )}
+            <div className="flex flex-wrap items-center gap-1.5 justify-end">
+              {project.technologies.slice(0, 2).map((tech) => (
+                <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{tech}</Badge>
+              ))}
+            </div>
         </div>
 
-        <div className="p-4 flex-grow">
-          <CardTitle className="font-headline text-2xl text-primary dark:text-foreground">
-            {titleToDisplay}
-          </CardTitle>
-          <CardDescription className="text-foreground/70 text-base mt-2">
-            {shortDescriptionToDisplay}
-          </CardDescription>
+        <div className="p-4 flex-grow flex flex-col">
+            <CardTitle className="font-headline text-2xl text-primary dark:text-foreground">
+                {titleToDisplay}
+            </CardTitle>
+            <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
+                {shortDescriptionToDisplay}
+            </CardDescription>
         </div>
         
       </Card>
