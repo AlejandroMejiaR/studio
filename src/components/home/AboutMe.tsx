@@ -1,4 +1,3 @@
-
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
@@ -31,11 +30,10 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     // Logos
     { name: 'Unity', type: 'logo', logoLight: 'UnityClaro.png', logoDark: 'UnityOscuro.png' },
     { name: 'Unreal Engine', type: 'logo', logoLight: 'UnrealClaro.png', logoDark: 'UnrealOscuro.png' },
-    { name: 'C#', type: 'logo', logo: 'c.png' },
-    { name: 'C++', type: 'logo', logo: 'c++.png' },
     { name: 'JavaScript', type: 'logo', logo: 'javascript.png' },
     { name: 'python', type: 'logo', logo: 'python.png' },
     { name: 'Git', type: 'logo', logo: 'git.png' },
+    { name: 'VS Code', type: 'logo', logo: 'Vs.png' },
     { name: 'Figma', type: 'logo', logo: 'Figma.png' },
   ];
 
