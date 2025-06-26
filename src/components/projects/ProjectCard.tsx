@@ -20,11 +20,16 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
 
+  const handleInteraction = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Stop the click from bubbling up to the main Link component
+    e.preventDefault();
+  };
+
   return (
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
       <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-accent/30 dark:group-hover:shadow-accent/20 group-hover:scale-105">
         
-        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-lg">
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
           <Image
             src={project.thumbnailUrl}
             alt={titleToDisplay}
@@ -36,7 +41,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
             {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary text-secondary-foreground dark:bg-accent dark:text-accent-foreground">
+              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-accent">
                 {project.category}
               </Badge>
             )}
