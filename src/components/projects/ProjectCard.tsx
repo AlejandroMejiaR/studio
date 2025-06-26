@@ -51,7 +51,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         )}
         <div className="flex flex-wrap items-center gap-1.5 justify-end">
           {project.technologies.slice(0, 2).map((tech) => (
-            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">{tech}</Badge>
+            <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{tech}</Badge>
           ))}
         </div>
       </div>
