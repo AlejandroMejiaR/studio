@@ -14,45 +14,43 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+// This function should only be called on the client.
 const getInitialLanguage = (): Language => {
-  if (typeof window !== 'undefined') {
-    // 1. Check localStorage first (user's explicit choice via navbar toggle)
-    const storedLanguage = localStorage.getItem('portfolio-ace-language') as Language | null;
-    if (storedLanguage && (storedLanguage === 'EN' || storedLanguage === 'ES')) {
-      return storedLanguage;
-    }
+  // 1. Check localStorage first (user's explicit choice via navbar toggle)
+  const storedLanguage = localStorage.getItem('portfolio-ace-language') as Language | null;
+  if (storedLanguage && (storedLanguage === 'EN' || storedLanguage === 'ES')) {
+    return storedLanguage;
+  }
 
-    // 2. If no stored preference, detect browser language
-    const browserLanguage = navigator.language || (navigator as any).userLanguage; // For older IE
-    if (browserLanguage) {
-      if (browserLanguage.toLowerCase().startsWith('es')) {
-        return 'ES'; // Spanish if browser is Spanish
-      }
+  // 2. If no stored preference, detect browser language
+  const browserLanguage = navigator.language || (navigator as any).userLanguage; // For older IE
+  if (browserLanguage) {
+    if (browserLanguage.toLowerCase().startsWith('es')) {
+      return 'ES'; // Spanish if browser is Spanish
     }
   }
-  // 3. Default to English if detection fails, not 'es', or window is not defined
+  // 3. Default to English if detection fails or not 'es'
   return 'EN';
 };
 
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+  // Always initialize with a static default ('EN') to prevent mismatch.
+  // The server will render 'EN', and the client's first render will also be 'EN'.
+  const [language, setLanguageState] = useState<Language>('EN');
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
-    // Set client ready and ensure language reflects initial detection or stored value
-    setIsClientReady(true);
-    const initialLang = getInitialLanguage();
-    if (language !== initialLang) {
-        setLanguageState(initialLang);
-    }
-    // Store the determined language in localStorage if it wasn't already there
-    // from a previous explicit user choice. This makes the detected language "stick"
-    // until the user changes it with the toggle.
+    // This effect runs only on the client, after the initial render (hydration).
+    const initialLang = getInitialLanguage(); // Safely get the language from the browser
+    setLanguageState(initialLang); // Update the language
+    setIsClientReady(true); // Signal that client-side logic has run
+
+    // Store the detected language if not already set by user choice, making it persist.
     if (localStorage.getItem('portfolio-ace-language') !== initialLang) {
         localStorage.setItem('portfolio-ace-language', initialLang);
     }
-  }, []); // Runs once on mount, language dependency removed to avoid loop with setLanguageState
+  }, []); // Empty dependency array ensures this runs only once on mount.
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
@@ -74,7 +72,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     <LanguageContext.Provider value={{ 
         language, 
         setLanguage, 
-        translationsForLanguage: translations[language] || translations[getInitialLanguage()], 
+        translationsForLanguage: translations[language], // On first render, this is EN for both server/client.
         isClientReady, 
         getEnglishTranslation,
       }}>
