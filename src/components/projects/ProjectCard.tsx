@@ -27,7 +27,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-accent/30 dark:hover:shadow-accent/20 group">
       <div className="p-4">
         <div className="flex justify-between items-start gap-4">
-          <CardTitle className="font-headline text-xl text-primary dark:text-foreground">
+          <CardTitle className="font-headline text-2xl text-primary dark:text-foreground">
             <Link 
               href={`/projects/${project.slug}`}
               className="hover:text-accent transition-colors"
@@ -75,7 +75,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           )}
           {/* Technologies on the right */}
           <div className="flex flex-wrap items-center gap-1.5 justify-end">
-              {project.technologies.map((tech) => (
+              {project.technologies.slice(0, 2).map((tech) => (
                   <Badge key={tech} variant="outline" className="text-xs">{tech}</Badge>
               ))}
           </div>
