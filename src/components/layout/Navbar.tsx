@@ -1,3 +1,4 @@
+
 "use client";
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -16,7 +17,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState('dark'); // Default to dark
   const [navbarIsMounted, setNavbarIsMounted] = useState(false);
-  const { language, setLanguage, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { language, setLanguage, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
   const pathname = usePathname();
   const isMobile = useIsMobile();
   const { shouldNavbarContentBeVisible, showLanguageHint, setShowLanguageHint } = useNavbarVisibility();
@@ -80,10 +81,10 @@ const Navbar = () => {
   const brandTextKey = isMobile ? 'brandNameShort' : 'brandName';
   const brandTextToRender = isClientReady
     ? translationsForLanguage[brandTextKey]
-    : getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name");
+    : getInitialServerTranslation(t => t[brandTextKey]) || (isMobile ? "Alejandro Mejía" : "Alejandro Mejía - Ingeniero en Multimedia");
 
-  const currentLanguageDisplay = isClientReady ? language : 'EN';
-  const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getEnglishTranslation(t => t.nav[labelKey]) || labelKey;
+  const currentLanguageDisplay = isClientReady ? language : 'ES';
+  const navLinkText = (labelKey: keyof AppTranslations['nav']) => isClientReady ? translationsForLanguage.nav[labelKey] : getInitialServerTranslation(t => t.nav[labelKey]) || labelKey;
 
   const staggerDelay = 0.05;
 
@@ -130,12 +131,12 @@ const Navbar = () => {
       {brandTextToRender}
     </h1>
   ) : ( 
-    <h1 className="font-headline text-xl font-bold" aria-label={getEnglishTranslation(t => t[brandTextKey]) || (isMobile ? "Brand" : "Brand Name")} style={{ visibility: 'hidden' }}>
-      {((getEnglishTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Brand" : "Brand Name")).split('').map((letter, index) => (
+    <h1 className="font-headline text-xl font-bold" aria-label={getInitialServerTranslation(t => t[brandTextKey]) || (isMobile ? "Alejandro Mejía" : "Alejandro Mejía - Ingeniero en Multimedia")} style={{ visibility: 'hidden' }}>
+      {((getInitialServerTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Alejandro Mejía" : "Alejandro Mejía - Ingeniero en Multimedia")).split('').map((letter, index) => (
         <span
           key={index}
           className="inline-block"
-          style={{ animationDelay: `${(((getEnglishTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Brand" : "Brand Name")).length - 1 - index) * staggerDelay}s` }}
+          style={{ animationDelay: `${(((getInitialServerTranslation(t => t[brandTextKey]) as string) || (isMobile ? "Alejandro Mejía" : "Alejandro Mejía - Ingeniero en Multimedia")).length - 1 - index) * staggerDelay}s` }}
         >
           {letter === ' ' ? '\u00A0' : letter}
         </span>

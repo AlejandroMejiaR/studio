@@ -25,7 +25,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     language,
     translationsForLanguage,
     isClientReady,
-    getEnglishTranslation
+    getInitialServerTranslation
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
   const aboutSectionRef = useRef<HTMLElement>(null);
@@ -153,8 +153,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     };
   }, [areControlsVisible, shouldAnimateHeroIntro]);
 
-  const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getEnglishTranslation(t => t.home.buttons.viewWork) as string || "View Work";
-  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getEnglishTranslation(t => t.home.buttons.aboutMe) as string || "About Me";
+  const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getInitialServerTranslation(t => t.home.buttons.viewWork) as string || "Ver Mi Trabajo";
+  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getInitialServerTranslation(t => t.home.buttons.aboutMe) as string || "Sobre Mí";
   
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
@@ -214,9 +214,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   };
   
   const fullHeroText = useMemo(() => {
-      if (!isClientReady) return undefined;
+      if (!isClientReady) return getInitialServerTranslation(t => t.home.hero.subtitle);
       return translationsForLanguage.home.hero.subtitle;
-  }, [isClientReady, translationsForLanguage]);
+  }, [isClientReady, translationsForLanguage, getInitialServerTranslation]);
 
   const handleAnimationComplete = useCallback(() => {
     setAreControlsVisible(true);
@@ -253,7 +253,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   }, [fullHeroText, language, isClientReady]);
   
   const StaticSubtitle = () => {
-    if (!isClientReady || !fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
+    if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const parts = fullHeroText.split('\n\n').map((block, index) => (
       <div key={index} className={index < 2 ? 'mb-16' : ''}>

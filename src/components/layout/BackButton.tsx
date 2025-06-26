@@ -8,11 +8,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 
 export default function BackButton({ className }: { className?: string }) {
-  const { getEnglishTranslation, isClientReady, translationsForLanguage } = useLanguage();
+  const { getInitialServerTranslation, isClientReady, translationsForLanguage } = useLanguage();
 
   const goBackText = isClientReady 
     ? translationsForLanguage.nav.goBack 
-    : getEnglishTranslation(t => t.nav.goBack) || "Go Back";
+    : getInitialServerTranslation(t => t.nav.goBack) || "Regresar";
 
   return (
     <Button

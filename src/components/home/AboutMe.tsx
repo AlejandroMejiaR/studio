@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 
 // Wrap AboutMe component with forwardRef to allow assigning ref from parent
 const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage(); // Use the hook
+  const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage(); // Use the hook
 
   const skills = isClientReady ? [
     { name: translationsForLanguage.aboutMe.skills.coding, icon: Code2 },
@@ -40,14 +40,14 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
   ];
 
   // Determine text based on client readiness and language
-  const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getEnglishTranslation(t => t.aboutMe.title);
-  const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getEnglishTranslation(t => t.aboutMe.paragraph1);
-  const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getEnglishTranslation(t => t.aboutMe.paragraph2);
-  const workTogetherText = isClientReady ? translationsForLanguage.aboutMe.workTogether : getEnglishTranslation(t => t.aboutMe.workTogether);
-  const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getEnglishTranslation(t => t.aboutMe.skillsTitle);
-  const technologiesTitle = isClientReady ? translationsForLanguage.aboutMe.technologiesTitle : getEnglishTranslation(t => t.aboutMe.technologiesTitle);
-  const jobTitleText = isClientReady ? translationsForLanguage.aboutMe.jobTitle : getEnglishTranslation(t => t.aboutMe.jobTitle);
-  const jobSpecializationText = isClientReady ? translationsForLanguage.aboutMe.jobSpecialization : getEnglishTranslation(t => t.aboutMe.jobSpecialization);
+  const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getInitialServerTranslation(t => t.aboutMe.title);
+  const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getInitialServerTranslation(t => t.aboutMe.paragraph1);
+  const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getInitialServerTranslation(t => t.aboutMe.paragraph2);
+  const workTogetherText = isClientReady ? translationsForLanguage.aboutMe.workTogether : getInitialServerTranslation(t => t.aboutMe.workTogether);
+  const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getInitialServerTranslation(t => t.aboutMe.skillsTitle);
+  const technologiesTitle = isClientReady ? translationsForLanguage.aboutMe.technologiesTitle : getInitialServerTranslation(t => t.aboutMe.technologiesTitle);
+  const jobTitleText = isClientReady ? translationsForLanguage.aboutMe.jobTitle : getInitialServerTranslation(t => t.aboutMe.jobTitle);
+  const jobSpecializationText = isClientReady ? translationsForLanguage.aboutMe.jobSpecialization : getInitialServerTranslation(t => t.aboutMe.jobSpecialization);
 
 
   return (

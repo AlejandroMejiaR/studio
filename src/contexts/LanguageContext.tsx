@@ -9,7 +9,7 @@ interface LanguageContextType {
   setLanguage: (language: Language) => void;
   translationsForLanguage: AppTranslations;
   isClientReady: boolean;
-  getEnglishTranslation: <T>(keyPath: (translations: AppTranslations) => T) => T | undefined;
+  getInitialServerTranslation: <T>(keyPath: (translations: AppTranslations) => T) => T | undefined;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -29,15 +29,15 @@ const getInitialLanguage = (): Language => {
       return 'ES'; // Spanish if browser is Spanish
     }
   }
-  // 3. Default to English if detection fails or not 'es'
-  return 'EN';
+  // 3. Default to Spanish if detection fails or not 'es'
+  return 'ES';
 };
 
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Always initialize with a static default ('EN') to prevent mismatch.
-  // The server will render 'EN', and the client's first render will also be 'EN'.
-  const [language, setLanguageState] = useState<Language>('EN');
+  // Always initialize with a static default ('ES') to prevent mismatch.
+  // The server will render 'ES', and the client's first render will also be 'ES'.
+  const [language, setLanguageState] = useState<Language>('ES');
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
@@ -59,9 +59,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
   
-  const getEnglishTranslation = useCallback(<T,>(keyPath: (translations: AppTranslations) => T) => {
-    if (translations['EN']) {
-      const value = keyPath(translations['EN']);
+  const getInitialServerTranslation = useCallback(<T,>(keyPath: (translations: AppTranslations) => T) => {
+    if (translations['ES']) {
+      const value = keyPath(translations['ES']);
       return value;
     }
     return undefined; 
@@ -72,9 +72,9 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     <LanguageContext.Provider value={{ 
         language, 
         setLanguage, 
-        translationsForLanguage: translations[language], // On first render, this is EN for both server/client.
+        translationsForLanguage: translations[language], // On first render, this is ES for both server/client.
         isClientReady, 
-        getEnglishTranslation,
+        getInitialServerTranslation,
       }}>
       {children}
     </LanguageContext.Provider>

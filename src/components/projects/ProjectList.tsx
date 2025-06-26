@@ -13,22 +13,22 @@ interface ProjectListProps {
 }
 
 const ProjectList = ({ projects }: ProjectListProps) => {
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
   
   const [visibleCount, setVisibleCount] = useState(3);
   const displayedProjects = projects.slice(0, visibleCount);
   
   const featuredProjectsTitleText = isClientReady 
     ? translationsForLanguage.home.featuredProjectsTitle 
-    : getEnglishTranslation(t => t.home.featuredProjectsTitle);
+    : getInitialServerTranslation(t => t.home.featuredProjectsTitle);
 
   const viewMoreProjectsText = isClientReady 
     ? translationsForLanguage.home.viewMoreProjects
-    : getEnglishTranslation(t => t.home.viewMoreProjects);
+    : getInitialServerTranslation(t => t.home.viewMoreProjects);
   
   const noProjectsText = isClientReady 
     ? translationsForLanguage.projectList.noProjects 
-    : getEnglishTranslation(t => t.projectList.noProjects);
+    : getInitialServerTranslation(t => t.projectList.noProjects);
 
   const handleViewMore = () => {
     setVisibleCount(prevCount => Math.min(prevCount + 3, projects.length));

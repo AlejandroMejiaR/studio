@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const { translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
   const pathname = usePathname();
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -25,23 +25,23 @@ const Footer = () => {
 
   const portfolioTitleText = isClientReady
     ? translationsForLanguage.footer.portfolioTitle
-    : getEnglishTranslation(t => t.footer.portfolioTitle) || "Portfolio";
+    : getInitialServerTranslation(t => t.footer.portfolioTitle) || "Portafolio";
 
   const rightsReservedText = isClientReady
     ? translationsForLanguage.footer.rightsReservedText
-    : getEnglishTranslation(t => t.footer.rightsReservedText) || "All rights reserved.";
+    : getInitialServerTranslation(t => t.footer.rightsReservedText) || "Todos los derechos reservados.";
 
   const quickLinksTitleText = isClientReady
     ? translationsForLanguage.footer.quickLinksTitle
-    : getEnglishTranslation(t => t.footer.quickLinksTitle) || "Quick Links";
+    : getInitialServerTranslation(t => t.footer.quickLinksTitle) || "Enlaces Rápidos";
   
   const projectsLinkText = isClientReady
     ? translationsForLanguage.footer.projectsLink
-    : getEnglishTranslation(t => t.footer.projectsLink) || "Projects";
+    : getInitialServerTranslation(t => t.footer.projectsLink) || "Proyectos";
 
   const aboutMeLinkText = isClientReady
     ? translationsForLanguage.footer.aboutMeLink
-    : getEnglishTranslation(t => t.footer.aboutMeLink) || "About Me";
+    : getInitialServerTranslation(t => t.footer.aboutMeLink) || "Sobre Mí";
 
   return (
     <footer className="bg-footer-bg text-footer-fg py-12">

@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project, ProjectTranslationDetails } from '@/types';
@@ -25,19 +26,19 @@ interface ProjectClientContentProps {
 }
 
 const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
-  const { language, translationsForLanguage, isClientReady, getEnglishTranslation } = useLanguage();
+  const { language, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
 
-  const titleToDisplay = isClientReady ? langContent.title : (project.en.title || "Title Loading...");
-  const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.en.problemStatement;
-  const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.en.solutionOverview;
+  const titleToDisplay = isClientReady ? langContent.title : (project.es.title || "Título Cargando...");
+  const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.es.problemStatement;
+  const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.es.solutionOverview;
 
-  const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getEnglishTranslation(t => t.projectDetails.theChallenge);
-  const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getEnglishTranslation(t => t.projectDetails.theApproach);
-  const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getEnglishTranslation(t => t.projectDetails.liveDemoButton);
-  const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getEnglishTranslation(t => t.projectDetails.viewCodeButton);
+  const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getInitialServerTranslation(t => t.projectDetails.theChallenge);
+  const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getInitialServerTranslation(t => t.projectDetails.theApproach);
+  const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getInitialServerTranslation(t => t.projectDetails.liveDemoButton);
+  const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getInitialServerTranslation(t => t.projectDetails.viewCodeButton);
   
   const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay;
   const showGallery = project.galleryImages && project.galleryImages.length > 0;
@@ -70,7 +71,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
               />
             ) : (
               <span style={{ visibility: "hidden" }}>
-                {project.en.title || "Loading..."}
+                {project.es.title || "Cargando..."}
               </span>
             )}
           </h1>
