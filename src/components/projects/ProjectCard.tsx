@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Project, ProjectTranslationDetails } from '@/types';
+import type { Project } from '@/types';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -15,7 +15,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const { language, isClientReady } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
-  const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
+  const langContent = project[currentLangKey] || project.en;
 
   const titleToDisplay = isClientReady ? langContent.title : project.en.title;
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
@@ -24,7 +24,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
       <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-accent/30 dark:group-hover:shadow-accent/20 group-hover:scale-105">
         
-        <div className="relative w-full aspect-video overflow-hidden rounded-t-lg">
+        <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-lg">
           <Image
             src={project.thumbnailUrl}
             alt={titleToDisplay}
@@ -36,7 +36,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
         <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
             {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm bg-transparent text-accent border-[#00000021] dark:border-[#fafafa26]">{project.category}</Badge>
+              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{project.category}</Badge>
             )}
             <div className="flex flex-wrap items-center gap-1.5 justify-end">
               {project.technologies.slice(0, 2).map((tech) => (
