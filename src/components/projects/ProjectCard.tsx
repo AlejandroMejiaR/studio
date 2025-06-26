@@ -61,13 +61,13 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <CardTitle className="font-headline text-2xl text-primary dark:text-foreground">
           {titleToDisplay}
         </CardTitle>
-        <CardDescription className="text-foreground/70 text-base mt-2 h-20 overflow-hidden">
+        <CardDescription className="text-foreground/70 text-base mt-2">
           {shortDescriptionToDisplay}
         </CardDescription>
       </div>
       
       {/* 4. Centered "View More" button */}
-      <CardFooter className="p-4 pt-0 mt-auto flex justify-center">
+      <CardFooter className="p-4 pt-0 flex justify-center">
         <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
           <Link href={`/projects/${project.slug}`} aria-label={`View more details for ${titleToDisplay}`}>
             <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
