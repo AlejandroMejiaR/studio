@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
-import { Menu, Gamepad2, Sun, Moon, Languages } from 'lucide-react';
+import { Menu, Gamepad2, Sun, Moon } from 'lucide-react';
 import AnimatedBrandName from '@/components/effects/AnimatedBrandName';
 import { cn } from '@/lib/utils';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
@@ -111,6 +111,9 @@ const Navbar = () => {
     handleMobileMenuClose();
   };
 
+  const languageSwitchText = language === 'EN' ? 'Español' : 'English';
+  const changeLanguageHintText = navLinkText('changeLanguageHint');
+
   const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (
     <AnimatedBrandName
       key={`brand-${theme}-${currentLanguageDisplay}-${isMobile ? 'short' : 'full'}-${pathname}`}
@@ -187,16 +190,15 @@ const Navbar = () => {
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              aria-label="Toggle language"
-              className="h-9 px-2 hover:bg-accent/10 flex items-center"
+              aria-label={changeLanguageHintText}
+              className="h-9 px-3 hover:bg-accent/10"
             >
-              <Languages className="h-5 w-5 text-foreground/80" />
               <span
-                key={`desktop-lang-indicator-${currentLanguageDisplay}`}
-                className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+                key={`desktop-lang-switch-${currentLanguageDisplay}`}
+                className="text-sm font-medium text-foreground/80 animate-fadeIn"
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               >
-                {currentLanguageDisplay}
+                {languageSwitchText}
               </span>
             </Button>
             <LanguageSwitcherTooltip
@@ -226,16 +228,15 @@ const Navbar = () => {
               variant="ghost"
               size="sm"
               onClick={toggleLanguage}
-              aria-label="Toggle language"
-              className="h-9 px-2 hover:bg-accent/10 flex items-center"
+              aria-label={changeLanguageHintText}
+              className="h-9 px-3 hover:bg-accent/10"
             >
-              <Languages className="h-5 w-5 text-foreground/80" />
               <span
-                key={`mobile-lang-indicator-${currentLanguageDisplay}`}
-                className="ml-1.5 text-xs font-semibold text-foreground/80 animate-fadeIn"
+                key={`mobile-lang-switch-${currentLanguageDisplay}`}
+                className="text-sm font-medium text-foreground/80 animate-fadeIn"
                 style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
               >
-                {currentLanguageDisplay}
+                {languageSwitchText}
               </span>
             </Button>
             <LanguageSwitcherTooltip
