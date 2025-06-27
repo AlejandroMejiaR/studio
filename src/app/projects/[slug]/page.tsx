@@ -61,7 +61,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12 pb-16 md:pb-24">
+    <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12 pb-32 md:pb-40">
       <ProjectClientContent 
         project={project} 
       />
