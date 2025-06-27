@@ -55,7 +55,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-center">
         <div className="md:col-span-1 flex justify-center md:justify-start">
-          <Card className="w-full max-w-sm shadow-xl">
+          <Card className="w-full max-w-sm shadow-xl bg-background">
             <CardContent className="p-0">
               <Image
                 src={getSupabaseImageUrl('documents', 'Profile.jpeg')}
@@ -66,7 +66,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                 data-ai-hint="professional portrait"
               />
             </CardContent>
-            <div className="p-6 bg-card rounded-b-lg">
+            <div className="p-6 bg-background rounded-b-lg">
                 <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Alejandro Mejia Rojas</h3>
                 <p className="text-accent" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                   {jobTitleText}<br />
@@ -119,7 +119,7 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
                 <TooltipProvider key={skill.name} delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div className="group relative bg-card p-3 rounded-lg flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 h-24 w-24 text-center">
+                      <div className="group relative bg-background border p-3 rounded-lg flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1 h-24 w-24 text-center">
                         <skill.icon className="h-8 w-8 text-muted-foreground transition-colors duration-300 group-hover:text-accent" />
                         <span className="text-xs font-medium text-muted-foreground transition-colors duration-300 group-hover:text-accent">{skill.name}</span>
                       </div>
