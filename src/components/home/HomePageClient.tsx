@@ -69,6 +69,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       setShouldAnimateHeroIntro(true);
       // And mark it as done for this session.
       sessionStorage.setItem(initialLoadAnimatedKey, 'true');
+      // Scroll to top to show the animation
+      window.scrollTo({ top: 0, behavior: 'auto' });
     } else {
       // Otherwise, don't animate.
       setShouldAnimateHeroIntro(false);
@@ -183,9 +185,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       ES: ["¡Hola!", "Soy Alejandro", 'diseño', 'desarrollo', 'experiencias digitales']
     };
 
-    const phrasesToColorAnimate = colorAnimatedWordsConfig[language];
-    const phrasesToBold = boldWordsConfig[language];
-    
     const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
     const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
     const parts = text.split(stylingRegex).filter(Boolean);
