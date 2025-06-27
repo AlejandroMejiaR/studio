@@ -23,7 +23,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
-      <Card className="flex flex-col h-full bg-background shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:scale-105">
+      <Card className="flex flex-col h-full bg-background shadow-md shadow-accent/20 overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-accent/40 group-hover:scale-105">
         
         <div className="p-4 flex-grow flex flex-col">
             <CardTitle className="font-headline text-2xl text-accent">
