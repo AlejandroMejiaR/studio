@@ -23,7 +23,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
-      <Card className="flex flex-col h-full bg-background shadow-md overflow-hidden transition-all duration-300 group-hover:border-accent group-hover:scale-105">
+      <Card className="flex flex-col h-full bg-background shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:scale-105">
         
         <div className="p-4 flex-grow flex flex-col">
             <CardTitle className="font-headline text-2xl text-accent">
@@ -44,7 +44,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-wrap items-end justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent">
             {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-[#ffa600cc] text-[#151a28]">
+              <Badge variant="outline" className="px-3 py-1 text-sm border-transparent bg-secondary text-[#151a28] dark:bg-[#ffa600cc]">
                 {project.category}
               </Badge>
             )}
