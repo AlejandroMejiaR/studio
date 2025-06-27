@@ -10,9 +10,10 @@ import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
 import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
-import { Suspense } from 'react'; 
+import { Suspense, useEffect } from 'react'; 
 import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 
 const inter = Inter({
@@ -30,6 +31,12 @@ const spaceGrotesk = Space_Grotesk({
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
   const { isFooterVisible } = useFooter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Scroll to top on every route change
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>
