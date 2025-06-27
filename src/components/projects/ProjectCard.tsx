@@ -17,17 +17,21 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent = project[currentLangKey] || project.en;
 
-  const titleToDisplay = isClientReady ? langContent.title : project.en.title;
-  const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.en.shortDescription;
-
-  const handleInteraction = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Stop the click from bubbling up to the main Link component
-    e.preventDefault();
-  };
+  const titleToDisplay = isClientReady ? langContent.title : project.es.title;
+  const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.es.shortDescription;
 
   return (
     <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
       <Card className="flex flex-col h-full shadow-md overflow-hidden transition-all duration-300 group-hover:shadow-xl group-hover:shadow-accent/30 dark:group-hover:shadow-accent/20 group-hover:scale-105">
+        
+        <div className="p-4 flex-grow flex flex-col">
+            <CardTitle className="font-headline text-2xl text-accent">
+                {titleToDisplay}
+            </CardTitle>
+            <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
+                {shortDescriptionToDisplay}
+            </CardDescription>
+        </div>
         
         <div className="relative w-full aspect-[16/9] overflow-hidden">
           <Image
@@ -39,7 +43,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           />
         </div>
 
-        <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-b">
+        <div className="p-4 flex flex-wrap items-center justify-between gap-2 border-t">
             {project.category && (
               <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-[#ffa600cc] text-[#151a28]">
                 {project.category}
@@ -50,15 +54,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
                 <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26]">{tech}</Badge>
               ))}
             </div>
-        </div>
-
-        <div className="p-4 flex-grow flex flex-col">
-            <CardTitle className="font-headline text-2xl text-accent">
-                {titleToDisplay}
-            </CardTitle>
-            <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
-                {shortDescriptionToDisplay}
-            </CardDescription>
         </div>
         
       </Card>
