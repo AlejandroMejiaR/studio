@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -43,7 +44,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-wrap items-end justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent">
             {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm border-transparent bg-secondary text-[#151a28] dark:bg-[#ffa600cc]">
+              <Badge variant="outline" className="px-3 py-1 text-sm border-transparent bg-[#cf8811] text-[#151a28] dark:bg-[#ffa600cc]">
                 {project.category}
               </Badge>
             )}
