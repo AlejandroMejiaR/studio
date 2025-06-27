@@ -34,7 +34,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             </CardDescription>
         </div>
         
-        <div className="relative w-full aspect-[16/9] overflow-hidden">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden">
           <Image
             src={project.thumbnailUrl}
             alt={titleToDisplay}
