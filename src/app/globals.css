@@ -36,7 +36,7 @@ body {
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 10% 85%; /* Cooler, less stark border #D3D7DE */
+    --border: 0 0% 87%; /* #dedede */
     --input: 220 10% 90%; /* Cooler, slightly darker input background #E1E4E8 */
     --ring: 30 99% 45%; /* Orange #E67601 */
 
@@ -86,7 +86,7 @@ body {
     --destructive: 0 80% 65%;       /* More Saturated Red #F54D4D */
     --destructive-foreground: 0 0% 98%; /* Off-white */
 
-    --border: 225 30% 20%;         /* Slightly Lighter Indigo/Navy, for subtle separation #242C47 */
+    --border: 0 0% 25%;         /* #3f3f3f */
     --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
     --ring: 39 100% 50%;           /* Ring color (matches accent) */
 
