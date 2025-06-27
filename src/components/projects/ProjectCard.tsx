@@ -43,13 +43,13 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           />
           <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-wrap items-end justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent">
             {project.category && (
-              <Badge variant="outline" className="bg-white/10 border-white/30 text-white">
+              <Badge variant="outline" className="px-3 py-1 text-sm border-[#00000021] dark:border-[#fafafa26] bg-secondary dark:bg-[#ffa600cc] text-[#151a28]">
                 {project.category}
               </Badge>
             )}
             <div className="flex flex-wrap items-center gap-1.5 justify-end">
               {project.technologies.slice(0, 2).map((tech) => (
-                <Badge key={tech} variant="outline" className="bg-white/10 border-white/30 text-white">
+                <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-transparent bg-black/30 text-white backdrop-blur-sm">
                   {tech}
                 </Badge>
               ))}
