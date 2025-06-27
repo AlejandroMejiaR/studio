@@ -185,6 +185,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       ES: ["¡Hola!", "Soy Alejandro", 'diseño', 'desarrollo', 'experiencias digitales']
     };
 
+    const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
+    const phrasesToBold = boldWordsConfig[language] || [];
+
     const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
     const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
     const parts = text.split(stylingRegex).filter(Boolean);
