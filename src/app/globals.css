@@ -8,14 +8,11 @@ body {
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
   :root {
     --background: 220 16% 93%; /* Light cool grey #EBEDF0 */
     --foreground: 175 38% 11%; /* Dark teal #122624 */
 
-    --card: 220 12% 96%; /* Very light cool grey #F3F4F6 */
+    --card: 220 16% 93%; /* Very light cool grey #F3F4F6 */
     --card-foreground: 175 38% 11%;
 
     --popover: 220 12% 96%; /* Very light cool grey #F3F4F6 */
@@ -65,7 +62,7 @@ body {
     --background: 0 0% 0%;    /* Black */
     --foreground: 0 0% 98%;       /* Off-white #FAFAFA */
 
-    --card: 225 28% 17%;           /* Slightly Lighter Indigo/Navy #1D2338 - more vibrant */
+    --card: 0 0% 0%;           /* Slightly Lighter Indigo/Navy #1D2338 - more vibrant */
     --card-foreground: 0 0% 98%;   /* Off-white */
 
     --popover: 225 28% 17%;        /* Popover background */
