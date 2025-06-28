@@ -60,7 +60,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       {/* Section 1: Hero Section */}
       <header className="pt-8 md:pt-12">
         <SectionContainer>
-          <div className="flex items-start gap-4 md:gap-8 max-w-4xl mx-auto">
+          <div className="flex items-start gap-4 md:gap-8">
             <BackButton className="mt-2 flex-shrink-0" />
             <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl">
               {isClientReady ? (
@@ -87,10 +87,10 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
             <Card className="lg:col-span-7 bg-card p-6 md:p-8 rounded-xl shadow-lg">
               <h3 className="font-headline text-lg font-semibold text-primary/80 dark:text-foreground/80 mb-3">{t('projectSummary')}</h3>
-              <p className="text-foreground/80 leading-relaxed">{langContent.summary}</p>
+              <p className="text-foreground/80 leading-relaxed text-lg">{langContent.summary}</p>
             </Card>
             <Card className="lg:col-span-3 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="space-y-4 text-sm">
+              <ul className="space-y-4 text-base">
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('myRole')}</strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('technologies')}</strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('category')}</strong> <span className="text-foreground/80">{project.category}</span></li>
@@ -115,11 +115,11 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
             <div className="lg:col-span-6">
               <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-3">{t('problemDescription')}</h3>
-              <p className="text-foreground/80 leading-relaxed">{langContent.problemStatement}</p>
+              <p className="text-foreground/80 leading-relaxed text-lg">{langContent.problemStatement}</p>
             </div>
             <div className="lg:col-span-4">
               <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-3">{t('projectObjectives')}</h3>
-              <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent">
+              <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent text-lg">
                 {langContent.objectives?.map((obj, i) => <li key={i}>{obj}</li>)}
               </ul>
             </div>
@@ -132,7 +132,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
          <section>
           <SectionContainer>
             <SectionTitle>{t('processTitle')}</SectionTitle>
-            {langContent.processIntro && <p className="max-w-3xl mx-auto text-center text-foreground/80 mb-16 -mt-4">{langContent.processIntro}</p>}
+            {langContent.processIntro && <p className="max-w-3xl mx-auto text-center text-foreground/80 mb-16 -mt-4 text-lg">{langContent.processIntro}</p>}
             <div className="space-y-16">
               {langContent.process.map((step, index) => {
                 const Icon = processIcons[index] || Lightbulb;
@@ -144,7 +144,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                         <div className="flex-shrink-0 grid place-content-center h-12 w-12 rounded-full bg-accent text-accent-foreground font-bold text-xl">{index + 1}</div>
                         <h3 className="font-headline text-2xl font-bold text-primary dark:text-foreground">{step.title}</h3>
                       </div>
-                      <p className="text-foreground/80 leading-relaxed">{step.description}</p>
+                      <p className="text-foreground/80 leading-relaxed text-lg">{step.description}</p>
                     </div>
                     <div className={cn("relative aspect-video rounded-lg overflow-hidden bg-muted md:order-2", { "md:order-1": isReversed })}>
                        <Image src={step.imageUrl} alt={step.title} fill className="object-cover" data-ai-hint="design process" />
@@ -201,7 +201,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
             </div>
             <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg">
                <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-4">{t('myLearnings')}</h3>
-               <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent">
+               <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent text-lg">
                 {langContent.learnings?.map((learning, i) => <li key={i}>{learning}</li>)}
               </ul>
             </Card>
