@@ -1,29 +1,42 @@
 
 "use client";
 
-import type { Project, ProjectTranslationDetails } from '@/types';
+import type { Project, ProjectTranslationDetails, ProjectProcessStep } from '@/types';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  Github,
-  ExternalLink,
-  CalendarDays,
-  Lightbulb,
-  Target,
-} from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Card } from '@/components/ui/card';
+import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import BackButton from '../layout/BackButton';
+import ImageModal from './ImageModal';
 
 interface ProjectClientContentProps {
   project: Project;
 }
+
+const processIcons: Record<number, React.ElementType> = {
+  0: Search,
+  1: FileText,
+  2: Lightbulb,
+  3: DraftingCompass,
+  4: CheckCircle2,
+};
+
+const SectionContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className={cn("container mx-auto px-4 sm:px-6 lg:px-8", className)}>
+    {children}
+  </div>
+);
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-10 md:mb-12 text-center">
+    {children}
+  </h2>
+);
 
 const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
@@ -31,171 +44,172 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
   const langContent: ProjectTranslationDetails = project[currentLangKey] || project.en;
 
-  const titleToDisplay = isClientReady ? langContent.title : (project.es.title || "Título Cargando...");
-  const problemStatementToDisplay = isClientReady ? langContent.problemStatement : project.es.problemStatement;
-  const solutionOverviewToDisplay = isClientReady ? langContent.solutionOverview : project.es.solutionOverview;
+  const t = (key: keyof AppTranslations['projectDetails']) => isClientReady
+    ? translationsForLanguage.projectDetails[key]
+    : getInitialServerTranslation(trans => trans.projectDetails[key]);
 
-  const theChallengeText = isClientReady ? translationsForLanguage.projectDetails.theChallenge : getInitialServerTranslation(t => t.projectDetails.theChallenge);
-  const theApproachText = isClientReady ? translationsForLanguage.projectDetails.theApproach : getInitialServerTranslation(t => t.projectDetails.theApproach);
-  const liveDemoButtonText = isClientReady ? translationsForLanguage.projectDetails.liveDemoButton : getInitialServerTranslation(t => t.projectDetails.liveDemoButton);
-  const viewCodeButtonText = isClientReady ? translationsForLanguage.projectDetails.viewCodeButton : getInitialServerTranslation(t => t.projectDetails.viewCodeButton);
-  
-  const showCaseStudy = problemStatementToDisplay || solutionOverviewToDisplay;
-  const showGallery = project.galleryImages && project.galleryImages.length > 0;
-  
+  const titleToDisplay = isClientReady ? langContent.title : (project.es.title || "...");
+
   const titleLetterStaggerConst = 0.04;
   const titleLetterAnimationDurationConst = 0.5;
   const titleDelayBetweenWordsConst = 0.1;
   const titleBaseDelay = 0.2;
 
   return (
-    <>
-      <div className="mb-8 md:mb-12">
-        <div className="flex items-center gap-8">
-          <BackButton />
-          <h1
-            className={cn(
-              "font-headline font-bold text-left",
-              "text-4xl sm:text-5xl md:text-6xl"
-            )}
-          >
-            {isClientReady ? (
-              <WordRevealAnimation
-                key={`title-${titleToDisplay}-${language}`}
-                text={titleToDisplay || ""}
-                lineBaseDelay={titleBaseDelay}
-                delayBetweenWords={titleDelayBetweenWordsConst}
-                letterStaggerDelay={titleLetterStaggerConst}
-                letterAnimationDuration={titleLetterAnimationDurationConst}
-                className="inline-block"
-              />
-            ) : (
-              <span style={{ visibility: "hidden" }}>
-                {project.es.title || "Cargando..."}
-              </span>
-            )}
-          </h1>
-        </div>
-
-        {(showGallery || showCaseStudy) && (
-          <div className="flex flex-col lg:flex-row lg:items-end gap-8 lg:gap-12 mt-10">
-            {/* Left Column: Carousel Section */}
-            <div className={`w-full ${showCaseStudy ? 'lg:flex-[0_0_calc(70%-1.5rem)]' : 'lg:flex-[1_1_100%]'}`}>
-               <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  {project.category && (
-                    <Badge variant="secondary" className="bg-accent/80 text-accent-foreground text-sm px-3 py-1">
-                      {project.category}
-                    </Badge>
-                  )}
-                  {project.technologies?.map((tech) => (
-                    <Badge key={tech} variant="outline" className="px-3 py-1 text-sm">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex shrink-0 items-center text-base text-muted-foreground">
-                  <CalendarDays size={18} className="mr-2 text-accent" />
-                  <span>{project.date}</span>
-                </div>
-              </div>
-              {showGallery && (
-                <>
-                  <Carousel
-                    opts={{ align: "start", loop: project.galleryImages && project.galleryImages.length > 1 }}
-                    className="w-full max-w-6xl mx-auto"
-                  >
-                    <CarouselContent>
-                      {project.galleryImages?.map((src, index) => (
-                        <CarouselItem key={index} className="basis-full">
-                           <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-lg shadow-md">
-                            <Image
-                              src={src}
-                              alt={`${titleToDisplay} gallery image ${index + 1}`}
-                              fill
-                              sizes="(max-width: 1279px) 100vw, 1152px"
-                              className="object-cover"
-                              priority={index === 0}
-                              loading={index === 0 ? 'eager' : 'lazy'}
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    {project.galleryImages && project.galleryImages.length > 1 && (
-                      <>
-                        <CarouselPrevious className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-accent hover:bg-accent/90 text-accent-foreground border-transparent shadow-md" />
-                        <CarouselNext className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-accent hover:bg-accent/90 text-accent-foreground border-transparent shadow-md" />
-                      </>
-                    )}
-                  </Carousel>
-                </>
+    <article className="space-y-20 md:space-y-28 lg:space-y-36">
+      {/* Section 1: Hero Section */}
+      <header className="pt-8 md:pt-12">
+        <SectionContainer>
+          <div className="flex items-start gap-4 md:gap-8 max-w-4xl mx-auto">
+            <BackButton className="mt-2 flex-shrink-0" />
+            <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl">
+              {isClientReady ? (
+                <WordRevealAnimation
+                  key={`title-${titleToDisplay}-${language}`}
+                  text={titleToDisplay || ""}
+                  lineBaseDelay={titleBaseDelay}
+                  delayBetweenWords={titleDelayBetweenWordsConst}
+                  letterStaggerDelay={titleLetterStaggerConst}
+                  letterAnimationDuration={titleLetterAnimationDurationConst}
+                  className="inline-block"
+                />
+              ) : (
+                <span style={{ visibility: "hidden" }}>{project.es.title || "Cargando..."}</span>
               )}
+            </h1>
+          </div>
+        </SectionContainer>
+      </header>
+
+      {/* Section 2: Summary & Key Details */}
+      <section>
+        <SectionContainer>
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
+            <Card className="lg:col-span-7 bg-card p-6 md:p-8 rounded-xl shadow-lg">
+              <h3 className="font-headline text-lg font-semibold text-primary/80 dark:text-foreground/80 mb-3">{t('projectSummary')}</h3>
+              <p className="text-foreground/80 leading-relaxed">{langContent.summary}</p>
+            </Card>
+            <Card className="lg:col-span-3 bg-card p-6 md:p-8 rounded-xl shadow-lg">
+              <ul className="space-y-4 text-sm">
+                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('myRole')}</strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
+                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('technologies')}</strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
+                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('category')}</strong> <span className="text-foreground/80">{project.category}</span></li>
+                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('date')}</strong> <span className="text-foreground/80">{project.date}</span></li>
+              </ul>
+            </Card>
+          </div>
+        </SectionContainer>
+      </section>
+
+      {/* Section 3: Full-Width Hero Image */}
+      {project.bannerUrl && (
+        <section className="relative w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-muted">
+          <Image src={project.bannerUrl} alt={titleToDisplay} fill className="object-cover" priority data-ai-hint="product mockup" />
+        </section>
+      )}
+
+      {/* Section 4: Problem and Objectives */}
+      <section>
+        <SectionContainer>
+          <SectionTitle>{t('mainChallengeTitle')}</SectionTitle>
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
+            <div className="lg:col-span-6">
+              <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-3">{t('problemDescription')}</h3>
+              <p className="text-foreground/80 leading-relaxed">{langContent.problemStatement}</p>
             </div>
-
-            {/* Right Column: Case Study Section */}
-            <div className="w-full lg:flex-[0_0_calc(30%-1.5rem)] flex">
-              {showCaseStudy && (
-                <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg flex flex-col h-full w-full">
-                  <div className="space-y-6 flex-grow">
-                    
-                    {problemStatementToDisplay && (
-                      <div>
-                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
-                          <Lightbulb className="mr-3 h-6 w-6 text-accent shrink-0" />
-                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                            {theChallengeText}
-                          </span>
-                        </h3>
-                        <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                          {problemStatementToDisplay}
-                        </p>
-                      </div>
-                    )}
-                    {solutionOverviewToDisplay && (
-                        <div>
-                        <h3 className="flex items-center text-xl font-headline text-primary dark:text-foreground mb-3">
-                          <Target className="mr-3 h-6 w-6 text-accent shrink-0" />
-                          <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                            {theApproachText}
-                          </span>
-                        </h3>
-                        <p className="text-foreground/80 text-base leading-relaxed pl-2">
-                          {solutionOverviewToDisplay}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-wrap justify-start items-center gap-4 pt-6 mt-auto">
-                      {/* Left group: Action Buttons */}
-                      <div className="flex flex-wrap items-center gap-3">
-                        {project.liveUrl && project.liveUrl !== 'none' && (
-                          <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                            <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                              <ExternalLink size={18} className="mr-2" />
-                              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                                {liveDemoButtonText}
-                              </span>
-                            </Link>
-                          </Button>
-                        )}
-                        {project.repoUrl && project.repoUrl !== 'none' && (
-                          <Button variant="outline" size="icon-sm" asChild className="border-primary text-primary hover:bg-primary hover:text-primary-foreground dark:border-foreground dark:text-foreground dark:hover:bg-foreground dark:hover:text-background">
-                            <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer" aria-label={viewCodeButtonText}>
-                              <Github size={18} />
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
-                  </div>
-                </Card>
-              )}
+            <div className="lg:col-span-4">
+              <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-3">{t('projectObjectives')}</h3>
+              <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent">
+                {langContent.objectives?.map((obj, i) => <li key={i}>{obj}</li>)}
+              </ul>
             </div>
           </div>
-        )}
-      </div>
-    </>
+        </SectionContainer>
+      </section>
+
+      {/* Section 5: The Process */}
+      {langContent.process && langContent.process.length > 0 && (
+         <section>
+          <SectionContainer>
+            <SectionTitle>{t('processTitle')}</SectionTitle>
+            {langContent.processIntro && <p className="max-w-3xl mx-auto text-center text-foreground/80 mb-16 -mt-4">{langContent.processIntro}</p>}
+            <div className="space-y-16">
+              {langContent.process.map((step, index) => {
+                const Icon = processIcons[index] || Lightbulb;
+                const isReversed = index % 2 !== 0;
+                return (
+                  <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                    <div className={cn("md:order-1", { "md:order-2": isReversed })}>
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="flex-shrink-0 grid place-content-center h-12 w-12 rounded-full bg-accent text-accent-foreground font-bold text-xl">{index + 1}</div>
+                        <h3 className="font-headline text-2xl font-bold text-primary dark:text-foreground">{step.title}</h3>
+                      </div>
+                      <p className="text-foreground/80 leading-relaxed">{step.description}</p>
+                    </div>
+                    <div className={cn("relative aspect-video rounded-lg overflow-hidden bg-muted md:order-2", { "md:order-1": isReversed })}>
+                       <Image src={step.imageUrl} alt={step.title} fill className="object-cover" data-ai-hint="design process" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </SectionContainer>
+        </section>
+      )}
+
+      {/* Section 6: Final Product */}
+      {project.galleryImages && project.galleryImages.length > 0 && (
+        <section>
+          <SectionContainer>
+            <SectionTitle>{t('finalSolutionTitle')}</SectionTitle>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
+              {project.galleryImages.slice(0, 4).map((src, index) => (
+                <ImageModal key={index} imageUrl={src} altText={`${titleToDisplay} - final design ${index + 1}`}>
+                  <div className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group bg-muted">
+                    <Image src={src} alt={`${titleToDisplay} - final design ${index + 1}`} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint="app screenshot" />
+                  </div>
+                </ImageModal>
+              ))}
+            </div>
+             <div className="flex flex-wrap justify-center items-center gap-4 mt-12">
+              {project.liveUrl && project.liveUrl !== 'none' && (
+                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink size={20} className="mr-2" /> {t('exploreLiveDemo')}
+                  </Link>
+                </Button>
+              )}
+              {project.repoUrl && project.repoUrl !== 'none' && (
+                <Button size="lg" variant="outline" asChild>
+                  <Link href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+                    <Github size={20} className="mr-2" /> {t('viewCodeButton')}
+                  </Link>
+                </Button>
+              )}
+            </div>
+          </SectionContainer>
+        </section>
+      )}
+
+      {/* Section 7: Learnings & Reflections */}
+      <section>
+        <SectionContainer>
+          <SectionTitle>{t('learningsAndReflections')}</SectionTitle>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted">
+               <Image src={project.reflectionImageUrl || ''} alt={t('learningsAndReflections') || ''} fill className="object-cover" data-ai-hint="abstract growth" />
+            </div>
+            <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg">
+               <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-4">{t('myLearnings')}</h3>
+               <ul className="list-disc list-inside space-y-2 text-foreground/80 marker:text-accent">
+                {langContent.learnings?.map((learning, i) => <li key={i}>{learning}</li>)}
+              </ul>
+            </Card>
+          </div>
+        </SectionContainer>
+      </section>
+
+    </article>
   );
 };
 

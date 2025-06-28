@@ -20,7 +20,6 @@ export async function generateMetadata(
     };
   }
 
-  // Default to English for metadata, fallback to Spanish if English title is missing/defaulted
   const title = (project.en.title && project.en.title !== 'English Title Missing'
                  ? project.en.title
                  : project.es.title) || 'Portfolio Project';
@@ -28,8 +27,7 @@ export async function generateMetadata(
                       ? project.en.shortDescription
                       : project.es.shortDescription) || 'Details about this project.';
 
-  // Prioritize the first gallery image for the OpenGraph image, fallback to banner.
-  const imageUrl = project.galleryImages?.[0] || project.bannerUrl;
+  const imageUrl = project.bannerUrl;
 
 
   return {
@@ -61,7 +59,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 pt-8 md:pt-12 pb-32 md:pb-40">
+    <div className="pb-32 md:pb-40">
       <ProjectClientContent 
         project={project} 
       />

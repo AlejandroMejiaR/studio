@@ -41,10 +41,26 @@ export interface AppTranslations {
     noProjects: string;
   };
   projectDetails: {
+    // OLD KEYS
     theChallenge: string;
     theApproach: string;
     liveDemoButton: string;
     viewCodeButton: string;
+
+    // NEW KEYS
+    projectSummary: string;
+    myRole: string;
+    technologies: string;
+    category: string;
+    date: string;
+    mainChallengeTitle: string;
+    problemDescription: string;
+    projectObjectives: string;
+    processTitle: string;
+    finalSolutionTitle: string;
+    exploreLiveDemo: string;
+    learningsAndReflections: string;
+    myLearnings: string;
   };
   footer: {
     portfolioTitle: string;
@@ -108,6 +124,19 @@ export const translations: Record<Language, AppTranslations> = {
       theApproach: "The Approach",
       liveDemoButton: "Live Demo",
       viewCodeButton: "View Code",
+      projectSummary: "Project Summary",
+      myRole: "My Role",
+      technologies: "Technologies",
+      category: "Category",
+      date: "Date",
+      mainChallengeTitle: "The Main Challenge",
+      problemDescription: "Problem Description",
+      projectObjectives: "Project Objectives",
+      processTitle: "Our User-Centered Design Process",
+      finalSolutionTitle: "The Final Solution: High-Fidelity Design",
+      exploreLiveDemo: "Explore Live Demo",
+      learningsAndReflections: "Learnings and Reflections",
+      myLearnings: "My Learnings",
     },
     footer: {
       portfolioTitle: "Portfolio",
@@ -167,6 +196,19 @@ export const translations: Record<Language, AppTranslations> = {
       theApproach: "El Enfoque",
       liveDemoButton: "Demo en Vivo",
       viewCodeButton: "Ver Código",
+      projectSummary: "Resumen del Proyecto",
+      myRole: "Mi Rol",
+      technologies: "Tecnologías",
+      category: "Categoría",
+      date: "Fecha",
+      mainChallengeTitle: "El Desafío Principal",
+      problemDescription: "Descripción del Problema",
+      projectObjectives: "Objetivos del Proyecto",
+      processTitle: "Nuestro Proceso de Diseño Centrado en el Usuario",
+      finalSolutionTitle: "La Solución Final: Diseño de Alta Fidelidad",
+      exploreLiveDemo: "Explorar Demo Interactiva",
+      learningsAndReflections: "Aprendizajes y Reflexiones",
+      myLearnings: "Mis Conclusiones",
     },
     footer: {
       portfolioTitle: "Portafolio",
