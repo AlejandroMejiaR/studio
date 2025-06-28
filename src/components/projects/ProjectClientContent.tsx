@@ -84,12 +84,12 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       {/* Section 2: Summary & Key Details */}
       <section>
         <SectionContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
-            <Card className="lg:col-span-7 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <h3 className="font-headline text-lg font-semibold text-primary/80 dark:text-foreground/80 mb-3">{t('projectSummary')}</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto items-start">
+            <div className="lg:col-span-2">
+              <h3 className="font-headline text-xl font-semibold text-primary/80 dark:text-foreground/80 mb-4">{t('projectSummary')}</h3>
               <p className="text-foreground/80 leading-relaxed text-lg">{langContent.summary}</p>
-            </Card>
-            <Card className="lg:col-span-3 bg-card p-6 md:p-8 rounded-xl shadow-lg">
+            </div>
+            <Card className="lg:col-span-1 bg-card p-6 md:p-8 rounded-xl shadow-lg">
               <ul className="space-y-4 text-base">
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('myRole')}</strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('technologies')}</strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
