@@ -82,7 +82,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       </section>
 
       {/* Section 2: Resumen y Detalles Clave */}
-      <section className="mt-0">
+      <section className="mt-0 pt-0">
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
             <div className="lg:col-span-6">
@@ -102,13 +102,13 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
       {/* Section 3: Full-Width Hero Image */}
       {project.bannerUrl && (
-        <section className="mt-20 md:mt-28 lg:mt-36 relative w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-muted">
+        <section className="relative w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-muted">
           <Image src={project.bannerUrl} alt={titleToDisplay} fill className="object-cover" priority data-ai-hint="product mockup" />
         </section>
       )}
 
       {/* Section 4: Problem and Objectives */}
-      <section className="mt-20 md:mt-28 lg:mt-36">
+      <section>
         <SectionContainer>
           <SectionTitle>{t('mainChallengeTitle')}</SectionTitle>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 max-w-6xl mx-auto">
@@ -128,7 +128,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
       {/* Section 5: The Process */}
       {langContent.process && langContent.process.length > 0 && (
-         <section className="mt-20 md:mt-28 lg:mt-36">
+         <section>
           <SectionContainer>
             <SectionTitle>{t('processTitle')}</SectionTitle>
             {langContent.processIntro && <p className="max-w-3xl mx-auto text-center text-foreground/80 mb-16 -mt-4 text-lg">{langContent.processIntro}</p>}
@@ -158,7 +158,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
       {/* Section 6: Final Product */}
       {project.galleryImages && project.galleryImages.length > 0 && (
-        <section className="mt-20 md:mt-28 lg:mt-36">
+        <section>
           <SectionContainer>
             <SectionTitle>{t('finalSolutionTitle')}</SectionTitle>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
@@ -191,7 +191,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       )}
 
       {/* Section 7: Learnings & Reflections */}
-      <section className="mt-20 md:mt-28 lg:mt-36">
+      <section>
         <SectionContainer>
           <SectionTitle>{t('learningsAndReflections')}</SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto">
