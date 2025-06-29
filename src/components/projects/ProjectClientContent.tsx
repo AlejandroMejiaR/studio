@@ -213,5 +213,3 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 };
 
 export default ProjectClientContent;
-
-    
