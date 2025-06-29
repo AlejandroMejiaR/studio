@@ -18,12 +18,12 @@ export default function BackButton({ className }: { className?: string }) {
     <Button
       variant="ghost"
       size="icon"
-      className={cn("h-12 w-12 flex-shrink-0", className)}
+      className={cn("h-16 w-16 flex-shrink-0", className)}
       aria-label={goBackText}
       asChild
     >
       <Link href="/#projects">
-        <ArrowLeft className="h-8 w-8" strokeWidth={2.5} />
+        <ArrowLeft className="h-10 w-10" strokeWidth={2.5} />
       </Link>
     </Button>
   );
