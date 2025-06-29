@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2 } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import React from 'react';
@@ -62,7 +62,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
         <SectionContainer>
           <div className="flex items-start gap-4 md:gap-8">
             <BackButton className="mt-2 flex-shrink-0" />
-            <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl">
+            <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl lg:text-5xl">
               {isClientReady ? (
                 <WordRevealAnimation
                   key={`title-${titleToDisplay}-${language}`}
@@ -86,11 +86,10 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto items-start">
             <div className="lg:col-span-2">
-              <h3 className="font-headline text-xl font-semibold text-primary/80 dark:text-foreground/80 mb-4">{t('projectSummary')}</h3>
-              <p className="text-foreground/80 leading-relaxed text-lg">{langContent.summary}</p>
+              <p className="text-foreground/80 leading-relaxed text-2xl">{langContent.summary}</p>
             </div>
             <Card className="lg:col-span-1 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="space-y-4 text-base">
+              <ul className="space-y-4 text-lg">
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('myRole')}</strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('technologies')}</strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="block font-semibold text-primary dark:text-foreground">{t('category')}</strong> <span className="text-foreground/80">{project.category}</span></li>
