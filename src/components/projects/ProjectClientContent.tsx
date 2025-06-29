@@ -58,9 +58,9 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   return (
     <article className="space-y-20 md:space-y-28 lg:space-y-36">
       {/* Section 1: Hero Section */}
-      <header className="pt-8 md:pt-12">
+      <header>
         <SectionContainer>
-          <div className="flex items-start gap-4 md:gap-8">
+          <div className="flex items-center gap-4 md:gap-8">
             <BackButton className="mt-4 flex-shrink-0" />
             <h1 className="font-headline font-bold text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
               {isClientReady ? (
@@ -89,11 +89,11 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
               <p className="text-foreground/80 leading-relaxed text-2xl">{langContent.summary}</p>
             </div>
             <Card className="lg:col-span-1 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="space-y-4 text-lg">
-                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('myRole')}</strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
-                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('technologies')}</strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
-                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('category')}</strong> <span className="text-foreground/80">{project.category}</span></li>
-                <li><strong className="block font-semibold text-primary dark:text-foreground">{t('date')}</strong> <span className="text-foreground/80">{project.date}</span></li>
+              <ul className="flex flex-wrap gap-x-8 gap-y-4 text-lg">
+                <li><strong className="font-semibold text-primary dark:text-foreground">{t('myRole')}: </strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
+                <li><strong className="font-semibold text-primary dark:text-foreground">{t('technologies')}: </strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
+                <li><strong className="font-semibold text-primary dark:text-foreground">{t('category')}: </strong> <span className="text-foreground/80">{project.category}</span></li>
+                <li><strong className="font-semibold text-primary dark:text-foreground">{t('date')}: </strong> <span className="text-foreground/80">{project.date}</span></li>
               </ul>
             </Card>
           </div>
