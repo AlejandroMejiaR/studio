@@ -57,10 +57,10 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   return (
     <article className="space-y-20 md:space-y-28 lg:space-y-36">
       {/* Section 1: Hero Section */}
-      <header className="mt-12">
+      <header>
         <SectionContainer>
           <div className="flex items-center gap-4 md:gap-8">
-            <BackButton />
+            <BackButton className="self-center [&_svg]:size-8" />
             <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
               {isClientReady ? (
                 <WordRevealAnimation
@@ -88,7 +88,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
               <p className="text-foreground/80 leading-relaxed text-3xl">{langContent.summary}</p>
             </div>
             <Card className="lg:col-span-4 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="space-y-4 text-lg">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-lg">
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('myRole')}: </strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('technologies')}: </strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('category')}: </strong> <span className="text-foreground/80">{project.category}</span></li>
