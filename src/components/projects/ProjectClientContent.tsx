@@ -1,4 +1,3 @@
-
 "use client";
 
 import type { Project, ProjectTranslationDetails, ProjectProcessStep } from '@/types';
@@ -58,11 +57,11 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   return (
     <article className="space-y-20 md:space-y-28 lg:space-y-36">
       {/* Section 1: Hero Section */}
-      <header>
+      <header className="mt-12">
         <SectionContainer>
-          <div className="flex items-center gap-4 md:gap-8">
-            <BackButton className="mt-4 flex-shrink-0" />
-            <h1 className="font-headline font-bold text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+          <div className="flex items-start gap-4 md:gap-8">
+            <BackButton />
+            <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl -mt-2">
               {isClientReady ? (
                 <WordRevealAnimation
                   key={`title-${titleToDisplay}-${language}`}
@@ -84,12 +83,12 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       {/* Section 2: Summary & Key Details */}
       <section>
         <SectionContainer>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto items-start">
-            <div className="lg:col-span-2">
-              <p className="text-foreground/80 leading-relaxed text-2xl">{langContent.summary}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
+            <div className="lg:col-span-6">
+              <p className="text-foreground/80 leading-relaxed text-3xl">{langContent.summary}</p>
             </div>
-            <Card className="lg:col-span-1 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="flex flex-wrap gap-x-8 gap-y-4 text-lg">
+            <Card className="lg:col-span-4 bg-card p-6 md:p-8 rounded-xl shadow-lg">
+              <ul className="space-y-4 text-lg">
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('myRole')}: </strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('technologies')}: </strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('category')}: </strong> <span className="text-foreground/80">{project.category}</span></li>
