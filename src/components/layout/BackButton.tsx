@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -18,12 +17,12 @@ export default function BackButton({ className }: { className?: string }) {
     <Button
       variant="ghost"
       size="icon"
-      className={cn("h-16 w-16 flex-shrink-0", className)}
+      className={cn("h-16 w-16 flex-shrink-0 [&_svg]:size-8", className)}
       aria-label={goBackText}
       asChild
     >
       <Link href="/#projects">
-        <ArrowLeft className="h-8 w-8" strokeWidth={2.5} />
+        <ArrowLeft strokeWidth={2.5} />
       </Link>
     </Button>
   );
