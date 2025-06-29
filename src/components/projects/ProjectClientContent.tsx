@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Project, ProjectTranslationDetails, ProjectProcessStep } from '@/types';
@@ -57,10 +58,10 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   return (
     <article className="space-y-20 md:space-y-28 lg:space-y-36">
       {/* Section 1: Hero Section */}
-      <header>
+      <section>
         <SectionContainer>
           <div className="flex items-center gap-4 md:gap-8">
-            <BackButton className="self-center [&_svg]:size-8" />
+            <BackButton />
             <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
               {isClientReady ? (
                 <WordRevealAnimation
@@ -78,9 +79,9 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
             </h1>
           </div>
         </SectionContainer>
-      </header>
+      </section>
 
-      {/* Section 2: Summary & Key Details */}
+      {/* Section 2: Resumen y Detalles Clave */}
       <section>
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
@@ -212,3 +213,5 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 };
 
 export default ProjectClientContent;
+
+    
