@@ -61,8 +61,8 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       <header className="pt-8 md:pt-12">
         <SectionContainer>
           <div className="flex items-start gap-4 md:gap-8">
-            <BackButton className="mt-2 flex-shrink-0" />
-            <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl lg:text-5xl">
+            <BackButton className="mt-4 flex-shrink-0" />
+            <h1 className="font-headline font-bold text-left text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
               {isClientReady ? (
                 <WordRevealAnimation
                   key={`title-${titleToDisplay}-${language}`}
