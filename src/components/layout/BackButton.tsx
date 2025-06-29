@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -23,7 +22,7 @@ export default function BackButton({ className }: { className?: string }) {
       asChild
     >
       <Link href="/#projects">
-        <ArrowLeft className="h-10 w-10" strokeWidth={2.5} />
+        <ArrowLeft className="h-12 w-12" strokeWidth={2.5} />
       </Link>
     </Button>
   );
