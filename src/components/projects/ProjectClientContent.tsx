@@ -82,7 +82,7 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       </section>
 
       {/* Section 2: Resumen y Detalles Clave */}
-      <section className="mt-0 pt-0">
+      <section className="-mt-20 md:-mt-28 lg:-mt-36 pt-0">
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
             <div className="lg:col-span-6">
