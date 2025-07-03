@@ -139,19 +139,12 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!text) return null;
 
     const colorAnimatedWordsConfig = {
-      EN: ['UX', 'AI', 'Game Design'],
-      ES: ['UX', 'IA', 'Game Design']
-    };
-    const boldWordsConfig = {
-      EN: ["Hello!", 'designing', 'developing', 'digital experiences'],
-      ES: ["¡Hola!", "Soy Alejandro", 'diseño', 'desarrollo', 'experiencias digitales']
+      EN: ['UX', 'Game', 'AI'],
+      ES: ['UX', 'Videojuegos', 'IA']
     };
 
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
-    const phrasesToBold = boldWordsConfig[language] || [];
-
-    const allStyledPhrases = [...phrasesToColorAnimate, ...phrasesToBold];
-    const stylingRegex = new RegExp(`(${allStyledPhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
+    const stylingRegex = new RegExp(`(${phrasesToColorAnimate.join('|')})`, 'g');
     const parts = text.split(stylingRegex).filter(Boolean);
 
     return (
@@ -160,13 +153,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
            if (phrasesToColorAnimate.includes(part)) {
             return (
               <span key={index} className="animate-text-pulse font-bold text-accent">
-                {part}
-              </span>
-            );
-          }
-          if (phrasesToBold.includes(part)) {
-            return (
-              <span key={index} className="font-bold text-foreground/90">
                 {part}
               </span>
             );
@@ -188,42 +174,37 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   }, [setShouldNavbarContentBeVisible]);
   
   const animationItems = useMemo(() => {
-    const items: { content: React.ReactNode; delayAfter: number; className?: string }[] = [];
-    if (!isClientReady || !fullHeroText) return items;
+    if (!isClientReady || !fullHeroText) return [];
 
-    const mainBlocks = fullHeroText.split('\n\n');
-    
-    if (mainBlocks.length >= 2) {
-        const firstBlock = mainBlocks[0];
-        const secondBlock = mainBlocks[1];
-        const thirdBlockParts = mainBlocks[2] ? mainBlocks[2].split('\n') : [];
-      
-        items.push(
-            { content: renderStyledText(firstBlock, language), delayAfter: 1700, className: "mb-16" },
-            { content: renderStyledText(secondBlock, language), delayAfter: 2000, className: "mb-16" }
-        );
+    const lines = fullHeroText.split('\n');
+    const fontSizes = [
+        'text-3xl md:text-5xl font-medium', // Line 1
+        'text-2xl md:text-4xl font-medium', // Line 2
+        'text-xl md:text-3xl font-light',   // Line 3
+        'text-xl md:text-3xl font-light'    // Line 4
+    ];
 
-        if (thirdBlockParts.length > 0) {
-            items.push({ content: renderStyledText(thirdBlockParts[0], language), delayAfter: 1000 });
-        }
-        if (thirdBlockParts.length > 1) {
-            items.push({ content: renderStyledText(thirdBlockParts[1], language), delayAfter: 1000 });
-        }
-        if (thirdBlockParts.length > 2) {
-            items.push({ content: renderStyledText(thirdBlockParts[2], language), delayAfter: 0 });
-        }
-    }
-    return items;
+    return lines.map((line, index) => ({
+        content: renderStyledText(line, language),
+        delayAfter: index === 0 ? 1200 : 800, 
+        className: cn('mb-4', fontSizes[index] || fontSizes[fontSizes.length - 1])
+    }));
   }, [fullHeroText, language, isClientReady]);
   
   const StaticSubtitle = () => {
     if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
-    const parts = fullHeroText.split('\n\n').map((block, index) => (
-      <div key={index} className={index < 2 ? 'mb-16' : ''}>
-        {block.split('\n').map((line, lineIndex) => (
-          <div key={lineIndex}>{renderStyledText(line, language)}</div>
-        ))}
+    const lines = fullHeroText.split('\n');
+    const fontSizes = [
+        'text-3xl md:text-5xl font-medium', // Line 1
+        'text-2xl md:text-4xl font-medium', // Line 2
+        'text-xl md:text-3xl font-light',   // Line 3
+        'text-xl md:text-3xl font-light'    // Line 4
+    ];
+    
+    const parts = lines.map((line, index) => (
+      <div key={index} className={cn('mb-4', fontSizes[index] || fontSizes[fontSizes.length - 1])}>
+        {renderStyledText(line, language)}
       </div>
     ));
 
@@ -246,7 +227,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-4xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="mb-10 text-foreground/80 text-3xl md:text-5xl font-medium">
+            <div className="mb-10 text-foreground/80">
               {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                   <StaggeredTextAnimation
                     key={language}
