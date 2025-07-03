@@ -70,7 +70,7 @@ const Footer = () => {
               </span>
             </Link>
             <Link 
-              href="/#about" 
+              href="/about" 
               className="hover:text-accent transition-colors"
               onClick={handleSmoothScroll}
             >

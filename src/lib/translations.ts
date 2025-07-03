@@ -1,3 +1,4 @@
+
 export interface AppTranslations {
   brandName: string;
   brandNameShort: string;
@@ -82,7 +83,7 @@ export const translations: Record<Language, AppTranslations> = {
     brandNameShort: "Alejandro Mejia",
     nav: {
       projects: "Projects",
-      about: "About",
+      about: "About Me",
       mobileMenuTitle: "Mobile Navigation Menu",
       changeLanguageHint: "Change Language",
       goBack: "Go Back",
@@ -215,7 +216,7 @@ export const translations: Record<Language, AppTranslations> = {
       rightsReservedText: "Todos los derechos reservados.",
       quickLinksTitle: "Enlaces Rápidos",
       projectsLink: "Proyectos",
-      aboutMeLink: "Sobre Mí",
+      aboutMeLink: "Sobre mí",
     },
     projectCard: {
       viewMore: "Ver más",

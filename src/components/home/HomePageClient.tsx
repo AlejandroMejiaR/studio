@@ -1,20 +1,17 @@
 
 "use client";
 
-import { useEffect, useState, useRef, Fragment, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import type { Project } from '@/types';
-import AboutMe from '@/components/home/AboutMe';
 import ProjectList from '@/components/projects/ProjectList';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { ArrowDown } from 'lucide-react';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
-import { useFooter } from '@/contexts/FooterContext';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -28,8 +25,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     getInitialServerTranslation
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
-  const aboutSectionRef = useRef<HTMLElement>(null);
-  const { setIsFooterVisible } = useFooter();
   const pathname = usePathname();
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
@@ -110,38 +105,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   }, [isClientReady, shouldAnimateHeroIntro, setShowLanguageHint]);
 
   useEffect(() => {
-    if (pathname !== '/') {
-        return;
-    }
-    
-    if (shouldAnimateHeroIntro === null) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-        ([entry]) => {
-            setIsFooterVisible(entry.isIntersecting);
-        },
-        {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1,
-        }
-    );
-
-    const currentAboutSection = aboutSectionRef.current;
-    if (currentAboutSection) {
-        observer.observe(currentAboutSection);
-    }
-
-    return () => {
-        if (currentAboutSection) {
-            observer.unobserve(currentAboutSection);
-        }
-    };
-  }, [pathname, setIsFooterVisible, shouldAnimateHeroIntro]);
-
-  useEffect(() => {
     if (shouldAnimateHeroIntro) {
       if (!areControlsVisible) {
         document.body.classList.add('no-scroll');
@@ -156,7 +119,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   }, [areControlsVisible, shouldAnimateHeroIntro]);
 
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getInitialServerTranslation(t => t.home.buttons.viewWork) as string || "Ver Mi Trabajo";
-  const aboutMeButtonText = isClientReady ? translationsForLanguage.home.buttons.aboutMe : getInitialServerTranslation(t => t.home.buttons.aboutMe) as string || "Sobre Mí";
   
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
@@ -308,28 +270,12 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     </span>
                   </Link>
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  asChild
-                  className="border-primary text-primary hover:bg-accent hover:text-accent-foreground dark:border-foreground dark:text-foreground dark:hover:bg-accent dark:hover:text-accent-foreground text-lg px-10 py-6"
-                >
-                  <Link href="/#about" onClick={handleSmoothScroll}>
-                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                      {aboutMeButtonText}
-                    </span>
-                    <ArrowDown size={24} className="ml-3" />
-                  </Link>
-                </Button>
             </div>
         </div>
       </section>
 
       <section id="projects" className="pt-[50px]">
         <ProjectList projects={projects} />
-      </section>
-      <section id="about" ref={aboutSectionRef} className="pt-[100px] pb-[80px]">
-        <AboutMe />
       </section>
     </div>
   );

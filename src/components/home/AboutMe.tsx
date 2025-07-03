@@ -1,3 +1,4 @@
+
 "use client"; // Ensure this is a client component
 
 import Image from 'next/image';
@@ -14,8 +15,8 @@ import {
 import { Gamepad2, Component, Sparkles, Languages, Code2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Wrap AboutMe component with forwardRef to allow assigning ref from parent
-const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
+// This component no longer needs a ref as it's on its own page.
+const AboutMe = () => {
   const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage(); // Use the hook
 
   const skills = isClientReady ? [
@@ -49,9 +50,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
 
 
   return (
-    // The outer section element is now in page.tsx and has the ref
-    // This component now renders its content directly.
-    // id="about" is also handled by the wrapping section in page.tsx
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
       <div className="grid md:grid-cols-3 gap-8 lg:gap-12 items-center">
         <div className="md:col-span-1 flex justify-center md:justify-start">
@@ -187,8 +185,6 @@ const AboutMe = React.forwardRef<HTMLElement>((props, ref) => {
       </div>
     </div>
   );
-});
-
-AboutMe.displayName = 'AboutMe'; // Add display name for React Developer Tools
+};
 
 export default AboutMe;

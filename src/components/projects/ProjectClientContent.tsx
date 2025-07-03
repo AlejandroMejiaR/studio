@@ -18,15 +18,7 @@ interface ProjectClientContentProps {
   project: Project;
 }
 
-const processIcons: Record<number, React.ElementType> = {
-  0: Search,
-  1: FileText,
-  2: Lightbulb,
-  3: DraftingCompass,
-  4: CheckCircle2,
-};
-
-const SectionContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+export const SectionContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <div className={cn("container mx-auto px-4 sm:px-6 lg:px-8", className)}>
     {children}
   </div>
@@ -56,11 +48,11 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   const titleBaseDelay = 0.2;
 
   return (
-    <article>
+    <article className="space-y-24 md:space-y-32 lg:space-y-36">
       {/* Section 1: Hero Section */}
       <section>
         <SectionContainer>
-          <div className="flex items-center gap-4 md:gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <BackButton />
             <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
               {isClientReady ? (
@@ -82,14 +74,14 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       </section>
 
       {/* Section 2: Resumen y Detalles Clave */}
-      <section className="mt-0 pt-0">
+      <section className="!mt-0 pt-0">
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
             <div className="lg:col-span-6">
               <p className="text-foreground/80 leading-relaxed text-3xl">{langContent.summary}</p>
             </div>
             <Card className="lg:col-span-4 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="flex flex-col gap-x-6 gap-y-2 text-lg">
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-lg">
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('myRole')}: </strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('technologies')}: </strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('category')}: </strong> <span className="text-foreground/80">{project.category}</span></li>

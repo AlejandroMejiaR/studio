@@ -75,7 +75,7 @@ const Navbar = () => {
 
   const navLinks: { href: string; labelKey: keyof AppTranslations['nav'] }[] = [
     { href: '/#projects', labelKey: 'projects' },
-    { href: '/#about', labelKey: 'about' },
+    { href: '/about', labelKey: 'about' },
   ];
 
   const brandTextKey = isMobile ? 'brandNameShort' : 'brandName';
