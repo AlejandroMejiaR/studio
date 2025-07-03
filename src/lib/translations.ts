@@ -83,7 +83,7 @@ export const translations: Record<Language, AppTranslations> = {
     brandNameShort: "Alejandro Mejia",
     nav: {
       projects: "Projects",
-      about: "About Me",
+      about: "About",
       mobileMenuTitle: "Mobile Navigation Menu",
       changeLanguageHint: "Change Language",
       goBack: "Go Back",
@@ -144,7 +144,7 @@ export const translations: Record<Language, AppTranslations> = {
       rightsReservedText: "All rights reserved.",
       quickLinksTitle: "Quick Links",
       projectsLink: "Projects",
-      aboutMeLink: "About Me",
+      aboutMeLink: "About",
     },
     projectCard: {
       viewMore: "View More",
