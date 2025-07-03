@@ -139,8 +139,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!text) return null;
 
     const colorAnimatedWordsConfig = {
-      EN: ['UX', 'Game', 'AI'],
-      ES: ['UX', 'Videojuegos', 'IA']
+      EN: ['UX', 'Game', 'Designer', 'AI'],
+      ES: ['Diseñador', 'UX', 'Videojuegos', 'IA']
     };
 
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
@@ -187,7 +187,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     return lines.map((line, index) => ({
         content: renderStyledText(line, language),
         delayAfter: index === 0 ? 1200 : 800, 
-        className: cn('mb-4', fontSizes[index] || fontSizes[fontSizes.length - 1])
+        className: cn(
+          index === 1 ? 'mb-8' : 'mb-4',
+          fontSizes[index] || fontSizes[fontSizes.length - 1]
+        )
     }));
   }, [fullHeroText, language, isClientReady]);
   
@@ -203,7 +206,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     ];
     
     const parts = lines.map((line, index) => (
-      <div key={index} className={cn('mb-4', fontSizes[index] || fontSizes[fontSizes.length - 1])}>
+      <div key={index} className={cn(
+        index === 1 ? 'mb-8' : 'mb-4',
+        fontSizes[index] || fontSizes[fontSizes.length - 1]
+      )}>
         {renderStyledText(line, language)}
       </div>
     ));
