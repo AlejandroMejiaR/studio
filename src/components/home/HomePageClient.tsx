@@ -188,7 +188,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         content: renderStyledText(line, language),
         delayAfter: index === 0 ? 1200 : 800, 
         className: cn(
-          index === 1 ? 'mb-12' : 'mb-4',
+          index === 1 ? 'mb-20' : 'mb-4',
           fontSizes[index] || fontSizes[fontSizes.length - 1]
         )
     }));
@@ -207,7 +207,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     
     const parts = lines.map((line, index) => (
       <div key={index} className={cn(
-        index === 1 ? 'mb-12' : 'mb-4',
+        index === 1 ? 'mb-20' : 'mb-4',
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )}>
         {renderStyledText(line, language)}
@@ -233,7 +233,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-4xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="mb-10 text-foreground/80">
+            <div className="mb-10 text-foreground">
               {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                   <StaggeredTextAnimation
                     key={language}
