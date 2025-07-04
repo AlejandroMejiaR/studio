@@ -12,6 +12,7 @@ import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
 import React, { Fragment } from 'react';
+import { ArrowDown } from 'lucide-react';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -278,22 +279,27 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     className="items-start text-left"
                   />
                 ) : (
-                  <StaticSubtitle />
+                  <div className="items-start text-left">
+                    <StaticSubtitle />
+                  </div>
                 )
               }
             </div>
 
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-start",
+              "flex flex-col sm:flex-row gap-6 justify-start pt-8",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}>
-                <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
-                  <Link href="/#projects" onClick={handleSmoothScroll}>
-                    <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                      {viewWorkButtonText}
-                    </span>
-                  </Link>
-                </Button>
+              <Button
+                size="icon"
+                asChild
+                className="h-16 w-16 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground animate-bounce-subtle"
+                aria-label={viewWorkButtonText}
+              >
+                <Link href="/#projects" onClick={handleSmoothScroll}>
+                  <ArrowDown className="h-8 w-8" />
+                </Link>
+              </Button>
             </div>
         </div>
       </section>

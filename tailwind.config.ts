@@ -125,6 +125,10 @@ export default {
           'from': { opacity: '0', transform: 'translateY(10px)' },
           'to': { opacity: '1', transform: 'translateY(0)' },
         },
+        'bounce-subtle': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -134,6 +138,7 @@ export default {
         'letter-reveal': 'letter-reveal-from-below 0.6s ease-out forwards',
         'fadeIn': 'fadeIn 0.3s ease-out forwards', // Added fadeIn animation
         'controls-fade-in': 'controls-fade-in 1s ease-out forwards',
+        'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
       },
     },
   },
