@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
 import React, { Fragment } from 'react';
 import { ArrowDown } from 'lucide-react';
+import Image from 'next/image';
 
 interface HomePageClientProps {
   projects: Project[];
@@ -267,27 +268,44 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
       >
         <div className={cn(
-          "w-full max-w-4xl transition-opacity duration-1000",
+          "w-full max-w-7xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="mb-10 text-foreground">
-              {shouldAnimateHeroIntro && animationItems.length > 0 ? (
-                  <StaggeredTextAnimation
-                    key={language}
-                    items={animationItems}
-                    onComplete={handleAnimationComplete}
-                    className="items-start text-left"
-                  />
-                ) : (
-                  <div className="items-start text-left">
-                    <StaticSubtitle />
-                  </div>
-                )
-              }
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+              {/* Text Column */}
+              <div className="text-foreground">
+                {shouldAnimateHeroIntro && animationItems.length > 0 ? (
+                    <StaggeredTextAnimation
+                      key={language}
+                      items={animationItems}
+                      onComplete={handleAnimationComplete}
+                      className="items-start text-left"
+                    />
+                  ) : (
+                    <div className="items-start text-left">
+                      <StaticSubtitle />
+                    </div>
+                  )
+                }
+              </div>
+
+              {/* GIF Column */}
+              <div className="hidden md:flex justify-center items-center">
+                <Image
+                  src="https://placehold.co/500x500.png"
+                  alt="Abstract animation representing technology and creativity"
+                  width={500}
+                  height={500}
+                  className="rounded-lg shadow-2xl"
+                  data-ai-hint="abstract animation"
+                  unoptimized // Important for GIFs
+                />
+              </div>
             </div>
 
+
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-center pt-8",
+              "flex flex-col sm:flex-row gap-6 justify-center pt-16",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}>
               <Button
