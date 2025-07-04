@@ -292,8 +292,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             )}>
               <Button
                 size="icon"
+                variant="outline"
                 asChild
-                className="h-16 w-16 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground animate-bounce-subtle"
+                className="h-16 w-16 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle"
                 aria-label={viewWorkButtonText}
               >
                 <Link href="/#projects" onClick={handleSmoothScroll}>
