@@ -182,10 +182,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (lines.length < 4) return []; // Expecting new 4-line format
 
     const fontSizes = [
-        'text-5xl md:text-7xl font-medium',         // "Hello!"
-        'text-5xl md:text-7xl font-medium',         // "I'm Alejandro"
+        'text-5xl md:text-5xl font-medium',         // "Hello!"
+        'text-5xl md:text-6xl font-medium',         // "I'm Alejandro"
         'text-4xl md:text-6xl font-medium',         // "UX & Game Designer"
-        'text-xl md:text-2xl font-light'            // "I'm passionate about..."
+        'text-2xl md:text-4xl font-light'            // "I'm passionate about..."
     ];
 
     return [
@@ -219,10 +219,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (lines.length < 4) return null; // Or some fallback
 
     const fontSizes = [
-        'text-5xl md:text-7xl font-medium',
-        'text-5xl md:text-7xl font-medium',
+        'text-5xl md:text-5xl font-medium',
+        'text-5xl md:text-6xl font-medium',
         'text-4xl md:text-6xl font-medium',
-        'text-xl md:text-2xl font-light'
+        'text-2xl md:text-4xl font-light'
     ];
     
     return (
