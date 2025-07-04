@@ -195,7 +195,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           {lastLines.map((line, index) => (
             <div key={index} className={cn(
                 fontSizes[index + 2],
-                index < lastLines.length - 1 ? 'mb-4' : ''
+                index < lastLines.length - 1 ? 'mb-2' : ''
               )}>
               {renderStyledText(line, language)}
             </div>
@@ -232,7 +232,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {
           'mb-8': index === 0,
           'mb-20': index === 1,
-          'mb-4': index > 1,
+          'mb-2': index > 1,
         },
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )
@@ -257,7 +257,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {
           'mb-8': index === 0,
           'mb-20': index === 1,
-          'mb-4': index > 1,
+          'mb-2': index > 1,
         },
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )}>
