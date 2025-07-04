@@ -279,7 +279,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   alt="Abstract animation representing technology and creativity"
                   width={500}
                   height={500}
-                  className="rounded-lg shadow-2xl"
+                  className="rounded-lg shadow-2xl mix-blend-screen dark:mix-blend-normal"
                   data-ai-hint="abstract animation"
                   unoptimized // Important for GIFs
                 />
