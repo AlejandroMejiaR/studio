@@ -275,7 +275,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
               )}>
                 <Image
-                  src="https://placehold.co/500x500.png"
+                  src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//nS1%20(1).gif"
                   alt="Abstract animation representing technology and creativity"
                   width={500}
                   height={500}
