@@ -271,9 +271,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-7xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="grid grid-cols-1 md:grid-cols-10 gap-16 items-center">
+            <div className="flex flex-col md:flex-row gap-16 items-center">
               {/* Text Column */}
-              <div className="text-foreground md:col-span-7">
+              <div className="w-full md:w-[60%] text-foreground">
                 {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                     <StaggeredTextAnimation
                       key={language}
@@ -291,7 +291,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
               {/* GIF Column */}
               <div className={cn(
-                "hidden md:flex justify-center items-center md:col-span-3",
+                "hidden md:flex justify-center items-center w-full md:w-[40%]",
                 areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
               )}>
                 <Image
