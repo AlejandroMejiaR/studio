@@ -178,19 +178,54 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
     const lines = fullHeroText.split('\n');
     const fontSizes = [
-        'text-3xl md:text-5xl font-medium', // Line 1
-        'text-2xl md:text-4xl font-medium', // Line 2
-        'text-xl md:text-3xl font-light',   // Line 3
-        'text-xl md:text-3xl font-light'    // Line 4
+      'text-3xl md:text-5xl font-medium', // Line 1
+      'text-2xl md:text-4xl font-medium', // Line 2
+      'text-xl md:text-3xl font-light',   // Line 3
+      'text-xl md:text-3xl font-light'    // Line 4
     ];
 
+    // Combine last two lines to animate them together
+    if (lines.length >= 4) {
+      const combinedLastLines = (
+        <>
+          <div className={cn('mb-4', fontSizes[2])}>
+            {renderStyledText(lines[2], language)}
+          </div>
+          <div className={cn(fontSizes[3])}>
+            {renderStyledText(lines[3], language)}
+          </div>
+        </>
+      );
+
+      const items = [
+        {
+          content: renderStyledText(lines[0], language),
+          delayAfter: 1200,
+          className: cn('text-foreground', 'mb-4', fontSizes[0])
+        },
+        {
+          content: renderStyledText(lines[1], language),
+          delayAfter: 800,
+          className: cn('text-foreground', 'mb-20', fontSizes[1])
+        },
+        {
+          content: combinedLastLines,
+          delayAfter: 0, // It's the last item, no delay after it.
+          className: 'text-foreground' // Apply base color to the animated wrapper
+        }
+      ];
+      return items;
+    }
+    
+    // Fallback to original logic if text format is different for some reason
     return lines.map((line, index) => ({
-        content: renderStyledText(line, language),
-        delayAfter: index === 0 ? 1200 : 800, 
-        className: cn(
-          index === 1 ? 'mb-20' : 'mb-4',
-          fontSizes[index] || fontSizes[fontSizes.length - 1]
-        )
+      content: renderStyledText(line, language),
+      delayAfter: index === 0 ? 1200 : 800, 
+      className: cn(
+        'text-foreground',
+        index === 1 ? 'mb-20' : 'mb-4',
+        fontSizes[index] || fontSizes[fontSizes.length - 1]
+      )
     }));
   }, [fullHeroText, language, isClientReady]);
   
@@ -207,6 +242,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     
     const parts = lines.map((line, index) => (
       <div key={index} className={cn(
+        'text-foreground',
         index === 1 ? 'mb-20' : 'mb-4',
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )}>
