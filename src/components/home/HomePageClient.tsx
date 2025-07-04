@@ -183,19 +183,23 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       'text-4xl md:text-6xl font-medium', // Line 1
       'text-3xl md:text-5xl font-medium', // Line 2
       'text-2xl md:text-4xl font-light',   // Line 3
-      'text-2xl md:text-4xl font-light'    // Line 4
+      'text-2xl md:text-4xl font-light',   // Line 4
+      'text-2xl md:text-4xl font-light'    // Line 5
     ];
 
-    // Combine last two lines to animate them together
-    if (lines.length >= 4) {
+    // Combine last lines to animate them together
+    if (lines.length >= 3) {
+       const lastLines = lines.slice(2);
       const combinedLastLines = (
         <>
-          <div className={cn('mb-4', fontSizes[2])}>
-            {renderStyledText(lines[2], language)}
-          </div>
-          <div className={cn(fontSizes[3])}>
-            {renderStyledText(lines[3], language)}
-          </div>
+          {lastLines.map((line, index) => (
+            <div key={index} className={cn(
+                fontSizes[index + 2],
+                index < lastLines.length - 1 ? 'mb-4' : ''
+              )}>
+              {renderStyledText(line, language)}
+            </div>
+          ))}
         </>
       );
 
@@ -239,7 +243,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         'text-4xl md:text-6xl font-medium', // Line 1
         'text-3xl md:text-5xl font-medium', // Line 2
         'text-2xl md:text-4xl font-light',   // Line 3
-        'text-2xl md:text-4xl font-light'    // Line 4
+        'text-2xl md:text-4xl font-light',   // Line 4
+        'text-2xl md:text-4xl font-light'    // Line 5
     ];
     
     const parts = lines.map((line, index) => (
