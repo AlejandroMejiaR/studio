@@ -179,41 +179,33 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!isClientReady || !fullHeroText) return [];
 
     const lines = fullHeroText.split('\n');
-    if (lines.length < 6) return []; // Expecting the new 6-line format
+    if (lines.length < 4) return []; // Expecting new 4-line format
 
     const fontSizes = [
-        'text-4xl md:text-6xl font-medium', // Line 1
-        'text-4xl md:text-6xl font-medium', // Line 2
-        'text-3xl md:text-5xl font-medium', // Line 3
-        'text-2xl md:text-4xl font-light',   // Line 4
-        'text-2xl md:text-4xl font-light',   // Line 5
-        'text-2xl md:text-4xl font-light'    // Line 6
+        'text-5xl md:text-7xl font-medium',         // "Hello!"
+        'text-5xl md:text-7xl font-medium',         // "I'm Alejandro"
+        'text-4xl md:text-6xl font-medium',         // "UX & Game Designer"
+        'text-xl md:text-2xl font-light'            // "I'm passionate about..."
     ];
-
-    const firstBlock = (
-        <>
-            <div className={cn(fontSizes[0])}>{renderStyledText(lines[0], language)}</div>
-            <div className={cn(fontSizes[1])}>{renderStyledText(lines[1], language)}</div>
-            <div className={cn(fontSizes[2])}>{renderStyledText(lines[2], language)}</div>
-        </>
-    );
-
-    const secondBlock = (
-        <>
-            <div className={cn(fontSizes[3], 'mb-2')}>{renderStyledText(lines[3], language)}</div>
-            <div className={cn(fontSizes[4], 'mb-2')}>{renderStyledText(lines[4], language)}</div>
-            <div className={cn(fontSizes[5])}>{renderStyledText(lines[5], language)}</div>
-        </>
-    );
 
     return [
         {
-            content: firstBlock,
-            delayAfter: 1200,
-            className: cn('text-foreground', 'mb-20')
+            content: <div className={cn(fontSizes[0])}>{renderStyledText(lines[0], language)}</div>,
+            delayAfter: 800,
+            className: 'text-foreground mb-6'
         },
         {
-            content: secondBlock,
+            content: <div className={cn(fontSizes[1])}>{renderStyledText(lines[1], language)}</div>,
+            delayAfter: 800,
+            className: 'text-foreground mb-6'
+        },
+        {
+            content: <div className={cn(fontSizes[2])}>{renderStyledText(lines[2], language)}</div>,
+            delayAfter: 1200,
+            className: 'text-foreground mb-12'
+        },
+        {
+            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language)}</div>,
             delayAfter: 0,
             className: 'text-foreground'
         }
@@ -224,29 +216,21 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const lines = fullHeroText.split('\n');
-    if (lines.length < 6) return null; // Or some fallback
+    if (lines.length < 4) return null; // Or some fallback
 
     const fontSizes = [
+        'text-5xl md:text-7xl font-medium',
+        'text-5xl md:text-7xl font-medium',
         'text-4xl md:text-6xl font-medium',
-        'text-4xl md:text-6xl font-medium',
-        'text-3xl md:text-5xl font-medium',
-        'text-2xl md:text-4xl font-light',
-        'text-2xl md:text-4xl font-light',
-        'text-2xl md:text-4xl font-light'
+        'text-xl md:text-2xl font-light'
     ];
     
     return (
         <>
-            <div className="mb-20">
-                <div className={cn('text-foreground', fontSizes[0])}>{renderStyledText(lines[0], language)}</div>
-                <div className={cn('text-foreground', fontSizes[1])}>{renderStyledText(lines[1], language)}</div>
-                <div className={cn('text-foreground', fontSizes[2])}>{renderStyledText(lines[2], language)}</div>
-            </div>
-            <div>
-                <div className={cn('text-foreground', fontSizes[3], 'mb-2')}>{renderStyledText(lines[3], language)}</div>
-                <div className={cn('text-foreground', fontSizes[4], 'mb-2')}>{renderStyledText(lines[4], language)}</div>
-                <div className={cn('text-foreground', fontSizes[5])}>{renderStyledText(lines[5], language)}</div>
-            </div>
+            <div className={cn('text-foreground', fontSizes[0], 'mb-6')}>{renderStyledText(lines[0], language)}</div>
+            <div className={cn('text-foreground', fontSizes[1], 'mb-6')}>{renderStyledText(lines[1], language)}</div>
+            <div className={cn('text-foreground', fontSizes[2], 'mb-12')}>{renderStyledText(lines[2], language)}</div>
+            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language)}</div>
         </>
     );
   };
