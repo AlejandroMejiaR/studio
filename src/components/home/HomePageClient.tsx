@@ -207,7 +207,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {
           content: renderStyledText(lines[0], language),
           delayAfter: 1200,
-          className: cn('text-foreground', 'mb-4', fontSizes[0])
+          className: cn('text-foreground', 'mb-8', fontSizes[0])
         },
         {
           content: renderStyledText(lines[1], language),
@@ -229,7 +229,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       delayAfter: index === 0 ? 1200 : 800, 
       className: cn(
         'text-foreground',
-        index === 1 ? 'mb-20' : 'mb-4',
+        {
+          'mb-8': index === 0,
+          'mb-20': index === 1,
+          'mb-4': index > 1,
+        },
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )
     }));
@@ -250,7 +254,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     const parts = lines.map((line, index) => (
       <div key={index} className={cn(
         'text-foreground',
-        index === 1 ? 'mb-20' : 'mb-4',
+        {
+          'mb-8': index === 0,
+          'mb-20': index === 1,
+          'mb-4': index > 1,
+        },
         fontSizes[index] || fontSizes[fontSizes.length - 1]
       )}>
         {renderStyledText(line, language)}
