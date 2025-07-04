@@ -178,10 +178,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
     const lines = fullHeroText.split('\n');
     const fontSizes = [
-      'text-3xl md:text-5xl font-medium', // Line 1
-      'text-2xl md:text-4xl font-medium', // Line 2
-      'text-xl md:text-3xl font-light',   // Line 3
-      'text-xl md:text-3xl font-light'    // Line 4
+      'text-4xl md:text-6xl font-medium', // Line 1
+      'text-3xl md:text-5xl font-medium', // Line 2
+      'text-2xl md:text-4xl font-light',   // Line 3
+      'text-2xl md:text-4xl font-light'    // Line 4
     ];
 
     // Combine last two lines to animate them together
@@ -234,10 +234,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     
     const lines = fullHeroText.split('\n');
     const fontSizes = [
-        'text-3xl md:text-5xl font-medium', // Line 1
-        'text-2xl md:text-4xl font-medium', // Line 2
-        'text-xl md:text-3xl font-light',   // Line 3
-        'text-xl md:text-3xl font-light'    // Line 4
+        'text-4xl md:text-6xl font-medium', // Line 1
+        'text-3xl md:text-5xl font-medium', // Line 2
+        'text-2xl md:text-4xl font-light',   // Line 3
+        'text-2xl md:text-4xl font-light'    // Line 4
     ];
     
     const parts = lines.map((line, index) => (
@@ -263,7 +263,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div className="container mx-auto">
       <section 
-        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-center pt-10 pb-20"
+        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
       >
         <div className={cn(
           "w-full max-w-4xl transition-opacity duration-1000",
@@ -275,6 +275,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     key={language}
                     items={animationItems}
                     onComplete={handleAnimationComplete}
+                    className="items-start text-left"
                   />
                 ) : (
                   <StaticSubtitle />
@@ -283,7 +284,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             </div>
 
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-center",
+              "flex flex-col sm:flex-row gap-6 justify-start",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}>
                 <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-10 py-6">
