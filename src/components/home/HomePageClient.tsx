@@ -179,93 +179,76 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!isClientReady || !fullHeroText) return [];
 
     const lines = fullHeroText.split('\n');
+    if (lines.length < 6) return []; // Expecting the new 6-line format
+
     const fontSizes = [
-      'text-4xl md:text-6xl font-medium', // Line 1
-      'text-3xl md:text-5xl font-medium', // Line 2
-      'text-2xl md:text-4xl font-light',   // Line 3
-      'text-2xl md:text-4xl font-light',   // Line 4
-      'text-2xl md:text-4xl font-light'    // Line 5
+        'text-4xl md:text-6xl font-medium', // Line 1
+        'text-4xl md:text-6xl font-medium', // Line 2
+        'text-3xl md:text-5xl font-medium', // Line 3
+        'text-2xl md:text-4xl font-light',   // Line 4
+        'text-2xl md:text-4xl font-light',   // Line 5
+        'text-2xl md:text-4xl font-light'    // Line 6
     ];
 
-    // Combine last lines to animate them together
-    if (lines.length >= 3) {
-       const lastLines = lines.slice(2);
-      const combinedLastLines = (
+    const firstBlock = (
         <>
-          {lastLines.map((line, index) => (
-            <div key={index} className={cn(
-                fontSizes[index + 2],
-                index < lastLines.length - 1 ? 'mb-2' : ''
-              )}>
-              {renderStyledText(line, language)}
-            </div>
-          ))}
+            <div className={cn(fontSizes[0])}>{renderStyledText(lines[0], language)}</div>
+            <div className={cn(fontSizes[1])}>{renderStyledText(lines[1], language)}</div>
+            <div className={cn(fontSizes[2])}>{renderStyledText(lines[2], language)}</div>
         </>
-      );
+    );
 
-      const items = [
+    const secondBlock = (
+        <>
+            <div className={cn(fontSizes[3], 'mb-2')}>{renderStyledText(lines[3], language)}</div>
+            <div className={cn(fontSizes[4], 'mb-2')}>{renderStyledText(lines[4], language)}</div>
+            <div className={cn(fontSizes[5])}>{renderStyledText(lines[5], language)}</div>
+        </>
+    );
+
+    return [
         {
-          content: renderStyledText(lines[0], language),
-          delayAfter: 1200,
-          className: cn('text-foreground', 'mb-8', fontSizes[0])
+            content: firstBlock,
+            delayAfter: 1200,
+            className: cn('text-foreground', 'mb-20')
         },
         {
-          content: renderStyledText(lines[1], language),
-          delayAfter: 800,
-          className: cn('text-foreground', 'mb-20', fontSizes[1])
-        },
-        {
-          content: combinedLastLines,
-          delayAfter: 0, // It's the last item, no delay after it.
-          className: 'text-foreground' // Apply base color to the animated wrapper
+            content: secondBlock,
+            delayAfter: 0,
+            className: 'text-foreground'
         }
-      ];
-      return items;
-    }
-    
-    // Fallback to original logic if text format is different for some reason
-    return lines.map((line, index) => ({
-      content: renderStyledText(line, language),
-      delayAfter: index === 0 ? 1200 : 800, 
-      className: cn(
-        'text-foreground',
-        {
-          'mb-8': index === 0,
-          'mb-20': index === 1,
-          'mb-2': index > 1,
-        },
-        fontSizes[index] || fontSizes[fontSizes.length - 1]
-      )
-    }));
+    ];
   }, [fullHeroText, language, isClientReady]);
   
   const StaticSubtitle = () => {
     if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const lines = fullHeroText.split('\n');
+    if (lines.length < 6) return null; // Or some fallback
+
     const fontSizes = [
-        'text-4xl md:text-6xl font-medium', // Line 1
-        'text-3xl md:text-5xl font-medium', // Line 2
-        'text-2xl md:text-4xl font-light',   // Line 3
-        'text-2xl md:text-4xl font-light',   // Line 4
-        'text-2xl md:text-4xl font-light'    // Line 5
+        'text-4xl md:text-6xl font-medium',
+        'text-4xl md:text-6xl font-medium',
+        'text-3xl md:text-5xl font-medium',
+        'text-2xl md:text-4xl font-light',
+        'text-2xl md:text-4xl font-light',
+        'text-2xl md:text-4xl font-light'
     ];
     
-    const parts = lines.map((line, index) => (
-      <div key={index} className={cn(
-        'text-foreground',
-        {
-          'mb-8': index === 0,
-          'mb-20': index === 1,
-          'mb-2': index > 1,
-        },
-        fontSizes[index] || fontSizes[fontSizes.length - 1]
-      )}>
-        {renderStyledText(line, language)}
-      </div>
-    ));
-
-    return <>{parts}</>;
+    return (
+        <>
+            <div className="mb-20">
+                <div className={cn('text-foreground', fontSizes[0])}>{renderStyledText(lines[0], language)}</div>
+                <div className={cn('text-foreground', fontSizes[1])}>{renderStyledText(lines[1], language)}</div>
+                <div className={cn('text-foreground', fontSizes[2])}>{renderStyledText(lines[2], language)}</div>
+            </div>
+            <div>
+                <div className={cn('text-foreground', fontSizes[3], 'mb-2')}>{renderStyledText(lines[3], language)}</div>
+                <div className={cn('text-foreground', fontSizes[4], 'mb-2')}>{renderStyledText(lines[4], language)}</div>
+                <div className={cn('text-foreground', fontSizes[5])}>{renderStyledText(lines[5], language)}</div>
+            </div>
+        </>
+    );
   };
 
   if (!isClientReady || shouldAnimateHeroIntro === null) {
@@ -321,7 +304,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
 
             <div className={cn(
-              "flex flex-col sm:flex-row gap-6 justify-center pt-16",
+              "flex flex-col sm:flex-row gap-6 justify-center items-center pt-16",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}>
               <Button
