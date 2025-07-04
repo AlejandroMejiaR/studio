@@ -290,7 +290,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
               </div>
 
               {/* GIF Column */}
-              <div className="hidden md:flex justify-center items-center">
+              <div className={cn(
+                "hidden md:flex justify-center items-center",
+                areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+              )}>
                 <Image
                   src="https://placehold.co/500x500.png"
                   alt="Abstract animation representing technology and creativity"
