@@ -30,6 +30,8 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   </h2>
 );
 
+const processIcons = [Search, FileText, Lightbulb, DraftingCompass, CheckCircle2];
+
 const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
   const { language, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
 
@@ -132,7 +134,9 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
                   <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
                     <div className={cn("md:order-1", { "md:order-2": isReversed })}>
                       <div className="flex items-center gap-4 mb-4">
-                        <div className="flex-shrink-0 grid place-content-center h-12 w-12 rounded-full bg-accent text-accent-foreground font-bold text-xl">{index + 1}</div>
+                        <div className="flex-shrink-0 grid place-content-center h-12 w-12 rounded-full bg-accent text-accent-foreground">
+                          <Icon className="h-6 w-6" />
+                        </div>
                         <h3 className="font-headline text-2xl font-bold text-primary dark:text-foreground">{step.title}</h3>
                       </div>
                       <p className="text-foreground/80 leading-relaxed text-lg">{step.description}</p>
