@@ -11,9 +11,15 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
-import React, { Fragment } from 'react';
+import React, { Fragment, Suspense } from 'react';
 import { ArrowDown } from 'lucide-react';
-import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-transparent" />,
+});
+
 
 interface HomePageClientProps {
   projects: Project[];
@@ -179,7 +185,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     if (!isClientReady || !fullHeroText) return [];
 
     const lines = fullHeroText.split('\n');
-    if (lines.length < 4) return []; // Expecting new 4-line format
+    if (lines.length < 4) return [];
 
     const fontSizes = [
         'text-4xl md:text-5xl font-medium',         // "Hello!"
@@ -269,20 +275,15 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 }
               </div>
 
-              {/* GIF Column */}
+              {/* 3D Model Column */}
               <div className={cn(
                 "hidden md:flex justify-center items-center w-full md:w-[40%]",
+                "h-96 md:h-[500px]",
                 areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
               )}>
-                <Image
-                  src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects//nS1%20(1).gif"
-                  alt="Abstract animation representing technology and creativity"
-                  width={500}
-                  height={500}
-                  className="mix-blend-screen dark:mix-blend-normal"
-                  data-ai-hint="abstract animation"
-                  unoptimized // Important for GIFs
-                />
+                <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+                  <HeroScene />
+                </Suspense>
               </div>
             </div>
 
