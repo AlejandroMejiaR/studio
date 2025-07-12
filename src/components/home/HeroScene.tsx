@@ -10,7 +10,7 @@ import React from 'react';
 // This component loads and displays the GLB model.
 function Model(props: JSX.IntrinsicElements['group']) {
   // useGLTF hook preloads and caches the model.
-  const { scene } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Finalscene.glb');
+  const { scene } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SceneFinal.glb');
   
   // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
   return <primitive object={scene} {...props} />;
@@ -36,4 +36,4 @@ export default function HeroScene() {
 }
 
 // Make sure the GLTF file is preloaded for better performance.
-useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Finalscene.glb');
+useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SceneFinal.glb');
