@@ -3,37 +3,37 @@
 
 import { Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import React from 'react';
 
-function Box(props: JSX.IntrinsicElements['mesh']) {
-  const ref = React.useRef<THREE.Mesh>(null!);
-  useFrame((_state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.x += delta;
-      ref.current.rotation.y += delta;
-    }
-  });
-
-  return (
-    <mesh {...props} ref={ref}>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial color={'orange'} />
-    </mesh>
-  );
+// This component loads and displays the GLB model.
+function Model(props: JSX.IntrinsicElements['group']) {
+  // useGLTF hook preloads and caches the model.
+  const { scene } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Finalscene.glb');
+  
+  // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
+  return <primitive object={scene} {...props} />;
 }
 
 export default function HeroScene() {
   return (
-    <Canvas>
-      <ambientLight intensity={Math.PI / 2} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-      <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+    <Canvas camera={{ position: [0, 2, 8], fov: 50 }}>
+      {/* Lights */}
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[5, 5, 5]} intensity={2} />
+      <directionalLight position={[-5, -5, -5]} intensity={1} />
+      
       <Suspense fallback={null}>
-        <Box position={[0, 0, 0]} />
+        <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
-      <OrbitControls enableZoom={false} enablePan={false} />
+
+      {/* OrbitControls allows you to orbit around the model.
+          We can disable this later once the camera position is finalized. */}
+      <OrbitControls />
     </Canvas>
   );
 }
+
+// Make sure the GLTF file is preloaded for better performance.
+useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Finalscene.glb');
