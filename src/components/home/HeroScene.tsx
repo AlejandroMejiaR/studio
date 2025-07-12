@@ -1,9 +1,11 @@
+
 "use client";
 
 import { Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import React from 'react';
 
 function Box(props: JSX.IntrinsicElements['mesh']) {
   const ref = React.useRef<THREE.Mesh>(null!);
