@@ -2,16 +2,12 @@
 "use client";
 
 import { Suspense, useRef, useEffect, useState }from 'react';
-import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import type { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
-
-// Make sure the GLTF file is preloaded for better performance.
-useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
-
 
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
@@ -23,25 +19,20 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    // Play the 'Idle' animation by default
     const idleAction = actions.Idle;
     if (idleAction) {
       idleAction.play();
     }
 
-    // Configure the 'Wave' animation to play only once
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 2);
+      waveAction.setLoop(THREE.LoopOnce, 2); // Play twice
       waveAction.clampWhenFinished = true;
     }
 
-    // Listener for when an animation finishes
     const onFinished = (e: any) => {
-      // Check if the finished animation is 'Wave'
       if (e.action === waveAction) {
         setIsAnimating(false);
-        // Smoothly transition back to 'Idle'
         if (idleAction && waveAction) {
           waveAction.fadeOut(0.5);
           idleAction.reset().fadeIn(0.5).play();
@@ -51,22 +42,17 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     mixer.addEventListener('finished', onFinished);
 
-    // Cleanup listener on component unmount
     return () => {
-      mixer.removeEventListener('finished', onFinished)
+      mixer.removeEventListener('finished', onFinished);
     };
-
   }, [actions, mixer]);
 
   const handleModelClick = () => {
-    // Don't do anything if an animation is already in progress
     if (isAnimating || !actions.Idle || !actions.Wave) {
       return;
     }
-
     setIsAnimating(true);
     
-    // Smoothly transition from 'Idle' to 'Wave'
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
 
@@ -76,7 +62,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
     }
   };
 
-  // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
@@ -85,16 +70,15 @@ function CameraPositionLogger() {
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
-  const logCameraPosition = () => {
-    if(!controlsRef.current) return;
-    const { x, y, z } = controlsRef.current.object.position;
-    // console.log(`Camera Position: { x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, z: ${z.toFixed(2)} }`);
-  };
-
-  return <OrbitControls ref={controlsRef} onChange={logCameraPosition} />;
+  return <OrbitControls ref={controlsRef} />;
 }
 
 export default function HeroScene() {
+  // Preload the model here to avoid export issues.
+  useEffect(() => {
+    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
+  }, []);
+
   return (
     <Canvas camera={{ position: [0, 0, 5], fov: 30 }}>
       {/* Lights */}
@@ -112,10 +96,10 @@ export default function HeroScene() {
       {/* Post-processing effects */}
       <EffectComposer>
         <Bloom 
-          luminanceThreshold={0.3} // Only objects brighter than this threshold will bloom
-          luminanceSmoothing={0.9} // Smoothness of the bloom effect
-          height={300} // Quality of the bloom effect
-          intensity={0.1} // Strength of the bloom effect
+          luminanceThreshold={0.3}
+          luminanceSmoothing={0.9}
+          height={300}
+          intensity={0.1}
         />
       </EffectComposer>
     </Canvas>
