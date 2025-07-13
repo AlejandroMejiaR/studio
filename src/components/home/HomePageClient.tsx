@@ -261,7 +261,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
               "absolute top-0 left-0 w-full z-20",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
-            style={{ top: '30px', height: '650px' }}
+            style={{ top: '30px', height: '750px' }}
           >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <HeroScene />
