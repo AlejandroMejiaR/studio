@@ -145,7 +145,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
   };
   
-  const renderStyledText = (text: string | undefined, language: Language) => {
+  const renderStyledText = (text: string | undefined, language: Language, isLastLine: boolean = false) => {
     if (!text) return null;
 
     const colorAnimatedWordsConfig = {
@@ -153,24 +153,51 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       ES: ['UX', 'Videojuegos', 'IA']
     };
 
+    let textToRender: React.ReactNode = text;
+
+    if (isLastLine) {
+        if (language === 'EN') {
+            const parts = text.split('the future');
+            textToRender = (
+                <>
+                    {parts[0]}the <br className="hidden md:block" />future{parts[1]}
+                </>
+            );
+        }
+        if (language === 'ES') {
+            const parts = text.split('el futuro');
+            textToRender = (
+                <>
+                    {parts[0]}el <br className="hidden md:block" />futuro{parts[1]}
+                </>
+            );
+        }
+    }
+
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
     const stylingRegex = new RegExp(`(${phrasesToColorAnimate.join('|')})`, 'g');
-    const parts = text.split(stylingRegex).filter(Boolean);
+    const finalParts = typeof textToRender === 'string' 
+        ? textToRender.split(stylingRegex).filter(Boolean)
+        : [textToRender]; // if it's already JSX, don't split it further
 
-    return (
-      <Fragment>
-        {parts.map((part, index) => {
-           if (phrasesToColorAnimate.includes(part)) {
-            return (
-              <span key={index} className="animate-text-pulse font-bold text-accent">
-                {part}
-              </span>
-            );
-          }
-          return <Fragment key={index}>{part}</Fragment>;
-        })}
-      </Fragment>
-    );
+    if (typeof textToRender === 'string') {
+        return (
+            <Fragment>
+                {finalParts.map((part, index) => {
+                    if (typeof part === 'string' && phrasesToColorAnimate.includes(part)) {
+                        return (
+                            <span key={index} className="animate-text-pulse font-bold text-accent">
+                                {part}
+                            </span>
+                        );
+                    }
+                    return <Fragment key={index}>{part}</Fragment>;
+                })}
+            </Fragment>
+        );
+    }
+
+    return textToRender; // Return the JSX with the <br> tag
   };
   
   const fullHeroText = useMemo(() => {
@@ -213,7 +240,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             className: 'text-foreground mb-12'
         },
         {
-            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language)}</div>,
+            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language, true)}</div>,
             delayAfter: 0,
             className: 'text-foreground'
         }
@@ -238,7 +265,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             <div className={cn('text-foreground', fontSizes[0], 'mb-6')}>{renderStyledText(lines[0], language)}</div>
             <div className={cn('text-foreground', fontSizes[1], 'mb-6')}>{renderStyledText(lines[1], language)}</div>
             <div className={cn('text-foreground', fontSizes[2], 'mb-12')}>{renderStyledText(lines[2], language)}</div>
-            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language)}</div>
+            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language, true)}</div>
         </>
     );
   };
@@ -256,7 +283,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {!isMobile && (
           <div 
             className={cn(
-              "absolute inset-0 w-full h-full z-20",
+              "absolute inset-0 w-full h-full z-20 pointer-events-none",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
             style={{ top: '30px' }}
@@ -272,15 +299,16 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         >
           <div className="container mx-auto">
             <div className={cn(
-              "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000 pointer-events-none",
-              isContentVisible ? 'opacity-100' : 'opacity-0'
+              "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000",
+              isContentVisible ? 'opacity-100' : 'opacity-0',
+              !isMobile && "pointer-events-none"
             )}>
               {/* Text Container */}
               <div className={cn(
-                "w-full flex flex-col items-center pointer-events-auto",
+                "w-full flex flex-col items-center",
                 !isMobile && "md:w-3/5"
               )}>
-                <div className="w-full text-left md:items-start flex flex-col items-center">
+                <div className="w-full text-left md:items-start flex flex-col items-center pointer-events-auto">
                   {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                       <StaggeredTextAnimation
                         key={language}
@@ -297,7 +325,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 </div>
 
                 <div className={cn(
-                  "flex justify-center w-full pt-16",
+                  "flex justify-center w-full pt-16 pointer-events-auto",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
