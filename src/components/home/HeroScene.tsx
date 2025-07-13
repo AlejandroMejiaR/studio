@@ -3,7 +3,7 @@
 
 import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
@@ -68,38 +68,14 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-
-// A helper component to log camera position and target during development.
-function CameraPositionLogger() {
+// A helper component to set the camera's target.
+function CameraSetup() {
   const { camera } = useThree();
-  const controls = useRef<any>();
-
   useEffect(() => {
-    const onControlsChange = () => {
-      if (controls.current) {
-        const position = camera.position.toArray();
-        const target = controls.current.target.toArray();
-        console.log(`Position: [${position.map(p => p.toFixed(2)).join(', ')}]`);
-        console.log(`Target: [${target.map(t => t.toFixed(2)).join(', ')}]`);
-      }
-    };
-
-    if (controls.current) {
-      // Log initial position
-      onControlsChange();
-      // Add event listener for changes
-      controls.current.addEventListener('end', onControlsChange);
-    }
-    
-    return () => {
-      if (controls.current) {
-        controls.current.removeEventListener('end', onControlsChange);
-      }
-    };
+    camera.lookAt(new THREE.Vector3(-1.49, -1.22, -0.12));
+    camera.updateProjectionMatrix();
   }, [camera]);
-
-  // OrbitControls now takes full control. `makeDefault` makes it the default controller.
-  return <OrbitControls ref={controls} makeDefault />;
+  return null;
 }
 
 
@@ -110,7 +86,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ fov: 30 }}>
+    <Canvas camera={{ position: [0.86, 0.13, 1.79], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
@@ -120,8 +96,8 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
       
-      {/* Logger for finding camera position/target */}
-      <CameraPositionLogger />
+      {/* Set the final camera target */}
+      <CameraSetup />
 
       {/* Post-processing effects */}
       <EffectComposer>
