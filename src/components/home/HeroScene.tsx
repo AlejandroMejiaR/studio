@@ -91,9 +91,8 @@ function CameraSetup({ config }: { config: { position: THREE.Vector3, target: TH
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
-  const controlsRef = useRef<any>();
 
-  const cameraConfigs: Record<ScreenSize, { position: THREE.Vector3, target: THREE.Vector3 }> = {
+  const cameraConfigs: Record<Exclude<ScreenSize, 'mobile'>, { position: THREE.Vector3, target: THREE.Vector3 }> = {
     desktop: {
       position: new THREE.Vector3(0.87, 0.13, 1.78),
       target: new THREE.Vector3(-1.49, -1.22, -0.12),
@@ -102,21 +101,17 @@ export default function HeroScene() {
       position: new THREE.Vector3(0.95, 0.52, 1.90),
       target: new THREE.Vector3(-1.17, -1.49, -0.33),
     },
-    mobile: {
-      position: new THREE.Vector3(1.22, 1.06, 2.07),
-      target: new THREE.Vector3(-0.89, -1.60, -0.17),
-    }
   };
   
-  const cameraConfig = screenSize ? cameraConfigs[screenSize] : cameraConfigs.desktop;
+  // Default to desktop config if screenSize is not yet available or is mobile (though it shouldn't be rendered on mobile)
+  const cameraConfig = screenSize && screenSize !== 'mobile' ? cameraConfigs[screenSize] : cameraConfigs.desktop;
 
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
 
-
-  if (!screenSize) {
-    return null; // Don't render on server or until screen size is known
+  if (!screenSize || screenSize === 'mobile') {
+    return null; // Don't render on server or on mobile
   }
 
   return (

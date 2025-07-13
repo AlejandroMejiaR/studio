@@ -257,7 +257,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div>
       <div className="relative">
-        {screenSize && (
+        {screenSize && screenSize !== 'mobile' && (
           <div 
             className={cn(
               "absolute top-0 left-0 w-full z-20 pointer-events-none",
@@ -278,7 +278,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             <div className={cn(
               "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000",
               isContentVisible ? 'opacity-100' : 'opacity-0',
-              "pointer-events-none"
+              !isMobile && "pointer-events-none" 
             )}>
               {/* Text Container */}
               <div className={cn(
