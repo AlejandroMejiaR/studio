@@ -112,7 +112,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [1.26, 1.26, 1.93], fov: 30 }}>
+    <Canvas camera={{ position: [0.84, -0.24, 1.58], rotation: [-0.33, 0.81, 0.24], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0} />
       <directionalLight position={[5, 5, 5]} intensity={0} />
