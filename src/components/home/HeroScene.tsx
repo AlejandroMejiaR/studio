@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useRef, useEffect, useState }from 'react';
+import { Suspense, useRef, useEffect, useState, useFrame }from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -15,6 +15,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [wavePlayCount, setWavePlayCount] = useState(0);
 
   useEffect(() => {
     const idleAction = actions.Idle;
@@ -24,18 +25,23 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 1);
-      waveAction.clampWhenFinished = true;
+      waveAction.setLoop(THREE.LoopOnce, 1); // Play once per call
+      waveAction.clampWhenFinished = true; // Prevents T-pose between plays
     }
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
-        const idleAction = actions.Idle;
-        if (idleAction) {
+        if (wavePlayCount < 1) { // If it has played once, play it again
+          setWavePlayCount(prev => prev + 1);
+          waveAction.reset().play();
+        } else { // If it has played twice, transition back to idle
           waveAction.fadeOut(0.5);
-          idleAction.reset().fadeIn(0.5).play();
+          const idleAction = actions.Idle;
+          if (idleAction) {
+            idleAction.reset().fadeIn(0.5).play();
+          }
+          setIsAnimating(false);
         }
-        setIsAnimating(false);
       }
     };
 
@@ -44,13 +50,14 @@ function Model(props: JSX.IntrinsicElements['group']) {
     return () => {
       mixer.removeEventListener('finished', onFinished);
     };
-  }, [actions, mixer]);
+  }, [actions, mixer, wavePlayCount]);
 
   const handleModelClick = () => {
     if (isAnimating || !actions.Idle || !actions.Wave) {
       return;
     }
     setIsAnimating(true);
+    setWavePlayCount(0); // Reset play count for the new interaction
     
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
@@ -71,7 +78,7 @@ function CameraPositionLogger() {
 }
 
 export default function HeroScene() {
-  // Preload the model here to avoid export issues.
+  // Preload the model here.
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
