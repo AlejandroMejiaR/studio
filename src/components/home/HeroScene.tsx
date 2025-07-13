@@ -72,40 +72,40 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to set the camera's target.
-function CameraSetup({ config }: { config: { position: THREE.Vector3, target: THREE.Vector3 } }) {
+// A helper component to log camera position and target for debugging.
+function CameraPositionLogger({ screenSize }: { screenSize: ScreenSize | undefined }) {
   const { camera } = useThree();
+  const controls = useRef<any>(null);
+
   useFrame(() => {
-    // Continuously look at the target
-    camera.lookAt(config.target);
-    camera.updateProjectionMatrix();
+    if (controls.current) {
+      // The camera's current rotation is influenced by the controls looking at the target.
+      // We log both to have all necessary info.
+    }
   });
 
   useEffect(() => {
-    // Set initial position
-    camera.position.set(config.position.x, config.position.y, config.position.z);
-  }, [camera, config]);
+    if (controls.current) {
+      const logCameraPosition = () => {
+        const position = camera.position.toArray().map(p => parseFloat(p.toFixed(2)));
+        const target = controls.current.target.toArray().map(t => parseFloat(t.toFixed(2)));
+        console.log(`Current Screen Size: ${screenSize}`);
+        console.log(`Position: [${position.join(', ')}]`);
+        console.log(`Target: [${target.join(', ')}]`);
+      };
+      
+      controls.current.addEventListener('end', logCameraPosition);
+      return () => controls.current.removeEventListener('end', logCameraPosition);
+    }
+  }, [camera, screenSize]);
 
-  return null;
+  return <OrbitControls ref={controls} />;
 }
+
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
-
-  const cameraConfigs: Record<Exclude<ScreenSize, 'mobile'>, { position: THREE.Vector3, target: THREE.Vector3 }> = {
-    desktop: {
-      position: new THREE.Vector3(0.87, 0.13, 1.78),
-      target: new THREE.Vector3(-1.49, -1.22, -0.12),
-    },
-    tablet: {
-      position: new THREE.Vector3(0.95, 0.52, 1.90),
-      target: new THREE.Vector3(-1.17, -1.49, -0.33),
-    },
-  };
   
-  // Default to desktop config if screenSize is not yet available or is mobile (though it shouldn't be rendered on mobile)
-  const cameraConfig = screenSize && screenSize !== 'mobile' ? cameraConfigs[screenSize] : cameraConfigs.desktop;
-
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
@@ -126,7 +126,8 @@ export default function HeroScene() {
             <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
         </Suspense>
         
-        <CameraSetup config={cameraConfig} />
+        {/* Enable logger and controls for positioning */}
+        <CameraPositionLogger screenSize={screenSize} />
 
         {/* Post-processing effects */}
         <EffectComposer>

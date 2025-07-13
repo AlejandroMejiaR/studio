@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 
-export type ScreenSize = 'mobile' | 'tablet' | 'desktop';
+export type ScreenSize = 'mobile' | 'tablet' | 'laptop' | 'desktop';
 
 const getScreenSize = (width: number): ScreenSize => {
   if (width < 768) {
@@ -9,6 +9,9 @@ const getScreenSize = (width: number): ScreenSize => {
   }
   if (width < 1024) {
     return 'tablet';
+  }
+  if (width < 1440) {
+    return 'laptop';
   }
   return 'desktop';
 };
