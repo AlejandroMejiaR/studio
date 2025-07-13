@@ -9,6 +9,9 @@ import React from 'react';
 import type { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
 
+// Make sure the GLTF file is preloaded for better performance.
+useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
+
 
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
@@ -118,6 +121,3 @@ export default function HeroScene() {
     </Canvas>
   );
 }
-
-// Make sure the GLTF file is preloaded for better performance.
-useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
