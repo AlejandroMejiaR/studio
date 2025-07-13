@@ -130,10 +130,10 @@ export default function HeroScene() {
         We provide a target for the camera to look at, and then disable the controls.
         This avoids conflicts with setting a manual rotation.
       */}
-      <OrbitControls enabled={false} target={[-0.42, -0.67, 0.23]} />
+      {/* <OrbitControls enabled={false} target={[-0.42, -0.67, 0.23]} /> */}
 
       {/* Uncomment this to find a new camera position */}
-      {/* <CameraPositionLogger /> */}
+      <CameraPositionLogger />
 
       {/* Post-processing effects */}
       <EffectComposer>
