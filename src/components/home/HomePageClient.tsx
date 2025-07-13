@@ -300,7 +300,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 )}>
                   <Button
                     size="icon"
-                    variant="outline"
                     asChild
                     className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
                     aria-label={viewWorkButtonText}
