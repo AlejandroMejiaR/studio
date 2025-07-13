@@ -1,21 +1,70 @@
 
 "use client";
 
-import { Suspense, useRef } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import { Suspense, useRef, useEffect, useState }from 'react';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import type { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
+import * as THREE from 'three';
 
 
-// This component loads and displays the GLB model.
+// This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
-  // useGLTF hook preloads and caches the model.
-  const { scene } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
-  
+  const group = useRef<THREE.Group>(null);
+  // useGLTF hook preloads and caches the model, including its animations.
+  const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
+  // useAnimations hook provides controls for the animations.
+  const { actions, mixer } = useAnimations(animations, group);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    // Play the 'Idle' animation by default
+    const idleAction = actions.Idle;
+    if (idleAction) {
+      idleAction.play();
+    }
+
+    // Configure the 'Waving' animation to play only once
+    const waveAction = actions.Waving;
+    if (waveAction) {
+      waveAction.setLoop(THREE.LoopOnce, 1);
+      waveAction.clampWhenFinished = true;
+    }
+
+    // Listener for when an animation finishes
+    const onFinished = (e: any) => {
+      // Check if the finished animation is 'Waving'
+      if (e.action === waveAction) {
+        setIsAnimating(false);
+        // Smoothly transition back to 'Idle'
+        if (idleAction) {
+          waveAction.crossFadeTo(idleAction, 0.3, true);
+        }
+      }
+    };
+
+    mixer.addEventListener('finished', onFinished);
+
+    // Cleanup listener on component unmount
+    return () => mixer.removeEventListener('finished', onFinished);
+
+  }, [actions, mixer]);
+
+  const handleModelClick = () => {
+    // Don't do anything if an animation is already in progress
+    if (isAnimating || !actions.Idle || !actions.Waving) return;
+
+    setIsAnimating(true);
+    
+    // Smoothly transition from 'Idle' to 'Waving'
+    actions.Idle.crossFadeTo(actions.Waving, 0.3, true);
+    actions.Waving.reset().play();
+  };
+
   // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
-  return <primitive object={scene} {...props} />;
+  return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
 // A helper component to log camera position
