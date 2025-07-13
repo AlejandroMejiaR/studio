@@ -256,7 +256,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {!isMobile && (
           <div 
             className={cn(
-              "absolute inset-0 w-full h-full z-0",
+              "absolute inset-0 w-full h-full z-20",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
             style={{ top: '30px' }}
@@ -272,15 +272,15 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         >
           <div className="container mx-auto">
             <div className={cn(
-              "relative z-10 w-full h-full flex flex-col justify-center transition-opacity duration-1000",
+              "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000 pointer-events-none",
               isContentVisible ? 'opacity-100' : 'opacity-0'
             )}>
               {/* Text Container */}
               <div className={cn(
-                "w-full flex flex-col items-center",
-                !isMobile && "md:w-3/5 md:items-start"
+                "w-full flex flex-col items-center pointer-events-auto",
+                !isMobile && "md:w-3/5"
               )}>
-                <div className="w-full">
+                <div className="w-full text-left md:items-start flex flex-col items-center">
                   {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                       <StaggeredTextAnimation
                         key={language}
