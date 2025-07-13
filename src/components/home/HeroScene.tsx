@@ -26,8 +26,8 @@ function Model(props: JSX.IntrinsicElements['group']) {
       idleAction.play();
     }
 
-    // Configure the 'Waving' animation to play only once
-    const waveAction = actions.Waving;
+    // Configure the 'WavingSide' animation to play only once
+    const waveAction = actions.WavingSide;
     if (waveAction) {
       waveAction.setLoop(THREE.LoopOnce, 1);
       waveAction.clampWhenFinished = true;
@@ -35,7 +35,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     // Listener for when an animation finishes
     const onFinished = (e: any) => {
-      // Check if the finished animation is 'Waving'
+      // Check if the finished animation is 'WavingSide'
       if (e.action === waveAction) {
         setIsAnimating(false);
         // Smoothly transition back to 'Idle'
@@ -55,13 +55,13 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
   const handleModelClick = () => {
     // Don't do anything if an animation is already in progress
-    if (isAnimating || !actions.Idle || !actions.Waving) return;
+    if (isAnimating || !actions.Idle || !actions.WavingSide) return;
 
     setIsAnimating(true);
     
-    // Smoothly transition from 'Idle' to 'Waving'
-    actions.Idle.crossFadeTo(actions.Waving, 0.3, true);
-    actions.Waving.reset().play();
+    // Smoothly transition from 'Idle' to 'WavingSide'
+    actions.Idle.crossFadeTo(actions.WavingSide, 0.3, true);
+    actions.WavingSide.reset().play();
   };
 
   // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
