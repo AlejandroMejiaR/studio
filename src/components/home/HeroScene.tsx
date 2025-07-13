@@ -115,7 +115,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [0.68, -0.04, 1.57], rotation: [-0.44, 0.64, 0.27], fov: 30 }}>
+    <Canvas camera={{ position: [0.68, -0.04, 1.57], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0} />
       <directionalLight position={[5, 5, 5]} intensity={0} />
@@ -125,8 +125,15 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
 
-      {/* OrbitControls have been disabled to set the final camera position */}
+      {/* 
+        This is the correct way to set a static camera view based on OrbitControls.
+        We provide a target for the camera to look at, and then disable the controls.
+        This avoids conflicts with setting a manual rotation.
+      */}
       <OrbitControls enabled={false} target={[-0.42, -0.67, 0.23]} />
+
+      {/* Uncomment this to find a new camera position */}
+      {/* <CameraPositionLogger /> */}
 
       {/* Post-processing effects */}
       <EffectComposer>
