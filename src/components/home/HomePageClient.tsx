@@ -263,10 +263,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 "relative w-full flex items-center",
                 isMobile ? "h-auto" : "h-[calc(100vh-10rem)]"
             )}>
-              {/* 3D Model Column (only on desktop) */}
+              {/* 3D Model Container (only on desktop) */}
               {!isMobile && (
                 <div className={cn(
-                  "absolute inset-0 z-0",
+                  "absolute inset-0 w-full z-0",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
@@ -275,27 +275,29 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 </div>
               )}
               
-              {/* Text Column (overlay on desktop, full width on mobile) */}
+              {/* Text Container (overlay on desktop, full width on mobile) */}
               <div className={cn(
-                "relative z-10 w-full text-foreground",
-                !isMobile && "md:w-1/2"
+                "relative z-10 w-full flex flex-col items-center md:items-start",
+                !isMobile && "md:w-3/5"
               )}>
-                {shouldAnimateHeroIntro && animationItems.length > 0 ? (
-                    <StaggeredTextAnimation
-                      key={language}
-                      items={animationItems}
-                      onComplete={handleAnimationComplete}
-                      className="items-start text-left"
-                    />
-                  ) : (
-                    <div className="items-start text-left">
-                      <StaticSubtitle />
-                    </div>
-                  )
-                }
+                <div className="w-full">
+                  {shouldAnimateHeroIntro && animationItems.length > 0 ? (
+                      <StaggeredTextAnimation
+                        key={language}
+                        items={animationItems}
+                        onComplete={handleAnimationComplete}
+                        className="items-start text-left"
+                      />
+                    ) : (
+                      <div className="items-start text-left">
+                        <StaticSubtitle />
+                      </div>
+                    )
+                  }
+                </div>
 
                 <div className={cn(
-                  "flex justify-center pt-16",
+                  "flex justify-center w-full pt-16",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
