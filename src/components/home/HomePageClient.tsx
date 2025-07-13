@@ -295,7 +295,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 }
 
                 <div className={cn(
-                  "flex justify-center md:justify-start pt-16",
+                  "flex justify-center pt-16",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
