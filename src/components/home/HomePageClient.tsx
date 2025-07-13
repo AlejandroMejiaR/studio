@@ -260,9 +260,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {screenSize && (
           <div 
             className={cn(
-              "absolute top-0 left-0 w-full z-20",
-              areControlsVisible ? "animate-controls-fade-in" : "opacity-0",
-               isMobile ? "pointer-events-none" : ""
+              "absolute top-0 left-0 w-full z-20 pointer-events-none",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
             style={{ top: '30px', height: '750px' }}
           >
@@ -279,7 +278,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             <div className={cn(
               "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000",
               isContentVisible ? 'opacity-100' : 'opacity-0',
-              !isMobile && "pointer-events-none"
+              "pointer-events-none"
             )}>
               {/* Text Container */}
               <div className={cn(

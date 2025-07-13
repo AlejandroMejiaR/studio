@@ -16,6 +16,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
   const [wavePlayCount, setWavePlayCount] = useState(0);
+  const screenSize = useScreenSize();
 
   useEffect(() => {
     const idleAction = actions.Idle;
@@ -52,8 +53,10 @@ function Model(props: JSX.IntrinsicElements['group']) {
     };
   }, [actions, mixer, wavePlayCount]);
 
-  const handleModelClick = () => {
-    if (isAnimating || !actions.Idle || !actions.Wave) {
+  const handleModelClick = (event: any) => {
+    // Stop propagation so the main container doesn't get the click.
+    event.stopPropagation();
+    if (isAnimating || !actions.Idle || !actions.Wave || screenSize === 'mobile') {
       return;
     }
     setIsAnimating(true);
@@ -70,35 +73,21 @@ function Model(props: JSX.IntrinsicElements['group']) {
 }
 
 // A helper component to set the camera's target.
-function CameraSetup({ targetPosition }: { targetPosition: THREE.Vector3 }) {
+function CameraSetup({ config }: { config: { position: THREE.Vector3, target: THREE.Vector3 } }) {
   const { camera } = useThree();
-  useEffect(() => {
-    camera.lookAt(targetPosition);
+  useFrame(() => {
+    // Continuously look at the target
+    camera.lookAt(config.target);
     camera.updateProjectionMatrix();
-  }, [camera, targetPosition]);
+  });
+
+  useEffect(() => {
+    // Set initial position
+    camera.position.set(config.position.x, config.position.y, config.position.z);
+  }, [camera, config]);
+
   return null;
 }
-
-// Helper to log camera position for setup.
-const CameraPositionLogger = ({ controlsRef }: { controlsRef: React.RefObject<any> }) => {
-  useEffect(() => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-
-    const logCameraPosition = () => {
-      const camera = controls.object;
-      const target = controls.target;
-      console.log(`Position: [${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}]`);
-      console.log(`Target: [${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)}]`);
-    };
-
-    controls.addEventListener('end', logCameraPosition);
-    return () => controls.removeEventListener('end', logCameraPosition);
-  }, [controlsRef]);
-
-  return null;
-};
-
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
@@ -106,23 +95,19 @@ export default function HeroScene() {
 
   const cameraConfigs: Record<ScreenSize, { position: THREE.Vector3, target: THREE.Vector3 }> = {
     desktop: {
-      position: new THREE.Vector3(0.86, 0.13, 1.79),
+      position: new THREE.Vector3(0.87, 0.13, 1.78),
       target: new THREE.Vector3(-1.49, -1.22, -0.12),
     },
     tablet: {
-      // Placeholder, to be defined
-      position: new THREE.Vector3(0.86, 0.13, 1.79),
-      target: new THREE.Vector3(-1.49, -1.22, -0.12),
+      position: new THREE.Vector3(0.95, 0.52, 1.90),
+      target: new THREE.Vector3(-1.17, -1.49, -0.33),
     },
     mobile: {
-      // Placeholder, to be defined
-      position: new THREE.Vector3(0.86, 0.13, 1.79),
-      target: new THREE.Vector3(-1.49, -1.22, -0.12),
+      position: new THREE.Vector3(1.22, 1.06, 2.07),
+      target: new THREE.Vector3(-0.89, -1.60, -0.17),
     }
   };
   
-  // For now, always enable controls to find positions
-  const enableControls = true;
   const cameraConfig = screenSize ? cameraConfigs[screenSize] : cameraConfigs.desktop;
 
   useEffect(() => {
@@ -135,34 +120,29 @@ export default function HeroScene() {
   }
 
   return (
-    <Canvas camera={{ position: cameraConfig.position.toArray(), fov: 30 }}>
-      {/* Lights */}
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 5, 5]} intensity={1} />
-      <directionalLight position={[-5, -5, -5]} intensity={0.5} />
-      
-      <Suspense fallback={null}>
-        <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
-      </Suspense>
-      
-      {enableControls ? (
-        <>
-          <OrbitControls ref={controlsRef} target={cameraConfig.target} />
-          <CameraPositionLogger controlsRef={controlsRef} />
-        </>
-      ) : (
-        <CameraSetup targetPosition={cameraConfig.target} />
-      )}
+    <div className="w-full h-full pointer-events-auto">
+        <Canvas camera={{ fov: 30 }}>
+        {/* Lights */}
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
+        <directionalLight position={[-5, -5, -5]} intensity={0.5} />
+        
+        <Suspense fallback={null}>
+            <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
+        </Suspense>
+        
+        <CameraSetup config={cameraConfig} />
 
-      {/* Post-processing effects */}
-      <EffectComposer>
-        <Bloom 
-          luminanceThreshold={0.3}
-          luminanceSmoothing={0.9}
-          height={300}
-          intensity={0.1}
-        />
-      </EffectComposer>
-    </Canvas>
+        {/* Post-processing effects */}
+        <EffectComposer>
+            <Bloom 
+            luminanceThreshold={0.3}
+            luminanceSmoothing={0.9}
+            height={300}
+            intensity={0.1}
+            />
+        </EffectComposer>
+        </Canvas>
+    </div>
   );
 }
