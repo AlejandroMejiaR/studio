@@ -69,7 +69,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to log camera position, rotation, and zoom.
+// A helper component to log camera position, rotation, zoom, and target.
 function CameraPositionLogger() {
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
@@ -81,12 +81,14 @@ function CameraPositionLogger() {
     const logCameraState = () => {
       const { x: posX, y: posY, z: posZ } = camera.position;
       const { x: rotX, y: rotY, z: rotZ } = camera.rotation;
+      const { x: targetX, y: targetY, z: targetZ } = controls.target;
       const zoom = camera.zoom;
       const fov = (camera as THREE.PerspectiveCamera).fov; // Cast to get fov
 
       console.log(
         `Position: { x: ${posX.toFixed(2)}, y: ${posY.toFixed(2)}, z: ${posZ.toFixed(2)} },\n` +
         `Rotation: { _x: ${rotX.toFixed(2)}, _y: ${rotY.toFixed(2)}, _z: ${rotZ.toFixed(2)} },\n` +
+        `Target: { x: ${targetX.toFixed(2)}, y: ${targetY.toFixed(2)}, z: ${targetZ.toFixed(2)} },\n` +
         `Zoom: ${zoom.toFixed(2)},\n` +
         `FOV: ${fov}`
       );
@@ -102,7 +104,8 @@ function CameraPositionLogger() {
     };
   }, [camera]);
 
-  return <OrbitControls ref={controlsRef} />;
+  // Set the initial target to match the model's y-position for more intuitive panning.
+  return <OrbitControls ref={controlsRef} target={[0, -2, 0]} />;
 }
 
 export default function HeroScene() {
@@ -122,7 +125,7 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
 
-      {/* OrbitControls allows you to orbit around the model. */}
+      {/* OrbitControls allows you to orbit around the model. Re-enabled for positioning. */}
       <CameraPositionLogger />
 
       {/* Post-processing effects */}
