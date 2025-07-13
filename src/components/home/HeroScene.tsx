@@ -3,10 +3,9 @@
 
 import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
-import type { OrbitControls as OrbitControlsImpl } from 'three/examples/jsm/controls/OrbitControls';
 import * as THREE from 'three';
 
 // This component loads and displays the GLB model and handles its animations.
@@ -69,44 +68,17 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to log camera position, rotation, zoom, and target.
-function CameraPositionLogger() {
+// A helper component to set the final camera orientation.
+function CameraSetup() {
   const { camera } = useThree();
-  const controlsRef = useRef<OrbitControlsImpl>(null);
-
   useEffect(() => {
-    const controls = controlsRef.current;
-    if (!controls) return;
-
-    const logCameraState = () => {
-      const { x: posX, y: posY, z: posZ } = camera.position;
-      const { x: rotX, y: rotY, z: rotZ } = camera.rotation;
-      const { x: targetX, y: targetY, z: targetZ } = controls.target;
-      const zoom = camera.zoom;
-      const fov = (camera as THREE.PerspectiveCamera).fov; // Cast to get fov
-
-      console.log(
-        `Position: { x: ${posX.toFixed(2)}, y: ${posY.toFixed(2)}, z: ${posZ.toFixed(2)} },\n` +
-        `Rotation: { _x: ${rotX.toFixed(2)}, _y: ${rotY.toFixed(2)}, _z: ${rotZ.toFixed(2)} },\n` +
-        `Target: { x: ${targetX.toFixed(2)}, y: ${targetY.toFixed(2)}, z: ${targetZ.toFixed(2)} },\n` +
-        `Zoom: ${zoom.toFixed(2)},\n` +
-        `FOV: ${fov}`
-      );
-    };
-
-    controls.addEventListener('change', logCameraState);
-    
-    // Initial log
-    logCameraState();
-
-    return () => {
-      controls.removeEventListener('change', logCameraState);
-    };
+    // This runs once after the component mounts and sets the camera's focus point.
+    camera.lookAt(new THREE.Vector3(-0.40, -0.65, 0.20));
+    camera.updateProjectionMatrix(); // Important to apply the changes
   }, [camera]);
-
-  // Set the initial target to match the model's y-position for more intuitive panning.
-  return <OrbitControls ref={controlsRef} target={[-0.42, -0.67, 0.23]} />;
+  return null;
 }
+
 
 export default function HeroScene() {
   // Preload the model here.
@@ -115,7 +87,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [0.68, -0.04, 1.57], fov: 30 }}>
+    <Canvas camera={{ position: [0.66, -0.05, 1.47], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0} />
       <directionalLight position={[5, 5, 5]} intensity={0} />
@@ -125,15 +97,8 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
 
-      {/* 
-        This is the correct way to set a static camera view based on OrbitControls.
-        We provide a target for the camera to look at, and then disable the controls.
-        This avoids conflicts with setting a manual rotation.
-      */}
-      {/* <OrbitControls enabled={false} target={[-0.42, -0.67, 0.23]} /> */}
-
-      {/* Uncomment this to find a new camera position */}
-      <CameraPositionLogger />
+      {/* Set the final, static camera view */}
+      <CameraSetup />
 
       {/* Post-processing effects */}
       <EffectComposer>
