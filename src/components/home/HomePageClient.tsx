@@ -258,7 +258,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {!isMobile && (
           <div 
             className={cn(
-              "absolute top-0 left-0 w-full z-20",
+              "absolute top-0 left-0 w-full z-20 pointer-events-none",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
             style={{ top: '30px', height: '750px' }}
