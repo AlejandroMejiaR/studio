@@ -12,7 +12,7 @@ import { useScreenSize, type ScreenSize } from '@/hooks/use-screen-size';
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
+  const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Scene.glb');
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
   const [wavePlayCount, setWavePlayCount] = useState(0);
@@ -137,7 +137,7 @@ export default function HeroScene() {
   }, []);
   
   useEffect(() => {
-    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
+    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Scene.glb');
   }, []);
 
   if (!screenSize || screenSize === 'mobile') {
@@ -150,9 +150,9 @@ export default function HeroScene() {
         {/* Set canvas background color to match the page's theme */}
         <color attach="background" args={[bgColor]} />
         {/* Lights */}
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} />
-        <directionalLight position={[-5, -5, -5]} intensity={0.5} />
+        <ambientLight intensity={0.1} />
+        <directionalLight position={[0, 10, 0]} intensity={1} />
+        <directionalLight position={[0, 2, -10]} intensity={1.5} />
         
         <Suspense fallback={null}>
             <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
