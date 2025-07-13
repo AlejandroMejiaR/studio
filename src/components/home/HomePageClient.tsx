@@ -145,7 +145,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     }
   };
   
-  const renderStyledText = (text: string | undefined, language: Language, isLastLine: boolean = false) => {
+  const renderStyledText = (text: string | undefined, language: Language) => {
     if (!text) return null;
 
     const colorAnimatedWordsConfig = {
@@ -153,51 +153,25 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       ES: ['UX', 'Videojuegos', 'IA']
     };
 
-    let textToRender: React.ReactNode = text;
-
-    if (isLastLine) {
-        if (language === 'EN') {
-            const parts = text.split('the future');
-            textToRender = (
-                <>
-                    {parts[0]}the <br className="hidden md:block" />future{parts[1]}
-                </>
-            );
-        }
-        if (language === 'ES') {
-            const parts = text.split('el futuro');
-            textToRender = (
-                <>
-                    {parts[0]}el <br className="hidden md:block" />futuro{parts[1]}
-                </>
-            );
-        }
-    }
-
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
     const stylingRegex = new RegExp(`(${phrasesToColorAnimate.join('|')})`, 'g');
-    const finalParts = typeof textToRender === 'string' 
-        ? textToRender.split(stylingRegex).filter(Boolean)
-        : [textToRender]; // if it's already JSX, don't split it further
+    
+    const finalParts = text.split(stylingRegex).filter(Boolean);
 
-    if (typeof textToRender === 'string') {
-        return (
-            <Fragment>
-                {finalParts.map((part, index) => {
-                    if (typeof part === 'string' && phrasesToColorAnimate.includes(part)) {
-                        return (
-                            <span key={index} className="animate-text-pulse font-bold text-accent">
-                                {part}
-                            </span>
-                        );
-                    }
-                    return <Fragment key={index}>{part}</Fragment>;
-                })}
-            </Fragment>
-        );
-    }
-
-    return textToRender; // Return the JSX with the <br> tag
+    return (
+        <Fragment>
+            {finalParts.map((part, index) => {
+                if (phrasesToColorAnimate.includes(part)) {
+                    return (
+                        <span key={index} className="animate-text-pulse font-bold text-accent">
+                            {part}
+                        </span>
+                    );
+                }
+                return <Fragment key={index}>{part}</Fragment>;
+            })}
+        </Fragment>
+    );
   };
   
   const fullHeroText = useMemo(() => {
@@ -240,7 +214,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             className: 'text-foreground mb-12'
         },
         {
-            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language, true)}</div>,
+            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language)}</div>,
             delayAfter: 0,
             className: 'text-foreground'
         }
@@ -265,7 +239,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
             <div className={cn('text-foreground', fontSizes[0], 'mb-6')}>{renderStyledText(lines[0], language)}</div>
             <div className={cn('text-foreground', fontSizes[1], 'mb-6')}>{renderStyledText(lines[1], language)}</div>
             <div className={cn('text-foreground', fontSizes[2], 'mb-12')}>{renderStyledText(lines[2], language)}</div>
-            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language, true)}</div>
+            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language)}</div>
         </>
     );
   };
