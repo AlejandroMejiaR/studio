@@ -278,7 +278,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
               {/* Text Column (overlay on desktop, full width on mobile) */}
               <div className={cn(
                 "relative z-10 w-full text-foreground",
-                !isMobile && "md:w-[60%]"
+                !isMobile && "md:w-1/2"
               )}>
                 {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                     <StaggeredTextAnimation
