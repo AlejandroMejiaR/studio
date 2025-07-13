@@ -68,15 +68,34 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to set the final camera orientation.
-function CameraSetup() {
+
+// A helper component to log camera position and target during development.
+function CameraPositionLogger() {
   const { camera } = useThree();
+  const controls = useRef<any>();
+
   useEffect(() => {
-    // This runs once after the component mounts and sets the camera's focus point.
-    // camera.lookAt(new THREE.Vector3(-0.40, -0.65, 0.20));
-    // camera.updateProjectionMatrix(); // Important to apply the changes
+    const onControlsChange = () => {
+      if (controls.current) {
+        const position = camera.position.toArray();
+        const target = controls.current.target.toArray();
+        console.log(`Position: [${position.map(p => p.toFixed(2)).join(', ')}]`);
+        console.log(`Target: [${target.map(t => t.toFixed(2)).join(', ')}]`);
+      }
+    };
+
+    if (controls.current) {
+      controls.current.addEventListener('end', onControlsChange);
+    }
+    
+    return () => {
+      if (controls.current) {
+        controls.current.removeEventListener('end', onControlsChange);
+      }
+    };
   }, [camera]);
-  return null;
+
+  return <OrbitControls ref={controls} />;
 }
 
 
@@ -96,12 +115,9 @@ export default function HeroScene() {
       <Suspense fallback={null}>
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
-
-      {/* Set the final, static camera view */}
-      <CameraSetup />
       
-      {/* OrbitControls for camera manipulation during development */}
-      <OrbitControls />
+      {/* Logger for finding camera position/target */}
+      <CameraPositionLogger />
 
       {/* Post-processing effects */}
       <EffectComposer>
