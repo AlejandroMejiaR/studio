@@ -257,7 +257,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-7xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="relative w-full h-[500px] flex items-center">
+            <div className="relative w-full h-[calc(100vh-10rem)] flex items-center">
               {/* 3D Model Column (as background) */}
               <div className={cn(
                 "absolute inset-0 z-0",
