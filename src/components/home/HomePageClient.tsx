@@ -14,6 +14,7 @@ import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation'
 import React, { Fragment, Suspense } from 'react';
 import { ArrowDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
   ssr: false,
@@ -34,6 +35,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
   const pathname = usePathname();
+  const isMobile = useIsMobile();
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
 
@@ -257,19 +259,27 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           "w-full max-w-7xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="relative w-full h-[calc(100vh-10rem)] flex items-center">
-              {/* 3D Model Column (as background) */}
-              <div className={cn(
-                "absolute inset-0 z-0",
-                areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
-              )}>
-                <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
-                  <HeroScene />
-                </Suspense>
-              </div>
+            <div className={cn(
+                "relative w-full flex items-center",
+                isMobile ? "h-auto" : "h-[calc(100vh-10rem)]"
+            )}>
+              {/* 3D Model Column (only on desktop) */}
+              {!isMobile && (
+                <div className={cn(
+                  "absolute inset-0 z-0",
+                  areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+                )}>
+                  <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+                    <HeroScene />
+                  </Suspense>
+                </div>
+              )}
               
-              {/* Text Column (overlay) */}
-              <div className="relative z-10 w-full md:w-[60%] text-foreground">
+              {/* Text Column (overlay on desktop, full width on mobile) */}
+              <div className={cn(
+                "relative z-10 w-full text-foreground",
+                !isMobile && "md:w-[60%]"
+              )}>
                 {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                     <StaggeredTextAnimation
                       key={language}
@@ -285,7 +295,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 }
 
                 <div className={cn(
-                  "flex justify-center pt-16",
+                  "flex justify-center md:justify-start pt-16",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
