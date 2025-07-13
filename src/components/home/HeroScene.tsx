@@ -12,11 +12,10 @@ import * as THREE from 'three';
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>(null);
-  // useGLTF hook preloads and caches the model, including its animations.
   const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
-  // useAnimations hook provides controls for the animations.
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
+  const waveCount = useRef(0);
 
   useEffect(() => {
     const idleAction = actions.Idle;
@@ -26,16 +25,25 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 2);
+      waveAction.setLoop(THREE.LoopOnce, 1);
       waveAction.clampWhenFinished = true;
     }
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
-        setIsAnimating(false);
-        if (idleAction) {
-          waveAction.fadeOut(0.5);
-          idleAction.reset().fadeIn(0.5).play();
+        waveCount.current++;
+        if (waveCount.current < 2) {
+          // Play the wave animation again
+          waveAction.reset().fadeIn(0.5).play();
+        } else {
+          // Finished waving twice, now go back to idle
+          const idleAction = actions.Idle;
+          if (idleAction) {
+            waveAction.fadeOut(0.5);
+            idleAction.reset().fadeIn(0.5).play();
+          }
+          setIsAnimating(false);
+          waveCount.current = 0; // Reset for next interaction
         }
       }
     };
@@ -52,12 +60,13 @@ function Model(props: JSX.IntrinsicElements['group']) {
       return;
     }
     setIsAnimating(true);
+    waveCount.current = 0; // Reset counter on new click
     
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
 
     idleAction.fadeOut(0.5);
-    waveAction.fadeIn(0.5).play();
+    waveAction.reset().fadeIn(0.5).play();
   };
 
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
