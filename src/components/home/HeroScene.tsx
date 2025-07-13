@@ -3,7 +3,7 @@
 
 import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
+import { useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
@@ -72,34 +72,36 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to log camera position and target for debugging.
-function CameraPositionLogger({ screenSize }: { screenSize: ScreenSize | undefined }) {
-  const { camera } = useThree();
-  const controls = useRef<any>(null);
+const cameraConfigs: Record<Exclude<ScreenSize, 'mobile'>, { position: [number, number, number], target: [number, number, number] }> = {
+  desktop: {
+    position: [0.8, 0.09, 1.33],
+    target: [-0.84, -0.85, 0.21],
+  },
+  laptop: {
+    position: [1.14, 0.33, 1.61],
+    target: [-0.68, -0.95, 0.07],
+  },
+  tablet: {
+    position: [1.81, 0.87, 3.48],
+    target: [-0.69, -1.07, 0.26],
+  },
+};
 
-  useFrame(() => {
-    if (controls.current) {
-      // The camera's current rotation is influenced by the controls looking at the target.
-      // We log both to have all necessary info.
-    }
-  });
+function CameraSetup() {
+  const { camera } = useThree();
+  const screenSize = useScreenSize();
 
   useEffect(() => {
-    if (controls.current) {
-      const logCameraPosition = () => {
-        const position = camera.position.toArray().map(p => parseFloat(p.toFixed(2)));
-        const target = controls.current.target.toArray().map(t => parseFloat(t.toFixed(2)));
-        console.log(`Current Screen Size: ${screenSize}`);
-        console.log(`Position: [${position.join(', ')}]`);
-        console.log(`Target: [${target.join(', ')}]`);
-      };
-      
-      controls.current.addEventListener('end', logCameraPosition);
-      return () => controls.current.removeEventListener('end', logCameraPosition);
+    if (screenSize && screenSize !== 'mobile') {
+      const config = cameraConfigs[screenSize];
+      if (config) {
+        camera.position.set(...config.position);
+        camera.lookAt(...config.target);
+      }
     }
   }, [camera, screenSize]);
 
-  return <OrbitControls ref={controls} />;
+  return null;
 }
 
 
@@ -126,8 +128,7 @@ export default function HeroScene() {
             <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
         </Suspense>
         
-        {/* Enable logger and controls for positioning */}
-        <CameraPositionLogger screenSize={screenSize} />
+        <CameraSetup />
 
         {/* Post-processing effects */}
         <EffectComposer>
