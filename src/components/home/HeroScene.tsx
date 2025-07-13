@@ -7,7 +7,7 @@ import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useScreenSize, type ScreenSize } from '@/hooks/use-screen-size';
 
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
@@ -101,30 +101,38 @@ const CameraPositionLogger = ({ controlsRef }: { controlsRef: React.RefObject<an
 
 
 export default function HeroScene() {
-  const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
   const controlsRef = useRef<any>();
 
-  const desktopCamera = {
-    position: new THREE.Vector3(0.86, 0.13, 1.79),
-    target: new THREE.Vector3(-1.49, -1.22, -0.12),
-  };
-
-  // Placeholder for mobile - we will get these values from the user.
-  const mobileCamera = {
-    position: new THREE.Vector3(0.86, 0.13, 1.79),
-    target: new THREE.Vector3(-1.49, -1.22, -0.12),
+  const cameraConfigs: Record<ScreenSize, { position: THREE.Vector3, target: THREE.Vector3 }> = {
+    desktop: {
+      position: new THREE.Vector3(0.86, 0.13, 1.79),
+      target: new THREE.Vector3(-1.49, -1.22, -0.12),
+    },
+    tablet: {
+      // Placeholder, to be defined
+      position: new THREE.Vector3(0.86, 0.13, 1.79),
+      target: new THREE.Vector3(-1.49, -1.22, -0.12),
+    },
+    mobile: {
+      // Placeholder, to be defined
+      position: new THREE.Vector3(0.86, 0.13, 1.79),
+      target: new THREE.Vector3(-1.49, -1.22, -0.12),
+    }
   };
   
-  const cameraConfig = isMobile ? mobileCamera : desktopCamera;
+  // For now, always enable controls to find positions
+  const enableControls = true;
+  const cameraConfig = screenSize ? cameraConfigs[screenSize] : cameraConfigs.desktop;
 
-  // Preload the model here.
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
 
-  // Determine if OrbitControls should be enabled (only for mobile setup)
-  // We'll set this to `true` for the user to find the position.
-  const enableControls = isMobile;
+
+  if (!screenSize) {
+    return null; // Don't render on server or until screen size is known
+  }
 
   return (
     <Canvas camera={{ position: cameraConfig.position.toArray(), fov: 30 }}>

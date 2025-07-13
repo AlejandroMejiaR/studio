@@ -14,7 +14,7 @@ import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation'
 import React, { Fragment, Suspense } from 'react';
 import { ArrowDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useScreenSize } from '@/hooks/use-screen-size';
 
 const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
   ssr: false,
@@ -35,7 +35,9 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
   const pathname = usePathname();
-  const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
+  const isMobile = screenSize === 'mobile';
+
 
   const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
 
@@ -255,11 +257,12 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div>
       <div className="relative">
-        {!isMobile && (
+        {screenSize && (
           <div 
             className={cn(
-              "absolute top-0 left-0 w-full z-20 pointer-events-none",
-              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+              "absolute top-0 left-0 w-full z-20",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0",
+               isMobile ? "pointer-events-none" : ""
             )}
             style={{ top: '30px', height: '750px' }}
           >
