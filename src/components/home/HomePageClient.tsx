@@ -251,15 +251,25 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div className="container mx-auto">
       <section 
-        className="min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
+        className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
       >
         <div className={cn(
           "w-full max-w-7xl transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className="flex flex-col md:flex-row gap-16 items-center">
-              {/* Text Column */}
-              <div className="w-full md:w-1/2 text-foreground">
+            <div className="relative w-full h-[500px] flex items-center">
+              {/* 3D Model Column (as background) */}
+              <div className={cn(
+                "absolute inset-0 z-0",
+                areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+              )}>
+                <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+                  <HeroScene />
+                </Suspense>
+              </div>
+              
+              {/* Text Column (overlay) */}
+              <div className="relative z-10 w-full md:w-[60%] text-foreground">
                 {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                     <StaggeredTextAnimation
                       key={language}
@@ -273,17 +283,6 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     </div>
                   )
                 }
-              </div>
-
-              {/* 3D Model Column */}
-              <div className={cn(
-                "hidden md:flex justify-center items-center w-full md:w-1/2",
-                "h-96 md:h-[500px]",
-                areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
-              )}>
-                <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
-                  <HeroScene />
-                </Suspense>
               </div>
             </div>
 
