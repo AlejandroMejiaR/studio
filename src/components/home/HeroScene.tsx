@@ -107,6 +107,34 @@ function CameraSetup() {
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
+  const [bgColor, setBgColor] = useState('hsl(220 16% 93%)'); // Default light theme bg
+
+  useEffect(() => {
+    // This function reads the computed background color from the body.
+    const updateBgColor = () => {
+      if (typeof window !== 'undefined') {
+        const bodyStyles = window.getComputedStyle(document.body);
+        setBgColor(bodyStyles.backgroundColor);
+      }
+    };
+
+    // Set the initial color
+    updateBgColor();
+
+    // Observe changes to the theme (light/dark mode toggle)
+    const observer = new MutationObserver((mutationsList) => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          updateBgColor();
+        }
+      }
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, []);
   
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
@@ -119,6 +147,8 @@ export default function HeroScene() {
   return (
     <div className="w-full h-full pointer-events-auto">
         <Canvas camera={{ fov: 30 }}>
+        {/* Set canvas background color to match the page's theme */}
+        <color attach="background" args={[bgColor]} />
         {/* Lights */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
