@@ -26,15 +26,15 @@ function Model(props: JSX.IntrinsicElements['group']) {
     const waveAction = actions.Wave;
     if (waveAction) {
       waveAction.setLoop(THREE.LoopOnce, 1);
-      waveAction.clampWhenFinished = true;
+      waveAction.clampWhenFinished = true; // Crucial for smooth transition
     }
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
         waveCount.current++;
         if (waveCount.current < 2) {
-          // Play the wave animation again
-          waveAction.reset().fadeIn(0.5).play();
+          // Play the wave animation again without resetting
+          waveAction.play();
         } else {
           // Finished waving twice, now go back to idle
           const idleAction = actions.Idle;
