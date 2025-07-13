@@ -285,18 +285,18 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 }
 
                 <div className={cn(
-                  "flex flex-col sm:flex-row gap-6 justify-start items-center pt-16",
+                  "flex justify-center pt-16",
                   areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
                     size="icon"
                     variant="outline"
                     asChild
-                    className="h-16 w-16 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
+                    className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
                     aria-label={viewWorkButtonText}
                   >
                     <Link href="/#projects" onClick={handleSmoothScroll}>
-                      <ArrowDown className="h-8 w-8" />
+                      <ArrowDown className="h-10 w-10" />
                     </Link>
                   </Button>
                 </div>
