@@ -259,7 +259,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}>
             <div className="flex flex-col md:flex-row gap-16 items-center">
               {/* Text Column */}
-              <div className="w-full md:w-[60%] text-foreground">
+              <div className="w-full md:w-1/2 text-foreground">
                 {shouldAnimateHeroIntro && animationItems.length > 0 ? (
                     <StaggeredTextAnimation
                       key={language}
@@ -277,7 +277,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
               {/* 3D Model Column */}
               <div className={cn(
-                "hidden md:flex justify-center items-center w-full md:w-[40%]",
+                "hidden md:flex justify-center items-center w-full md:w-1/2",
                 "h-96 md:h-[500px]",
                 areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
               )}>
