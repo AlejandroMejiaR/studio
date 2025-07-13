@@ -39,8 +39,9 @@ function Model(props: JSX.IntrinsicElements['group']) {
       if (e.action === waveAction) {
         setIsAnimating(false);
         // Smoothly transition back to 'Idle'
-        if (idleAction) {
-          waveAction.crossFadeTo(idleAction, 0.3, true);
+        if (idleAction && waveAction) {
+          waveAction.fadeOut(0.3);
+          idleAction.reset().fadeIn(0.3).play();
         }
       }
     };
@@ -73,7 +74,8 @@ function CameraPositionLogger() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
 
   const logCameraPosition = () => {
-    const { x, y, z } = camera.position;
+    if(!controlsRef.current) return;
+    const { x, y, z } = controlsRef.current.object.position;
     console.log(`Camera Position: { x: ${x.toFixed(2)}, y: ${y.toFixed(2)}, z: ${z.toFixed(2)} }`);
   };
 
