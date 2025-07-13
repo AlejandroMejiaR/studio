@@ -26,14 +26,14 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 2); // Play twice
+      waveAction.setLoop(THREE.LoopOnce, 2); // Set to play twice
       waveAction.clampWhenFinished = true;
     }
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
         setIsAnimating(false);
-        if (idleAction && waveAction) {
+        if (idleAction) {
           waveAction.fadeOut(0.5);
           idleAction.reset().fadeIn(0.5).play();
         }
@@ -56,10 +56,8 @@ function Model(props: JSX.IntrinsicElements['group']) {
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
 
-    if (idleAction && waveAction) {
-      idleAction.fadeOut(0.5);
-      waveAction.reset().fadeIn(0.5).play();
-    }
+    idleAction.fadeOut(0.5);
+    waveAction.reset().fadeIn(0.5).play();
   };
 
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
