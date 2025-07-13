@@ -12,10 +12,9 @@ import * as THREE from 'three';
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
+  const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
-  const waveCount = useRef(0);
 
   useEffect(() => {
     const idleAction = actions.Idle;
@@ -26,25 +25,17 @@ function Model(props: JSX.IntrinsicElements['group']) {
     const waveAction = actions.Wave;
     if (waveAction) {
       waveAction.setLoop(THREE.LoopOnce, 1);
-      waveAction.clampWhenFinished = true; // Crucial for smooth transition
+      waveAction.clampWhenFinished = true;
     }
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
-        waveCount.current++;
-        if (waveCount.current < 2) {
-          // Play the wave animation again without resetting
-          waveAction.play();
-        } else {
-          // Finished waving twice, now go back to idle
-          const idleAction = actions.Idle;
-          if (idleAction) {
-            waveAction.fadeOut(0.5);
-            idleAction.reset().fadeIn(0.5).play();
-          }
-          setIsAnimating(false);
-          waveCount.current = 0; // Reset for next interaction
+        const idleAction = actions.Idle;
+        if (idleAction) {
+          waveAction.fadeOut(0.5);
+          idleAction.reset().fadeIn(0.5).play();
         }
+        setIsAnimating(false);
       }
     };
 
@@ -60,7 +51,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
       return;
     }
     setIsAnimating(true);
-    waveCount.current = 0; // Reset counter on new click
     
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
@@ -83,7 +73,7 @@ function CameraPositionLogger() {
 export default function HeroScene() {
   // Preload the model here to avoid export issues.
   useEffect(() => {
-    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/FinalS.glb');
+    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
 
   return (
