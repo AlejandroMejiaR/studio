@@ -255,64 +255,59 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       <section 
         className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
       >
+        {/* 3D Model Container (only on desktop) */}
+        {!isMobile && (
+          <div className={cn(
+            "absolute inset-0 w-full h-full z-0",
+            areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+          )}>
+            <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
+              <HeroScene />
+            </Suspense>
+          </div>
+        )}
+        
         <div className={cn(
-          "w-full max-w-7xl transition-opacity duration-1000",
+          "relative z-10 w-full h-full max-w-7xl flex flex-col justify-center transition-opacity duration-1000",
           isContentVisible ? 'opacity-100' : 'opacity-0'
         )}>
-            <div className={cn(
-                "relative w-full flex items-center",
-                isMobile ? "h-auto" : "h-[calc(100vh-10rem)]"
-            )}>
-              {/* 3D Model Container (only on desktop) */}
-              {!isMobile && (
-                <div className={cn(
-                  "absolute inset-0 w-full z-0",
-                  areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
-                )}>
-                  <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
-                    <HeroScene />
-                  </Suspense>
-                </div>
-              )}
-              
-              {/* Text Container (overlay on desktop, full width on mobile) */}
-              <div className={cn(
-                "relative z-10 w-full flex flex-col items-center md:items-start",
-                !isMobile && "md:w-3/5"
-              )}>
-                <div className="w-full">
-                  {shouldAnimateHeroIntro && animationItems.length > 0 ? (
-                      <StaggeredTextAnimation
-                        key={language}
-                        items={animationItems}
-                        onComplete={handleAnimationComplete}
-                        className="items-start text-left"
-                      />
-                    ) : (
-                      <div className="items-start text-left">
-                        <StaticSubtitle />
-                      </div>
-                    )
-                  }
-                </div>
-
-                <div className={cn(
-                  "flex justify-center w-full pt-16",
-                  areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
-                )}>
-                  <Button
-                    size="icon"
-                    asChild
-                    className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
-                    aria-label={viewWorkButtonText}
-                  >
-                    <Link href="/#projects" onClick={handleSmoothScroll}>
-                      <ArrowDown className="h-10 w-10" />
-                    </Link>
-                  </Button>
-                </div>
-              </div>
+          {/* Text Container */}
+          <div className={cn(
+            "w-full flex flex-col items-center",
+            !isMobile && "md:w-3/5 md:items-start"
+          )}>
+            <div className="w-full">
+              {shouldAnimateHeroIntro && animationItems.length > 0 ? (
+                  <StaggeredTextAnimation
+                    key={language}
+                    items={animationItems}
+                    onComplete={handleAnimationComplete}
+                    className="items-start text-left"
+                  />
+                ) : (
+                  <div className="items-start text-left">
+                    <StaticSubtitle />
+                  </div>
+                )
+              }
             </div>
+
+            <div className={cn(
+              "flex justify-center w-full pt-16",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+            )}>
+              <Button
+                size="icon"
+                asChild
+                className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
+                aria-label={viewWorkButtonText}
+              >
+                <Link href="/#projects" onClick={handleSmoothScroll}>
+                  <ArrowDown className="h-10 w-10" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
