@@ -85,6 +85,9 @@ function CameraPositionLogger() {
     };
 
     if (controls.current) {
+      // Log initial position
+      onControlsChange();
+      // Add event listener for changes
       controls.current.addEventListener('end', onControlsChange);
     }
     
@@ -95,7 +98,8 @@ function CameraPositionLogger() {
     };
   }, [camera]);
 
-  return <OrbitControls ref={controls} />;
+  // OrbitControls now takes full control. `makeDefault` makes it the default controller.
+  return <OrbitControls ref={controls} makeDefault />;
 }
 
 
@@ -106,11 +110,11 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [0.66, -0.05, 1.47], fov: 30 }}>
+    <Canvas camera={{ fov: 30 }}>
       {/* Lights */}
-      <ambientLight intensity={0} />
-      <directionalLight position={[5, 5, 5]} intensity={0} />
-      <directionalLight position={[-5, -5, -5]} intensity={0} />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 5, 5]} intensity={1} />
+      <directionalLight position={[-5, -5, -5]} intensity={0.5} />
       
       <Suspense fallback={null}>
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
