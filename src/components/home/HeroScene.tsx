@@ -2,11 +2,12 @@
 "use client";
 
 import { Suspense, useRef, useEffect, useState }from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
@@ -69,24 +70,64 @@ function Model(props: JSX.IntrinsicElements['group']) {
 }
 
 // A helper component to set the camera's target.
-function CameraSetup() {
+function CameraSetup({ targetPosition }: { targetPosition: THREE.Vector3 }) {
   const { camera } = useThree();
   useEffect(() => {
-    camera.lookAt(new THREE.Vector3(-1.49, -1.22, -0.12));
+    camera.lookAt(targetPosition);
     camera.updateProjectionMatrix();
-  }, [camera]);
+  }, [camera, targetPosition]);
   return null;
 }
 
+// Helper to log camera position for setup.
+const CameraPositionLogger = ({ controlsRef }: { controlsRef: React.RefObject<any> }) => {
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    const logCameraPosition = () => {
+      const camera = controls.object;
+      const target = controls.target;
+      console.log(`Position: [${camera.position.x.toFixed(2)}, ${camera.position.y.toFixed(2)}, ${camera.position.z.toFixed(2)}]`);
+      console.log(`Target: [${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)}]`);
+    };
+
+    controls.addEventListener('end', logCameraPosition);
+    return () => controls.removeEventListener('end', logCameraPosition);
+  }, [controlsRef]);
+
+  return null;
+};
+
 
 export default function HeroScene() {
+  const isMobile = useIsMobile();
+  const controlsRef = useRef<any>();
+
+  const desktopCamera = {
+    position: new THREE.Vector3(0.86, 0.13, 1.79),
+    target: new THREE.Vector3(-1.49, -1.22, -0.12),
+  };
+
+  // Placeholder for mobile - we will get these values from the user.
+  const mobileCamera = {
+    position: new THREE.Vector3(0.86, 0.13, 1.79),
+    target: new THREE.Vector3(-1.49, -1.22, -0.12),
+  };
+  
+  const cameraConfig = isMobile ? mobileCamera : desktopCamera;
+
   // Preload the model here.
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/SFinal.glb');
   }, []);
 
+  // Determine if OrbitControls should be enabled (only for mobile setup)
+  // We'll set this to `true` for the user to find the position.
+  const enableControls = isMobile;
+
   return (
-    <Canvas camera={{ position: [0.86, 0.13, 1.79], fov: 30 }}>
+    <Canvas camera={{ position: cameraConfig.position.toArray(), fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
@@ -96,8 +137,14 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
       
-      {/* Set the final camera target */}
-      <CameraSetup />
+      {enableControls ? (
+        <>
+          <OrbitControls ref={controlsRef} target={cameraConfig.target} />
+          <CameraPositionLogger controlsRef={controlsRef} />
+        </>
+      ) : (
+        <CameraSetup targetPosition={cameraConfig.target} />
+      )}
 
       {/* Post-processing effects */}
       <EffectComposer>
