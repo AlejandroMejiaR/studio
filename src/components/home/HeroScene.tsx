@@ -3,7 +3,7 @@
 
 import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF, useAnimations, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
@@ -73,8 +73,8 @@ function CameraSetup() {
   const { camera } = useThree();
   useEffect(() => {
     // This runs once after the component mounts and sets the camera's focus point.
-    camera.lookAt(new THREE.Vector3(-0.40, -0.65, 0.20));
-    camera.updateProjectionMatrix(); // Important to apply the changes
+    // camera.lookAt(new THREE.Vector3(-0.40, -0.65, 0.20));
+    // camera.updateProjectionMatrix(); // Important to apply the changes
   }, [camera]);
   return null;
 }
@@ -99,6 +99,9 @@ export default function HeroScene() {
 
       {/* Set the final, static camera view */}
       <CameraSetup />
+      
+      {/* OrbitControls for camera manipulation during development */}
+      <OrbitControls />
 
       {/* Post-processing effects */}
       <EffectComposer>

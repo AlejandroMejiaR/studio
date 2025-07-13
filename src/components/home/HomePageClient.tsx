@@ -147,32 +147,33 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   
   const renderStyledText = (text: string | undefined, language: Language) => {
     if (!text) return null;
-
+  
     const colorAnimatedWordsConfig = {
       EN: ['UX', 'Game', 'AI'],
-      ES: ['UX', 'Videojuegos', 'IA']
+      ES: ['UX', 'Videojuegos', 'IA'],
     };
-
+  
     const phrasesToColorAnimate = colorAnimatedWordsConfig[language] || [];
     const stylingRegex = new RegExp(`(${phrasesToColorAnimate.join('|')})`, 'g');
-    
+  
     const finalParts = text.split(stylingRegex).filter(Boolean);
-
+  
     return (
-        <Fragment>
-            {finalParts.map((part, index) => {
-                if (phrasesToColorAnimate.includes(part)) {
-                    return (
-                        <span key={index} className="animate-text-pulse font-bold text-accent">
-                            {part}
-                        </span>
-                    );
-                }
-                return <Fragment key={index}>{part}</Fragment>;
-            })}
-        </Fragment>
+      <Fragment>
+        {finalParts.map((part, index) => {
+          if (phrasesToColorAnimate.includes(part)) {
+            return (
+              <span key={index} className="animate-text-pulse font-bold text-accent">
+                {part}
+              </span>
+            );
+          }
+          return <Fragment key={index}>{part}</Fragment>;
+        })}
+      </Fragment>
     );
   };
+  
   
   const fullHeroText = useMemo(() => {
       if (!isClientReady) return getInitialServerTranslation(t => t.home.hero.subtitle);
@@ -257,10 +258,10 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         {!isMobile && (
           <div 
             className={cn(
-              "absolute inset-0 w-full h-full z-20 pointer-events-none",
+              "absolute top-0 left-0 w-full z-20",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
             )}
-            style={{ top: '30px' }}
+            style={{ top: '30px', height: '650px' }}
           >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <HeroScene />
