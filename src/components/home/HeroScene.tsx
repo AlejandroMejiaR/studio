@@ -29,7 +29,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     // Configure the 'Wave' animation to play only once
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 1);
+      waveAction.setLoop(THREE.LoopOnce, 2);
       waveAction.clampWhenFinished = true;
     }
 
