@@ -105,7 +105,7 @@ function CameraPositionLogger() {
   }, [camera]);
 
   // Set the initial target to match the model's y-position for more intuitive panning.
-  return <OrbitControls ref={controlsRef} target={[0, -2, 0]} />;
+  return <OrbitControls ref={controlsRef} target={[-0.42, -0.67, 0.23]} />;
 }
 
 export default function HeroScene() {
@@ -115,7 +115,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [0.84, -0.24, 1.58], rotation: [-0.33, 0.81, 0.24], fov: 30 }}>
+    <Canvas camera={{ position: [0.68, -0.04, 1.57], rotation: [-0.44, 0.64, 0.27], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0} />
       <directionalLight position={[5, 5, 5]} intensity={0} />
@@ -125,8 +125,8 @@ export default function HeroScene() {
         <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
       </Suspense>
 
-      {/* OrbitControls allows you to orbit around the model. Re-enabled for positioning. */}
-      <CameraPositionLogger />
+      {/* OrbitControls have been disabled to set the final camera position */}
+      <OrbitControls enabled={false} target={[-0.42, -0.67, 0.23]} />
 
       {/* Post-processing effects */}
       <EffectComposer>
