@@ -19,10 +19,20 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Debugging: Monitor the timeScale of the Idle animation
+  useFrame(() => {
+    if (actions.Idle) {
+      console.log('Idle timeScale:', actions.Idle.timeScale);
+    }
+  });
+
   useEffect(() => {
+    console.log("Animation setup running. Actions:", Object.keys(actions));
+
     // Play the 'Idle' animation by default
     const idleAction = actions.Idle;
     if (idleAction) {
+      console.log("Playing Idle animation by default.");
       idleAction.play();
     }
 
@@ -31,15 +41,18 @@ function Model(props: JSX.IntrinsicElements['group']) {
     if (waveAction) {
       waveAction.setLoop(THREE.LoopOnce, 1);
       waveAction.clampWhenFinished = true;
+      console.log("Wave animation configured to play once.");
     }
 
     // Listener for when an animation finishes
     const onFinished = (e: any) => {
       // Check if the finished animation is 'Wave'
       if (e.action === waveAction) {
+        console.log("Wave animation finished.");
         setIsAnimating(false);
         // Smoothly transition back to 'Idle'
         if (idleAction && waveAction) {
+          console.log("Fading out Wave, fading in Idle.");
           waveAction.fadeOut(0.3);
           idleAction.reset().fadeIn(0.3).play();
         }
@@ -47,21 +60,30 @@ function Model(props: JSX.IntrinsicElements['group']) {
     };
 
     mixer.addEventListener('finished', onFinished);
+    console.log("'finished' event listener added to mixer.");
 
     // Cleanup listener on component unmount
-    return () => mixer.removeEventListener('finished', onFinished);
+    return () => {
+      console.log("Cleaning up animation listeners.");
+      mixer.removeEventListener('finished', onFinished)
+    };
 
   }, [actions, mixer]);
 
   const handleModelClick = () => {
     // Don't do anything if an animation is already in progress
-    if (isAnimating || !actions.Idle || !actions.Wave) return;
+    if (isAnimating || !actions.Idle || !actions.Wave) {
+      console.log(`Click ignored. isAnimating: ${isAnimating}`);
+      return;
+    }
 
+    console.log("Model clicked. Starting Wave animation.");
     setIsAnimating(true);
     
     // Smoothly transition from 'Idle' to 'Wave'
-    actions.Idle.crossFadeTo(actions.Wave, 0.3, true);
+    console.log("Crossfading from Idle to Wave.");
     actions.Wave.reset().play();
+    actions.Idle.crossFadeTo(actions.Wave, 0.3, true);
   };
 
   // The 'primitive' object is a way to render a pre-existing THREE.Object3D scene.
