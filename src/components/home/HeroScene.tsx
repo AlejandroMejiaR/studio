@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useRef, useEffect, useState, useFrame }from 'react';
+import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -25,7 +25,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     const waveAction = actions.Wave;
     if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 1); // Play once per call
+      waveAction.setLoop(THREE.LoopOnce, 1); // We will control the repeat manually.
       waveAction.clampWhenFinished = true; // Prevents T-pose between plays
     }
 
@@ -69,10 +69,38 @@ function Model(props: JSX.IntrinsicElements['group']) {
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
 }
 
-// A helper component to log camera position
+// A helper component to log camera position, rotation, and zoom.
 function CameraPositionLogger() {
   const { camera } = useThree();
   const controlsRef = useRef<OrbitControlsImpl>(null);
+
+  useEffect(() => {
+    const controls = controlsRef.current;
+    if (!controls) return;
+
+    const logCameraState = () => {
+      const { x: posX, y: posY, z: posZ } = camera.position;
+      const { x: rotX, y: rotY, z: rotZ } = camera.rotation;
+      const zoom = camera.zoom;
+      const fov = (camera as THREE.PerspectiveCamera).fov; // Cast to get fov
+
+      console.log(
+        `Position: { x: ${posX.toFixed(2)}, y: ${posY.toFixed(2)}, z: ${posZ.toFixed(2)} },\n` +
+        `Rotation: { _x: ${rotX.toFixed(2)}, _y: ${rotY.toFixed(2)}, _z: ${rotZ.toFixed(2)} },\n` +
+        `Zoom: ${zoom.toFixed(2)},\n` +
+        `FOV: ${fov}`
+      );
+    };
+
+    controls.addEventListener('change', logCameraState);
+    
+    // Initial log
+    logCameraState();
+
+    return () => {
+      controls.removeEventListener('change', logCameraState);
+    };
+  }, [camera]);
 
   return <OrbitControls ref={controlsRef} />;
 }
@@ -84,7 +112,7 @@ export default function HeroScene() {
   }, []);
 
   return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 30 }}>
+    <Canvas camera={{ position: [1.26, 1.26, 1.93], fov: 30 }}>
       {/* Lights */}
       <ambientLight intensity={0} />
       <directionalLight position={[5, 5, 5]} intensity={0} />
