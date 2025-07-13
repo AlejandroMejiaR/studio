@@ -254,10 +254,13 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     <div>
       <div className="relative">
         {!isMobile && (
-          <div className={cn(
-            "absolute inset-0 w-full h-full z-0",
-            areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
-          )}>
+          <div 
+            className={cn(
+              "absolute inset-0 w-full h-full z-0",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+            )}
+            style={{ top: '100px' }}
+          >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <HeroScene />
             </Suspense>
