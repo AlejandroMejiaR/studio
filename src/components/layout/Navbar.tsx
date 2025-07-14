@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import LanguageSwitcherTooltip from './LanguageSwitcherTooltip';
+import MusicPlayer from './MusicPlayer';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -206,6 +207,7 @@ const Navbar = () => {
               onClose={() => setShowLanguageHint(false)}
             />
           </div>
+          <MusicPlayer />
           <Button
             variant="ghost"
             size="icon"
@@ -244,6 +246,7 @@ const Navbar = () => {
               onClose={() => setShowLanguageHint(false)}
             />
           </div>
+          <MusicPlayer />
           <Button
             variant="ghost"
             size="icon"
