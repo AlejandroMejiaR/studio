@@ -112,7 +112,7 @@ const Navbar = () => {
     handleMobileMenuClose();
   };
 
-  const languageSwitchText = language === 'EN' ? 'Español' : 'English';
+  const languageSwitchText = language === 'EN' ? 'English' : 'Español';
   const changeLanguageHintText = navLinkText('changeLanguageHint');
 
   const brandNameComponent = navbarIsMounted && animateBrandName && pathname === '/' ? (
