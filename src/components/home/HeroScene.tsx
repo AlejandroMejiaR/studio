@@ -3,7 +3,7 @@
 
 import { Suspense, useRef, useEffect, useState }from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import { useGLTF, useAnimations, Html } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
@@ -104,6 +104,16 @@ function CameraSetup() {
   return null;
 }
 
+function Loader() {
+  return (
+    <Html center>
+      <div className="flex justify-center items-center">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-accent"></div>
+      </div>
+    </Html>
+  );
+}
+
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
@@ -151,7 +161,7 @@ export default function HeroScene() {
         <color attach="background" args={[bgColor]} />
         {/* Lights are now embedded in the GLB file */}
         
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
             <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
         </Suspense>
         
