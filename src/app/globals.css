@@ -125,6 +125,16 @@ body {
 }
 
 @layer utilities {
+  .partial-border-right::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    height: 1px;
+    background-color: hsl(var(--border));
+  }
+
   @keyframes brand-pulse {
     0%, 90%, 100% {
       opacity: 1;
