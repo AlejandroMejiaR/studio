@@ -9,7 +9,7 @@ body {
 
 @layer base {
   :root {
-    --background: 220 27% 97%; /* Light cool grey #f4f6fa */
+    --background: 0 0% 100%; /* White #ffffff */
     --foreground: 175 38% 11%; /* Dark teal #122624 */
 
     --card: 220 16% 93%; /* Very light cool grey #F3F4F6 */
@@ -59,7 +59,7 @@ body {
   }
 
   .dark {
-    --background: 0 0% 0%;    /* Black #090808 */
+    --background: 0 0% 0%;    /* Black #000000 */
     --foreground: 0 0% 98%;       /* Off-white #FAFAFA */
 
     --card: 0 0% 0%;           /* Slightly Lighter Indigo/Navy #1D2338 - more vibrant */
@@ -295,3 +295,5 @@ body {
     animation: fadeInThenOut 3.5s ease-in-out forwards;
   }
 }
+
+    
