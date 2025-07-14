@@ -125,22 +125,6 @@ body {
 }
 
 @layer utilities {
-  .partial-border-top::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 1px;
-    width: 0; /* Hidden by default on mobile */
-    background-color: hsl(var(--border));
-  }
-
-  @media (min-width: 768px) {
-    .partial-border-top::after {
-      width: 50%; /* Visible only on md and up */
-    }
-  }
-
   @keyframes brand-pulse {
     0%, 90%, 100% {
       opacity: 1;
