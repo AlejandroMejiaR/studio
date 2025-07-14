@@ -85,9 +85,9 @@ const MusicPlayer = () => {
       className="h-10 w-10 hover:bg-accent/10"
     >
       {isPlaying ? (
-        <Headphones className="h-6 w-6" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
+        <Headphones className="h-[25px] w-[25px]" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
       ) : (
-        <VolumeX className="h-6 w-6" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
+        <VolumeX className="h-[25px] w-[25px]" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
       )}
     </Button>
   );
