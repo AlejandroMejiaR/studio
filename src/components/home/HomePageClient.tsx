@@ -272,7 +272,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         )}
         
         <section 
-          className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
+          className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20 border-b"
         >
           <div className="container mx-auto">
             <div className={cn(
