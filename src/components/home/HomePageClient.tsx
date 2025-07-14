@@ -322,7 +322,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         </section>
       </div>
 
-      <div className="relative container mx-auto partial-border-top" />
+      <div className="relative partial-border-top h-[200px]" />
 
       <div className="container mx-auto">
         <section id="projects" className="pt-[50px]">
