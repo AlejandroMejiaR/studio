@@ -174,6 +174,7 @@ const Navbar = () => {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-2">
+          <MusicPlayer />
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -207,7 +208,6 @@ const Navbar = () => {
               onClose={() => setShowLanguageHint(false)}
             />
           </div>
-          <MusicPlayer />
           <Button
             variant="ghost"
             size="icon"
