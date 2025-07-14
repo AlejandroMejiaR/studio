@@ -22,7 +22,7 @@ export const SectionContainer = ({ children, className }: { children: React.Reac
   </div>
 );
 
-const SectionTitle = ({ children }: { children: React.Node }) => (
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-10 md:mb-12 text-center">
     {children}
   </h2>
