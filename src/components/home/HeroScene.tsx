@@ -163,7 +163,7 @@ export default function HeroScene() {
             luminanceThreshold={0.3}
             luminanceSmoothing={0.9}
             height={300}
-            intensity={0.1}
+            intensity={0.2}
             />
         </EffectComposer>
         </Canvas>
