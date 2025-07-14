@@ -4,7 +4,7 @@
 import type { FC } from 'react';
 import { cn } from '@/lib/utils';
 import LetterRevealAnimation from './LetterRevealAnimation';
-import React from 'react';
+import React, { Fragment } from 'react';
 
 interface WordRevealAnimationProps {
   text: string; // A single line of text
@@ -82,7 +82,7 @@ const WordRevealAnimation: FC<WordRevealAnimationProps> = ({
   return (
     <span className={cn(className)} style={style} aria-label={text}>
       {animatedElements.map((element, index) => (
-          <React.Fragment key={index}>{element}</React.Fragment>
+          <Fragment key={index}>{element}</Fragment>
       ))}
     </span>
   );

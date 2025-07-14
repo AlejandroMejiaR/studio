@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback, Fragment, Suspense } from 'react';
 import type { Project } from '@/types';
 import ProjectList from '@/components/projects/ProjectList';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,6 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
-import React, { Fragment, Suspense } from 'react';
 import { ArrowDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useScreenSize } from '@/hooks/use-screen-size';
