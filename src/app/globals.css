@@ -130,7 +130,7 @@ body {
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 40%;
+    width: 50%;
     height: 1px;
     background-color: hsl(var(--border));
   }
