@@ -79,15 +79,14 @@ const MusicPlayer = () => {
   return (
     <Button
       variant="ghost"
-      size="icon"
       onClick={togglePlay}
       aria-label={isPlaying ? "Mute music" : "Play music"}
       className="h-10 w-10 hover:bg-accent/10"
     >
       {isPlaying ? (
-        <Headphones className="h-[25px] w-[25px]" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
+        <Headphones style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
       ) : (
-        <VolumeX className="h-[25px] w-[25px]" style={{ color: '#ffa600' }} strokeWidth={2.5}/>
+        <VolumeX style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
       )}
     </Button>
   );
