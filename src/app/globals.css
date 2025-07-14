@@ -59,7 +59,7 @@ body {
   }
 
   .dark {
-    --background: 0 0% 0%;    /* Black */
+    --background: 0 0% 0%;    /* Black #090808 */
     --foreground: 0 0% 98%;       /* Off-white #FAFAFA */
 
     --card: 0 0% 0%;           /* Slightly Lighter Indigo/Navy #1D2338 - more vibrant */
