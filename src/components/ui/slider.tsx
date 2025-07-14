@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -23,7 +24,7 @@ const Slider = React.forwardRef<
       props.orientation === "vertical" ? "h-full w-2" : "h-2 w-full"
     )}>
       <SliderPrimitive.Range className={cn(
-        "absolute bg-primary",
+        "absolute bg-accent",
         props.orientation === "vertical" ? "w-full" : "h-full"
       )} />
     </SliderPrimitive.Track>
