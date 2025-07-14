@@ -273,8 +273,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         <section 
           className={cn(
             "relative flex flex-col justify-center items-center text-left pt-10 pb-20",
-            "min-h-[calc(100vh-4rem)] md:h-[750px] md:min-h-0", // Responsive height
-            "flex partial-border-right" // Now always flex, border handles responsive visibility
+            "md:h-[750px]", 
+            "flex partial-border-right"
           )}
         >
           <div className="container mx-auto">
