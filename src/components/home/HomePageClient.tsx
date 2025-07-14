@@ -257,22 +257,21 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   return (
     <div>
       <div className="relative">
-        {screenSize && screenSize !== 'mobile' && (
-          <div 
+        <div 
             className={cn(
-              "absolute top-0 left-0 w-full z-20 pointer-events-none",
-              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+              "absolute top-0 left-0 w-full z-20 pointer-events-none relative",
+              areControlsVisible ? "animate-controls-fade-in" : "opacity-0",
+              "hidden md:block partial-border-right"
             )}
             style={{ top: 0, height: '750px' }}
-          >
+        >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <HeroScene />
             </Suspense>
-          </div>
-        )}
+        </div>
         
         <section 
-          className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20 relative partial-border-right"
+          className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
         >
           <div className="container mx-auto">
             <div className={cn(
