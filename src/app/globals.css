@@ -125,13 +125,18 @@ body {
 }
 
 @layer utilities {
-  .partial-border-right::after {
-    @apply content-[''] absolute bottom-0 right-0 h-[1px] bg-border;
+  .partial-border-top::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 1px;
     width: 0; /* Hidden by default on mobile */
+    background-color: hsl(var(--border));
   }
 
   @media (min-width: 768px) {
-    .partial-border-right::after {
+    .partial-border-top::after {
       width: 50%; /* Visible only on md and up */
     }
   }

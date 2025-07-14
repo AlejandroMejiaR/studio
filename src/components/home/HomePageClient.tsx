@@ -271,8 +271,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         
         <section 
           className={cn(
-            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px]",
-            areControlsVisible ? "partial-border-right" : ""
+            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px]"
           )}
         >
           <div className="container mx-auto">
@@ -322,6 +321,8 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
           </div>
         </section>
       </div>
+
+      <div className="relative container mx-auto partial-border-top" />
 
       <div className="container mx-auto">
         <section id="projects" className="pt-[50px]">
