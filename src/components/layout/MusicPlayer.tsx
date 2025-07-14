@@ -4,91 +4,92 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Headphones, VolumeX } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Slider } from '@/components/ui/slider';
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.5); // Initial volume at 50%
+  const [lastVolume, setLastVolume] = useState(0.5);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Create the audio element on the client side to avoid SSR issues.
     if (!audioRef.current) {
-      const audio = new Audio('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Sound/Music.ogg');
+      const audio = new Audio('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Sound/Music.mp3');
       audio.loop = true;
-      audio.volume = 0; // Start with volume at 0
+      audio.volume = 0; // Start muted
       audioRef.current = audio;
     }
-
-    // Cleanup on unmount
-    return () => {
-      if (fadeIntervalRef.current) {
-        clearInterval(fadeIntervalRef.current);
-      }
-      audioRef.current?.pause();
-    };
   }, []);
 
-  const fadeAudio = (targetVolume: number, duration: number = 1000) => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (fadeIntervalRef.current) {
-      clearInterval(fadeIntervalRef.current);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
     }
-
-    const startVolume = audio.volume;
-    const stepTime = 50; // ms per step
-    const totalSteps = duration / stepTime;
-    const volumeStep = (targetVolume - startVolume) / totalSteps;
-    let currentStep = 0;
-
-    fadeIntervalRef.current = setInterval(() => {
-      currentStep++;
-      if (currentStep >= totalSteps) {
-        audio.volume = targetVolume;
-        clearInterval(fadeIntervalRef.current as NodeJS.Timeout);
-        fadeIntervalRef.current = null;
-        if (targetVolume === 0) {
-          audio.pause();
-        }
-      } else {
-        const newVolume = startVolume + (volumeStep * currentStep);
-        // Clamp volume between 0 and 1
-        audio.volume = Math.max(0, Math.min(1, newVolume));
-      }
-    }, stepTime);
-  };
+  }, [volume]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (isPlaying) {
-      fadeAudio(0);
+      // Mute
+      setLastVolume(volume);
+      setVolume(0);
       setIsPlaying(false);
+      // We don't pause, just set volume to 0 to keep it running seamlessly
     } else {
-      audio.play().catch(error => {
-        console.error("Audio play failed:", error);
-      });
-      fadeAudio(1);
+      // Unmute
+      const newVolume = lastVolume > 0 ? lastVolume : 0.5; // Restore or default
+      setVolume(newVolume);
       setIsPlaying(true);
+      audio.play().catch(error => console.error("Audio play failed:", error));
+    }
+  };
+
+  const handleVolumeChange = (newVolume: number[]) => {
+    const vol = newVolume[0];
+    setVolume(vol);
+    if (vol > 0 && !isPlaying) {
+      setIsPlaying(true);
+      if (audioRef.current?.paused) {
+        audioRef.current.play().catch(error => console.error("Audio play failed:", error));
+      }
+    } else if (vol === 0 && isPlaying) {
+      setIsPlaying(false);
     }
   };
 
   return (
-    <Button
-      variant="ghost"
-      onClick={togglePlay}
-      aria-label={isPlaying ? "Mute music" : "Play music"}
-      className="h-10 w-10 hover:bg-accent/10"
-    >
-      {isPlaying ? (
-        <Headphones style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
-      ) : (
-        <VolumeX style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
-      )}
-    </Button>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="ghost"
+          onClick={togglePlay}
+          aria-label={isPlaying ? "Mute music" : "Play music"}
+          className="h-10 w-10 hover:bg-accent/10"
+        >
+          {volume > 0 ? (
+            <Headphones style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
+          ) : (
+            <VolumeX style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5}/>
+          )}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-20 p-2" align="center" side="top">
+        <div className="flex justify-center items-center h-32">
+          <Slider
+            defaultValue={[volume]}
+            value={[volume]}
+            max={1}
+            step={0.01}
+            orientation="vertical"
+            onValueChange={handleVolumeChange}
+            className="h-full"
+          />
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
