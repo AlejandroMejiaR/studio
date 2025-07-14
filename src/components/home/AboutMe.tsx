@@ -17,15 +17,15 @@ import { cn } from '@/lib/utils';
 
 // This component no longer needs a ref as it's on its own page.
 const AboutMe = () => {
-  const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage(); // Use the hook
+  const { translationsForLanguage } = useLanguage();
 
-  const skills = isClientReady ? [
+  const skills = [
     { name: translationsForLanguage.aboutMe.skills.coding, icon: Code2 },
     { name: translationsForLanguage.aboutMe.skills.gameDesign, icon: Gamepad2 },
     { name: translationsForLanguage.aboutMe.skills.uxDesign, icon: Component },
     { name: translationsForLanguage.aboutMe.skills.generativeAI, icon: Sparkles },
     { name: translationsForLanguage.aboutMe.skills.englishB2, icon: Languages },
-  ] : [];
+  ];
   
   const technologies = [
     // Logos
@@ -37,17 +37,6 @@ const AboutMe = () => {
     { name: 'VS Code', type: 'logo', logo: 'Vs.png' },
     { name: 'Figma', type: 'logo', logo: 'Figma.png' },
   ];
-
-  // Determine text based on client readiness and language
-  const aboutMeTitle = isClientReady ? translationsForLanguage.aboutMe.title : getInitialServerTranslation(t => t.aboutMe.title);
-  const paragraph1 = isClientReady ? translationsForLanguage.aboutMe.paragraph1 : getInitialServerTranslation(t => t.aboutMe.paragraph1);
-  const paragraph2 = isClientReady ? translationsForLanguage.aboutMe.paragraph2 : getInitialServerTranslation(t => t.aboutMe.paragraph2);
-  const workTogetherText = isClientReady ? translationsForLanguage.aboutMe.workTogether : getInitialServerTranslation(t => t.aboutMe.workTogether);
-  const skillsTitle = isClientReady ? translationsForLanguage.aboutMe.skillsTitle : getInitialServerTranslation(t => t.aboutMe.skillsTitle);
-  const technologiesTitle = isClientReady ? translationsForLanguage.aboutMe.technologiesTitle : getInitialServerTranslation(t => t.aboutMe.technologiesTitle);
-  const jobTitleText = isClientReady ? translationsForLanguage.aboutMe.jobTitle : getInitialServerTranslation(t => t.aboutMe.jobTitle);
-  const jobSpecializationText = isClientReady ? translationsForLanguage.aboutMe.jobSpecialization : getInitialServerTranslation(t => t.aboutMe.jobSpecialization);
-
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
@@ -66,51 +55,36 @@ const AboutMe = () => {
             </CardContent>
             <div className="p-6 bg-background rounded-b-lg">
                 <h3 className="font-headline text-2xl font-semibold text-primary dark:text-foreground">Alejandro Mejia Rojas</h3>
-                <p className="text-accent" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                  {jobTitleText}<br />
-                  <span className="text-sm">{jobSpecializationText}</span>
+                <p className="text-accent">
+                  {translationsForLanguage.aboutMe.jobTitle}<br />
+                  <span className="text-sm">{translationsForLanguage.aboutMe.jobSpecialization}</span>
                 </p>
             </div>
           </Card>
         </div>
 
         <div className="md:col-span-2">
-          <h2 
-            className="font-headline text-4xl md:text-5xl font-bold text-primary mb-6 dark:text-foreground"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          >
-            {aboutMeTitle}
+          <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary mb-6 dark:text-foreground">
+            {translationsForLanguage.aboutMe.title}
           </h2>
-          <p 
-            className="text-lg text-foreground/80 mb-6 leading-relaxed"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          >
-            {paragraph1}
+          <p className="text-lg text-foreground/80 mb-6 leading-relaxed">
+            {translationsForLanguage.aboutMe.paragraph1}
           </p>
-          <p 
-            className="text-lg text-foreground/80 mb-2 leading-relaxed"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          >
-            {paragraph2}
+          <p className="text-lg text-foreground/80 mb-2 leading-relaxed">
+            {translationsForLanguage.aboutMe.paragraph2}
           </p>
-          <p 
-            className="text-lg mb-8"
-            style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-          >
+          <p className="text-lg mb-8">
             <a 
               href="mailto:alejandro197mejia@gmail.com" 
               className="font-bold text-accent hover:text-accent/90 no-underline transition-colors"
             >
-              {workTogetherText}
+              {translationsForLanguage.aboutMe.workTogether}
             </a>
           </p>
           
           <div>
-            <h3 
-              className="font-headline text-2xl font-semibold text-primary mb-6 dark:text-foreground"
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-            >
-              {skillsTitle}
+            <h3 className="font-headline text-2xl font-semibold text-primary mb-6 dark:text-foreground">
+              {translationsForLanguage.aboutMe.skillsTitle}
             </h3>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-8">
               {skills.map((skill) => (
@@ -130,11 +104,8 @@ const AboutMe = () => {
               ))}
             </div>
 
-            <h3 
-              className="font-headline text-2xl font-semibold text-primary mb-6 dark:text-foreground"
-              style={{ visibility: isClientReady ? 'visible' : 'hidden' }}
-            >
-              {technologiesTitle}
+            <h3 className="font-headline text-2xl font-semibold text-primary mb-6 dark:text-foreground">
+              {translationsForLanguage.aboutMe.technologiesTitle}
             </h3>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               {technologies.map((skill) => (
