@@ -126,13 +126,14 @@ body {
 
 @layer utilities {
   .partial-border-right::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 50%;
-    height: 1px;
-    background-color: hsl(var(--border));
+    @apply content-[''] absolute bottom-0 right-0 h-[1px] bg-border;
+    width: 0; /* Hidden by default on mobile */
+  }
+
+  @media (min-width: 768px) {
+    .partial-border-right::after {
+      width: 50%; /* Visible only on md and up */
+    }
   }
 
   @keyframes brand-pulse {
