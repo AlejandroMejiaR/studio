@@ -76,21 +76,26 @@ const MusicPlayer = () => {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          onClick={(e) => {
+          onClick={() => {
+            // This click handler is for the PopoverTrigger button itself.
+            // It should only toggle the popover if music is playing.
             if (isPlaying) {
-              // If music is already playing, this click should open/toggle the popover
-              setIsPopoverOpen(!isPopoverOpen);
+              setIsPopoverOpen((prev) => !prev);
             } else {
-              // If muted, this click should just play the music, not open the popover
+              // If muted, this click should just play the music, not open popover.
               togglePlay();
             }
           }}
           aria-label={isPlaying ? "Adjust volume" : "Play music"}
           className="h-10 w-10 hover:bg-accent/10"
         >
-          {/* A separate button for mute inside the popover is an option, 
-              but for now, the main button is a combined trigger. */}
-           <div onClick={(e) => { e.stopPropagation(); togglePlay(); }}
+          {/* A separate clickable div for the icon to handle mute/unmute */}
+           <div 
+              onClick={(e) => { 
+                // Stop click from propagating to the parent button's onClick
+                e.stopPropagation(); 
+                togglePlay(); 
+              }}
               aria-label={isPlaying ? "Mute music" : "Play music"}
            >
             {volume > 0 ? (
@@ -101,6 +106,7 @@ const MusicPlayer = () => {
            </div>
         </Button>
       </PopoverTrigger>
+      {/* The PopoverContent is only rendered if music is playing, preventing it from showing on unmute */}
       {isPlaying && (
         <PopoverContent className="w-20 p-2" align="center" side="top">
           <div className="flex justify-center items-center h-32">
