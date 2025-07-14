@@ -11,16 +11,7 @@ import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import ImageModal from './ImageModal';
-
-interface ProjectClientContentProps {
-  project: Project;
-}
-
-export const SectionContainer = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <div className={cn("container mx-auto px-4 sm:px-6 lg:px-8", className)}>
-    {children}
-  </div>
-);
+import { SectionContainer } from '@/components/layout/SectionContainer';
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-10 md:mb-12 text-center">
@@ -30,7 +21,7 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 
 const processIcons = [Search, FileText, Lightbulb, DraftingCompass, CheckCircle2];
 
-const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
+const ProjectClientContent = ({ project }: { project: Project }) => {
   const { language, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';

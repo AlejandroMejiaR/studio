@@ -1,6 +1,6 @@
 
 import AboutMe from '@/components/home/AboutMe';
-import { SectionContainer } from '@/components/projects/ProjectClientContent';
+import { SectionContainer } from '@/components/layout/SectionContainer';
 
 
 export default function AboutPage() {
