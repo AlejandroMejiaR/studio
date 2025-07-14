@@ -10,7 +10,6 @@ import { Slider } from '@/components/ui/slider';
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [lastVolume, setLastVolume] = useState(0.5);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -34,8 +33,8 @@ const MusicPlayer = () => {
     if (!audio) return;
 
     if (!isPlaying) {
-      // If muted, this click should just play the music.
-      const newVolume = lastVolume > 0 ? lastVolume : 0.5;
+      // If muted, this click should just play the music at 10% volume.
+      const newVolume = 0.1;
       setVolume(newVolume);
       setIsPlaying(true);
       if (audio.paused) {
@@ -53,7 +52,6 @@ const MusicPlayer = () => {
     // If user drags slider to 0, reflect this as 'muted' state
     if (vol === 0) {
       if (isPlaying) {
-        setLastVolume(volume > 0.1 ? volume : 0.5); // Store last known volume before mute
         setIsPlaying(false);
       }
     } else {
