@@ -8,10 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2 } from 'lucide-react';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
-import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { cn } from '@/lib/utils';
 import React from 'react';
-import BackButton from '../layout/BackButton';
 import ImageModal from './ImageModal';
 
 interface ProjectClientContentProps {
@@ -24,7 +22,7 @@ export const SectionContainer = ({ children, className }: { children: React.Reac
   </div>
 );
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+const SectionTitle = ({ children }: { children: React.Node }) => (
   <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-10 md:mb-12 text-center">
     {children}
   </h2>
@@ -44,10 +42,6 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
 
   const titleToDisplay = isClientReady ? langContent.title : (project.es.title || "...");
 
-  const titleLetterStaggerConst = 0.04;
-  const titleLetterAnimationDurationConst = 0.5;
-  const titleDelayBetweenWordsConst = 0.1;
-  const titleBaseDelay = 0.2;
 
   return (
     <article className="space-y-24 md:space-y-32 lg:space-y-36">
@@ -55,21 +49,8 @@ const ProjectClientContent = ({ project }: ProjectClientContentProps) => {
       <section>
         <SectionContainer>
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <BackButton />
             <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
-              {isClientReady ? (
-                <WordRevealAnimation
-                  key={`title-${titleToDisplay}-${language}`}
-                  text={titleToDisplay || ""}
-                  lineBaseDelay={titleBaseDelay}
-                  delayBetweenWords={titleDelayBetweenWordsConst}
-                  letterStaggerDelay={titleLetterStaggerConst}
-                  letterAnimationDuration={titleLetterAnimationDurationConst}
-                  className="inline-block"
-                />
-              ) : (
-                <span style={{ visibility: "hidden" }}>{project.es.title || "Cargando..."}</span>
-              )}
+              {titleToDisplay}
             </h1>
           </div>
         </SectionContainer>

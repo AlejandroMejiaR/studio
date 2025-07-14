@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
-import React from 'react'; // Import React for forwardRef
+import React from 'react';
 import { getSupabaseImageUrl } from '@/lib/supabase';
 import {
   Tooltip,
