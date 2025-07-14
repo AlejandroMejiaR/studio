@@ -259,11 +259,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       <div className="relative">
         <div 
             className={cn(
-              "absolute top-0 left-0 w-full z-20 pointer-events-none relative",
+              "absolute top-0 left-0 w-full z-20 pointer-events-none",
               areControlsVisible ? "animate-controls-fade-in" : "opacity-0",
-              "hidden md:block partial-border-right"
+              "hidden md:block"
             )}
-            style={{ top: 0, height: '750px' }}
+            style={{ height: '750px' }}
         >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
               <HeroScene />
@@ -271,7 +271,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         </div>
         
         <section 
-          className="relative min-h-[calc(100vh-4rem)] flex flex-col justify-center items-center text-left pt-10 pb-20"
+          className={cn(
+            "relative flex flex-col justify-center items-center text-left pt-10 pb-20",
+            "min-h-[calc(100vh-4rem)] md:h-[750px] md:min-h-0", // Responsive height
+            "hidden md:flex partial-border-right" // Partial border only on md and up
+          )}
         >
           <div className="container mx-auto">
             <div className={cn(
