@@ -16,7 +16,7 @@ const MusicPlayer = () => {
 
   useEffect(() => {
     if (!audioRef.current) {
-      const audio = new Audio('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Sound/Music.mp3');
+      const audio = new Audio('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Sound/M.mp3');
       audio.loop = true;
       audio.volume = 0; // Start muted but ready
       audioRef.current = audio;
