@@ -117,7 +117,7 @@ function Loader() {
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
-  const [bgColor, setBgColor] = useState('hsl(220 16% 93%)'); // Default light theme bg
+  const [bgColor, setBgColor] = useState('hsl(0 0% 100%)'); // Default light theme bg
 
   useEffect(() => {
     // This function reads the computed background color from the body.
