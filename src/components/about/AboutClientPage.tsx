@@ -9,6 +9,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const AboutClientPage = () => {
     
@@ -61,11 +63,13 @@ const AboutClientPage = () => {
             <p>
               I'm always learning, open to new challenges and collaborations.
             </p>
-            <p className="mt-4">
-              <a href="mailto:alejandro197mejia@gmail.com" className="font-bold text-accent hover:text-accent/90 no-underline transition-colors">
-                Let’s Work Together.
-              </a>
-            </p>
+            <div className="mt-6">
+              <Button variant="outline" size="lg" asChild>
+                <Link href="mailto:alejandro197mejia@gmail.com">
+                  Let’s Work Together.
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Right Column - Single Image */}
