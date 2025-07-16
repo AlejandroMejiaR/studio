@@ -46,7 +46,7 @@ const AboutPage = () => {
   }
 
   return (
-    <SectionContainer className="py-16 md:py-24 space-y-16 md:space-y-20">
+    <SectionContainer className="py-16 md:py-24 space-y-16 md:space-y-20 px-20">
       
       {/* Section 1: Introduction */}
       <section>
