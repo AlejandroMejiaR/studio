@@ -51,9 +51,9 @@ const AboutClientPage = () => {
       
       {/* Section 1: Intro Text and Single Image */}
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-16">
           {/* Left Column - Intro Text */}
-          <div className="text-left text-lg text-foreground/80 leading-relaxed">
+          <div className="w-full max-w-lg text-left text-lg text-foreground/80 leading-relaxed flex-shrink-0">
             <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
             <p>
               I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.
@@ -70,10 +70,10 @@ const AboutClientPage = () => {
           </div>
 
           {/* Right Column - Single Image */}
-          <div className="flex justify-center items-center">
+          <div className="w-full max-w-xs flex-shrink-0">
             <div
               className={cn(
-                'relative w-[50%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
+                'relative w-full aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
                 profileImage.rotation
               )}
             >
