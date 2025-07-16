@@ -47,7 +47,7 @@ const AboutClientPage = () => {
   };
 
   return (
-    <SectionContainer className="py-8 md:py-12 lg:py-16 space-y-20 md:space-y-28">
+    <SectionContainer>
       
       {/* Section 1: Intro Text and Single Image */}
       <section>
@@ -92,7 +92,7 @@ const AboutClientPage = () => {
       </section>
 
       {/* Section 2: Centered Skills, Tech, and Education */}
-      <section>
+      <section className="mt-24">
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
           {/* Skills */}
