@@ -94,49 +94,52 @@ const AboutClientPage = () => {
       <div className="pb-24 mb-24">
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
-          {/* Skills */}
-          <div className="w-full max-w-4xl">
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
-            <div className="flex justify-start gap-8">
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
-                </ul>
+          <div className="w-full max-w-4xl flex flex-col md:flex-row justify-between gap-12">
+            {/* Skills */}
+            <div className="flex-1">
+              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
+              <div className="flex justify-start gap-8">
+                <div className="text-left">
+                  <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
+                  <ul className="space-y-1 text-foreground/80">
+                    {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
+                  </ul>
+                </div>
+                <div className="text-left">
+                  <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
+                  <ul className="space-y-1 text-foreground/80">
+                    {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
+                  </ul>
+                </div>
               </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
-                </ul>
+            </div>
+
+            {/* Technologies */}
+            <div className="flex-1">
+              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
+              <div className="flex justify-start gap-8">
+                <div className="text-left">
+                  <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
+                  <ul className="space-y-2 text-foreground/80">
+                    {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
+                  </ul>
+                </div>
+                <div className="text-left">
+                  <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
+                  <ul className="space-y-2 text-foreground/80">
+                    {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
+                  </ul>
+                </div>
+                <div className="text-left">
+                  <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
+                  <ul className="space-y-2 text-foreground/80">
+                    {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Technologies */}
-          <div className="w-full max-w-4xl">
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
-            <div className="grid grid-cols-3 gap-8">
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
-                <ul className="space-y-2 text-foreground/80">
-                  {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
-                <ul className="space-y-2 text-foreground/80">
-                  {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
-                <ul className="space-y-2 text-foreground/80">
-                  {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
-            </div>
-          </div>
 
           {/* Education */}
           <div className="w-full max-w-4xl">
