@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion"
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import { cn } from '@/lib/utils';
+import WordRevealAnimation from '../effects/WordRevealAnimation';
 
 const AboutClientPage = () => {
     
@@ -158,12 +159,13 @@ const AboutClientPage = () => {
                 <div
                   key={index}
                   className={cn(
-                    'absolute w-[70%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10',
+                    'absolute w-[60%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10',
                     image.rotation
                   )}
                   style={{
-                    top: `${index * 20}%`,
-                    left: `${(index % 2) * 10}%`,
+                    top: `${index * 30}%`,
+                    left: `${index % 2 === 0 ? '0%' : 'auto'}`,
+                    right: `${index % 2 !== 0 ? '0%' : 'auto'}`,
                   }}
                 >
                   <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden group-hover:scale-105 transition-transform duration-300">
