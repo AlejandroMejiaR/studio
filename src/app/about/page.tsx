@@ -9,8 +9,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
-import { SectionContainer } from '@/components/layout/SectionContainer';
 import * as React from 'react';
+import { SectionContainer } from '@/components/layout/SectionContainer';
 
 const AboutPage = () => {
     
@@ -41,11 +41,11 @@ const AboutPage = () => {
   }
 
   return (
-    <SectionContainer className="py-16 md:py-24 space-y-16 md:space-y-20 px-20">
+    <SectionContainer className="py-16 md:py-24 space-y-16 md:space-y-20">
       
       {/* Section 1: Introduction */}
       <section>
-        <div className="flex flex-col md:flex-row items-center gap-12 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center gap-12">
           {/* Text Content */}
           <div className="md:w-1/2 text-left text-lg text-foreground/80 leading-relaxed">
             <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
