@@ -10,6 +10,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
+import { SectionContainer } from '@/components/layout/SectionContainer';
 
 const AboutPage = () => {
   const { translationsForLanguage, isClientReady } = useLanguage();
@@ -45,7 +46,7 @@ const AboutPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 space-y-16 md:space-y-20">
+    <SectionContainer className="py-16 md:py-24 space-y-16 md:space-y-20">
       
       {/* Section 1: Introduction */}
       <section>
@@ -154,7 +155,7 @@ const AboutPage = () => {
             className="font-headline text-6xl md:text-8xl font-extrabold"
         />
       </section>
-    </div>
+    </SectionContainer>
   );
 };
 
