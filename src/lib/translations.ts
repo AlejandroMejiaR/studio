@@ -37,6 +37,20 @@ export interface AppTranslations {
     };
     jobTitle: string;
     jobSpecialization: string;
+    education: {
+      title: string;
+      course1: string;
+      course2: string;
+    };
+    skills_list: {
+      ux: string[];
+      gameDesign: string[];
+    };
+    tech_areas: {
+      design: string;
+      develop: string;
+      management: string;
+    };
   };
   projectList: {
     noProjects: string;
@@ -101,11 +115,11 @@ export const translations: Record<Language, AppTranslations> = {
       viewMoreProjects: "View More Projects",
     },
     aboutMe: {
-      title: "About Me",
-      paragraph1: "Hello! I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.",
+      title: "Hello Again!",
+      paragraph1: "I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.",
       paragraph2: "I'm always learning, open to new challenges and collaborations.",
       workTogether: "Let's Work Together.",
-      skillsTitle: "My Skills",
+      skillsTitle: "Skills",
       technologiesTitle: "Technologies",
       skills: {
         gameDesign: "Game Design",
@@ -116,6 +130,20 @@ export const translations: Record<Language, AppTranslations> = {
       },
       jobTitle: "Multimedia Engineer",
       jobSpecialization: "Game · UX Designer",
+      education: {
+        title: "Education",
+        course1: "Multimedia Engineering",
+        course2: "High School Diploma",
+      },
+      skills_list: {
+        ux: ["User Research", "Wireframing", "Prototyping", "Usability Testing"],
+        gameDesign: ["Game Mechanics", "Level Design", "Narrative Design", "Playtesting"],
+      },
+      tech_areas: {
+        design: "Design",
+        develop: "Develop",
+        management: "Management",
+      },
     },
     projectList: {
       noProjects: "No projects to display yet. Check back soon!",
@@ -173,11 +201,11 @@ export const translations: Record<Language, AppTranslations> = {
       viewMoreProjects: "Ver Más Proyectos",
     },
     aboutMe: {
-      title: "Sobre mí",
-      paragraph1: "¡Hola! Soy un aspirante a Ingeniero en Multimedia, actualmente cursando el 10º semestre en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y el diseño de interacción (UX). Mi camino en la tecnología está impulsado por una pasión por la resolución de problemas y por crear soluciones digitales que sean tanto funcionales como visualmente atractivas.",
-      paragraph2: "Siempre estoy en constante aprendizaje, abierto a nuevos desafíos y colaboraciones.",
+      title: "¡Hola de Nuevo!",
+      paragraph1: "Soy un aspirante a Ingeniero Multimedia, actualmente en mi décimo semestre en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y diseño de interacción (UX). Mi trayectoria en la tecnología está impulsada por la pasión por resolver problemas y crear soluciones digitales que sean tanto funcionales como visualmente atractivas.",
+      paragraph2: "Siempre estoy aprendiendo, abierto a nuevos desafíos y colaboraciones.",
       workTogether: "Trabajemos Juntos.",
-      skillsTitle: "Mis Habilidades",
+      skillsTitle: "Habilidades",
       technologiesTitle: "Tecnologías",
       skills: {
         gameDesign: "Diseño de Juegos",
@@ -188,6 +216,20 @@ export const translations: Record<Language, AppTranslations> = {
       },
       jobTitle: "Ingeniero en Multimedia",
       jobSpecialization: "Game · UX Designer",
+      education: {
+        title: "Educación",
+        course1: "Ingeniería Multimedia",
+        course2: "Bachiller Académico",
+      },
+      skills_list: {
+        ux: ["Investigación de Usuarios", "Wireframing", "Prototipado", "Pruebas de Usabilidad"],
+        gameDesign: ["Mecánicas de Juego", "Diseño de Niveles", "Diseño Narrativo", "Playtesting"],
+      },
+      tech_areas: {
+        design: "Diseño",
+        develop: "Desarrollo",
+        management: "Gestión",
+      },
     },
     projectList: {
       noProjects: "Aún no hay proyectos para mostrar. ¡Vuelve pronto!",
