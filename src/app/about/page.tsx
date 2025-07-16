@@ -45,7 +45,7 @@ const AboutPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 space-y-24 md:space-y-32">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 space-y-16 md:space-y-20">
       
       {/* Section 1: Introduction */}
       <section>
@@ -68,7 +68,7 @@ const AboutPage = () => {
           <div className="flex justify-center items-center">
             <div className="relative w-full max-w-sm h-96">
                <Image
-                src="https://placehold.co/400x500.png"
+                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Profile.jpeg"
                 alt="Alejandro Mejia Rojas Portrait"
                 fill
                 className="object-cover rounded-lg shadow-lg"
