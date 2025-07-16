@@ -41,10 +41,10 @@ const AboutPage = () => {
   }
 
   return (
-    <SectionContainer className="space-y-16 md:space-y-20 py-16 md:py-24">
+    <SectionContainer>
       
       {/* Section 1: Introduction */}
-      <section>
+      <section className="py-5">
         <div className="flex flex-col md:flex-row items-center gap-12">
           {/* Text Content */}
           <div className="md:w-1/2 text-left text-lg text-foreground/80 leading-relaxed">
@@ -78,7 +78,7 @@ const AboutPage = () => {
       </section>
 
       {/* Section 2: Skills & Technologies */}
-      <section>
+      <section className="py-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Skills */}
           <div>
@@ -126,7 +126,7 @@ const AboutPage = () => {
       </section>
 
       {/* Section 3: Education */}
-      <section>
+      <section className="py-5">
         <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-12 text-center">Education</h2>
         <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
           {educationItems.map((item, index) => (
@@ -146,7 +146,7 @@ const AboutPage = () => {
       </section>
 
       {/* Section 4: Get In Touch */}
-      <section className="text-center py-16">
+      <section className="text-center py-5">
          <WordRevealAnimation
             text="Get In Touch"
             className="font-headline text-6xl md:text-8xl font-extrabold"
