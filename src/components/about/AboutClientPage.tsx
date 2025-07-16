@@ -2,12 +2,6 @@
 "use client";
 
 import Image from 'next/image';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -151,21 +145,14 @@ const AboutClientPage = () => {
       {/* Section 3: Education */}
       <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
         <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Education</h2>
-        <Accordion type="single" collapsible className="w-full">
+        <div className="w-full">
           {educationItems.map((item, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger>
-                <div className="flex justify-between w-full text-left">
-                  <span className="font-semibold text-lg">{item.course}</span>
-                  <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                {item.description}
-              </AccordionContent>
-            </AccordionItem>
+            <div key={index} className="flex justify-between items-center w-full text-left border-b py-4">
+              <span className="font-semibold text-lg">{item.course}</span>
+              <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
+            </div>
           ))}
-        </Accordion>
+        </div>
       </div>
 
     </div>
