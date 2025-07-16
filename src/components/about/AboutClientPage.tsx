@@ -100,7 +100,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-6xl mx-auto pb-32">
+      <div className="w-full max-w-4xl mx-auto pb-32">
         <div className="flex justify-between">
           {/* Skills */}
           <div>
@@ -149,7 +149,7 @@ const AboutClientPage = () => {
       </div>
       
       {/* Section 3: Education */}
-      <div className="w-full max-w-6xl mx-auto pb-24 mb-24">
+      <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
         <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Education</h2>
         <Accordion type="single" collapsible className="w-full">
           {educationItems.map((item, index) => (
