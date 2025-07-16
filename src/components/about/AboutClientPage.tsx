@@ -56,7 +56,7 @@ const AboutClientPage = () => {
     {
       src: "https://placehold.co/600x400.png",
       alt: "Videogame development on screen",
-      rotation: "rotate-1",
+      rotation: "rotate-2",
       hint: "game development"
     },
   ];
@@ -153,32 +153,35 @@ const AboutClientPage = () => {
           </div>
 
           {/* Right Column - Image Stack */}
-          <div className="relative h-full flex items-center justify-center pt-10 md:pt-0">
-            <div className="relative w-full h-[500px]">
-              {imageStack.map((image, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    'absolute w-[60%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10',
-                    image.rotation
-                  )}
-                  style={{
-                    top: `${index * 30}%`,
-                    left: `${index % 2 === 0 ? '0%' : 'auto'}`,
-                    right: `${index % 2 !== 0 ? '0%' : 'auto'}`,
-                  }}
-                >
-                  <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      className="object-cover"
-                      data-ai-hint={image.hint}
-                    />
+          <div className="relative min-h-[600px] flex items-center justify-center pt-10 md:pt-0">
+            <div className="relative w-full h-full">
+              {imageStack.map((image, index) => {
+                const positions = [
+                  { top: '0%', left: '10%' },
+                  { top: '30%', left: '0%' },
+                  { top: '60%', left: '10%' },
+                ];
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      'absolute w-[70%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
+                      image.rotation
+                    )}
+                    style={positions[index]}
+                  >
+                    <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={image.hint}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
