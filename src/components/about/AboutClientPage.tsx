@@ -129,6 +129,26 @@ const AboutClientPage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Education */}
+            <div className="max-w-4xl">
+              <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-12 text-left">Education</h2>
+              <Accordion type="single" collapsible className="w-full">
+                {educationItems.map((item, index) => (
+                  <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger>
+                      <div className="flex justify-between w-full text-left">
+                        <span className="font-semibold text-lg">{item.course}</span>
+                        <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {item.description}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
           </div>
 
           {/* Right Column - Image Stack */}
@@ -162,27 +182,6 @@ const AboutClientPage = () => {
         </div>
       </section>
 
-      {/* Section 2: Education */}
-      <section className="py-5">
-        <div className="max-w-4xl">
-          <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-12 text-left">Education</h2>
-          <Accordion type="single" collapsible className="w-full">
-            {educationItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger>
-                  <div className="flex justify-between w-full text-left">
-                    <span className="font-semibold text-lg">{item.course}</span>
-                    <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  {item.description}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
-      </section>
     </SectionContainer>
   );
 };
