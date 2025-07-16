@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/accordion"
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import { cn } from '@/lib/utils';
-import WordRevealAnimation from '../effects/WordRevealAnimation';
 
 const AboutClientPage = () => {
     
@@ -40,141 +39,124 @@ const AboutClientPage = () => {
     management: ["Jira", "Trello", "Git"]
   }
 
-  const imageStack = [
-    {
-      src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Profile.jpeg",
-      alt: "Alejandro Mejia Rojas Portrait",
-      rotation: "rotate-2",
-      hint: "professional portrait"
-    },
-    {
-      src: "https://placehold.co/600x400.png",
-      alt: "Workspace with design tools",
-      rotation: "-rotate-2",
-      hint: "workspace design"
-    },
-    {
-      src: "https://placehold.co/600x400.png",
-      alt: "Videogame development on screen",
-      rotation: "rotate-2",
-      hint: "game development"
-    },
-  ];
-
+  const profileImage = {
+    src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Profile.jpeg",
+    alt: "Alejandro Mejia Rojas Portrait",
+    rotation: "rotate-2",
+    hint: "professional portrait"
+  };
 
   return (
-    <SectionContainer>
+    <SectionContainer className="py-16 md:py-24 lg:py-32 space-y-20 md:space-y-28">
       
-      {/* Section 1: Two-column layout with Intro, Skills, Tech, and Image Stack */}
-      <section className="py-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-          {/* Left Column */}
-          <div className="flex flex-col gap-10">
-            {/* Intro Text */}
-            <div className="text-left text-lg text-foreground/80 leading-relaxed">
-              <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
-              <p>
-                I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.
-              </p>
-              <br />
-              <p>
-                I'm always learning, open to new challenges and collaborations.
-              </p>
-              <p className="mt-4">
-                <a href="mailto:alejandro197mejia@gmail.com" className="font-bold text-accent hover:text-accent/90 no-underline transition-colors">
-                  Let’s Work Together.
-                </a>
-              </p>
-            </div>
+      {/* Section 1: Intro Text and Single Image */}
+      <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Left Column - Intro Text */}
+          <div className="text-left text-lg text-foreground/80 leading-relaxed">
+            <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
+            <p>
+              I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.
+            </p>
+            <br />
+            <p>
+              I'm always learning, open to new challenges and collaborations.
+            </p>
+            <p className="mt-4">
+              <a href="mailto:alejandro197mejia@gmail.com" className="font-bold text-accent hover:text-accent/90 no-underline transition-colors">
+                Let’s Work Together.
+              </a>
+            </p>
+          </div>
 
-            {/* Skills */}
-            <div>
-              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8">Skills</h3>
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
-                  </ul>
-                </div>
+          {/* Right Column - Single Image */}
+          <div className="flex justify-center items-center">
+            <div
+              className={cn(
+                'relative w-[75%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
+                profileImage.rotation
+              )}
+            >
+              <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden">
+                <Image
+                  src={profileImage.src}
+                  alt={profileImage.alt}
+                  fill
+                  className="object-cover"
+                  data-ai-hint={profileImage.hint}
+                />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Technologies */}
-            <div>
-              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8">Technologies</h3>
-              <div className="grid grid-cols-3 gap-8">
-                <div>
-                  <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
+      {/* Section 2: Centered Skills, Tech, and Education */}
+      <section>
+        <div className="flex flex-col items-center gap-16 md:gap-20">
+
+          {/* Skills */}
+          <div className="w-full max-w-4xl">
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center">Skills</h3>
+            <div className="grid grid-cols-2 gap-8">
+              <div>
+                <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
+                </ul>
               </div>
-            </div>
-
-            {/* Education */}
-            <div className="max-w-4xl">
-              <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-12 text-left">Education</h2>
-              <Accordion type="single" collapsible className="w-full">
-                {educationItems.map((item, index) => (
-                  <AccordionItem key={index} value={`item-${index}`}>
-                    <AccordionTrigger>
-                      <div className="flex justify-between w-full text-left">
-                        <span className="font-semibold text-lg">{item.course}</span>
-                        <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      {item.description}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+              <div>
+                <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
+                </ul>
+              </div>
             </div>
           </div>
 
-          {/* Right Column - Image Stack */}
-          <div className="h-full flex flex-col justify-center items-center py-10 md:py-0">
-            <div className="flex flex-col gap-8 w-full items-center">
-              {imageStack.map((image, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    'relative w-[50%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
-                    image.rotation
-                  )}
-                >
-                  <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden">
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      fill
-                      className="object-cover"
-                      data-ai-hint={image.hint}
-                    />
-                  </div>
-                </div>
-              ))}
+          {/* Technologies */}
+          <div className="w-full max-w-4xl">
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center">Technologies</h3>
+            <div className="grid grid-cols-3 gap-8">
+              <div>
+                <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
             </div>
+          </div>
+
+          {/* Education */}
+          <div className="w-full max-w-4xl">
+            <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center">Education</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {educationItems.map((item, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger>
+                    <div className="flex justify-between w-full text-left">
+                      <span className="font-semibold text-lg">{item.course}</span>
+                      <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    {item.description}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
 
         </div>
