@@ -8,7 +8,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { SectionContainer } from '@/components/layout/SectionContainer';
 import { cn } from '@/lib/utils';
 
 const AboutClientPage = () => {
@@ -101,13 +100,13 @@ const AboutClientPage = () => {
             <div className="grid grid-cols-2 gap-8">
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
-                <ul className="space-y-2 text-foreground/80">
+                <ul className="space-y-1 text-foreground/80">
                   {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
                 </ul>
               </div>
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
-                <ul className="space-y-2 text-foreground/80">
+                <ul className="space-y-1 text-foreground/80">
                   {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
                 </ul>
               </div>
