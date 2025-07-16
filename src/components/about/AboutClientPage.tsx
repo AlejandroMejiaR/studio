@@ -47,7 +47,7 @@ const AboutClientPage = () => {
   };
 
   return (
-    <SectionContainer className="py-16 md:py-24 lg:py-32 space-y-20 md:space-y-28">
+    <SectionContainer className="py-8 md:py-12 lg:py-16 space-y-20 md:space-y-28">
       
       {/* Section 1: Intro Text and Single Image */}
       <section>
@@ -73,7 +73,7 @@ const AboutClientPage = () => {
           <div className="flex justify-center items-center">
             <div
               className={cn(
-                'relative w-[75%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
+                'relative w-[50%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
                 profileImage.rotation
               )}
             >
