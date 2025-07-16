@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
 import {
   Accordion,
@@ -11,13 +10,9 @@ import {
 } from "@/components/ui/accordion"
 import WordRevealAnimation from '@/components/effects/WordRevealAnimation';
 import { SectionContainer } from '@/components/layout/SectionContainer';
+import * as React from 'react';
 
 const AboutPage = () => {
-  const { translationsForLanguage, isClientReady } = useLanguage();
-
-  const aboutMeTitle = isClientReady 
-    ? translationsForLanguage.aboutMe.title 
-    : "Sobre Mí";
     
   const educationItems = [
     {
@@ -50,8 +45,9 @@ const AboutPage = () => {
       
       {/* Section 1: Introduction */}
       <section>
-        <div className="mx-auto max-w-4xl">
-          <div className="text-left text-lg text-foreground/80 leading-relaxed mb-12">
+        <div className="flex flex-col md:flex-row items-center gap-12 max-w-7xl mx-auto">
+          {/* Text Content */}
+          <div className="md:w-1/2 text-left text-lg text-foreground/80 leading-relaxed">
             <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
             <p>
               I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.
@@ -66,7 +62,8 @@ const AboutPage = () => {
               </a>
             </p>
           </div>
-          <div className="flex justify-center items-center">
+          {/* Image */}
+          <div className="md:w-1/2 flex justify-center items-center">
             <div className="relative w-full max-w-sm h-96">
                <Image
                 src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Profile.jpeg"
