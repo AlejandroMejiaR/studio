@@ -90,78 +90,73 @@ const AboutClientPage = () => {
         </div>
       </div>
 
-      {/* Section 2: Centered Skills, Tech, and Education */}
-      <div className="pb-24 mb-24">
-        <div className="flex flex-col items-center gap-16 md:gap-20">
-
-          <div className="w-full max-w-4xl flex justify-between gap-12">
-            {/* Skills */}
-            <div>
-              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
-              <div className="flex justify-start gap-8">
-                <div className="text-left">
-                  <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
-                  <ul className="space-y-1 text-foreground/80">
-                    {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
-                  </ul>
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
-                  <ul className="space-y-1 text-foreground/80">
-                    {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
-                  </ul>
-                </div>
+      {/* Section 2: Skills and Technologies */}
+      <div className="w-full max-w-4xl mx-auto mb-16">
+        <div className="flex justify-between gap-12">
+          {/* Skills */}
+          <div>
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
+            <div className="flex justify-start gap-8">
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
+                <ul className="space-y-1 text-foreground/80">
+                  {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
+                </ul>
               </div>
-            </div>
-
-            {/* Technologies */}
-            <div className="ml-auto">
-              <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
-              <div className="flex justify-start gap-8 flex-wrap">
-                <div className="text-left">
-                  <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
-                <div className="text-left">
-                  <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
-                  <ul className="space-y-2 text-foreground/80">
-                    {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
-                  </ul>
-                </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
+                <ul className="space-y-1 text-foreground/80">
+                  {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
+                </ul>
               </div>
             </div>
           </div>
 
-
-          {/* Education */}
-          <div className="w-full max-w-4xl">
-            <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Education</h2>
-            <Accordion type="single" collapsible className="w-full">
-              {educationItems.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger>
-                    <div className="flex justify-between w-full text-left">
-                      <span className="font-semibold text-lg">{item.course}</span>
-                      <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    {item.description}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+          {/* Technologies */}
+          <div className="ml-auto">
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
+            <div className="flex justify-start gap-8 flex-wrap">
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
+                <ul className="space-y-2 text-foreground/80">
+                  {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
+                </ul>
+              </div>
+            </div>
           </div>
-
         </div>
+      </div>
+      
+      {/* Section 3: Education */}
+      <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
+        <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Education</h2>
+        <Accordion type="single" collapsible className="w-full">
+          {educationItems.map((item, index) => (
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger>
+                <div className="flex justify-between w-full text-left">
+                  <span className="font-semibold text-lg">{item.course}</span>
+                  <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                {item.description}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
 
     </div>
