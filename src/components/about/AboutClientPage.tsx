@@ -99,13 +99,13 @@ const AboutClientPage = () => {
           <div className="w-full max-w-4xl">
             <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center">Skills</h3>
             <div className="grid grid-cols-2 gap-8">
-              <div>
+              <div className="text-center">
                 <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
                 <ul className="space-y-2 text-foreground/80">
                   {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
                 </ul>
               </div>
-              <div>
+              <div className="text-center">
                 <h4 className="font-semibold text-xl text-accent mb-4">Game Design</h4>
                 <ul className="space-y-2 text-foreground/80">
                   {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
@@ -118,19 +118,19 @@ const AboutClientPage = () => {
           <div className="w-full max-w-4xl">
             <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center">Technologies</h3>
             <div className="grid grid-cols-3 gap-8">
-              <div>
+              <div className="text-center">
                 <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
                 <ul className="space-y-2 text-foreground/80">
                   {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>
               </div>
-              <div>
+              <div className="text-center">
                 <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
                 <ul className="space-y-2 text-foreground/80">
                   {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>
               </div>
-              <div>
+              <div className="text-center">
                 <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
                 <ul className="space-y-2 text-foreground/80">
                   {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
