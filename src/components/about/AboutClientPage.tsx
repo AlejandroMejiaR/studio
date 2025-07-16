@@ -92,7 +92,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Centered Skills, Tech, and Education */}
-      <div className="mt-24">
+      <div>
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
           {/* Skills */}
