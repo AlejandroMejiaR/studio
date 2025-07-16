@@ -100,7 +100,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-6xl mx-auto pb-32">
+      <div className="w-full pb-32">
         <div className="flex justify-between">
           {/* Skills */}
           <div>
