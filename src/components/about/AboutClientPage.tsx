@@ -64,7 +64,12 @@ const AboutClientPage = () => {
               I'm always learning, open to new challenges and collaborations.
             </p>
             <div className="mt-6">
-              <Button variant="outline" size="lg" asChild>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                asChild
+                className="border-accent text-accent hover:bg-accent hover:text-accent-foreground"
+              >
                 <Link href="mailto:alejandro197mejia@gmail.com">
                   Let’s Work Together.
                 </Link>
@@ -95,7 +100,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-4xl mx-auto pb-32">
+      <div className="w-full max-w-6xl mx-auto pb-32">
         <div className="flex justify-between gap-12">
           {/* Skills */}
           <div>
@@ -122,19 +127,19 @@ const AboutClientPage = () => {
             <div className="flex justify-start gap-8 flex-wrap">
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
-                <ul className="space-y-2 text-foreground/80">
+                <ul className="space-y-1 text-foreground/80">
                   {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>
               </div>
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">Develop</h4>
-                <ul className="space-y-2 text-foreground/80">
+                <ul className="space-y-1 text-foreground/80">
                   {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>
               </div>
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">Management</h4>
-                <ul className="space-y-2 text-foreground/80">
+                <ul className="space-y-1 text-foreground/80">
                   {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>
               </div>
