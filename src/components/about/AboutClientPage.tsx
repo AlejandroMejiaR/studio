@@ -24,8 +24,8 @@ const AboutClientPage = () => {
   ];
 
   const skills = {
-    ux: [translationsForLanguage.aboutMe.skills_list.ux[0], translationsForLanguage.aboutMe.skills_list.ux[1], translationsForLanguage.aboutMe.skills_list.ux[2], translationsForLanguage.aboutMe.skills_list.ux[3]],
-    gameDesign: [translationsForLanguage.aboutMe.skills_list.gameDesign[0], translationsForLanguage.aboutMe.skills_list.gameDesign[1], translationsForLanguage.aboutMe.skills_list.gameDesign[2], translationsForLanguage.aboutMe.skills_list.gameDesign[3]]
+    ux: ["User Research", "Wireframing", "Prototyping", "Usability Testing"],
+    gameDesign: ["Game Mechanics", "Level Design", "Narrative Design", "Playtesting"]
   }
 
   const technologies = {

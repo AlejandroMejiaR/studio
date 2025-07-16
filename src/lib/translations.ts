@@ -42,10 +42,6 @@ export interface AppTranslations {
       course1: string;
       course2: string;
     };
-    skills_list: {
-      ux: string[];
-      gameDesign: string[];
-    };
     tech_areas: {
       design: string;
       develop: string;
@@ -135,10 +131,6 @@ export const translations: Record<Language, AppTranslations> = {
         course1: "Multimedia Engineering",
         course2: "High School Diploma",
       },
-      skills_list: {
-        ux: ["User Research", "Wireframing", "Prototyping", "Usability Testing"],
-        gameDesign: ["Game Mechanics", "Level Design", "Narrative Design", "Playtesting"],
-      },
       tech_areas: {
         design: "Design",
         develop: "Develop",
@@ -220,10 +212,6 @@ export const translations: Record<Language, AppTranslations> = {
         title: "Educación",
         course1: "Ingeniería Multimedia",
         course2: "Bachiller Académico",
-      },
-      skills_list: {
-        ux: ["Investigación de Usuarios", "Wireframing", "Prototipado", "Pruebas de Usabilidad"],
-        gameDesign: ["Mecánicas de Juego", "Diseño de Niveles", "Diseño Narrativo", "Playtesting"],
       },
       tech_areas: {
         design: "Diseño",
