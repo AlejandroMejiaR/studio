@@ -50,8 +50,8 @@ const AboutPage = () => {
       
       {/* Section 1: Introduction */}
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="text-left text-lg text-foreground/80 leading-relaxed">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-left text-lg text-foreground/80 leading-relaxed mb-12">
             <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
             <p>
               I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.
