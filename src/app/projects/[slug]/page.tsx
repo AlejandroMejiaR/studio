@@ -5,6 +5,7 @@ import ProjectClientContent from '@/components/projects/ProjectClientContent';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
 import BackButton from '@/components/layout/BackButton';
+import { SectionContainer } from '@/components/layout/SectionContainer';
 
 // Disable data caching for this page.
 export const revalidate = 0;
@@ -61,11 +62,11 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
   return (
     <div className="pb-32 md:pb-40">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+      <SectionContainer className="pt-12">
         <div className="flex items-center gap-4">
           <BackButton />
         </div>
-      </div>
+      </SectionContainer>
       <ProjectClientContent 
         project={project} 
       />
