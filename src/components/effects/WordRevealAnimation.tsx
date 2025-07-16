@@ -1,10 +1,10 @@
 
 "use client";
 
-import type { FC } from 'react';
+import type { FC, Fragment } from 'react';
 import { cn } from '@/lib/utils';
 import LetterRevealAnimation from './LetterRevealAnimation';
-import React, { Fragment } from 'react';
+import React from 'react';
 
 interface WordRevealAnimationProps {
   text: string; // A single line of text
