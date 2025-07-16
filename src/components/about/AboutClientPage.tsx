@@ -157,9 +157,9 @@ const AboutClientPage = () => {
             <div className="relative w-full h-full">
               {imageStack.map((image, index) => {
                 const positions = [
-                  { top: '0%', left: '10%' },
-                  { top: '30%', left: '0%' },
-                  { top: '60%', left: '10%' },
+                  { top: '5%', left: '15%' },
+                  { top: '35%', left: '0%' },
+                  { top: '65%', left: '15%' },
                 ];
                 return (
                   <div
