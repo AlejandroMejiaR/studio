@@ -153,37 +153,31 @@ const AboutClientPage = () => {
           </div>
 
           {/* Right Column - Image Stack */}
-          <div className="relative min-h-[600px] flex items-center justify-center pt-10 md:pt-0">
-            <div className="relative w-full h-full">
-              {imageStack.map((image, index) => {
-                const positions = [
-                  { top: '5%', left: '15%' },
-                  { top: '35%', left: '0%' },
-                  { top: '65%', left: '15%' },
-                ];
-                return (
-                  <div
-                    key={index}
-                    className={cn(
-                      'absolute w-[70%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
-                      image.rotation
-                    )}
-                    style={positions[index]}
-                  >
-                    <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden">
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        className="object-cover"
-                        data-ai-hint={image.hint}
-                      />
-                    </div>
+          <div className="h-full flex flex-col justify-center items-center py-10 md:py-0">
+            <div className="flex flex-col gap-8 w-full px-4">
+              {imageStack.map((image, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    'relative w-[85%] aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
+                    image.rotation,
+                    index === 1 ? 'self-end' : 'self-start' // Alternate alignment for overlap
+                  )}
+                >
+                  <div className="relative w-full h-full rounded-lg shadow-lg overflow-hidden">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                      data-ai-hint={image.hint}
+                    />
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
+
         </div>
       </section>
 
