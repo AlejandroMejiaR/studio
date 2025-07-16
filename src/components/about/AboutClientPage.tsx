@@ -64,9 +64,9 @@ const AboutClientPage = () => {
               I'm always learning, open to new challenges and collaborations.
             </p>
             <div className="mt-6">
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 asChild
                 className="border-accent text-accent hover:bg-accent hover:text-accent-foreground"
               >
@@ -101,11 +101,11 @@ const AboutClientPage = () => {
 
       {/* Section 2: Skills and Technologies */}
       <div className="w-full max-w-4xl mx-auto pb-32">
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           {/* Skills */}
-          <div>
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
-            <div className="flex justify-start gap-8">
+          <div className="mb-12 md:mb-0">
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center md:text-left">Skills</h3>
+            <div className="flex justify-center md:justify-start gap-8">
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
                 <ul className="space-y-1 text-foreground/80">
@@ -122,9 +122,9 @@ const AboutClientPage = () => {
           </div>
 
           {/* Technologies */}
-          <div className="ml-auto">
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
-            <div className="flex justify-start gap-8 flex-wrap">
+          <div className="md:ml-auto">
+            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center md:text-left">Technologies</h3>
+            <div className="flex justify-center md:justify-start gap-8 flex-wrap">
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
                 <ul className="space-y-1 text-foreground/80">
