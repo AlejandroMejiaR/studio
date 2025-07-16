@@ -69,7 +69,7 @@ const AboutPage = () => {
           <div className="flex justify-center items-center">
             <div className="relative w-full max-w-sm h-96">
                <Image
-                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Profile.jpeg"
+                src="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Profile.jpeg"
                 alt="Alejandro Mejia Rojas Portrait"
                 fill
                 className="object-cover rounded-lg shadow-lg"
