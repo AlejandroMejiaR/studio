@@ -50,7 +50,7 @@ const AboutClientPage = () => {
     <div className="container">
       
       {/* Section 1: Intro Text and Single Image */}
-      <div className="pt-32">
+      <div className="pt-32 pb-12">
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-16">
           {/* Left Column - Intro Text */}
           <div className="w-full max-w-lg text-left text-lg text-foreground/80 leading-relaxed flex-shrink-0">
