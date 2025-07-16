@@ -49,7 +49,7 @@ const AboutClientPage = () => {
     <div className="container">
       
       {/* Section 1: Intro Text and Single Image */}
-      <div className="pt-32 pb-12">
+      <div className="pt-32 pb-32">
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-16">
           {/* Left Column - Intro Text */}
           <div className="w-full max-w-lg text-left text-lg text-foreground/80 leading-relaxed flex-shrink-0">
@@ -94,7 +94,7 @@ const AboutClientPage = () => {
       <div className="pb-24 mb-24">
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
-          <div className="w-full max-w-4xl flex flex-col md:flex-row gap-12">
+          <div className="w-full max-w-4xl flex justify-between gap-12">
             {/* Skills */}
             <div>
               <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
