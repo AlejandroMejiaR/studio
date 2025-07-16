@@ -51,7 +51,7 @@ const AboutClientPage = () => {
       
       {/* Section 1: Intro Text and Single Image */}
       <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
           {/* Left Column - Intro Text */}
           <div className="text-left text-lg text-foreground/80 leading-relaxed">
             <h2 className="font-headline text-5xl font-bold text-primary dark:text-foreground mb-6">Hello Again!</h2>
