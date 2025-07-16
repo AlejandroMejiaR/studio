@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useEffect, FC, Fragment } from 'react';
-import React from 'react';
+import { useState, useEffect, FC } from 'react';
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 interface HighlightedWord {
@@ -115,7 +115,7 @@ const TypingAnimation: FC<TypingAnimationProps> = ({
         if (isHighlight) {
             typedJsx.push(<span key={i} className={highlightedMap.get(part)}>{partToDisplay}</span>);
         } else {
-            typedJsx.push(<Fragment key={i}>{partToDisplay}</Fragment>);
+            typedJsx.push(<React.Fragment key={i}>{partToDisplay}</React.Fragment>);
         }
 
         charsTypedSoFar += part.length;
