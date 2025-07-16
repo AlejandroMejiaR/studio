@@ -96,7 +96,7 @@ const AboutClientPage = () => {
 
           <div className="w-full max-w-4xl flex flex-col md:flex-row justify-between gap-12">
             {/* Skills */}
-            <div className="flex-1">
+            <div>
               <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
               <div className="flex justify-start gap-8">
                 <div className="text-left">
@@ -115,9 +115,9 @@ const AboutClientPage = () => {
             </div>
 
             {/* Technologies */}
-            <div className="flex-1">
+            <div>
               <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
-              <div className="flex justify-start gap-8">
+              <div className="flex justify-start gap-8 flex-wrap">
                 <div className="text-left">
                   <h4 className="font-semibold text-xl text-accent mb-4">Design</h4>
                   <ul className="space-y-2 text-foreground/80">
