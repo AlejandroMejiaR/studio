@@ -91,7 +91,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-4xl mx-auto mb-16">
+      <div className="w-full max-w-4xl mx-auto mb-16 pb-32">
         <div className="flex justify-between gap-12">
           {/* Skills */}
           <div>
