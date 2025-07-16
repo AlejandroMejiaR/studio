@@ -47,10 +47,10 @@ const AboutClientPage = () => {
   };
 
   return (
-    <SectionContainer>
+    <div className="container">
       
       {/* Section 1: Intro Text and Single Image */}
-      <section>
+      <div className="py-8 md:py-12 lg:py-16">
         <div className="flex flex-col md:flex-row items-center justify-center gap-12 lg:gap-16">
           {/* Left Column - Intro Text */}
           <div className="w-full max-w-lg text-left text-lg text-foreground/80 leading-relaxed flex-shrink-0">
@@ -89,10 +89,10 @@ const AboutClientPage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Section 2: Centered Skills, Tech, and Education */}
-      <section className="mt-24">
+      <div className="mt-24">
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
           {/* Skills */}
@@ -160,9 +160,9 @@ const AboutClientPage = () => {
           </div>
 
         </div>
-      </section>
+      </div>
 
-    </SectionContainer>
+    </div>
   );
 };
 
