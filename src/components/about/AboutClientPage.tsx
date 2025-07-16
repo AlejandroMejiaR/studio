@@ -94,7 +94,7 @@ const AboutClientPage = () => {
       <div className="pb-24 mb-24">
         <div className="flex flex-col items-center gap-16 md:gap-20">
 
-          <div className="w-full max-w-6xl flex flex-col md:flex-row justify-between gap-12">
+          <div className="w-full max-w-4xl flex flex-col md:flex-row gap-12">
             {/* Skills */}
             <div>
               <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Skills</h3>
@@ -115,7 +115,7 @@ const AboutClientPage = () => {
             </div>
 
             {/* Technologies */}
-            <div>
+            <div className="ml-auto">
               <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Technologies</h3>
               <div className="flex justify-start gap-8 flex-wrap">
                 <div className="text-left">
