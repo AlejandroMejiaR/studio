@@ -180,7 +180,7 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               onClick={handleSmoothScroll}
-              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors duration-300 ease-in-out px-2"
+              className="text-sm font-medium text-foreground/80 hover:bg-accent/10 transition-colors duration-300 ease-in-out px-3 py-2 rounded-md"
             >
               <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
                 {navLinkText(link.labelKey)}
