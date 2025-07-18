@@ -307,11 +307,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                   <Button
                     size="icon"
                     asChild
-                    className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground"
+                    className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground [&_svg]:size-8"
                     aria-label={viewWorkButtonText}
                   >
                     <Link href="/#projects" onClick={handleSmoothScroll}>
-                      <ArrowDown className="h-8 w-8" />
+                      <ArrowDown />
                     </Link>
                   </Button>
                 </div>
