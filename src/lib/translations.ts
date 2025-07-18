@@ -183,7 +183,7 @@ export const translations: Record<Language, AppTranslations> = {
     home: {
       hero: {
         animatingTitle: ["Transforma", "Ideas En", "Mundos", "Interactivos"],
-        subtitle: "¡Hola!\nSoy Alejandro\nDiseñador UX y de Videojuegos\nMe apasiona dar forma al futuro de la interacción digital, impulsada por IA.",
+        subtitle: "¡Hola!\nSoy Alejandro\nDiseñador UX y de Videojuegos\nMe apasiona dar forma al futuro de la interacción digital — impulsada por IA.",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
