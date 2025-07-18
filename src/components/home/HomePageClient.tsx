@@ -311,7 +311,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     aria-label={viewWorkButtonText}
                   >
                     <Link href="/#projects" onClick={handleSmoothScroll}>
-                      <ArrowDown className="h-10 w-10" />
+                      <ArrowDown className="h-12 w-12" />
                     </Link>
                   </Button>
                 </div>
