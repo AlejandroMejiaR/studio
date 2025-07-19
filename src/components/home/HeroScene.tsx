@@ -2,7 +2,7 @@
 "use client";
 
 import { Suspense, useRef, useEffect, useState, useCallback }from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { useGLTF, useAnimations, Html } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
@@ -60,20 +60,16 @@ function Model(props: JSX.IntrinsicElements['group']) {
     };
 
     mixer.addEventListener('finished', onFinished);
+    
+    // Trigger the initial wave animation ONLY ONCE on load, after model is ready.
+    startWaveAnimation();
 
     return () => {
       mixer.removeEventListener('finished', onFinished);
     };
-  }, [actions, mixer, wavePlayCount]);
-
-  // Effect to trigger the initial wave animation ONLY ONCE on load.
-  useEffect(() => {
-    // This check ensures we only trigger the automatic wave if animations are ready.
-    if (actions.Idle && actions.Wave) {
-      startWaveAnimation();
-    }
+    // This effect runs only when actions become available, ensuring model is loaded.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions.Idle, actions.Wave]); // This effect runs only when actions become available.
+  }, [actions, mixer]);
 
 
   const handleModelClick = (event: any) => {
