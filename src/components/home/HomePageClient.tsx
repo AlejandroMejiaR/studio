@@ -14,6 +14,7 @@ import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation'
 import { ArrowDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useScreenSize } from '@/hooks/use-screen-size';
+import { useGLTF } from '@react-three/drei';
 
 const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
   ssr: false,
@@ -42,6 +43,11 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
   const [isContentVisible, setIsContentVisible] = useState(false);
   const [areControlsVisible, setAreControlsVisible] = useState(false);
+
+  // Preload the model as early as possible on the client
+  useEffect(() => {
+    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
+  }, []);
 
   useEffect(() => {
     if (!isClientReady) return;

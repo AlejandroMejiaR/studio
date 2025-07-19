@@ -60,7 +60,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
       const welcomeTimer = setTimeout(() => {
         startWaveAnimation();
         sessionStorage.setItem('portfolio-ace-has-greeted', 'true');
-      }, 2500); // Wait for model to be visible
+      }, 3000); // Wait for model to be visible
       return () => clearTimeout(welcomeTimer);
     }
     
@@ -149,9 +149,6 @@ export default function HeroScene() {
     return () => observer.disconnect();
   }, []);
   
-  useEffect(() => {
-    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
-  }, []);
 
   if (!isMounted || !screenSize || screenSize === 'mobile') {
     return null; // Don't render on server or on mobile
