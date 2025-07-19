@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useRef, useEffect, useState }from 'react';
+import { Suspense, useRef, useEffect, useState, useCallback }from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, useAnimations, Html } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -17,18 +17,34 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [wavePlayCount, setWavePlayCount] = useState(0);
   const screenSize = useScreenSize();
+  
+  const startWaveAnimation = useCallback(() => {
+    if (isAnimating || !actions.Idle || !actions.Wave) {
+      return;
+    }
+    setIsAnimating(true);
+    setWavePlayCount(0); // Reset play count for the new interaction
+    
+    const idleAction = actions.Idle;
+    const waveAction = actions.Wave;
+
+    idleAction.fadeOut(0.5);
+    waveAction.reset().fadeIn(0.5).play();
+  }, [actions, isAnimating]);
 
   useEffect(() => {
     const idleAction = actions.Idle;
-    if (idleAction) {
-      idleAction.play();
-    }
-
     const waveAction = actions.Wave;
-    if (waveAction) {
-      waveAction.setLoop(THREE.LoopOnce, 1); // We will control the repeat manually.
-      waveAction.clampWhenFinished = true; // Prevents T-pose between plays
-    }
+    
+    if (!idleAction || !waveAction) return;
+
+    // Default action setup
+    idleAction.play();
+    waveAction.setLoop(THREE.LoopOnce, 1);
+    waveAction.clampWhenFinished = true;
+
+    // Start wave animation on initial load
+    startWaveAnimation();
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
@@ -37,7 +53,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
           waveAction.reset().play();
         } else { // If it has played twice, transition back to idle
           waveAction.fadeOut(0.5);
-          const idleAction = actions.Idle;
           if (idleAction) {
             idleAction.reset().fadeIn(0.5).play();
           }
@@ -51,22 +66,16 @@ function Model(props: JSX.IntrinsicElements['group']) {
     return () => {
       mixer.removeEventListener('finished', onFinished);
     };
-  }, [actions, mixer, wavePlayCount]);
+  }, [actions, mixer, wavePlayCount, startWaveAnimation]);
+
 
   const handleModelClick = (event: any) => {
     // Stop propagation so the main container doesn't get the click.
     event.stopPropagation();
-    if (isAnimating || !actions.Idle || !actions.Wave || screenSize === 'mobile') {
+    if (screenSize === 'mobile') {
       return;
     }
-    setIsAnimating(true);
-    setWavePlayCount(0); // Reset play count for the new interaction
-    
-    const idleAction = actions.Idle;
-    const waveAction = actions.Wave;
-
-    idleAction.fadeOut(0.5);
-    waveAction.reset().fadeIn(0.5).play();
+    startWaveAnimation();
   };
 
   return <primitive ref={group} object={scene} {...props} onClick={handleModelClick} />;
