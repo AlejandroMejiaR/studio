@@ -45,7 +45,7 @@ body {
     --radius: 0.5rem;
 
     /* Custom variables for Portfolio Ace */
-    --footer-background: 30 40% 25%; /* Dark Brown */
+    --footer-background: 0 0% 23%; /* Dark Grey #3b3b3b */
     --footer-foreground: 0 0% 85%; /* Light grey/off-white for footer text */
 
     --sidebar-background: 220 10% 94%; /* Very light cool grey for sidebar #EDEFF2 */
