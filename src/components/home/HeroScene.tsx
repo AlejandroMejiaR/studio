@@ -31,7 +31,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
   useEffect(() => {
     if (!actions.Idle || !actions.Wave) return;
 
-    // Default action setup
     actions.Idle.play();
     actions.Wave.setLoop(THREE.LoopOnce, 1);
     actions.Wave.clampWhenFinished = true;
@@ -40,36 +39,39 @@ function Model(props: JSX.IntrinsicElements['group']) {
 
     const onFinished = (e: any) => {
       if (e.action === actions.Wave) {
-        if (wavePlayCount < 1) { // If it has played once, play it again
+        if (wavePlayCount < 1) { 
           wavePlayCount++;
           actions.Wave.reset().play();
-        } else { // If it has played twice, transition back to idle
+        } else { 
           actions.Wave.fadeOut(0.5);
           actions.Idle.reset().fadeIn(0.5).play();
-          wavePlayCount = 0; // Reset for the next interaction
+          wavePlayCount = 0; 
           setIsAnimating(false);
         }
       }
     };
 
     mixer.addEventListener('finished', onFinished);
-
-    // After a short delay to allow for the model's fade-in, trigger the welcome wave.
-    const welcomeTimer = setTimeout(() => {
-      startWaveAnimation();
-    }, 2000); // 2000ms delay
+    
+    // Check session storage to decide if the welcome animation should play.
+    const hasGreeted = sessionStorage.getItem('portfolio-ace-has-greeted');
+    if (!hasGreeted) {
+      // After a delay to allow for the model's fade-in, trigger the welcome wave.
+      const welcomeTimer = setTimeout(() => {
+        startWaveAnimation();
+        sessionStorage.setItem('portfolio-ace-has-greeted', 'true');
+      }, 2500); // Wait for model to be visible
+      return () => clearTimeout(welcomeTimer);
+    }
+    
 
     return () => {
       mixer.removeEventListener('finished', onFinished);
-      clearTimeout(welcomeTimer);
     };
-    // This effect runs only when actions become available, ensuring model is loaded.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions, mixer]);
+  }, [actions, mixer, startWaveAnimation]);
 
 
   const handleModelClick = (event: any) => {
-    // Stop propagation so the main container doesn't get the click.
     event.stopPropagation();
     if (screenSize === 'mobile') {
       return;
@@ -130,11 +132,9 @@ export default function HeroScene() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Initial theme check from localStorage or default to dark.
     const storedTheme = localStorage.getItem('portfolio-ace-theme') || 'dark';
     setTheme(storedTheme);
 
-    // Observer for theme changes on the html element.
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
@@ -157,14 +157,12 @@ export default function HeroScene() {
     return null; // Don't render on server or on mobile
   }
   
-  const bgColor = theme === 'light' ? '#ddd' : '#000000';
+  const bgColor = theme === 'light' ? '#d9d9d9' : '#000000';
 
   return (
     <div className="w-full h-full pointer-events-auto">
         <Canvas camera={{ fov: 30 }}>
-        {/* Set canvas background color to match the page's theme */}
         <color attach="background" args={[bgColor]} />
-        {/* Lights are now embedded in the GLB file */}
         
         <Suspense fallback={<Loader />}>
             <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
@@ -172,7 +170,6 @@ export default function HeroScene() {
         
         <CameraSetup />
 
-        {/* Post-processing effects */}
         <EffectComposer>
             <Bloom 
             luminanceThreshold={0.3}
