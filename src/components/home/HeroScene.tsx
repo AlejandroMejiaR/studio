@@ -23,37 +23,29 @@ function Model(props: JSX.IntrinsicElements['group']) {
     }
     setIsAnimating(true);
     
-    const idleAction = actions.Idle;
-    const waveAction = actions.Wave;
-
-    idleAction.fadeOut(0.5);
-    waveAction.reset().fadeIn(0.5).play();
+    actions.Idle.fadeOut(0.5);
+    actions.Wave.reset().fadeIn(0.5).play();
   }, [actions, isAnimating]);
 
-  // Effect for initial setup and handling animation transitions.
+  // Effect for setting up animations and handling the "finished" event logic.
   useEffect(() => {
-    const idleAction = actions.Idle;
-    const waveAction = actions.Wave;
-    
-    if (!idleAction || !waveAction) return;
+    if (!actions.Idle || !actions.Wave) return;
 
     // Default action setup
-    idleAction.play();
-    waveAction.setLoop(THREE.LoopOnce, 1);
-    waveAction.clampWhenFinished = true;
+    actions.Idle.play();
+    actions.Wave.setLoop(THREE.LoopOnce, 1);
+    actions.Wave.clampWhenFinished = true;
     
     let wavePlayCount = 0;
 
     const onFinished = (e: any) => {
-      if (e.action === waveAction) {
+      if (e.action === actions.Wave) {
         if (wavePlayCount < 1) { // If it has played once, play it again
           wavePlayCount++;
-          waveAction.reset().play();
+          actions.Wave.reset().play();
         } else { // If it has played twice, transition back to idle
-          waveAction.fadeOut(0.5);
-          if (idleAction) {
-            idleAction.reset().fadeIn(0.5).play();
-          }
+          actions.Wave.fadeOut(0.5);
+          actions.Idle.reset().fadeIn(0.5).play();
           wavePlayCount = 0; // Reset for the next interaction
           setIsAnimating(false);
         }
@@ -61,12 +53,15 @@ function Model(props: JSX.IntrinsicElements['group']) {
     };
 
     mixer.addEventListener('finished', onFinished);
-    
-    // Trigger the initial wave animation ONLY ONCE on load, after model is ready.
-    startWaveAnimation();
+
+    // After a short delay to allow for the model's fade-in, trigger the welcome wave.
+    const welcomeTimer = setTimeout(() => {
+      startWaveAnimation();
+    }, 500); // 500ms delay
 
     return () => {
       mixer.removeEventListener('finished', onFinished);
+      clearTimeout(welcomeTimer);
     };
     // This effect runs only when actions become available, ensuring model is loaded.
     // eslint-disable-next-line react-hooks/exhaustive-deps
