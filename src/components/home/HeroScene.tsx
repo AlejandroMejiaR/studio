@@ -57,7 +57,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     // After a short delay to allow for the model's fade-in, trigger the welcome wave.
     const welcomeTimer = setTimeout(() => {
       startWaveAnimation();
-    }, 500); // 500ms delay
+    }, 1000); // 1000ms delay
 
     return () => {
       mixer.removeEventListener('finished', onFinished);
