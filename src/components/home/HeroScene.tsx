@@ -57,7 +57,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     // After a short delay to allow for the model's fade-in, trigger the welcome wave.
     const welcomeTimer = setTimeout(() => {
       startWaveAnimation();
-    }, 1500); // 1500ms delay
+    }, 2000); // 2000ms delay
 
     return () => {
       mixer.removeEventListener('finished', onFinished);
@@ -157,7 +157,7 @@ export default function HeroScene() {
     return null; // Don't render on server or on mobile
   }
   
-  const bgColor = theme === 'light' ? '#d9d9d9' : '#000000';
+  const bgColor = theme === 'light' ? '#ddd' : '#000000';
 
   return (
     <div className="w-full h-full pointer-events-auto">
