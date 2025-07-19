@@ -15,7 +15,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const { scene, animations } = useGLTF('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
   const { actions, mixer } = useAnimations(animations, group);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [wavePlayCount, setWavePlayCount] = useState(0);
   const screenSize = useScreenSize();
   
   const startWaveAnimation = useCallback(() => {
@@ -23,7 +22,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
       return;
     }
     setIsAnimating(true);
-    setWavePlayCount(0); // Reset play count for the new interaction
     
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
@@ -43,17 +41,20 @@ function Model(props: JSX.IntrinsicElements['group']) {
     idleAction.play();
     waveAction.setLoop(THREE.LoopOnce, 1);
     waveAction.clampWhenFinished = true;
+    
+    let wavePlayCount = 0;
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
         if (wavePlayCount < 1) { // If it has played once, play it again
-          setWavePlayCount(prev => prev + 1);
+          wavePlayCount++;
           waveAction.reset().play();
         } else { // If it has played twice, transition back to idle
           waveAction.fadeOut(0.5);
           if (idleAction) {
             idleAction.reset().fadeIn(0.5).play();
           }
+          wavePlayCount = 0; // Reset for the next interaction
           setIsAnimating(false);
         }
       }
