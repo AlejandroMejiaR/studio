@@ -32,6 +32,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
     waveAction.reset().fadeIn(0.5).play();
   }, [actions, isAnimating]);
 
+  // Effect for initial setup and handling animation transitions.
   useEffect(() => {
     const idleAction = actions.Idle;
     const waveAction = actions.Wave;
@@ -42,9 +43,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
     idleAction.play();
     waveAction.setLoop(THREE.LoopOnce, 1);
     waveAction.clampWhenFinished = true;
-
-    // Start wave animation on initial load
-    startWaveAnimation();
 
     const onFinished = (e: any) => {
       if (e.action === waveAction) {
@@ -66,7 +64,16 @@ function Model(props: JSX.IntrinsicElements['group']) {
     return () => {
       mixer.removeEventListener('finished', onFinished);
     };
-  }, [actions, mixer, wavePlayCount, startWaveAnimation]);
+  }, [actions, mixer, wavePlayCount]);
+
+  // Effect to trigger the initial wave animation ONLY ONCE on load.
+  useEffect(() => {
+    // This check ensures we only trigger the automatic wave if animations are ready.
+    if (actions.Idle && actions.Wave) {
+      startWaveAnimation();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actions.Idle, actions.Wave]); // This effect runs only when actions become available.
 
 
   const handleModelClick = (event: any) => {
@@ -131,11 +138,11 @@ export default function HeroScene() {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedTheme = localStorage.getItem('portfolio-ace-theme');
-    if (storedTheme) {
-      setTheme(storedTheme);
-    }
+    // Initial theme check from localStorage or default to dark.
+    const storedTheme = localStorage.getItem('portfolio-ace-theme') || 'dark';
+    setTheme(storedTheme);
 
+    // Observer for theme changes on the html element.
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
