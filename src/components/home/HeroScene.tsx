@@ -117,32 +117,27 @@ function Loader() {
 
 export default function HeroScene() {
   const screenSize = useScreenSize();
-  const [bgColor, setBgColor] = useState('hsl(0 0% 100%)'); // Default light theme bg
+  const [theme, setTheme] = useState('dark');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // This function reads the computed background color from the body.
-    const updateBgColor = () => {
-      if (typeof window !== 'undefined') {
-        const bodyStyles = window.getComputedStyle(document.body);
-        setBgColor(bodyStyles.backgroundColor);
-      }
-    };
+    setIsMounted(true);
+    const storedTheme = localStorage.getItem('portfolio-ace-theme');
+    if (storedTheme) {
+      setTheme(storedTheme);
+    }
 
-    // Set the initial color
-    updateBgColor();
-
-    // Observe changes to the theme (light/dark mode toggle)
-    const observer = new MutationObserver((mutationsList) => {
-      for (const mutation of mutationsList) {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          updateBgColor();
+          const isDark = (mutation.target as HTMLElement).classList.contains('dark');
+          setTheme(isDark ? 'dark' : 'light');
         }
       }
     });
 
     observer.observe(document.documentElement, { attributes: true });
 
-    // Cleanup observer on component unmount
     return () => observer.disconnect();
   }, []);
   
@@ -150,9 +145,11 @@ export default function HeroScene() {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
   }, []);
 
-  if (!screenSize || screenSize === 'mobile') {
+  if (!isMounted || !screenSize || screenSize === 'mobile') {
     return null; // Don't render on server or on mobile
   }
+  
+  const bgColor = theme === 'light' ? '#f2f2f2' : '#000000';
 
   return (
     <div className="w-full h-full pointer-events-auto">
