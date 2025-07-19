@@ -149,7 +149,7 @@ export default function HeroScene() {
     return null; // Don't render on server or on mobile
   }
   
-  const bgColor = theme === 'light' ? '#f2f2f2' : '#000000';
+  const bgColor = theme === 'light' ? '#a6a6a6' : '#000000';
 
   return (
     <div className="w-full h-full pointer-events-auto">
