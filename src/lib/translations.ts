@@ -20,6 +20,8 @@ export interface AppTranslations {
     };
     featuredProjectsTitle: string;
     viewMoreProjects: string;
+    caseStudiesTitle: string;
+    creativeProjectsTitle: string;
   };
   aboutMe: {
     title: string;
@@ -72,6 +74,7 @@ export interface AppTranslations {
     exploreLiveDemo: string;
     learningsAndReflections: string;
     myLearnings: string;
+    viewCaseStudy: string;
   };
   footer: {
     portfolioTitle: string;
@@ -109,6 +112,8 @@ export const translations: Record<Language, AppTranslations> = {
       },
       featuredProjectsTitle: "Featured Projects",
       viewMoreProjects: "View More Projects",
+      caseStudiesTitle: "Case Studies",
+      creativeProjectsTitle: "Creative Projects",
     },
     aboutMe: {
       title: "Hello Again!",
@@ -158,6 +163,7 @@ export const translations: Record<Language, AppTranslations> = {
       exploreLiveDemo: "Explore Live Demo",
       learningsAndReflections: "Learnings and Reflections",
       myLearnings: "My Learnings",
+      viewCaseStudy: "View Case Study",
     },
     footer: {
       portfolioTitle: "Portfolio",
@@ -191,6 +197,8 @@ export const translations: Record<Language, AppTranslations> = {
       },
       featuredProjectsTitle: "Proyectos Destacados",
       viewMoreProjects: "Ver Más Proyectos",
+      caseStudiesTitle: "Casos de Estudio",
+      creativeProjectsTitle: "Proyectos Creativos",
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
@@ -240,6 +248,7 @@ export const translations: Record<Language, AppTranslations> = {
       exploreLiveDemo: "Explorar Demo Interactiva",
       learningsAndReflections: "Aprendizajes y Reflexiones",
       myLearnings: "Mis Conclusiones",
+      viewCaseStudy: "Ver caso de estudio",
     },
     footer: {
       portfolioTitle: "Portafolio",

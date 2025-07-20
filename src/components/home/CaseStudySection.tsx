@@ -24,7 +24,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
   return (
     <div className="space-y-20 md:space-y-28">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-center">
-        Case Studies
+        {translationsForLanguage.home.caseStudiesTitle}
       </h2>
       {projects.map((project, index) => {
         const isReversed = index % 2 !== 0;
@@ -57,7 +57,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
               </p>
               <Button asChild size="lg" variant="link" className="p-0 text-lg text-accent hover:text-accent/90">
                 <Link href={`/projects/${project.slug}`}>
-                  Ver caso de estudio
+                  {translationsForLanguage.projectDetails.viewCaseStudy}
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

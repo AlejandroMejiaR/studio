@@ -20,7 +20,7 @@ interface CreativeProjectsSectionProps {
 }
 
 const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => {
-  const { language } = useLanguage();
+  const { language, translationsForLanguage } = useLanguage();
   const [selectedProject, setSelectedProject] = useState<Project | null>(
     projects?.[0] || null
   );
@@ -36,7 +36,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
   return (
     <div>
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-center mb-12">
-        Creative Projects
+        {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
       <div className="flex flex-col md:flex-row gap-8 md:gap-12">
         {/* Left Column (30%) - Project List */}
