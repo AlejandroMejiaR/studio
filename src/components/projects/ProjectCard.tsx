@@ -7,6 +7,7 @@ import type { Project } from '@/types';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Heart } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
@@ -26,9 +27,15 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       <Card className="flex flex-col h-full bg-background transition-all duration-300 group-hover:scale-105 shadow-accent-glow group-hover:shadow-accent-glow-lg">
         
         <div className="p-4 flex-grow flex flex-col">
-            <CardTitle className="font-headline text-2xl text-accent">
-                {titleToDisplay}
-            </CardTitle>
+            <div className="flex justify-between items-start">
+              <CardTitle className="font-headline text-2xl text-accent">
+                  {titleToDisplay}
+              </CardTitle>
+              <div className="flex items-center gap-1.5 text-accent">
+                <Heart size={20} />
+                <span className="font-semibold">{project.likeCount || 0}</span>
+              </div>
+            </div>
             <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
                 {shortDescriptionToDisplay}
             </CardDescription>

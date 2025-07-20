@@ -30,6 +30,7 @@ export interface Project {
   liveUrl?: string;
   repoUrl?: string;
   priority?: number;
+  likeCount?: number;
 
   // Translatable content directly available
   en: ProjectTranslationDetails;

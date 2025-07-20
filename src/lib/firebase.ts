@@ -3,9 +3,15 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import {
   getFirestore,
   Firestore,
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  increment,
+  DocumentData,
 } from 'firebase/firestore';
 import type { Project } from '@/types';
-import { placeholderProjects } from '@/lib/placeholder-data';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -16,8 +22,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-let app: FirebaseApp | undefined;
-let db: Firestore | undefined;
+let app: FirebaseApp;
+let db: Firestore;
 
 if (firebaseConfig.projectId) {
   if (!getApps().length) {
@@ -28,38 +34,85 @@ if (firebaseConfig.projectId) {
   db = getFirestore(app);
 } else {
   console.warn(
-    'Firebase projectId is not configured. Firebase features will be disabled and data will be mocked.'
+    'Firebase projectId is not configured. Firebase features will be disabled.'
   );
 }
 
-// NOTE: The functions below are now using placeholder data.
-// Once you connect to your new Firebase project, this logic will need to be updated.
+const mapDocToProject = (doc: DocumentData): Project => {
+  const data = doc.data();
+  return {
+    id: doc.id,
+    slug: data.slug,
+    category: data.category,
+    date: data.date,
+    technologies: data.technologies,
+    thumbnailUrl: data.thumbnailUrl,
+    bannerUrl: data.bannerUrl,
+    galleryImages: data.galleryImages || [],
+    reflectionImageUrl: data.reflectionImageUrl,
+    liveUrl: data.liveUrl,
+    repoUrl: data.repoUrl,
+    priority: data.priority,
+    likeCount: data.likeCount || 0,
+    en: data.en,
+    es: data.es,
+  };
+};
 
 export const getAllProjectsFromFirestore = async (): Promise<Project[]> => {
-  console.log("Using placeholder project data.");
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 50)); 
-  return placeholderProjects;
+  if (!db) {
+    console.log("Firebase is not configured. Returning empty project list.");
+    return [];
+  }
+
+  try {
+    const projectsCol = collection(db, 'projects');
+    const projectSnapshot = await getDocs(projectsCol);
+    const projectList = projectSnapshot.docs.map(doc => mapDocToProject(doc));
+    // Sort by priority if it exists
+    projectList.sort((a, b) => (a.priority || 99) - (b.priority || 99));
+    return projectList;
+  } catch (error) {
+    console.error("Error fetching projects from Firestore: ", error);
+    return [];
+  }
 };
 
 export const getProjectBySlugFromFirestore = async (slug: string): Promise<Project | undefined> => {
-    console.log(`Using placeholder project data for slug: ${slug}`);
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 50));
-    return placeholderProjects.find(p => p.slug === slug);
+  if (!db) {
+    console.log("Firebase is not configured. Returning undefined.");
+    return undefined;
+  }
+
+  try {
+    const projectDocRef = doc(db, 'projects', slug);
+    const projectSnap = await getDoc(projectDocRef);
+    if (projectSnap.exists()) {
+      return mapDocToProject(projectSnap);
+    } else {
+      console.log(`No project found with slug: ${slug}`);
+      return undefined;
+    }
+  } catch (error) {
+    console.error(`Error fetching project with slug ${slug}: `, error);
+    return undefined;
+  }
 };
 
-/**
- * Generates a public URL for an image.
- * In a real scenario, this would point to a service like Firebase Storage.
- * @param imagePath The path to the image file.
- * @returns A placeholder URL for now.
- */
-export const getImageUrl = (imagePath: string): string => {
-  if (imagePath.startsWith('http')) {
-    return imagePath; // It's already a full URL
-  }
-  // For now, let's assume imagePath is just a placeholder identifier
-  // We can return a generic placeholder or a more specific one if needed.
-  return `https://placehold.co/600x400.png?text=${imagePath}`;
+export const incrementLikeCount = async (slug: string): Promise<void> => {
+  if (!db) return;
+  const projectRef = doc(db, 'projects', slug);
+  await updateDoc(projectRef, {
+    likeCount: increment(1)
+  });
+};
+
+export const getLikeCount = async (slug: string): Promise<number> => {
+    if (!db) return 0;
+    const projectRef = doc(db, 'projects', slug);
+    const docSnap = await getDoc(projectRef);
+    if (docSnap.exists()) {
+        return docSnap.data().likeCount || 0;
+    }
+    return 0;
 };
