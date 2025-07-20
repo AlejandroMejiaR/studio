@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
 import React from 'react';
-import { getSupabaseImageUrl } from '@/lib/supabase';
 import {
   Tooltip,
   TooltipContent,
@@ -45,7 +44,7 @@ const AboutMe = () => {
           <Card className="w-full max-w-sm shadow-xl bg-background">
             <CardContent className="p-0">
               <Image
-                src={getSupabaseImageUrl('documents', 'Profile.jpeg')}
+                src={"https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Profile.jpeg"}
                 alt="Alejandro Mejia Rojas"
                 width={400}
                 height={500}
@@ -116,14 +115,14 @@ const AboutMe = () => {
                           {skill.logoLight && skill.logoDark ? (
                               <>
                                   <Image
-                                      src={getSupabaseImageUrl('documents', `Logos/${skill.logoLight}`)}
+                                      src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoLight}`}
                                       alt={`${skill.name} logo`}
                                       width={48} height={48}
                                       className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
                                       unoptimized={true}
                                   />
                                   <Image
-                                      src={getSupabaseImageUrl('documents', `Logos/${skill.logoDark}`)}
+                                      src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoDark}`}
                                       alt={`${skill.name} logo`}
                                       width={48} height={48}
                                       className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
@@ -132,7 +131,7 @@ const AboutMe = () => {
                               </>
                           ) : (
                               <Image
-                                  src={getSupabaseImageUrl('documents', `Logos/${skill.logo}`)}
+                                  src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logo}`}
                                   alt={`${skill.name} logo`}
                                   width={48} height={48}
                                   className={cn(

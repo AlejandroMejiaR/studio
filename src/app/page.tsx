@@ -6,6 +6,7 @@ import HomePageClient from '@/components/home/HomePageClient';
 export const revalidate = 0;
 
 export default async function HomePage() {
+  // This now fetches placeholder data until the new Firebase project is connected.
   const projects = await getAllProjectsFromFirestore();
   
   return <HomePageClient projects={projects} />;
