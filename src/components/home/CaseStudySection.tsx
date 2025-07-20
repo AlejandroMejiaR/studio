@@ -34,7 +34,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
         return (
           <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Image Column */}
-            <div className={cn("relative aspect-[3/4] rounded-lg overflow-hidden group", isReversed && "md:order-last")}>
+            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group", isReversed && "md:order-last")}>
               <Image
                 src={project.thumbnailUrl}
                 alt={content.title}
