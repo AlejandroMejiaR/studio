@@ -12,6 +12,7 @@ interface ProjectListProps {
   projects: Project[];
 }
 
+// This component is no longer used on the homepage but might be useful elsewhere.
 const ProjectList = ({ projects }: ProjectListProps) => {
   const { translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
   

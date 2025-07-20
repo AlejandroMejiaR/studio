@@ -3,7 +3,6 @@
 
 import { useEffect, useState, useMemo, useCallback, Fragment, Suspense } from 'react';
 import type { Project } from '@/types';
-import ProjectList from '@/components/projects/ProjectList';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
@@ -275,6 +274,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         </div>
         
         <section 
+          id="hero"
           className={cn(
             "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px]"
           )}
@@ -316,7 +316,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground [&_svg]:size-8"
                     aria-label={viewWorkButtonText}
                   >
-                    <Link href="/#projects" onClick={handleSmoothScroll}>
+                    <Link href="/#case-studies" onClick={handleSmoothScroll}>
                       <ArrowDown />
                     </Link>
                   </Button>
@@ -327,13 +327,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         </section>
       </div>
 
-      <div className="h-[200px]" />
-
-      <div className="container mx-auto">
-        <section id="projects" className="pt-[50px]">
-          <ProjectList projects={projects} />
-        </section>
-      </div>
+      <div id="case-studies" className="scroll-mt-16" />
     </div>
   );
 }
