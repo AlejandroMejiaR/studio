@@ -32,9 +32,9 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
         const content = project[currentLangKey] || project.en;
 
         return (
-          <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch">
+          <div key={project.id} className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12 items-stretch">
             {/* Image Column */}
-            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group bg-muted", !isReversed ? "md:order-first" : "md:order-last")}>
+            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group bg-muted md:col-span-2", !isReversed ? "md:order-first" : "md:order-last")}>
               <Image
                 src={project.thumbnailUrl}
                 alt={content.title}
@@ -45,7 +45,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
             </div>
 
             {/* Text Column */}
-            <div className={cn("flex flex-col items-start justify-center text-left", !isReversed ? "md:order-last" : "md:order-first")}>
+            <div className={cn("flex flex-col items-start justify-center text-left md:col-span-3", !isReversed ? "md:order-last" : "md:order-first")}>
               <Badge variant="outline" className="mb-4 text-foreground/80 border-current">
                 {project.category}
               </Badge>
