@@ -55,7 +55,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
               <p className="text-foreground/80 mb-8 text-lg leading-relaxed">
                 {content.shortDescription}
               </p>
-              <Button asChild size="lg" variant="link" className="p-0 text-lg text-accent hover:text-accent/90 mt-auto">
+              <Button asChild size="lg" variant="outline" className="text-lg border-accent text-accent hover:bg-accent hover:text-accent-foreground mt-auto">
                 <Link href={`/projects/${project.slug}`}>
                   {translationsForLanguage.projectDetails.viewCaseStudy}
                   <ArrowRight className="ml-2 h-5 w-5" />
