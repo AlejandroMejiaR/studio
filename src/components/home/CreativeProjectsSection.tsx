@@ -4,7 +4,6 @@
 import type { Project } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   Carousel,
@@ -49,7 +48,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
-                    <Badge key={tech} variant="outline">
+                    <Badge key={tech} variant="outline" className="border-current text-foreground/80">
                       {tech}
                     </Badge>
                   ))}
