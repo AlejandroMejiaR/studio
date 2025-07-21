@@ -13,6 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { cn } from '@/lib/utils';
 
 interface CreativeProjectsSectionProps {
   projects: Project[];
@@ -32,13 +33,14 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
       </h2>
       
       <div className="space-y-16">
-        {projects.map((project) => {
+        {projects.map((project, index) => {
           const content = project[language.toLowerCase() as 'en' | 'es'] || project.en;
+          const isReversed = index % 2 !== 0;
           
           return (
             <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
               {/* Text Column */}
-              <div className="flex flex-col items-start justify-center text-left">
+              <div className={cn("flex flex-col items-start justify-center text-left", { "md:order-2": isReversed })}>
                 <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-4">
                   {content.title}
                 </h3>
@@ -55,7 +57,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
               </div>
 
               {/* Carousel Column */}
-              <div className="w-full">
+              <div className={cn("w-full", { "md:order-1": isReversed })}>
                 {project.galleryImages && project.galleryImages.length > 0 && (
                   <Carousel
                     opts={{
