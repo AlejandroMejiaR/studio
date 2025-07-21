@@ -27,14 +27,14 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
         {translationsForLanguage.home.caseStudiesTitle}
       </h2>
       {projects.map((project, index) => {
-        const isReversed = index % 2 === 0; // Starts with Image-Text layout
+        const isReversed = index % 2 !== 0;
         const currentLangKey = language.toLowerCase() as 'en' | 'es';
         const content = project[currentLangKey] || project.en;
 
         return (
           <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch">
             {/* Image Column */}
-            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group bg-muted", isReversed ? "md:order-first" : "md:order-last")}>
+            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group bg-muted", isReversed ? "md:order-last" : "md:order-first")}>
               <Image
                 src={project.thumbnailUrl}
                 alt={content.title}
@@ -45,8 +45,8 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
             </div>
 
             {/* Text Column */}
-            <div className={cn("flex flex-col items-start justify-center text-left", isReversed ? "md:order-last" : "md:order-first")}>
-              <Badge variant="secondary" className="mb-4">
+            <div className={cn("flex flex-col items-start justify-center text-left", isReversed ? "md:order-first" : "md:order-last")}>
+              <Badge variant="outline" className="mb-4">
                 {project.category}
               </Badge>
               <h3 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-4">
