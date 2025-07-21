@@ -5,6 +5,7 @@ import type { Project } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Carousel,
   CarouselContent,
@@ -43,7 +44,16 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
           return (
             <AccordionItem value={`item-${project.id}`} key={project.id}>
               <AccordionTrigger className="text-xl font-medium hover:no-underline">
-                {content.title}
+                <div className="flex justify-between items-center w-full pr-4">
+                  <span>{content.title}</span>
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    {project.technologies.slice(0, 3).map((tech) => (
+                      <Badge key={tech} variant="outline" className="hidden md:inline-flex">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
               </AccordionTrigger>
               <AccordionContent>
                 <Card className="bg-card border-none shadow-lg mt-2">
@@ -52,7 +62,12 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                       {content.shortDescription}
                     </p>
                     {project.galleryImages && project.galleryImages.length > 0 && (
-                      <Carousel className="w-full">
+                      <Carousel
+                        opts={{
+                          loop: true,
+                        }}
+                        className="w-full"
+                      >
                         <CarouselContent>
                           {project.galleryImages.map((imgSrc, index) => (
                             <CarouselItem key={index}>
