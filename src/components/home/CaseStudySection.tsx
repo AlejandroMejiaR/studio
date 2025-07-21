@@ -39,7 +39,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
                 src={project.thumbnailUrl}
                 alt={content.title}
                 fill
-                className="object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
+                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
                 data-ai-hint="portfolio project"
               />
             </div>
