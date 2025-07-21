@@ -23,7 +23,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
 
   return (
     <div className="space-y-20 md:space-y-28">
-      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-center">
+      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left">
         {translationsForLanguage.home.caseStudiesTitle}
       </h2>
       {projects.map((project, index) => {

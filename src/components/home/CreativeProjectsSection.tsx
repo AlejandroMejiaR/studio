@@ -35,7 +35,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
   return (
     <div>
-      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-center mb-12">
+      <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
       <div className="flex flex-col md:flex-row gap-8 md:gap-12">
