@@ -13,12 +13,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 interface CreativeProjectsSectionProps {
   projects: Project[];
@@ -37,63 +31,62 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
       
-      <Accordion type="single" collapsible className="w-full">
+      <div className="space-y-16">
         {projects.map((project) => {
           const content = project[language.toLowerCase() as 'en' | 'es'] || project.en;
           
           return (
-            <AccordionItem value={`item-${project.id}`} key={project.id}>
-              <AccordionTrigger className="text-xl font-medium hover:no-underline">
-                <div className="flex justify-between items-center w-full pr-4">
-                  <span>{content.title}</span>
-                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                    {project.technologies.slice(0, 3).map((tech) => (
-                      <Badge key={tech} variant="outline" className="hidden md:inline-flex">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
+            <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+              {/* Text Column */}
+              <div className="flex flex-col items-start justify-center text-left">
+                <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-4">
+                  {content.title}
+                </h3>
+                <p className="text-foreground/80 mb-6 text-base leading-relaxed">
+                  {content.shortDescription}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <Badge key={tech} variant="outline">
+                      {tech}
+                    </Badge>
+                  ))}
                 </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <Card className="bg-card border-none shadow-lg mt-2">
-                  <CardContent className="p-6 md:p-8">
-                    <p className="text-foreground/80 mb-6 text-base leading-relaxed">
-                      {content.shortDescription}
-                    </p>
-                    {project.galleryImages && project.galleryImages.length > 0 && (
-                      <Carousel
-                        opts={{
-                          loop: true,
-                        }}
-                        className="w-full"
-                      >
-                        <CarouselContent>
-                          {project.galleryImages.map((imgSrc, index) => (
-                            <CarouselItem key={index}>
-                              <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
-                                <Image
-                                  src={imgSrc}
-                                  alt={`${content.title} - image ${index + 1}`}
-                                  fill
-                                  className="object-cover"
-                                  data-ai-hint="creative project screenshot"
-                                />
-                              </div>
-                            </CarouselItem>
-                          ))}
-                        </CarouselContent>
-                        <CarouselPrevious className="left-4" />
-                        <CarouselNext className="right-4" />
-                      </Carousel>
-                    )}
-                  </CardContent>
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
+              </div>
+
+              {/* Carousel Column */}
+              <div className="w-full">
+                {project.galleryImages && project.galleryImages.length > 0 && (
+                  <Carousel
+                    opts={{
+                      loop: true,
+                    }}
+                    className="w-full"
+                  >
+                    <CarouselContent>
+                      {project.galleryImages.map((imgSrc, index) => (
+                        <CarouselItem key={index}>
+                          <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
+                            <Image
+                              src={imgSrc}
+                              alt={`${content.title} - image ${index + 1}`}
+                              fill
+                              className="object-cover"
+                              data-ai-hint="creative project screenshot"
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="left-4" />
+                    <CarouselNext className="right-4" />
+                  </Carousel>
+                )}
+              </div>
+            </div>
           );
         })}
-      </Accordion>
+      </div>
     </div>
   );
 };
