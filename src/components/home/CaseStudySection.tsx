@@ -27,7 +27,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
         {translationsForLanguage.home.caseStudiesTitle}
       </h2>
       {projects.map((project, index) => {
-        const isReversed = index % 2 !== 0;
+        const isReversed = index % 2 === 0; // Starts with Text-Image layout
         const currentLangKey = language.toLowerCase() as 'en' | 'es';
         const content = project[currentLangKey] || project.en;
 
