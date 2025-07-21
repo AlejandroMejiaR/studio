@@ -27,25 +27,25 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
         {translationsForLanguage.home.caseStudiesTitle}
       </h2>
       {projects.map((project, index) => {
-        const isReversed = index % 2 === 0; // Starts with Text-Image layout
+        const isReversed = index % 2 === 0; // Starts with Image-Text layout
         const currentLangKey = language.toLowerCase() as 'en' | 'es';
         const content = project[currentLangKey] || project.en;
 
         return (
-          <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div key={project.id} className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch">
             {/* Image Column */}
-            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group", isReversed && "md:order-last")}>
+            <div className={cn("relative aspect-[4/3] rounded-lg overflow-hidden group bg-muted", isReversed ? "md:order-first" : "md:order-last")}>
               <Image
                 src={project.thumbnailUrl}
                 alt={content.title}
                 fill
-                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                className="object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
                 data-ai-hint="portfolio project"
               />
             </div>
 
             {/* Text Column */}
-            <div className={cn("flex flex-col items-start text-left", isReversed && "md:order-first")}>
+            <div className={cn("flex flex-col items-start justify-center text-left", isReversed ? "md:order-last" : "md:order-first")}>
               <Badge variant="secondary" className="mb-4">
                 {project.category}
               </Badge>
@@ -55,7 +55,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
               <p className="text-foreground/80 mb-8 text-lg leading-relaxed">
                 {content.shortDescription}
               </p>
-              <Button asChild size="lg" variant="link" className="p-0 text-lg text-accent hover:text-accent/90">
+              <Button asChild size="lg" variant="link" className="p-0 text-lg text-accent hover:text-accent/90 mt-auto">
                 <Link href={`/projects/${project.slug}`}>
                   {translationsForLanguage.projectDetails.viewCaseStudy}
                   <ArrowRight className="ml-2 h-5 w-5" />
