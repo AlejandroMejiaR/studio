@@ -73,20 +73,21 @@ const AboutClientPage = () => {
 
           {/* Right Column - Single Image */}
           <div className="w-full max-w-xs flex-shrink-0">
-            <div
-              className={cn(
-                'relative w-full aspect-[4/5] transition-all duration-300 ease-in-out group hover:z-10 hover:scale-105',
-                profileImage.rotation
-              )}
-            >
-              <div className="relative w-full h-full rounded-lg shadow-accent-glow overflow-hidden">
-                <Image
-                  src={profileImage.src}
-                  alt={profileImage.alt}
-                  fill
-                  className="object-cover"
-                  data-ai-hint={profileImage.hint}
-                />
+            <div className={cn('relative w-full aspect-[4/5] group image-glow-container', profileImage.rotation)}>
+              <div
+                className={cn(
+                  'relative w-full h-full transition-all duration-300 ease-in-out group-hover:z-10 group-hover:scale-105'
+                )}
+              >
+                <div className="relative w-full h-full rounded-lg overflow-hidden">
+                  <Image
+                    src={profileImage.src}
+                    alt={profileImage.alt}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={profileImage.hint}
+                  />
+                </div>
               </div>
             </div>
           </div>
