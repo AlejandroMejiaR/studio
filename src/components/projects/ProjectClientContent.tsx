@@ -69,7 +69,7 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
       {/* Section 3: Full-Width Hero Image */}
       {project.bannerUrl && (
         <section className="relative w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-muted">
-          <Image src={project.bannerUrl} alt={titleToDisplay} fill className="object-cover" priority data-ai-hint="product mockup" />
+          <Image src={project.bannerUrl} alt={titleToDisplay} fill className="object-cover" priority data-ai-hint="product mockup" sizes="100vw" />
         </section>
       )}
 
@@ -114,7 +114,7 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
                       <p className="text-foreground/80 leading-relaxed text-lg">{step.description}</p>
                     </div>
                     <div className={cn("relative aspect-video rounded-lg overflow-hidden bg-muted md:order-2", { "md:order-1": isReversed })}>
-                       <Image src={step.imageUrl} alt={step.title} fill className="object-cover" data-ai-hint="design process" />
+                       <Image src={step.imageUrl} alt={step.title} fill className="object-cover" data-ai-hint="design process" sizes="(max-width: 768px) 100vw, 50vw"/>
                     </div>
                   </div>
                 );
@@ -133,7 +133,7 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
               {project.galleryImages.slice(0, 4).map((src, index) => (
                 <ImageModal key={index} imageUrl={src} altText={`${titleToDisplay} - final design ${index + 1}`}>
                   <div className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group bg-muted">
-                    <Image src={src} alt={`${titleToDisplay} - final design ${index + 1}`} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint="app screenshot" />
+                    <Image src={src} alt={`${titleToDisplay} - final design ${index + 1}`} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint="app screenshot" sizes="(max-width: 640px) 100vw, 50vw" />
                   </div>
                 </ImageModal>
               ))}
@@ -164,7 +164,7 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
           <SectionTitle>{t('learningsAndReflections')}</SectionTitle>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto">
             <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted">
-               <Image src={project.reflectionImageUrl || ''} alt={t('learningsAndReflections') || ''} fill className="object-cover" data-ai-hint="abstract growth" />
+               <Image src={project.reflectionImageUrl || ''} alt={t('learningsAndReflections') || ''} fill className="object-cover" data-ai-hint="abstract growth" sizes="(max-width: 768px) 100vw, 50vw" />
             </div>
             <Card className="bg-card p-6 md:p-8 rounded-xl shadow-lg">
                <h3 className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-4">{t('myLearnings')}</h3>

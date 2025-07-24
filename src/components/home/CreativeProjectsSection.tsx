@@ -72,6 +72,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                               src={imgSrc}
                               alt={`${content.title} - image ${index + 1}`}
                               fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
                               className="object-cover"
                               data-ai-hint="creative project screenshot"
                             />
