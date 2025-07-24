@@ -12,15 +12,15 @@ const AboutClientPage = () => {
     
   const educationItems = [
     {
+      course: "UX Design Professional Certificate",
+      institution: "Google",
+      date: "(2025)",
+    },
+    {
       course: translationsForLanguage.aboutMe.education.course1,
       institution: "Universidad Militar Nueva Granada",
       date: "(2020 - Present)",
     },
-    {
-      course: translationsForLanguage.aboutMe.education.course2,
-      institution: "Gimnasio Campestre La Fontana",
-      date: "(2006 - 2019)",
-    }
   ];
 
   const skills = {
@@ -73,10 +73,7 @@ const AboutClientPage = () => {
 
           {/* Right Column - Single Image */}
           <div className="w-full max-w-xs flex-shrink-0">
-            <div className={cn(
-              'relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105', 
-              profileImage.rotation
-            )}>
+            <div className={cn('relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105', profileImage.rotation)}>
               <Image
                 src={profileImage.src}
                 alt={profileImage.alt}
