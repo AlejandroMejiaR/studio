@@ -39,7 +39,7 @@ const AboutClientPage = () => {
   const profileImage = {
     src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//MeS.webp",
     alt: "Alejandro Mejia Rojas Portrait",
-    rotation: "rotate-2",
+    rotation: "-rotate-3",
     hint: "professional portrait"
   };
 
@@ -75,12 +75,12 @@ const AboutClientPage = () => {
 
           {/* Right Column - Single Image */}
           <div className="w-full max-w-xs flex-shrink-0">
-             <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105">
+             <div className={cn("relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105", profileImage.rotation)}>
               <Image
                 src={profileImage.src}
                 alt={profileImage.alt}
                 fill
-                className={cn('object-cover', profileImage.rotation)}
+                className={cn('object-cover')}
                 data-ai-hint={profileImage.hint}
               />
             </div>
