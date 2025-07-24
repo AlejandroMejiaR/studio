@@ -80,7 +80,7 @@ const AboutClientPage = () => {
                 src={profileImage.src}
                 alt={profileImage.alt}
                 fill
-                className={cn('object-cover', profileImage.rotation)}
+                className={cn('object-cover -scale-x-100', profileImage.rotation)}
                 data-ai-hint={profileImage.hint}
               />
             </div>
