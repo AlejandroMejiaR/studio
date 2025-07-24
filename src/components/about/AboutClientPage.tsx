@@ -15,11 +15,13 @@ const AboutClientPage = () => {
       course: "UX Design Professional Certificate",
       institution: "Google",
       date: "(2025)",
+      logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/Google.webp",
     },
     {
       course: translationsForLanguage.aboutMe.education.course1,
       institution: "Universidad Militar Nueva Granada",
       date: "(2020 - Present)",
+      logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UMNG.webp",
     },
   ];
 
@@ -73,12 +75,12 @@ const AboutClientPage = () => {
 
           {/* Right Column - Single Image */}
           <div className="w-full max-w-xs flex-shrink-0">
-            <div className={cn('relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105', profileImage.rotation)}>
+             <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105">
               <Image
                 src={profileImage.src}
                 alt={profileImage.alt}
                 fill
-                className="object-cover"
+                className={cn('object-cover', profileImage.rotation)}
                 data-ai-hint={profileImage.hint}
               />
             </div>
@@ -138,11 +140,24 @@ const AboutClientPage = () => {
       {/* Section 3: Education */}
       <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
         <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.education.title}</h2>
-        <div className="w-full">
+        <div className="w-full space-y-4">
           {educationItems.map((item, index) => (
-            <div key={index} className="flex justify-between items-center w-full text-left border-b py-4">
-              <span className="font-semibold text-lg">{item.course}</span>
-              <span className="text-muted-foreground text-right">{item.institution} <span className="text-sm">{item.date}</span></span>
+            <div key={index} className="flex items-center w-full text-left border-b py-4 gap-4">
+              <div className="flex-shrink-0">
+                <Image
+                  src={item.logo}
+                  alt={`${item.institution} logo`}
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <span className="font-semibold text-lg">{item.course}</span>
+                <span className="text-muted-foreground text-left sm:text-right mt-1 sm:mt-0">
+                  {item.institution} <span className="text-sm">{item.date}</span>
+                </span>
+              </div>
             </div>
           ))}
         </div>
