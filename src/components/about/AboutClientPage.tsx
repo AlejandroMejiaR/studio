@@ -79,7 +79,7 @@ const AboutClientPage = () => {
                 profileImage.rotation
               )}
             >
-              <div className="relative w-full h-full rounded-lg shadow-lg dark:shadow-white-glow overflow-hidden bg-background">
+              <div className="relative w-full h-full rounded-lg shadow-accent-glow overflow-hidden bg-background">
                 <Image
                   src={profileImage.src}
                   alt={profileImage.alt}
