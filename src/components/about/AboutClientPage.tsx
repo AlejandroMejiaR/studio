@@ -75,7 +75,7 @@ const AboutClientPage = () => {
 
           {/* Right Column - Single Image */}
           <div className="w-full max-w-xs flex-shrink-0">
-             <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105 shadow-xl">
+             <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden transition-all duration-300 ease-in-out group-hover:scale-105">
               <Image
                 src={profileImage.src}
                 alt={profileImage.alt}
