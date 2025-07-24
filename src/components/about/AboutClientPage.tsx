@@ -35,7 +35,7 @@ const AboutClientPage = () => {
   }
 
   const profileImage = {
-    src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//2222.webp",
+    src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//Me.webp",
     alt: "Alejandro Mejia Rojas Portrait",
     rotation: "rotate-2",
     hint: "professional portrait"
