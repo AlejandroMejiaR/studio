@@ -84,7 +84,7 @@ export default {
       boxShadow: {
         'accent-glow': '0 0 12px 0px hsl(var(--accent) / 0.35)',
         'accent-glow-lg': '0 0 24px 2px hsl(var(--accent) / 0.5)',
-        'white-glow': '0 0 15px 1px rgba(255, 255, 255, 0.4)',
+        'white-glow': '0 10px 15px -3px rgba(255, 255, 255, 0.07), 0 4px 6px -4px rgba(255, 255, 255, 0.05)',
       },
       keyframes: {
         'accordion-down': {
