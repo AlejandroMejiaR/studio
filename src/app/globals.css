@@ -9,7 +9,7 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 87%; /* Light Grey #ddd */
+    --background: 0 0% 96%; /* Very light grey #f5f5f5 */
     --foreground: 175 38% 11%; /* Dark teal #122624 */
 
     --card: 220 16% 93%; /* Very light cool grey #F3F4F6 */
@@ -296,3 +296,5 @@ body {
   }
 
 }
+
+    
