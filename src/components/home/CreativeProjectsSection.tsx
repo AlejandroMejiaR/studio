@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/c
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface CreativeProjectsSectionProps {
   projects: Project[];
@@ -18,10 +19,15 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const handleProjectClick = (project: Project) => {
-    setSelectedProject(project);
-    setTimeout(() => {
-      document.getElementById('project-detail-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    // If clicking the same project, deselect it. Otherwise, select the new one.
+    setSelectedProject(current => (current?.id === project.id ? null : project));
+    
+    // Smooth scroll to the detail view only when a project is newly selected.
+    if (!selectedProject || selectedProject.id !== project.id) {
+        setTimeout(() => {
+          document.getElementById('project-detail-view')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
   };
 
   const handleClose = () => {
@@ -43,11 +49,26 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {projects.map((project) => {
           const content = project[language.toLowerCase() as 'en' | 'es'] || project.en;
-          
+          const isSelected = selectedProject?.id === project.id;
+          const isAnyProjectSelected = !!selectedProject;
+
           return (
-            <div key={project.id} className="group block cursor-pointer" onClick={() => handleProjectClick(project)}>
-              <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1">
-                <div className="relative aspect-square w-full overflow-hidden bg-muted">
+            <div 
+              key={project.id} 
+              className={cn(
+                "group block cursor-pointer transition-all duration-300 ease-in-out",
+                isAnyProjectSelected && !isSelected && "opacity-40 hover:opacity-100"
+              )}
+              onClick={() => handleProjectClick(project)}
+            >
+              <Card className={cn(
+                  "h-full overflow-hidden transition-all duration-300 ease-in-out",
+                  isSelected ? "bg-accent/10 -translate-y-1 shadow-lg" : "group-hover:shadow-lg group-hover:-translate-y-1"
+              )}>
+                <div className={cn(
+                  "relative aspect-square w-full overflow-hidden bg-muted transition-all duration-300",
+                  isSelected && "hidden" // Hide image when selected
+                )}>
                   <Image
                     src={project.thumbnailUrl}
                     alt={content.title}
@@ -76,10 +97,11 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
             <Button 
               variant="outline" 
               size="icon" 
-              className="absolute top-0 right-0 h-12 w-12 rounded-full border-accent hover:bg-accent/10 z-10" 
+              className="absolute top-4 right-4 h-12 w-12 rounded-full border-accent text-accent hover:bg-accent/10 z-10" 
               onClick={handleClose}
+              aria-label="Close project details"
             >
-                <X className="h-6 w-6 text-accent" />
+                <X className="h-6 w-6" />
             </Button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 {/* Left Column: Details */}
