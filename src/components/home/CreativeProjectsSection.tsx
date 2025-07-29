@@ -74,8 +74,13 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
       {selectedProject && projectContent && (
         <div id="project-detail-view" className="mt-16 pt-8 border-t scroll-mt-24">
             <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                <Button variant="ghost" size="icon" className="absolute -top-4 right-0 h-12 w-12" onClick={handleClose}>
-                    <X className="h-6 w-6" />
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="absolute -top-4 right-0 h-12 w-12 rounded-full border-accent hover:bg-accent/10" 
+                  onClick={handleClose}
+                >
+                    <X className="h-6 w-6 text-accent" />
                 </Button>
                 {/* Left Column: Details */}
                 <div className="flex flex-col">
