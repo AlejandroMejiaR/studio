@@ -33,7 +33,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
           const content = project[currentLangKey] || project.en;
 
           return (
-            <Card key={project.id} className="flex flex-col overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card key={project.id} className="flex flex-col overflow-hidden rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-300">
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image
                   src={project.thumbnailUrl}
