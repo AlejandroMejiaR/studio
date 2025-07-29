@@ -33,39 +33,39 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
           const content = project[currentLangKey] || project.en;
 
           return (
-            <Card key={project.id} className="flex flex-col overflow-hidden rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-transform duration-300">
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
-                <Image
-                  src={project.thumbnailUrl}
-                  alt={content.title}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
-                  data-ai-hint="portfolio project"
-                />
-              </div>
+            <Link key={project.id} href={`/projects/${project.slug}`} className="block h-full group">
+              <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-transform duration-300">
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <Image
+                    src={project.thumbnailUrl}
+                    alt={content.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-105"
+                    data-ai-hint="portfolio project"
+                  />
+                </div>
 
-              <div className="flex flex-col flex-grow p-6">
-                <Badge variant="outline" className="mb-4 text-foreground/80 border-current w-fit">
-                  {project.category}
-                </Badge>
-                <h3 className="font-headline text-2xl font-bold text-primary dark:text-foreground mb-3">
-                  {content.title}
-                </h3>
-                <p className="text-foreground/80 leading-relaxed flex-grow">
-                  {content.shortDescription}
-                </p>
-              </div>
+                <div className="flex flex-col flex-grow p-6">
+                  <Badge variant="outline" className="mb-4 text-foreground/80 border-current w-fit">
+                    {project.category}
+                  </Badge>
+                  <h3 className="font-headline text-2xl font-bold text-primary dark:text-foreground mb-3">
+                    {content.title}
+                  </h3>
+                  <p className="text-foreground/80 leading-relaxed flex-grow">
+                    {content.shortDescription}
+                  </p>
+                </div>
 
-              <div className="p-6 pt-0 mt-4">
-                <Button asChild size="lg" variant="outline" className="w-full text-lg border-accent text-accent hover:bg-accent hover:text-accent-foreground">
-                  <Link href={`/projects/${project.slug}`}>
-                    {translationsForLanguage.projectDetails.viewCaseStudy}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </Card>
+                <div className="p-6 pt-0 mt-auto">
+                  <Button size="lg" variant="outline" className="w-full text-lg border-accent text-accent group-hover:bg-accent group-hover:text-accent-foreground pointer-events-none">
+                      {translationsForLanguage.projectDetails.viewCaseStudy}
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </Card>
+            </Link>
           );
         })}
       </div>
