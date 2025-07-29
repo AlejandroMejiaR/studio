@@ -38,6 +38,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
     return null;
   }
 
+  const isAnyProjectSelected = !!selectedProject;
   const projectContent = selectedProject ? selectedProject[language.toLowerCase() as 'en' | 'es'] || selectedProject.en : null;
 
   return (
@@ -50,8 +51,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
         {projects.map((project) => {
           const content = project[language.toLowerCase() as 'en' | 'es'] || project.en;
           const isSelected = selectedProject?.id === project.id;
-          const isAnyProjectSelected = !!selectedProject;
-
+          
           return (
             <div 
               key={project.id} 
@@ -66,8 +66,8 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                   isSelected ? "bg-accent/10 -translate-y-1 shadow-lg" : "group-hover:shadow-lg group-hover:-translate-y-1"
               )}>
                 <div className={cn(
-                  "relative aspect-square w-full overflow-hidden bg-muted transition-all duration-300",
-                  isSelected && "hidden" // Hide image when selected
+                  "relative aspect-square w-full overflow-hidden bg-muted transition-all duration-500 ease-in-out",
+                  isAnyProjectSelected ? "max-h-0" : "max-h-[500px]" // Animate height collapse
                 )}>
                   <Image
                     src={project.thumbnailUrl}
@@ -78,7 +78,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                     data-ai-hint="creative project screenshot"
                   />
                 </div>
-                <CardContent className="p-4">
+                <CardContent className="p-4 transition-all duration-300">
                   <CardTitle className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-2 truncate">
                     {content.title}
                   </CardTitle>
@@ -101,7 +101,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
               onClick={handleClose}
               aria-label="Close project details"
             >
-                <X className="h-6 w-6" />
+                <X className="h-6 w-6 text-accent" />
             </Button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
                 {/* Left Column: Details */}
