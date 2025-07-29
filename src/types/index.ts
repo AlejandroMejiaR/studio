@@ -33,7 +33,6 @@ export interface Project {
   repoUrl?: string;
   priority?: number;
   likeCount?: number;
-
   // Translatable content directly available
   en: ProjectTranslationDetails;
   es: ProjectTranslationDetails;
