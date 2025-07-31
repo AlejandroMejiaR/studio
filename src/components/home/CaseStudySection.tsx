@@ -61,7 +61,7 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
                   
                   {/* Button visible on hover */}
                   <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                     <Button size="lg" variant="outline" className="w-full text-lg bg-transparent text-white border-white hover:bg-white hover:text-black pointer-events-none">
+                     <Button size="lg" variant="outline" className="w-full text-lg bg-transparent text-accent border-accent hover:bg-accent hover:text-accent-foreground pointer-events-none">
                         {translationsForLanguage.projectDetails.viewCaseStudy}
                         <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
