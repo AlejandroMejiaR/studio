@@ -34,8 +34,8 @@ const CaseStudySection = ({ projects }: CaseStudySectionProps) => {
 
           return (
             <Link key={project.id} href={`/projects/${project.slug}`} className="block h-full group">
-              <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl group-hover:scale-105 transition-transform duration-300">
-                <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-transform duration-300 group-hover:scale-105">
+                <div className="relative aspect-square w-full overflow-hidden">
                   <Image
                     src={project.thumbnailUrl}
                     alt={content.title}
