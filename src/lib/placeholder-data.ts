@@ -64,7 +64,7 @@ export const placeholderProjects: Project[] = [
     category: 'UX Design',
     date: '2023',
     technologies: ['Figma', 'React', 'Firebase'],
-    thumbnailUrl: 'https://placehold.co/600x800.png',
+    thumbnailUrl: 'https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects/1/banner.png',
     bannerUrl: 'https://placehold.co/1920x1080.png',
     galleryImages: [
         'https://placehold.co/800x600.png',
