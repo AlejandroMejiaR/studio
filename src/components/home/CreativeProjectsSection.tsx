@@ -4,7 +4,7 @@
 import type { Project } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProjectDetailView from './ProjectDetailView';
 
@@ -18,16 +18,22 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
 
+  // This effect runs after a project is selected and the component re-renders.
+  useEffect(() => {
+    if (selectedProjectId) {
+      const section = document.getElementById('mini-projects-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, [selectedProjectId]);
+
   if (!projects || projects.length === 0) {
     return null;
   }
 
   const handleCardClick = (projectId: string) => {
     setSelectedProjectId(projectId);
-    const section = document.getElementById('mini-projects-section');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
   };
 
   const handleClose = () => {
