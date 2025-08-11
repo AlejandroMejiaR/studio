@@ -59,10 +59,10 @@ const ImageCarouselModal = ({ images, initialIndex, altText, onClose }: { images
             </Carousel>
              <DialogClose 
                 onClick={onClose}
-                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground"
+                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-center"
                 aria-label="Close image viewer"
              >
-                <X className="h-5 w-5 text-accent" />
+                <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
             </DialogClose>
         </DialogContent>
     );
@@ -170,10 +170,10 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                     variant="outline"
                     size="icon"
                     onClick={onClose}
-                    className="absolute top-0 right-0 h-10 w-10 rounded-full z-20 -mt-2 -mr-2 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground"
+                    className="absolute top-0 right-0 h-10 w-10 rounded-full z-20 -mt-2 -mr-2 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-center group"
                     aria-label="Close project details"
                 >
-                    <X className="h-5 w-5 text-accent" />
+                    <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
                 </Button>
             </motion.div>
             
