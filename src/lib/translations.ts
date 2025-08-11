@@ -112,7 +112,7 @@ export const translations: Record<Language, AppTranslations> = {
       featuredProjectsTitle: "Featured Projects",
       viewMoreProjects: "View More Projects",
       caseStudiesTitle: "Case Studies",
-      creativeProjectsTitle: "Project Gallery",
+      creativeProjectsTitle: "Mini Projects",
     },
     aboutMe: {
       title: "Hello Again!",
@@ -196,7 +196,7 @@ export const translations: Record<Language, AppTranslations> = {
       featuredProjectsTitle: "Proyectos Destacados",
       viewMoreProjects: "Ver Más Proyectos",
       caseStudiesTitle: "Casos de Estudio",
-      creativeProjectsTitle: "Galería de Proyectos",
+      creativeProjectsTitle: "Mini Proyectos",
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
