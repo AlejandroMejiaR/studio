@@ -101,28 +101,31 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                 transition={{ duration: 0.3 }}
                 className="w-full"
             >
-                <div className="mb-4">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={onClose}
-                        className="h-12 w-12 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground"
-                        aria-label="Go back to projects"
-                    >
-                        <ArrowLeft className="h-6 w-6" />
-                    </Button>
-                </div>
                 <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center">
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-[30%] lg:max-w-md flex-shrink-0">
                          <Card className="relative h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
                             <CardContent className="p-0 flex flex-col h-full">
-                                <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-2">
-                                    {content.title}
-                                </h3>
-                                <p className="text-sm text-muted-foreground mb-4">
-                                    <strong className="font-semibold text-primary/90 dark:text-foreground/90">{translationsForLanguage.projectDetails.myRole}:</strong> {content.myRole}
-                                </p>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-2">
+                                            {content.title}
+                                        </h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            <strong className="font-semibold text-primary/90 dark:text-foreground/90">{translationsForLanguage.projectDetails.myRole}:</strong> {content.myRole}
+                                        </p>
+                                    </div>
+                                    <Button
+                                        variant="outline"
+                                        size="icon"
+                                        onClick={onClose}
+                                        className="h-10 w-10 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground flex-shrink-0"
+                                        aria-label="Go back to projects"
+                                    >
+                                        <ArrowLeft className="h-5 w-5" />
+                                    </Button>
+                                </div>
+
                                 <p className="text-foreground/80 leading-relaxed flex-grow">
                                     {content.summary}
                                 </p>
