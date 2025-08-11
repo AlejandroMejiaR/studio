@@ -4,9 +4,11 @@
 import type { Project } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProjectDetailView from './ProjectDetailView';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 interface CreativeProjectsSectionProps {
   projects: Project[];
@@ -15,8 +17,22 @@ interface CreativeProjectsSectionProps {
 const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => {
   const { language, translationsForLanguage } = useLanguage();
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
+
+  useEffect(() => {
+    if (selectedProject && sectionRef.current) {
+        // Delay scroll slightly to allow layout animation to start
+        setTimeout(() => {
+            sectionRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start' 
+            });
+        }, 100);
+    }
+  }, [selectedProject]);
+
 
   if (!projects || projects.length === 0) {
     return null;
@@ -32,7 +48,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
 
   return (
-    <div id="mini-projects-section">
+    <div id="mini-projects-section" ref={sectionRef}>
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
@@ -61,13 +77,23 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                         <Card 
                             key={project.id} 
                             onClick={() => handleCardClick(project.id)}
-                            className="h-full overflow-hidden transition-all duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:-translate-y-1"
+                            className="relative h-full overflow-hidden transition-all duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:-translate-y-1 group border-0"
                         >
-                            <div className="p-4 text-left w-full">
-                                <CardTitle className="font-headline text-xl font-semibold text-primary dark:text-foreground mb-2 truncate">
+                            <Image
+                                src={project.thumbnailUrl}
+                                alt={content.title}
+                                fill
+                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                                className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+                                data-ai-hint="portfolio project"
+                            />
+                            <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors" />
+
+                            <div className="relative z-10 p-4 text-left w-full h-full flex flex-col justify-end text-white bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                                <CardTitle className="font-headline text-xl font-semibold text-white mb-2 truncate">
                                 {content.title}
                                 </CardTitle>
-                                <CardDescription className="text-foreground/80 text-sm leading-relaxed min-h-[60px]">
+                                <CardDescription className="text-white/90 text-sm leading-relaxed min-h-[60px]">
                                 {content.shortDescription}
                                 </CardDescription>
                             </div>
