@@ -57,12 +57,16 @@ const ImageCarouselModal = ({ images, initialIndex, altText, onClose }: { images
                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
             </Carousel>
-             <DialogClose
-                onClick={onClose}
-                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent group flex items-center justify-center transition-colors duration-200"
-                aria-label="Close image viewer"
-            >
-                <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+             <DialogClose asChild>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={onClose}
+                    className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent group flex items-center justify-center transition-colors duration-200"
+                    aria-label="Close image viewer"
+                >
+                    <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+                </Button>
             </DialogClose>
         </DialogContent>
     );
@@ -95,12 +99,21 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="relative w-full rounded-lg"
+                className="w-full"
             >
                 <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center">
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-[30%] lg:max-w-md flex-shrink-0">
-                         <Card className="h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
+                         <Card className="relative h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={onClose}
+                                className="absolute top-2 right-2 h-10 w-10 rounded-full z-10 bg-transparent hover:bg-accent/20 group"
+                                aria-label="Close project details"
+                            >
+                                <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+                            </Button>
                             <CardContent className="p-0 flex flex-col h-full">
                                 <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-2">
                                     {content.title}
@@ -166,15 +179,6 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                     </div>
                 </div>
 
-                <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={onClose}
-                    className="absolute top-0 right-0 h-10 w-10 rounded-full z-20 -mt-2 -mr-2 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-center group"
-                    aria-label="Close project details"
-                >
-                    <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
-                </Button>
             </motion.div>
             
             {isModalOpen && <ImageCarouselModal images={galleryImages} initialIndex={modalInitialIndex} altText={content.title} onClose={handleModalClose} />}
