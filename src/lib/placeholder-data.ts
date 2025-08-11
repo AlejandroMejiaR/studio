@@ -97,8 +97,8 @@ export const placeholderProjects: Project[] = [
     liveUrl: '#',
     repoUrl: '#',
     priority: 3,
-    en: { ...enDetails, title: 'Project 1', shortDescription: 'A web project.' },
-    es: { ...esDetails, title: 'Proyecto 1', shortDescription: 'Un proyecto web.' },
+    en: { ...enDetails, title: 'Creative Project 1', shortDescription: 'A creative web project.' },
+    es: { ...esDetails, title: 'Proyecto Creativo 1', shortDescription: 'Un proyecto web creativo.' },
   },
    {
     id: '4',
@@ -117,7 +117,7 @@ export const placeholderProjects: Project[] = [
     liveUrl: '#',
     repoUrl: '#',
     priority: 4,
-    en: { ...enDetails, title: 'Project 2', shortDescription: 'Generative art showcase.' },
-    es: { ...esDetails, title: 'Proyecto 2', shortDescription: 'Muestra de arte generativo.' },
+    en: { ...enDetails, title: 'Creative Project 2', shortDescription: 'Generative art showcase.' },
+    es: { ...esDetails, title: 'Proyecto Creativo 2', shortDescription: 'Muestra de arte generativo.' },
   },
 ];
