@@ -26,11 +26,11 @@ const CallToAction = () => {
     };
 
     return (
-        <div className="flex items-center justify-center my-16">
+        <div className="flex items-center justify-center mt-16">
             <Button
                 size="lg"
                 asChild
-                className="w-full max-w-xs h-16 text-lg rounded-lg border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground flex items-center justify-between px-6"
+                className="w-full max-w-xs h-16 text-lg rounded-lg border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground flex items-center justify-center gap-4 px-6"
                 aria-label={translationsForLanguage.home.buttons.exploreMiniProjects}
             >
                 <Link href="/#mini-projects" onClick={handleSmoothScroll}>

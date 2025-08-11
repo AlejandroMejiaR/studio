@@ -23,9 +23,8 @@ export default async function HomePage() {
       
       <SectionContainer className="pt-24 pb-16 md:pt-32 md:pb-24">
         <CaseStudySection projects={caseStudies} />
+        <CallToAction />
       </SectionContainer>
-      
-      <CallToAction />
 
       <SectionContainer className="pt-16 pb-24 md:pt-24 md:pb-32">
         <CreativeProjectsSection projects={creativeProjects} />
