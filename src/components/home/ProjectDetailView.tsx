@@ -9,26 +9,33 @@ import { Card, CardContent } from '@/components/ui/card';
 import { X, Code2, Component, Bot, Gamepad2, BrainCircuit, Wind, Database, Cloud } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
 
-// Map technology names to Lucide icons
-const getTechIcon = (tech: string) => {
+// Map technology names to Supabase image URLs
+const getTechIconUrl = (tech: string) => {
     const lowerCaseTech = tech.toLowerCase();
+    const baseUrl = "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/";
+
     switch (lowerCaseTech) {
-        case 'next.js': return <BrainCircuit className="h-5 w-5" />;
-        case 'react': return <Component className="h-5 w-5" />;
-        case 'tailwindcss': return <Wind className="h-5 w-5" />;
-        case 'firebase': return <Database className="h-5 w-5" />;
-        case 'vercel': return <Cloud className="h-5 w-5" />;
-        case 'unity': return <Gamepad2 className="h-5 w-5" />;
-        case 'figma': return <Bot className="h-5 w-5" />;
-        default: return <Code2 className="h-5 w-5" />;
+        case 'next.js': return `${baseUrl}next-js.png`;
+        case 'react': return `${baseUrl}React.png`;
+        case 'tailwindcss': return `${baseUrl}Tailwind.png`;
+        case 'firebase': return `${baseUrl}Firebase.png`;
+        case 'vercel': return `${baseUrl}Vercel.png`;
+        case 'unity': return `${baseUrl}UnityClaro.png`;
+        case 'figma': return `${baseUrl}Figma.png`;
+        case 'p5.js': return `${baseUrl}p5js.png`;
+        case 'javascript': return `${baseUrl}javascript.png`;
+        case 'c#': return `${baseUrl}c-sharp.png`;
+        case 'blender': return `${baseUrl}Blender.png`;
+        default: return null; // Fallback for unmapped tech
     }
 };
 
-const ImageCarouselModal = ({ images, initialIndex, altText }: { images: string[], initialIndex: number, altText: string }) => {
+const ImageCarouselModal = ({ images, initialIndex, altText, onClose }: { images: string[], initialIndex: number, altText: string, onClose: () => void }) => {
     return (
         <DialogContent className="max-w-5xl w-full p-4 bg-transparent border-0 shadow-none flex items-center justify-center">
             <Carousel opts={{ loop: true, startIndex: initialIndex }} className="w-full">
@@ -50,6 +57,13 @@ const ImageCarouselModal = ({ images, initialIndex, altText }: { images: string[
                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
             </Carousel>
+             <DialogClose 
+                onClick={onClose}
+                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground"
+                aria-label="Close image viewer"
+             >
+                <X className="h-5 w-5 text-accent" />
+            </DialogClose>
         </DialogContent>
     );
 };
@@ -66,6 +80,10 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
         setIsModalOpen(true);
     };
 
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
     const galleryImages = project.galleryImages && project.galleryImages.length > 0
         ? project.galleryImages
         : [project.thumbnailUrl];
@@ -79,7 +97,7 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                 transition={{ duration: 0.3 }}
                 className="relative w-full rounded-lg"
             >
-                <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+                <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center">
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-[30%] lg:max-w-md flex-shrink-0">
                          <Card className="h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
@@ -97,18 +115,23 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                                     <h4 className="font-semibold text-primary/90 dark:text-foreground/90 mb-3">{translationsForLanguage.projectDetails.technologies}:</h4>
                                     <div className="flex flex-wrap gap-3">
                                         <TooltipProvider>
-                                            {project.technologies.map(tech => (
-                                                <Tooltip key={tech}>
-                                                    <TooltipTrigger asChild>
-                                                        <div className="p-2 rounded-md bg-muted/50 border border-border/50">
-                                                            {getTechIcon(tech)}
-                                                        </div>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>
-                                                        <p>{tech}</p>
-                                                    </TooltipContent>
-                                                </Tooltip>
-                                            ))}
+                                            {project.technologies.map(tech => {
+                                                const iconUrl = getTechIconUrl(tech);
+                                                if (!iconUrl) return null;
+
+                                                return (
+                                                    <Tooltip key={tech}>
+                                                        <TooltipTrigger asChild>
+                                                            <div className="p-2 rounded-md bg-muted/50 border border-border/50 h-10 w-10 flex items-center justify-center">
+                                                                <Image src={iconUrl} alt={tech} width={24} height={24} className="object-contain" />
+                                                            </div>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>{tech}</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                );
+                                            })}
                                         </TooltipProvider>
                                     </div>
                                 </div>
@@ -150,11 +173,11 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                     className="absolute top-0 right-0 h-10 w-10 rounded-full z-20 -mt-2 -mr-2 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground"
                     aria-label="Close project details"
                 >
-                    <X className="h-5 w-5" />
+                    <X className="h-5 w-5 text-accent" />
                 </Button>
             </motion.div>
             
-            {isModalOpen && <ImageCarouselModal images={galleryImages} initialIndex={modalInitialIndex} altText={content.title} />}
+            {isModalOpen && <ImageCarouselModal images={galleryImages} initialIndex={modalInitialIndex} altText={content.title} onClose={handleModalClose} />}
         </Dialog>
     );
 };
