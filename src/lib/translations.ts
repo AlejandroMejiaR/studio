@@ -17,6 +17,7 @@ export interface AppTranslations {
     buttons: {
       viewWork: string;
       aboutMe: string;
+      exploreMiniProjects: string;
     };
     featuredProjectsTitle: string;
     viewMoreProjects: string;
@@ -108,6 +109,7 @@ export const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "View My Work",
         aboutMe: "About Me",
+        exploreMiniProjects: "Explore mini projects",
       },
       featuredProjectsTitle: "Featured Projects",
       viewMoreProjects: "View More Projects",
@@ -192,6 +194,7 @@ export const translations: Record<Language, AppTranslations> = {
       buttons: {
         viewWork: "Ver Mi Trabajo",
         aboutMe: "Sobre Mí",
+        exploreMiniProjects: "Explora los mini proyectos",
       },
       featuredProjectsTitle: "Proyectos Destacados",
       viewMoreProjects: "Ver Más Proyectos",

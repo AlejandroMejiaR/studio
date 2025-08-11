@@ -5,6 +5,7 @@ import type { Project } from '@/types';
 import CaseStudySection from '@/components/home/CaseStudySection';
 import CreativeProjectsSection from '@/components/home/CreativeProjectsSection';
 import { SectionContainer } from '@/components/layout/SectionContainer';
+import CallToAction from '@/components/home/CallToAction';
 
 // Disable data caching for this page to ensure fresh data on each visit.
 export const revalidate = 0;
@@ -24,6 +25,8 @@ export default async function HomePage() {
         <CaseStudySection projects={caseStudies} />
       </SectionContainer>
       
+      <CallToAction />
+
       <SectionContainer className="pt-16 pb-24 md:pt-24 md:pb-32">
         <CreativeProjectsSection projects={creativeProjects} />
       </SectionContainer>

@@ -17,22 +17,8 @@ interface CreativeProjectsSectionProps {
 const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => {
   const { language, translationsForLanguage } = useLanguage();
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
-
-  useEffect(() => {
-    if (selectedProject && sectionRef.current) {
-        // Delay scroll slightly to allow layout animation to start
-        setTimeout(() => {
-            sectionRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start' 
-            });
-        }, 100);
-    }
-  }, [selectedProject]);
-
 
   if (!projects || projects.length === 0) {
     return null;
@@ -48,7 +34,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
 
   return (
-    <div id="mini-projects-section" ref={sectionRef}>
+    <div id="mini-projects" className="scroll-mt-16">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
@@ -77,7 +63,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                         <Card 
                             key={project.id} 
                             onClick={() => handleCardClick(project.id)}
-                            className="relative h-full overflow-hidden transition-all duration-300 ease-in-out cursor-pointer hover:shadow-lg hover:-translate-y-1 group border-0"
+                            className="relative h-full overflow-hidden rounded-lg transition-all duration-300 ease-in-out cursor-pointer hover:shadow-lg group border-0"
                         >
                             <Image
                                 src={project.thumbnailUrl}
