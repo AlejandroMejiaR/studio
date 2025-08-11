@@ -26,20 +26,20 @@ const CallToAction = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center text-center gap-4 my-8">
+        <div className="flex items-center justify-center my-16">
             <Button
-                size="icon"
+                size="lg"
                 asChild
-                className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground [&_svg]:size-8"
+                className="w-full max-w-xs h-16 text-lg rounded-lg border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground flex items-center justify-between px-6"
                 aria-label={translationsForLanguage.home.buttons.exploreMiniProjects}
             >
                 <Link href="/#mini-projects" onClick={handleSmoothScroll}>
-                    <ArrowDown />
+                    <span>
+                        {translationsForLanguage.home.buttons.exploreMiniProjects}
+                    </span>
+                    <ArrowDown className="h-6 w-6" />
                 </Link>
             </Button>
-            <p className="text-sm font-medium text-foreground/80">
-                {translationsForLanguage.home.buttons.exploreMiniProjects}
-            </p>
         </div>
     );
 };
