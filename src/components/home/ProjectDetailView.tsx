@@ -57,12 +57,16 @@ const ImageCarouselModal = ({ images, initialIndex, altText, onClose }: { images
                 <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
                 <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/30 hover:bg-black/50 text-white border-0" />
             </Carousel>
-             <DialogClose 
-                onClick={onClose}
-                className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-center"
-                aria-label="Close image viewer"
-             >
-                <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+             <DialogClose asChild>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={onClose}
+                    className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent hover:text-accent-foreground flex items-center justify-center group"
+                    aria-label="Close image viewer"
+                >
+                    <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+                </Button>
             </DialogClose>
         </DialogContent>
     );
