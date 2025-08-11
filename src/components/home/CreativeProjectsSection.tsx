@@ -4,7 +4,7 @@
 import type { Project } from '@/types';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardDescription, CardTitle } from '@/components/ui/card';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProjectDetailView from './ProjectDetailView';
 
@@ -17,16 +17,6 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
-
-  // This effect runs after a project is selected and the component re-renders.
-  useEffect(() => {
-    if (selectedProjectId) {
-      const section = document.getElementById('mini-projects-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  }, [selectedProjectId]);
 
   if (!projects || projects.length === 0) {
     return null;
@@ -42,12 +32,12 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
 
   return (
-    <div id="mini-projects-section" className="scroll-mt-20">
+    <div id="mini-projects-section">
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
       
-      <div className="relative">
+      <motion.div layout className="relative">
         <AnimatePresence mode="wait">
             {selectedProject ? (
                  <ProjectDetailView 
@@ -87,7 +77,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
                 </motion.div>
             )}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
     </div>
   );
