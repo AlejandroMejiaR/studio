@@ -105,52 +105,55 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-[30%] lg:max-w-md flex-shrink-0">
                          <Card className="relative h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
-                            <CardContent className="p-0 flex flex-col h-full">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
+                            <CardContent className="p-0 flex h-full">
+                                <div className="flex w-full gap-4">
+                                     <div className="flex-shrink-0">
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            onClick={onClose}
+                                            className="h-10 w-10 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground"
+                                            aria-label="Go back to projects"
+                                        >
+                                            <ArrowLeft className="h-5 w-5" />
+                                        </Button>
+                                    </div>
+
+                                    <div className="flex-grow flex flex-col">
                                         <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-2">
                                             {content.title}
                                         </h3>
-                                        <p className="text-sm text-muted-foreground">
+                                        <p className="text-sm text-muted-foreground mb-4">
                                             <strong className="font-semibold text-primary/90 dark:text-foreground/90">{translationsForLanguage.projectDetails.myRole}:</strong> {content.myRole}
                                         </p>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        onClick={onClose}
-                                        className="h-10 w-10 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground flex-shrink-0"
-                                        aria-label="Go back to projects"
-                                    >
-                                        <ArrowLeft className="h-5 w-5" />
-                                    </Button>
-                                </div>
 
-                                <p className="text-foreground/80 leading-relaxed flex-grow">
-                                    {content.summary}
-                                </p>
-                                <div className="mt-6">
-                                    <h4 className="font-semibold text-primary/90 dark:text-foreground/90 mb-3">{translationsForLanguage.projectDetails.technologies}:</h4>
-                                    <div className="flex flex-wrap gap-3">
-                                        <TooltipProvider>
-                                            {project.technologies.map(tech => {
-                                                const iconUrl = getTechIconUrl(tech);
-                                                if (!iconUrl) return null;
+                                        <p className="text-foreground/80 leading-relaxed flex-grow">
+                                            {content.summary}
+                                        </p>
+                                        <div className="mt-6">
+                                            <h4 className="font-semibold text-primary/90 dark:text-foreground/90 mb-3">{translationsForLanguage.projectDetails.technologies}:</h4>
+                                            <div className="flex flex-wrap gap-3">
+                                                <TooltipProvider>
+                                                    {project.technologies.map(tech => {
+                                                        const iconUrl = getTechIconUrl(tech);
+                                                        if (!iconUrl) return null;
 
-                                                return (
-                                                    <Tooltip key={tech}>
-                                                        <TooltipTrigger asChild>
-                                                            <div className="p-2 rounded-md bg-muted/50 border border-border/50 h-10 w-10 flex items-center justify-center">
-                                                                <Image src={iconUrl} alt={tech} width={24} height={24} className="object-contain" />
-                                                            </div>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>{tech}</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                );
-                                            })}
-                                        </TooltipProvider>
+                                                        return (
+                                                            <Tooltip key={tech}>
+                                                                <TooltipTrigger asChild>
+                                                                    <div className="p-2 rounded-md bg-muted/50 border border-border/50 h-10 w-10 flex items-center justify-center">
+                                                                        <Image src={iconUrl} alt={tech} width={24} height={24} className="object-contain" />
+                                                                    </div>
+                                                                </TooltipTrigger>
+                                                                <TooltipContent>
+                                                                    <p>{tech}</p>
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        );
+                                                    })}
+                                                </TooltipProvider>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </CardContent>
