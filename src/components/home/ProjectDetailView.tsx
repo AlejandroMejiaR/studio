@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { X } from 'lucide-react';
+import { X, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
@@ -101,19 +101,21 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                 transition={{ duration: 0.3 }}
                 className="w-full"
             >
+                <div className="mb-4">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={onClose}
+                        className="h-12 w-12 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground"
+                        aria-label="Go back to projects"
+                    >
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
+                </div>
                 <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-center">
                     {/* Left Column: Details */}
                     <div className="w-full lg:w-[30%] lg:max-w-md flex-shrink-0">
                          <Card className="relative h-full p-6 md:p-8 bg-card/80 backdrop-blur-sm border-border/50">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={onClose}
-                                className="absolute top-2 right-2 h-10 w-10 rounded-full z-10 bg-transparent hover:bg-accent/20 group"
-                                aria-label="Close project details"
-                            >
-                                <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
-                            </Button>
                             <CardContent className="p-0 flex flex-col h-full">
                                 <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground mb-2">
                                     {content.title}
