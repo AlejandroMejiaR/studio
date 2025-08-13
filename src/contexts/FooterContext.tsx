@@ -18,9 +18,13 @@ export const FooterProvider = ({ children }: { children: ReactNode }) => {
 
   // This effect synchronizes the footer's visibility based on the current route.
   useEffect(() => {
-    // Footer is now visible on all pages by default.
-    // The logic to hide it on the homepage via IntersectionObserver has been removed.
-    setIsFooterVisible(true);
+    // Hide footer on the homepage initially. Its visibility will be
+    // controlled by an IntersectionObserver in HomePageClient.
+    if (pathname === '/') {
+      setIsFooterVisible(false);
+    } else {
+      setIsFooterVisible(true);
+    }
   }, [pathname]);
 
   return (

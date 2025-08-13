@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
 import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
+import { useFooter } from '@/contexts/FooterContext';
 import { cn } from '@/lib/utils';
 import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
 import { ArrowDown } from 'lucide-react';
@@ -19,11 +20,6 @@ const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-transparent" />,
 });
-
-
-interface HomePageClientProps {
-  projects: Project[];
-}
 
 // Function to check sessionStorage safely on the client
 const getInitialAnimationState = (): boolean => {
@@ -47,6 +43,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     getInitialServerTranslation
   } = useLanguage();
   const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
+  const { setIsFooterVisible } = useFooter();
   const pathname = usePathname();
   const screenSize = useScreenSize();
   const isMobile = screenSize === 'mobile';
@@ -77,6 +74,26 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       document.body.classList.remove('no-scroll');
     };
   }, [shouldAnimate, setShouldNavbarContentBeVisible]);
+
+  // Effect to control footer visibility based on hero section
+  useEffect(() => {
+    const heroSection = document.getElementById('hero');
+    if (!heroSection) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // When hero is NOT intersecting (i.e., scrolled out of view), show footer.
+        setIsFooterVisible(!entry.isIntersecting);
+      },
+      { threshold: 0.1 } // Adjust threshold as needed
+    );
+
+    observer.observe(heroSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [setIsFooterVisible]);
 
 
   useEffect(() => {
@@ -306,5 +323,3 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     </div>
   );
 }
-
-    
