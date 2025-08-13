@@ -42,7 +42,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
 
   return (
-    <div id="mini-projects" className="scroll-mt-16" ref={sectionRef}>
+    <div id="mini-projects" className="scroll-mt-16 mb-[200px]" ref={sectionRef}>
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
@@ -52,7 +52,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
             {selectedProject ? (
                  <ProjectDetailView 
                     key={selectedProject.id}
-                    project={selectedProject} 
+                    project={project} 
                     onClose={handleClose} 
                 />
             ) : (
