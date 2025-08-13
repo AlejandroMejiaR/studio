@@ -20,6 +20,9 @@ const Footer = () => {
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' });
       }
+    } else if (href && !href.startsWith('/')) {
+        // This is for navigating from other pages to a hash on the homepage
+        window.location.href = `/${href}`;
     }
   };
 
@@ -35,13 +38,23 @@ const Footer = () => {
     ? translationsForLanguage.footer.quickLinksTitle
     : getInitialServerTranslation(t => t.footer.quickLinksTitle) || "Enlaces Rápidos";
   
-  const projectsLinkText = isClientReady
-    ? translationsForLanguage.footer.projectsLink
-    : getInitialServerTranslation(t => t.footer.projectsLink) || "Proyectos";
-
   const aboutMeLinkText = isClientReady
     ? translationsForLanguage.footer.aboutMeLink
     : getInitialServerTranslation(t => t.footer.aboutMeLink) || "Sobre Mí";
+
+  const caseStudiesLinkText = isClientReady
+    ? translationsForLanguage.footer.caseStudiesLink
+    : getInitialServerTranslation(t => t.footer.caseStudiesLink) || "Casos de Estudio";
+
+  const miniProjectsLinkText = isClientReady
+    ? translationsForLanguage.footer.miniProjectsLink
+    : getInitialServerTranslation(t => t.footer.miniProjectsLink) || "Mini Proyectos";
+    
+  const links = [
+      { href: '/about', text: aboutMeLinkText },
+      { href: '/#case-studies', text: caseStudiesLinkText },
+      { href: '/#mini-projects', text: miniProjectsLinkText },
+  ];
 
   return (
     <footer className="bg-footer-bg text-footer-fg py-12">
@@ -60,25 +73,18 @@ const Footer = () => {
             <h4 className="font-headline text-lg font-medium mb-1" style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
               {quickLinksTitleText}
             </h4>
-            <Link 
-              href="/#projects" 
-              className="hover:text-accent transition-colors"
-              onClick={handleSmoothScroll}
-            >
-              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                {projectsLinkText}
-              </span>
-            </Link>
-            <Link 
-              href="/about" 
-              className="hover:text-accent transition-colors"
-              onClick={handleSmoothScroll}
-            >
-              <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
-                {aboutMeLinkText}
-              </span>
-            </Link>
-            {/* <Link href="/contact" className="hover:text-accent transition-colors">Contact</Link> */}
+            {links.map((link) => (
+                <Link 
+                    key={link.href}
+                    href={link.href} 
+                    className="hover:text-accent transition-colors"
+                    onClick={handleSmoothScroll}
+                >
+                <span style={{ visibility: isClientReady ? 'visible' : 'hidden' }}>
+                    {link.text}
+                </span>
+                </Link>
+            ))}
           </nav>
 
           <div className="flex justify-center md:justify-end space-x-4">

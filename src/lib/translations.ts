@@ -80,8 +80,9 @@ export interface AppTranslations {
     portfolioTitle: string;
     rightsReservedText: string;
     quickLinksTitle: string;
-    projectsLink: string;
     aboutMeLink: string;
+    caseStudiesLink: string;
+    miniProjectsLink: string;
   };
   projectCard: {
     viewMore: string;
@@ -169,8 +170,9 @@ export const translations: Record<Language, AppTranslations> = {
       portfolioTitle: "Portfolio",
       rightsReservedText: "All rights reserved.",
       quickLinksTitle: "Quick Links",
-      projectsLink: "Projects",
       aboutMeLink: "About",
+      caseStudiesLink: "Case Studies",
+      miniProjectsLink: "Mini Projects",
     },
     projectCard: {
       viewMore: "View More",
@@ -254,8 +256,9 @@ export const translations: Record<Language, AppTranslations> = {
       portfolioTitle: "Portafolio",
       rightsReservedText: "Todos los derechos reservados.",
       quickLinksTitle: "Enlaces Rápidos",
-      projectsLink: "Proyectos",
       aboutMeLink: "Sobre mí",
+      caseStudiesLink: "Casos de estudio",
+      miniProjectsLink: "Mini proyectos",
     },
     projectCard: {
       viewMore: "Ver más",
