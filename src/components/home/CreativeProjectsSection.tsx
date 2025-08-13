@@ -17,6 +17,7 @@ interface CreativeProjectsSectionProps {
 const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => {
   const { language, translationsForLanguage } = useLanguage();
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const selectedProject = projects.find(p => p.id === selectedProjectId);
 
@@ -26,6 +27,13 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
   const handleCardClick = (projectId: string) => {
     setSelectedProjectId(projectId);
+    // Scroll to the top of the section when a project is selected
+    if (sectionRef.current) {
+        // Use a timeout to allow the DOM to update before scrolling
+        setTimeout(() => {
+            sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100); // A small delay is often sufficient
+    }
   };
 
   const handleClose = () => {
@@ -34,7 +42,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
 
 
   return (
-    <div id="mini-projects" className="scroll-mt-16">
+    <div id="mini-projects" className="scroll-mt-16" ref={sectionRef}>
       <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
         {translationsForLanguage.home.creativeProjectsTitle}
       </h2>
