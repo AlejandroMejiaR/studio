@@ -25,6 +25,20 @@ interface HomePageClientProps {
   projects: Project[];
 }
 
+// Function to check sessionStorage safely on the client
+const getInitialAnimationState = (): boolean => {
+  if (typeof window === 'undefined') {
+    return false; // Never animate on the server
+  }
+  try {
+    const hasAnimated = sessionStorage.getItem('portfolio_ace_has_animated');
+    return !hasAnimated;
+  } catch (e) {
+    return false;
+  }
+};
+
+
 export default function HomePageClient({ projects }: HomePageClientProps) {
   const {
     language,
@@ -37,16 +51,33 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   const screenSize = useScreenSize();
   const isMobile = screenSize === 'mobile';
 
-
-  const [shouldAnimateHeroIntro, setShouldAnimateHeroIntro] = useState<boolean | null>(null);
-
-  const [isContentVisible, setIsContentVisible] = useState(false);
-  const [areControlsVisible, setAreControlsVisible] = useState(false);
+  // The single source of truth: Should we animate? Decision is made immediately.
+  const [shouldAnimate, setShouldAnimate] = useState(getInitialAnimationState);
 
   // Preload the model as early as possible on the client
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
   }, []);
+
+
+  // This effect handles all side-effects related to the animation state.
+  useEffect(() => {
+    if (shouldAnimate) {
+      // Prepare for animation
+      setShouldNavbarContentBeVisible(false);
+      document.body.classList.add('no-scroll');
+    } else {
+      // Ensure everything is visible if not animating
+      setShouldNavbarContentBeVisible(true);
+      document.body.classList.remove('no-scroll');
+    }
+
+    // Cleanup function to ensure scroll is always re-enabled on component unmount
+    return () => {
+      document.body.classList.remove('no-scroll');
+    };
+  }, [shouldAnimate, setShouldNavbarContentBeVisible]);
+
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -65,75 +96,15 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
       }
     }, 150);
 
-    return () => clearTimeout(scrollTimer);
-  }, [isClientReady, pathname]);
-
-  useEffect(() => {
-    if (!isClientReady) return;
-  
-    // The key in sessionStorage is now language-specific.
-    const initialLoadAnimatedKey = `portfolio_ace_initial_load_animated_${language}`;
-    const hasAnimatedForThisLanguage = sessionStorage.getItem(initialLoadAnimatedKey);
-  
-    if (!hasAnimatedForThisLanguage) {
-      // If we haven't animated for the current language in this session, do it now.
-      setShouldAnimateHeroIntro(true);
-      // And mark it as done for this session.
-      sessionStorage.setItem(initialLoadAnimatedKey, 'true');
-      // Scroll to top to show the animation
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    } else {
-      // Otherwise, don't animate.
-      setShouldAnimateHeroIntro(false);
-    }
-  
-  }, [isClientReady, language]);
-
-  useEffect(() => {
-    if (shouldAnimateHeroIntro === null || !isClientReady) {
-      return;
-    }
-
-    if (shouldAnimateHeroIntro) {
-      setIsContentVisible(false);
-      setAreControlsVisible(false); // Hide buttons/header for animation
-      setShouldNavbarContentBeVisible(false);
-      const timer = setTimeout(() => {
-        setIsContentVisible(true);
-      }, 300);
-      return () => clearTimeout(timer);
-    } else {
-      setIsContentVisible(true);
-      setAreControlsVisible(true); // Show buttons/header immediately
-      setShouldNavbarContentBeVisible(true);
-    }
-    
-  }, [shouldAnimateHeroIntro, isClientReady, setShouldNavbarContentBeVisible, language]);
-  
-  useEffect(() => {
-    if (!isClientReady || shouldAnimateHeroIntro === null) return;
-
     const hintShown = sessionStorage.getItem('portfolio-ace-language-hint-shown');
     if (!hintShown) {
         setShowLanguageHint(true);
         sessionStorage.setItem('portfolio-ace-language-hint-shown', 'true');
     }
-  }, [isClientReady, shouldAnimateHeroIntro, setShowLanguageHint]);
 
-  useEffect(() => {
-    if (shouldAnimateHeroIntro) {
-      if (!areControlsVisible) {
-        document.body.classList.add('no-scroll');
-      } else {
-        document.body.classList.remove('no-scroll');
-      }
-    }
-    // Cleanup function to ensure scroll is always re-enabled
-    return () => {
-      document.body.classList.remove('no-scroll');
-    };
-  }, [areControlsVisible, shouldAnimateHeroIntro]);
-
+    return () => clearTimeout(scrollTimer);
+  }, [isClientReady, pathname, setShowLanguageHint]);
+  
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getInitialServerTranslation(t => t.home.buttons.viewWork) as string || "Ver Mi Trabajo";
   
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -187,8 +158,13 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
   }, [isClientReady, translationsForLanguage, getInitialServerTranslation]);
 
   const handleAnimationComplete = useCallback(() => {
-    setAreControlsVisible(true);
+    // Animation is done, show controls and re-enable scroll
     setShouldNavbarContentBeVisible(true);
+    document.body.classList.remove('no-scroll');
+    // Mark as animated in this session
+    sessionStorage.setItem('portfolio_ace_has_animated', 'true');
+    // Update state to render static content and prevent re-animation
+    setShouldAnimate(false);
   }, [setShouldNavbarContentBeVisible]);
   
   const animationItems = useMemo(() => {
@@ -251,7 +227,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     );
   };
 
-  if (!isClientReady || shouldAnimateHeroIntro === null) {
+  if (!isClientReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
       </div>
@@ -264,7 +240,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         <div 
             className={cn(
               "absolute top-0 left-0 w-full z-20 pointer-events-none",
-              areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+              !shouldAnimate ? "animate-controls-fade-in" : "opacity-0"
             )}
             style={{ height: '750px' }}
         >
@@ -281,8 +257,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
         >
           <div className="container mx-auto">
             <div className={cn(
-              "relative z-30 w-full h-full flex flex-col justify-center transition-opacity duration-1000",
-              isContentVisible ? 'opacity-100' : 'opacity-0',
+              "relative z-30 w-full h-full flex flex-col justify-center",
               !isMobile && "pointer-events-none" 
             )}>
               {/* Text Container */}
@@ -291,7 +266,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                 !isMobile && "md:w-3/5"
               )}>
                 <div className="w-full text-left md:items-start flex flex-col items-center pointer-events-auto">
-                  {shouldAnimateHeroIntro && animationItems.length > 0 ? (
+                  {shouldAnimate ? (
                       <StaggeredTextAnimation
                         key={language}
                         items={animationItems}
@@ -308,7 +283,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
 
                 <div className={cn(
                   "flex justify-center w-full pt-16 pointer-events-auto",
-                  areControlsVisible ? "animate-controls-fade-in" : "opacity-0"
+                  !shouldAnimate ? "animate-controls-fade-in" : "opacity-0"
                 )}>
                   <Button
                     size="icon"
@@ -331,3 +306,5 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
     </div>
   );
 }
+
+    
