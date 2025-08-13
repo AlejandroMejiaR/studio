@@ -52,7 +52,7 @@ const CreativeProjectsSection = ({ projects }: CreativeProjectsSectionProps) => 
             {selectedProject ? (
                  <ProjectDetailView 
                     key={selectedProject.id}
-                    project={project} 
+                    project={selectedProject} 
                     onClose={handleClose} 
                 />
             ) : (
