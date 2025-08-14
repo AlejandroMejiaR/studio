@@ -211,7 +211,7 @@ export const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
-      paragraph1: "Soy Ingeniero Multimedia apasionado por el diseño y el desarrollo de videojuegos. Me impulsa la curiosidad y el interés por resolver problemas, que me guían para transformar ideas en soluciones funcionales, visualmente atractivas y centradas en el usuario.",
+      paragraph1: "Soy Ingeniero en Multimedia apasionado por el diseño y el desarrollo de videojuegos. Me impulsa la curiosidad y el interés por resolver problemas, que me guían para transformar ideas en soluciones funcionales, visualmente atractivas y centradas en el usuario.",
       paragraph2: "Siempre estoy aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me desafíen a crecer personal y profesionalmente.",
       paragraph3: "",
       paragraph4: "",
@@ -274,5 +274,7 @@ export const translations: Record<Language, AppTranslations> = {
     },
   },
 };
+
+    
 
     
