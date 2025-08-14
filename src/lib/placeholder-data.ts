@@ -43,7 +43,7 @@ export const placeholderProjects: Project[] = [
     date: '2024',
     technologies: ['Unity', 'C#', 'Blender'],
     thumbnailUrl: 'https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects/1/gallery2.png',
-    bannerUrl: 'https://placehold.co/1920x1080.png',
+    bannerUrl: 'https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects/1/banner.png',
     galleryImages: [
         'https://placehold.co/800x600.png',
         'https://placehold.co/800x600.png',
@@ -65,7 +65,7 @@ export const placeholderProjects: Project[] = [
     date: '2023',
     technologies: ['Figma', 'React', 'Firebase'],
     thumbnailUrl: 'https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects/1/banner.png',
-    bannerUrl: 'https://placehold.co/1920x1080.png',
+    bannerUrl: 'https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/projects/1/banner.png',
     galleryImages: [
         'https://placehold.co/800x600.png',
         'https://placehold.co/800x600.png',
