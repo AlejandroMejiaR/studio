@@ -6,12 +6,46 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2 } from 'lucide-react';
+import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2, X } from 'lucide-react';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
-import React from 'react';
-import ImageModal from './ImageModal';
+import React, { useState } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+
+
+const ImageDialog = ({ imageUrl, altText, children }: { imageUrl: string, altText: string, children: React.ReactNode }) => (
+    <Dialog>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogContent className="max-w-5xl w-full p-0 bg-transparent border-0 shadow-none flex items-center justify-center">
+            <div className="relative aspect-[16/9] w-full">
+                <Image
+                    src={imageUrl}
+                    alt={altText}
+                    fill
+                    className="object-contain"
+                    sizes="90vw"
+                />
+            </div>
+            <DialogClose asChild>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="absolute -top-2 -right-2 md:-top-3 md:-right-3 h-10 w-10 rounded-full z-20 border-2 border-accent bg-background/80 backdrop-blur-sm hover:bg-accent group flex items-center justify-center transition-colors duration-200"
+                    aria-label="Close image viewer"
+                >
+                    <X className="h-5 w-5 text-accent group-hover:text-accent-foreground" />
+                </Button>
+            </DialogClose>
+        </DialogContent>
+    </Dialog>
+);
+
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary dark:text-foreground mb-10 md:mb-12 text-center">
@@ -131,11 +165,11 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
             <SectionTitle>{t('finalSolutionTitle')}</SectionTitle>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto">
               {project.galleryImages.slice(0, 4).map((src, index) => (
-                <ImageModal key={index} imageUrl={src} altText={`${titleToDisplay} - final design ${index + 1}`}>
+                <ImageDialog key={index} imageUrl={src} altText={`${titleToDisplay} - final design ${index + 1}`}>
                   <div className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group bg-muted">
                     <Image src={src} alt={`${titleToDisplay} - final design ${index + 1}`} fill className="object-cover transition-transform duration-300 group-hover:scale-105" data-ai-hint="app screenshot" sizes="(max-width: 640px) 100vw, 50vw" />
                   </div>
-                </ImageModal>
+                </ImageDialog>
               ))}
             </div>
              <div className="flex flex-wrap justify-center items-center gap-4 mt-12">
