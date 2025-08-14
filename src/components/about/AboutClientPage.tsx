@@ -109,10 +109,6 @@ const AboutClientPage = () => {
             </p>
             <br />
             <p>
-              {translationsForLanguage.aboutMe.paragraph3}
-            </p>
-            <br />
-            <p>
               {translationsForLanguage.aboutMe.paragraph4}
             </p>
 

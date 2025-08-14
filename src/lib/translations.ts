@@ -123,8 +123,8 @@ export const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "Hello Again!",
       paragraph1: "I am a Multimedia Engineer, passionate about video game design and development.",
-      paragraph2: "I am motivated to transform ideas into solutions that captivate, are functional, visually attractive, and user-centered.",
-      paragraph3: "My path in technology is guided by curiosity and an interest in problem-solving.",
+      paragraph2: "I am motivated to transform ideas into solutions that captivate, are functional, visually attractive, and user-centered. My path in technology is guided by curiosity and an interest in problem-solving.",
+      paragraph3: "",
       paragraph4: "I am constantly learning new things and remain open to opportunities that push me to grow personally and professionally.",
       workTogether: "Let's Work Together.",
       skillsTitle: "Skills",
@@ -212,8 +212,8 @@ export const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "¡Hola de Nuevo!",
       paragraph1: "Soy Ingeniero Multimedia, apasionado por el diseño y desarrollo de videojuegos.",
-      paragraph2: "Me motiva transformar ideas en soluciones que cautiven, sean funcionales, visualmente atractivas y pensadas para el usuario.",
-      paragraph3: "Mi camino en la tecnología está guiado por la curiosidad y el interés por resolver problemas.",
+      paragraph2: "Me motiva transformar ideas en soluciones que cautiven, sean funcionales, visualmente atractivas y pensadas para el usuario. Mi camino en la tecnología está guiado por la curiosidad y el interés por resolver problemas.",
+      paragraph3: "",
       paragraph4: "Estoy constantemente aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me impulsen a crecer personal y profesionalmente.",
       workTogether: "Trabajemos Juntos.",
       skillsTitle: "Habilidades",
