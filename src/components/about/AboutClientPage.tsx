@@ -107,11 +107,7 @@ const AboutClientPage = () => {
             <p>
               {translationsForLanguage.aboutMe.paragraph2}
             </p>
-            <br />
-            <p>
-              {translationsForLanguage.aboutMe.paragraph4}
-            </p>
-
+            
             <div className="mt-6">
               <Button
                 variant="outline"

@@ -122,8 +122,8 @@ export const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "Hello Again!",
-      paragraph1: "I am a Multimedia Engineer, passionate about video game design and development.",
-      paragraph2: "I am motivated to transform ideas into solutions that are functional, visually attractive, and user-centered. My path in technology is guided by curiosity and an interest in problem-solving.",
+      paragraph1: "I'm a Multimedia Engineer passionate about video game design and development. I love turning ideas into functional, visually attractive, and user-centered solutions.",
+      paragraph2: "My work is fueled by a natural curiosity and a strong interest in solving problems. I'm always looking for opportunities that allow me to learn and grow.",
       paragraph3: "",
       paragraph4: "I am constantly learning new things and remain open to opportunities that push me to grow personally and professionally.",
       workTogether: "Let's Work Together.",
@@ -211,8 +211,8 @@ export const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
-      paragraph1: "Soy Ingeniero Multimedia, apasionado por el diseño y desarrollo de videojuegos.",
-      paragraph2: "Me motiva transformar ideas en soluciones que sean funcionales, visualmente atractivas y pensadas para el usuario, guiado por la curiosidad y el interés por resolver problemas.",
+      paragraph1: "Soy Ingeniero Multimedia apasionado por el diseño y el desarrollo de videojuegos. Me impulsa la curiosidad y el interés por resolver problemas, que me guían para transformar ideas en soluciones funcionales, visualmente atractivas y centradas en el usuario.",
+      paragraph2: "Siempre estoy aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me desafíen a crecer personal y profesionalmente.",
       paragraph3: "",
       paragraph4: "Estoy constantemente aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me impulsen a crecer personal y profesionalmente.",
       workTogether: "Trabajemos Juntos.",
