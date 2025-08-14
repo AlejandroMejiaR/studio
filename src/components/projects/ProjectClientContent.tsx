@@ -69,7 +69,7 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
 
 
   return (
-    <article className="space-y-24 md:space-y-32 lg:space-y-36 pt-12 md:pt-16">
+    <article className="space-y-24 md:space-y-32 lg:space-y-36 pt-24 md:pt-32">
       {/* Section 2: Resumen y Detalles Clave */}
       <section className="!pt-0">
         <SectionContainer>
@@ -88,13 +88,6 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
           </div>
         </SectionContainer>
       </section>
-
-      {/* Section 3: Full-Width Hero Image */}
-      {project.bannerUrl && (
-        <section className="relative w-full h-auto aspect-[16/9] md:aspect-[21/9] bg-muted">
-          <Image src={project.bannerUrl} alt={titleToDisplay} fill className="object-cover" priority data-ai-hint="product mockup" sizes="100vw" />
-        </section>
-      )}
 
       {/* Section 4: Problem and Objectives */}
       <section>
