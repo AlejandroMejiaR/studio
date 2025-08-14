@@ -4,7 +4,6 @@ import { placeholderProjects } from '@/lib/placeholder-data';
 import ProjectClientContent from '@/components/projects/ProjectClientContent';
 import type { Metadata } from 'next';
 import type { Project } from '@/types';
-import BackButton from '@/components/layout/BackButton';
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import Image from 'next/image';
 
@@ -86,7 +85,6 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         )}
         <div className="absolute inset-0 bg-black/50" />
         
-        <BackButton className="absolute top-8 left-8 z-20" />
 
         <div className="relative z-10 text-center px-4">
             <h1 className="font-headline font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-md">
