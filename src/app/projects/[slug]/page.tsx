@@ -109,7 +109,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
       </section>
 
       {/* Main Content */}
-      <div id="project-content" className="scroll-mt-[-100vh]">
+      <div id="project-content" className="scroll-mt-[-1px]">
         <ProjectClientContent 
           project={project} 
         />
