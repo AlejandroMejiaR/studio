@@ -212,7 +212,7 @@ export const translations: Record<Language, AppTranslations> = {
     aboutMe: {
       title: "¡Hola de Nuevo!",
       paragraph1: "Soy Ingeniero Multimedia, apasionado por el diseño y desarrollo de videojuegos.",
-      paragraph2: "Me motiva transformar ideas en soluciones que sean funcionales, visualmente atractivas y pensadas para el usuario. Mi camino en la tecnología está guiado por la curiosidad y el interés por resolver problemas.",
+      paragraph2: "Me motiva transformar ideas en soluciones que sean funcionales, visualmente atractivas y pensadas para el usuario, guiado por la curiosidad y el interés por resolver problemas.",
       paragraph3: "",
       paragraph4: "Estoy constantemente aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me impulsen a crecer personal y profesionalmente.",
       workTogether: "Trabajemos Juntos.",
