@@ -79,8 +79,8 @@ const AboutClientPage = () => {
   }
 
   const technologies = {
-    design: ["Figma", "Adobe XD", "Photoshop"],
-    develop: ["Unity", "Unreal Engine", "React", "JavaScript"],
+    design: ["Figma", "Miro"],
+    develop: ["Unity", "Unreal Engine", "Blender"],
     management: ["Jira", "Trello", "Git"]
   }
 
