@@ -17,6 +17,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 
 
 const ImageDialog = ({ imageUrl, altText, children }: { imageUrl: string, altText: string, children: React.ReactNode }) => (
@@ -54,6 +55,28 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 const processIcons = [Search, FileText, Lightbulb, DraftingCompass, CheckCircle2];
+
+// Map technology names to Supabase image URLs
+const getTechIconUrl = (tech: string) => {
+    const lowerCaseTech = tech.toLowerCase();
+    const baseUrl = "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/";
+
+    switch (lowerCaseTech) {
+        case 'next.js': return `${baseUrl}next-js.png`;
+        case 'react': return `${baseUrl}React.png`;
+        case 'tailwindcss': return `${baseUrl}Tailwind.png`;
+        case 'firebase': return `${baseUrl}Firebase.png`;
+        case 'vercel': return `${baseUrl}Vercel.png`;
+        case 'unity': return `${baseUrl}UnityClaro.png`;
+        case 'figma': return `${baseUrl}Figma.png`;
+        case 'p5.js': return `${baseUrl}p5js.png`;
+        case 'javascript': return `${baseUrl}javascript.png`;
+        case 'c#': return `${baseUrl}c-sharp.png`;
+        case 'blender': return `${baseUrl}Blender.png`;
+        default: return null; // Fallback for unmapped tech
+    }
+};
+
 
 const ProjectClientContent = ({ project }: { project: Project }) => {
   const { language, translationsForLanguage, isClientReady, getInitialServerTranslation } = useLanguage();
@@ -105,11 +128,34 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
               <p className="text-foreground/80 leading-relaxed text-3xl">{langContent.summary}</p>
             </div>
             <Card className="lg:col-span-4 bg-card p-6 md:p-8 rounded-xl shadow-lg">
-              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-lg">
+              <ul className="space-y-4 text-lg">
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('myRole')}: </strong> <span className="text-foreground/80">{langContent.myRole}</span></li>
-                <li><strong className="font-semibold text-primary dark:text-foreground">{t('technologies')}: </strong> <span className="text-foreground/80">{project.technologies.join(', ')}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('category')}: </strong> <span className="text-foreground/80">{project.category}</span></li>
                 <li><strong className="font-semibold text-primary dark:text-foreground">{t('date')}: </strong> <span className="text-foreground/80">{project.date}</span></li>
+                <li>
+                  <strong className="font-semibold text-primary dark:text-foreground mb-2 block">{t('technologies')}: </strong>
+                  <div className="flex flex-wrap gap-3">
+                      <TooltipProvider>
+                          {project.technologies.map(tech => {
+                              const iconUrl = getTechIconUrl(tech);
+                              if (!iconUrl) return null;
+
+                              return (
+                                  <Tooltip key={tech}>
+                                      <TooltipTrigger asChild>
+                                          <div className="p-2 rounded-md bg-muted/50 border border-border/50 h-10 w-10 flex items-center justify-center">
+                                              <Image src={iconUrl} alt={tech} width={24} height={24} className="object-contain" />
+                                          </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                          <p>{tech}</p>
+                                      </TooltipContent>
+                                  </Tooltip>
+                              );
+                          })}
+                      </TooltipProvider>
+                  </div>
+                </li>
               </ul>
             </Card>
           </div>
