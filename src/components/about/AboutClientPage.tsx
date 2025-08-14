@@ -213,7 +213,7 @@ const AboutClientPage = () => {
 
       {/* Section 4: Courses & Certificates */}
       <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
-        <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Courses & Certificates</h2>
+        <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.coursesTitle}</h2>
         <div className="w-full space-y-4">
           {coursesItems.map((item, index) => (
             <div key={index} className="flex items-center w-full text-left border-b py-4 gap-4">

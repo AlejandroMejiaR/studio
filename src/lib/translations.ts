@@ -44,6 +44,7 @@ export interface AppTranslations {
       title: string;
       course1: string;
     };
+    coursesTitle: string;
     tech_areas: {
       design: string;
       develop: string;
@@ -137,6 +138,7 @@ export const translations: Record<Language, AppTranslations> = {
         title: "Education",
         course1: "Multimedia Engineering",
       },
+      coursesTitle: "Courses & Certificates",
       tech_areas: {
         design: "Design",
         develop: "Develop",
@@ -223,6 +225,7 @@ export const translations: Record<Language, AppTranslations> = {
         title: "Educación",
         course1: "Ingeniería Multimedia",
       },
+      coursesTitle: "Cursos y Certificados",
       tech_areas: {
         design: "Diseño",
         develop: "Desarrollo",
