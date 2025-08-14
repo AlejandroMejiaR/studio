@@ -112,7 +112,6 @@ const AboutClientPage = () => {
               <Button
                 variant="outline"
                 size="lg"
-                asChild
                 className="border-accent text-accent hover:bg-accent hover:text-accent-foreground"
               >
                 <Link href="mailto:alejandro197mejia@gmail.com">
@@ -255,3 +254,5 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
+
+    
