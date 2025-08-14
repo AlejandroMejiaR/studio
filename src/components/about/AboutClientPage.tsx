@@ -6,6 +6,37 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useState, useEffect } from 'react';
+
+const ThemeSensitiveImage = ({ lightSrc, darkSrc, alt, width, height, className }: { lightSrc: string, darkSrc: string, alt: string, width: number, height: number, className?: string }) => {
+    const [theme, setTheme] = useState('dark');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        const handleThemeChange = () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            setTheme(isDark ? 'dark' : 'light');
+        };
+
+        handleThemeChange(); // Set initial theme
+
+        const observer = new MutationObserver(handleThemeChange);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+        return () => observer.disconnect();
+    }, []);
+
+    if (!isMounted) {
+        // Render a placeholder or the light version SSR to avoid layout shift
+        return <Image src={lightSrc} alt={alt} width={width} height={height} className={cn("object-contain", className)} />;
+    }
+    
+    const src = theme === 'dark' ? darkSrc : lightSrc;
+
+    return <Image src={src} alt={alt} width={width} height={height} className={cn("object-contain", className)} />;
+};
+
 
 const AboutClientPage = () => {
   const { translationsForLanguage } = useLanguage();
@@ -186,7 +217,7 @@ const AboutClientPage = () => {
         <div className="w-full space-y-4">
           {coursesItems.map((item, index) => (
             <div key={index} className="flex items-center w-full text-left border-b py-4 gap-4">
-              <div className="flex-shrink-0 h-10 w-10 relative">
+              <div className="flex-shrink-0 h-10 w-10 relative flex items-center justify-center">
                 {item.logo ? (
                      <Image
                         src={item.logo}
@@ -196,10 +227,15 @@ const AboutClientPage = () => {
                         className="object-contain"
                     />
                 ) : (
-                    <>
-                        {item.logoLight && <Image src={item.logoLight} alt={`${item.institution} logo`} width={40} height={40} className="object-contain block dark:hidden" />}
-                        {item.logoDark && <Image src={item.logoDark} alt={`${item.institution} logo`} width={40} height={40} className="object-contain hidden dark:block" />}
-                    </>
+                    item.logoLight && item.logoDark && (
+                        <ThemeSensitiveImage 
+                            lightSrc={item.logoLight}
+                            darkSrc={item.logoDark}
+                            alt={`${item.institution} logo`}
+                            width={40}
+                            height={40}
+                        />
+                    )
                 )}
               </div>
               <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center">

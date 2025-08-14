@@ -12,8 +12,10 @@ const MusicPlayer = () => {
   const [volume, setVolume] = useState(0.5);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     if (!audioRef.current) {
       const audio = new Audio('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Sound/M.mp3');
       audio.loop = true;
@@ -69,6 +71,19 @@ const MusicPlayer = () => {
     setIsPopoverOpen(false);
   };
   
+  if (!isMounted) {
+    return (
+        <Button
+          variant="ghost"
+          aria-label="Play music"
+          className="h-10 w-10 hover:bg-accent/10"
+          disabled={true}
+        >
+           <VolumeX style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5} />
+        </Button>
+    );
+  }
+
   const iconToShow = isPlaying ? (
     <Headphones style={{ color: '#ffa600', width: '25px', height: '25px' }} strokeWidth={2.5} />
   ) : (

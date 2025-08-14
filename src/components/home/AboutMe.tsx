@@ -4,7 +4,7 @@
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext'; // Import useLanguage
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Tooltip,
   TooltipContent,
@@ -13,6 +13,36 @@ import {
 } from '@/components/ui/tooltip';
 import { Gamepad2, Component, Sparkles, Languages, Code2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const ThemeSensitiveImage = ({ lightSrc, darkSrc, alt, width, height, className, unoptimized }: { lightSrc: string, darkSrc: string, alt: string, width: number, height: number, className?: string, unoptimized?: boolean }) => {
+    const [theme, setTheme] = useState('dark');
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        const handleThemeChange = () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            setTheme(isDark ? 'dark' : 'light');
+        };
+
+        handleThemeChange(); // Set initial theme
+
+        const observer = new MutationObserver(handleThemeChange);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+        return () => observer.disconnect();
+    }, []);
+
+    if (!isMounted) {
+        // Render a placeholder or the light version SSR to avoid layout shift
+        return <Image src={lightSrc} alt={alt} width={width} height={height} className={cn("object-contain", className)} unoptimized={unoptimized} />;
+    }
+    
+    const src = theme === 'dark' ? darkSrc : lightSrc;
+
+    return <Image src={src} alt={alt} width={width} height={height} className={cn("object-contain", className)} unoptimized={unoptimized} />;
+};
+
 
 // This component no longer needs a ref as it's on its own page.
 const AboutMe = () => {
@@ -113,22 +143,15 @@ const AboutMe = () => {
                     <TooltipTrigger asChild>
                       <div className="group relative h-16 w-16 flex items-center justify-center p-2 rounded-lg transition-all duration-300 ease-in-out transform hover:-translate-y-1">
                           {skill.logoLight && skill.logoDark ? (
-                              <>
-                                  <Image
-                                      src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoLight}`}
-                                      alt={`${skill.name} logo`}
-                                      width={48} height={48}
-                                      className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 block dark:hidden"
-                                      unoptimized={true}
-                                  />
-                                  <Image
-                                      src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoDark}`}
-                                      alt={`${skill.name} logo`}
-                                      width={48} height={48}
-                                      className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110 hidden dark:block"
-                                      unoptimized={true}
-                                  />
-                              </>
+                              <ThemeSensitiveImage 
+                                lightSrc={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoLight}`}
+                                darkSrc={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logoDark}`}
+                                alt={`${skill.name} logo`}
+                                width={48}
+                                height={48}
+                                className="object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
+                                unoptimized={true}
+                              />
                           ) : (
                               <Image
                                   src={`https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${skill.logo}`}
