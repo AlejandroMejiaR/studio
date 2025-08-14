@@ -12,16 +12,33 @@ const AboutClientPage = () => {
     
   const educationItems = [
     {
-      course: "UX Design Professional Certificate",
-      institution: "Google",
-      date: "(2025)",
-      logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/Google.webp",
-    },
-    {
       course: translationsForLanguage.aboutMe.education.course1,
       institution: "Universidad Militar Nueva Granada",
       date: "(2020 - Present)",
       logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UMNG.webp",
+    },
+  ];
+
+  const coursesItems = [
+    {
+        course: "UX Design Professional Certificate",
+        institution: "Google",
+        date: "(2025)",
+        logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/Google.webp",
+    },
+    {
+        course: "Introduction to Game Design",
+        institution: "Epic Games",
+        date: "(2025)",
+        logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
+    },
+    {
+        course: "Unreal Engine Fundamentals",
+        institution: "Epic Games",
+        date: "(2025)",
+        logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
     },
   ];
 
@@ -138,7 +155,7 @@ const AboutClientPage = () => {
       </div>
       
       {/* Section 3: Education */}
-      <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
+      <div className="w-full max-w-4xl mx-auto pb-16">
         <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.education.title}</h2>
         <div className="w-full space-y-4">
           {educationItems.map((item, index) => (
@@ -151,6 +168,39 @@ const AboutClientPage = () => {
                   height={40}
                   className="object-contain"
                 />
+              </div>
+              <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <span className="font-semibold text-lg">{item.course}</span>
+                <span className="text-muted-foreground text-left sm:text-right mt-1 sm:mt-0">
+                  {item.institution} <span className="text-sm">{item.date}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Section 4: Courses & Certificates */}
+      <div className="w-full max-w-4xl mx-auto pb-24 mb-24">
+        <h2 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">Courses & Certificates</h2>
+        <div className="w-full space-y-4">
+          {coursesItems.map((item, index) => (
+            <div key={index} className="flex items-center w-full text-left border-b py-4 gap-4">
+              <div className="flex-shrink-0 h-10 w-10 relative">
+                {item.logo ? (
+                     <Image
+                        src={item.logo}
+                        alt={`${item.institution} logo`}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                    />
+                ) : (
+                    <>
+                        {item.logoLight && <Image src={item.logoLight} alt={`${item.institution} logo`} width={40} height={40} className="object-contain block dark:hidden" />}
+                        {item.logoDark && <Image src={item.logoDark} alt={`${item.institution} logo`} width={40} height={40} className="object-contain hidden dark:block" />}
+                    </>
+                )}
               </div>
               <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <span className="font-semibold text-lg">{item.course}</span>
