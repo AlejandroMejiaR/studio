@@ -71,9 +71,12 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
   return (
     <div className="pb-32 md:pb-40">
-      <SectionContainer className="pt-12">
-        <div className="flex items-center gap-4">
+      <SectionContainer className="pt-24 md:pt-32">
+        <div className="flex items-center gap-4 md:gap-8">
           <BackButton />
+          <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+            {project.es.title || project.en.title}
+          </h1>
         </div>
       </SectionContainer>
       <ProjectClientContent 

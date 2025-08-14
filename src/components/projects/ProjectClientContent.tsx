@@ -69,20 +69,9 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
 
 
   return (
-    <article className="space-y-24 md:space-y-32 lg:space-y-36">
-      {/* Section 1: Hero Section */}
-      <section>
-        <SectionContainer>
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <h1 className="font-headline font-bold text-left text-6xl sm:text-7xl md:text-8xl lg:text-9xl">
-              {titleToDisplay}
-            </h1>
-          </div>
-        </SectionContainer>
-      </section>
-
+    <article className="space-y-24 md:space-y-32 lg:space-y-36 pt-12 md:pt-16">
       {/* Section 2: Resumen y Detalles Clave */}
-      <section className="!mt-0 pt-0">
+      <section className="!pt-0">
         <SectionContainer>
           <div className="grid grid-cols-1 lg:grid-cols-10 gap-8 md:gap-12 max-w-6xl mx-auto items-start">
             <div className="lg:col-span-6">
