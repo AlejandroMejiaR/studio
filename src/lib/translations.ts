@@ -229,7 +229,7 @@ export const translations: Record<Language, AppTranslations> = {
       jobSpecialization: "Game · UX Designer",
       education: {
         title: "Educación",
-        course1: "Ingeniería Multimedia",
+        course1: "Ingeniería en Multimedia",
       },
       coursesTitle: "Cursos y Certificados",
       tech_areas: {
