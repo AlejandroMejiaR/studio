@@ -87,7 +87,7 @@ body {
     --input: 225 25% 20%;          /* Darker Indigo for input backgrounds #262C40 */
     --ring: 39 100% 50%;           /* Ring color (matches accent) */
 
-    --footer-background: 225 30% 8%; /* Very Dark Indigo, almost black #0D101A */
+    --footer-background: 0 0% 23%; /* Very Dark Indigo, almost black #0D101A */
     --footer-foreground: 225 15% 75%;   /* Light Grey with Indigo hint for footer text #B0B5C7 */
 
     --sidebar-background: 225 25% 14%;    /* Dark Indigo for Sidebar #1A1F2E */
