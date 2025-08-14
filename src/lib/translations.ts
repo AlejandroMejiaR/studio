@@ -28,6 +28,8 @@ export interface AppTranslations {
     title: string;
     paragraph1: string;
     paragraph2: string;
+    paragraph3: string;
+    paragraph4: string;
     workTogether: string;
     skillsTitle: string;
     technologiesTitle: string;
@@ -120,8 +122,10 @@ export const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "Hello Again!",
-      paragraph1: "I am an aspiring Multimedia Engineer, currently in my 10th semester in Bogotá, Colombia. I specialize in the development of interactive applications and interaction design (UX). My journey in technology is driven by a passion for problem-solving and for creating digital solutions that are both functional and visually appealing.",
-      paragraph2: "I'm always learning, open to new challenges and collaborations.",
+      paragraph1: "I am a Multimedia Engineer, passionate about video game design and development.",
+      paragraph2: "I am motivated to transform ideas into solutions that captivate, are functional, visually attractive, and user-centered.",
+      paragraph3: "My path in technology is guided by curiosity and an interest in problem-solving.",
+      paragraph4: "I am constantly learning new things and remain open to opportunities that push me to grow personally and professionally.",
       workTogether: "Let's Work Together.",
       skillsTitle: "Skills",
       technologiesTitle: "Technologies",
@@ -207,8 +211,10 @@ export const translations: Record<Language, AppTranslations> = {
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
-      paragraph1: "Soy un aspirante a Ingeniero Multimedia, actualmente en mi décimo semestre en Bogotá, Colombia. Me especializo en el desarrollo de aplicaciones interactivas y diseño de interacción (UX). Mi trayectoria en la tecnología está impulsada por la pasión por resolver problemas y crear soluciones digitales que sean tanto funcionales como visualmente atractivas.",
-      paragraph2: "Siempre estoy aprendiendo, abierto a nuevos desafíos y colaboraciones.",
+      paragraph1: "Soy Ingeniero Multimedia, apasionado por el diseño y desarrollo de videojuegos.",
+      paragraph2: "Me motiva transformar ideas en soluciones que cautiven, sean funcionales, visualmente atractivas y pensadas para el usuario.",
+      paragraph3: "Mi camino en la tecnología está guiado por la curiosidad y el interés por resolver problemas.",
+      paragraph4: "Estoy constantemente aprendiendo cosas nuevas y me mantengo abierto a oportunidades que me impulsen a crecer personal y profesionalmente.",
       workTogether: "Trabajemos Juntos.",
       skillsTitle: "Habilidades",
       technologiesTitle: "Tecnologías",
