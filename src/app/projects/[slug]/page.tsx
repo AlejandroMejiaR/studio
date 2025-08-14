@@ -73,7 +73,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
   return (
     <div className="pb-32 md:pb-40">
       {/* Hero Section */}
-      <section className="relative w-full h-[40vh] md:h-[50vh] flex items-end text-white">
+      <section className="relative w-full h-screen flex items-center justify-center text-white">
         {project.bannerUrl && (
           <Image 
             src={project.bannerUrl} 
@@ -84,16 +84,15 @@ export default async function ProjectPage({ params }: { params: { slug: string }
             data-ai-hint="project banner"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-black/50" />
         
-        <SectionContainer className="relative z-10 w-full pb-8 md:pb-12">
-          <div className="flex items-center gap-4 md:gap-8">
-            <BackButton />
-            <h1 className="font-headline font-bold text-left text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+        <BackButton className="absolute top-8 left-8 z-20" />
+
+        <div className="relative z-10 text-center px-4">
+            <h1 className="font-headline font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-md">
               {project.es.title || project.en.title}
             </h1>
-          </div>
-        </SectionContainer>
+        </div>
       </section>
 
       {/* Main Content */}
