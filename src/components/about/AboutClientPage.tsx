@@ -75,7 +75,7 @@ const AboutClientPage = () => {
 
   const skills = {
     ux: ["User Research", "Wireframing", "Prototyping", "Usability Testing"],
-    gameDesign: ["Game Mechanics", "Level Design", "Narrative Design", "Playtesting"]
+    gameDesign: ["Gameplay Design", "Level Design", "Playtesting"]
   }
 
   const technologies = {
@@ -254,5 +254,3 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
-
-    
