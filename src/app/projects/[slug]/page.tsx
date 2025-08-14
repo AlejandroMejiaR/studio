@@ -6,6 +6,9 @@ import type { Metadata } from 'next';
 import type { Project } from '@/types';
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { ArrowDown } from 'lucide-react';
 
 // Disable data caching for this page.
 export const revalidate = 0;
@@ -86,17 +89,31 @@ export default async function ProjectPage({ params }: { params: { slug: string }
         <div className="absolute inset-0 bg-black/50" />
         
 
-        <div className="relative z-10 text-center px-4">
+        <div className="relative z-10 text-center px-4 flex flex-col items-center">
             <h1 className="font-headline font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-md">
               {project.es.title || project.en.title}
             </h1>
+            <div className="mt-16">
+                 <Button
+                    size="icon"
+                    asChild
+                    className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground [&_svg]:size-8"
+                    aria-label={"View project details"}
+                  >
+                    <Link href="#project-content" id="scroll-down-button">
+                      <ArrowDown />
+                    </Link>
+                  </Button>
+            </div>
         </div>
       </section>
 
       {/* Main Content */}
-      <ProjectClientContent 
-        project={project} 
-      />
+      <div id="project-content" className="scroll-mt-[-100vh]">
+        <ProjectClientContent 
+          project={project} 
+        />
+      </div>
     </div>
   );
 }

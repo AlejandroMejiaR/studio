@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Github, ExternalLink, Search, FileText, Lightbulb, DraftingCompass, CheckCircle2, X } from 'lucide-react';
 import { useLanguage, type AppTranslations } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SectionContainer } from '@/components/layout/SectionContainer';
 import {
   Dialog,
@@ -66,6 +66,33 @@ const ProjectClientContent = ({ project }: { project: Project }) => {
     : getInitialServerTranslation(trans => trans.projectDetails[key]);
 
   const titleToDisplay = isClientReady ? langContent.title : (project.es.title || "...");
+
+  const handleSmoothScroll = (e: MouseEvent) => {
+    const target = e.currentTarget as HTMLAnchorElement;
+    const href = target.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    const scrollButton = document.getElementById('scroll-down-button');
+    if (scrollButton) {
+      scrollButton.addEventListener('click', handleSmoothScroll as EventListener);
+    }
+    return () => {
+      if (scrollButton) {
+        scrollButton.removeEventListener('click', handleSmoothScroll as EventListener);
+      }
+    };
+  }, []);
 
 
   return (
