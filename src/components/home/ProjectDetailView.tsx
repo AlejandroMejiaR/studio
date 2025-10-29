@@ -111,10 +111,10 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                                         variant="outline"
                                         size="icon"
                                         onClick={onClose}
-                                        className="h-10 w-10 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground flex-shrink-0"
+                                        className="h-12 w-12 rounded-full border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-accent-foreground flex-shrink-0"
                                         aria-label="Go back to projects"
                                     >
-                                        <ArrowLeft className="h-5 w-5" />
+                                        <ArrowLeft className="h-6 w-6" />
                                     </Button>
                                     <h3 className="font-headline text-3xl font-bold text-primary dark:text-foreground">
                                         {content.title}
