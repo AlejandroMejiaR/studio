@@ -28,17 +28,13 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
     return null;
   }
 
-  const handleCardClick = (projectId: string, projectType: 'case-study' | 'creative') => {
-    // For creative projects, open the modal. For case studies, navigate.
-    if (projectType === 'creative') {
-        setSelectedProjectId(projectId);
-        if (sectionRef.current) {
-            setTimeout(() => {
-                sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
-        }
+  const handleCardClick = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    if (sectionRef.current) {
+        setTimeout(() => {
+            sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     }
-    // The <Link> component will handle navigation for case studies.
   };
   
   const handleClose = () => {
@@ -65,19 +61,18 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Case Studies Section */}
-            <div className="space-y-12 mb-24">
+            {/* Projects Section */}
+            <div className="space-y-12">
                 <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left">
-                    {translationsForLanguage.home.caseStudiesTitle}
+                    {translationsForLanguage.home.projectsTitle}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {caseStudies.map((project) => {
+                    {projects.map((project) => {
                     const currentLangKey = language.toLowerCase() as 'en' | 'es';
                     const content = project[currentLangKey] || project.en;
 
-                    return (
-                        <Link key={project.id} href={`/projects/${project.slug}`} className="block group">
-                        <Card className="relative aspect-square overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border-0">
+                    const cardContent = (
+                        <Card className="relative aspect-square overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border-0 h-full">
                             <Image
                             src={project.thumbnailUrl}
                             alt={content.title}
@@ -99,54 +94,21 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
                             </p>
                             <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <Button size="lg" className="w-full text-lg bg-accent text-accent-foreground hover:bg-accent/90 pointer-events-none">
-                                    {translationsForLanguage.projectDetails.viewCaseStudy}
+                                    {translationsForLanguage.projectCard.viewMore}
                                     <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </div>
                             </div>
                         </Card>
-                        </Link>
+                    );
+
+                    return (
+                        <div key={project.id} className="block group cursor-pointer" onClick={() => handleCardClick(project.id)}>
+                            {cardContent}
+                        </div>
                     );
                     })}
                 </div>
-            </div>
-
-            {/* Creative Projects Section */}
-            <div>
-              <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
-                {translationsForLanguage.home.creativeProjectsTitle}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {creativeProjects.map((project) => {
-                      const content = project[language.toLowerCase() as 'en' | 'es'] || project.en;
-                      return (
-                          <Card 
-                              key={project.id} 
-                              onClick={() => handleCardClick(project.id, project.type)}
-                              className="relative h-96 overflow-hidden rounded-lg transition-all duration-300 ease-in-out cursor-pointer hover:shadow-lg group border-0"
-                          >
-                              <Image
-                                  src={project.thumbnailUrl}
-                                  alt={content.title}
-                                  fill
-                                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                  className="object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-                                  data-ai-hint="portfolio project"
-                              />
-                              <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors" />
-
-                              <div className="relative z-10 p-4 text-left w-full h-full flex flex-col justify-end text-white bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-                                  <h3 className="font-headline text-xl font-semibold text-white mb-2 truncate">
-                                  {content.title}
-                                  </h3>
-                                  <p className="text-white/90 text-sm leading-relaxed min-h-[60px]">
-                                  {content.shortDescription}
-                                  </p>
-                              </div>
-                          </Card>
-                      );
-                  })}
-              </div>
             </div>
           </motion.div>
         )}

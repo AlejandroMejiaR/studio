@@ -18,7 +18,7 @@ export interface AppTranslations {
       viewWork: string;
       aboutMe: string;
     };
-    projectsTitle: string; // <-- Changed from featuredProjectsTitle
+    projectsTitle: string;
     viewMoreProjects: string;
     caseStudiesTitle: string;
     creativeProjectsTitle: string;
@@ -113,7 +113,7 @@ export const translations: Record<Language, AppTranslations> = {
         viewWork: "View My Work",
         aboutMe: "About Me",
       },
-      projectsTitle: "Projects", // <-- Changed from "Featured Projects"
+      projectsTitle: "Projects",
       viewMoreProjects: "View More Projects",
       caseStudiesTitle: "Case Studies",
       creativeProjectsTitle: "Mini Projects",
@@ -201,7 +201,7 @@ export const translations: Record<Language, AppTranslations> = {
         viewWork: "Ver Mi Trabajo",
         aboutMe: "Sobre Mí",
       },
-      projectsTitle: "Proyectos", // <-- Changed from "Proyectos Destacados"
+      projectsTitle: "Proyectos",
       viewMoreProjects: "Ver Más Proyectos",
       caseStudiesTitle: "Casos de Estudio",
       creativeProjectsTitle: "Mini Proyectos",
