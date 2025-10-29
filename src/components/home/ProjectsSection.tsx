@@ -11,7 +11,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import Link from 'next/link';
 
 interface ProjectsSectionProps {
   projects: Project[];
@@ -41,11 +40,11 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
     setSelectedProjectId(null);
   };
 
-  const caseStudies = projects.filter(p => p.type === 'case-study');
-  const creativeProjects = projects.filter(p => p.type === 'creative');
-
   return (
     <div id="projects" className="scroll-mt-16 mb-[100px]" ref={sectionRef}>
+        <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
+            {translationsForLanguage.home.projectsTitle}
+        </h2>
       <AnimatePresence mode="wait">
         {selectedProject ? (
           <ProjectDetailView 
@@ -61,54 +60,48 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Projects Section */}
-            <div className="space-y-12">
-                <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left">
-                    {translationsForLanguage.home.projectsTitle}
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {projects.map((project) => {
-                    const currentLangKey = language.toLowerCase() as 'en' | 'es';
-                    const content = project[currentLangKey] || project.en;
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project) => {
+                const currentLangKey = language.toLowerCase() as 'en' | 'es';
+                const content = project[currentLangKey] || project.en;
 
-                    const cardContent = (
-                        <Card className="relative aspect-square overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border-0 h-full">
-                            <Image
-                            src={project.thumbnailUrl}
-                            alt={content.title}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover transition-transform duration-500 ease-in-out"
-                            data-ai-hint="portfolio project"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                            <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
-                            <Badge variant="secondary" className="mb-3 w-fit bg-white/20 text-white border-0">
-                                {project.category}
-                            </Badge>
-                            <h3 className="font-headline text-2xl font-bold mb-2">
-                                {content.title}
-                            </h3>
-                            <p className="text-white/90 leading-relaxed text-sm flex-grow overflow-hidden max-h-12">
-                                {content.shortDescription}
-                            </p>
-                            <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <Button size="lg" className="w-full text-lg bg-accent text-accent-foreground hover:bg-accent/90 pointer-events-none">
-                                    {translationsForLanguage.projectCard.viewMore}
-                                    <ArrowRight className="ml-2 h-5 w-5" />
-                                </Button>
-                            </div>
-                            </div>
-                        </Card>
-                    );
-
-                    return (
-                        <div key={project.id} className="block group cursor-pointer" onClick={() => handleCardClick(project.id)}>
-                            {cardContent}
+                const cardContent = (
+                    <Card className="relative aspect-square overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border-0 h-full">
+                        <Image
+                        src={project.thumbnailUrl}
+                        alt={content.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 ease-in-out"
+                        data-ai-hint="portfolio project"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+                        <Badge variant="secondary" className="mb-3 w-fit bg-white/20 text-white border-0">
+                            {project.category}
+                        </Badge>
+                        <h3 className="font-headline text-2xl font-bold mb-2">
+                            {content.title}
+                        </h3>
+                        <p className="text-white/90 leading-relaxed text-sm flex-grow overflow-hidden max-h-12">
+                            {content.shortDescription}
+                        </p>
+                        <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <Button size="lg" className="w-full text-lg bg-accent text-accent-foreground hover:bg-accent/90 pointer-events-none">
+                                {translationsForLanguage.projectCard.viewMore}
+                                <ArrowRight className="ml-2 h-5 w-5" />
+                            </Button>
                         </div>
-                    );
-                    })}
-                </div>
+                        </div>
+                    </Card>
+                );
+
+                return (
+                    <div key={project.id} className="block group cursor-pointer" onClick={() => handleCardClick(project.id)}>
+                        {cardContent}
+                    </div>
+                );
+                })}
             </div>
           </motion.div>
         )}
