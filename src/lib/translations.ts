@@ -20,8 +20,6 @@ export interface AppTranslations {
     };
     projectsTitle: string;
     viewMoreProjects: string;
-    caseStudiesTitle: string;
-    creativeProjectsTitle: string;
   };
   aboutMe: {
     title: string;
@@ -83,8 +81,7 @@ export interface AppTranslations {
     rightsReservedText: string;
     quickLinksTitle: string;
     aboutMeLink: string;
-    caseStudiesLink: string;
-    miniProjectsLink: string;
+    projectsLink: string;
   };
   projectCard: {
     viewMore: string;
@@ -115,8 +112,6 @@ export const translations: Record<Language, AppTranslations> = {
       },
       projectsTitle: "Projects",
       viewMoreProjects: "View More Projects",
-      caseStudiesTitle: "Case Studies",
-      creativeProjectsTitle: "Mini Projects",
     },
     aboutMe: {
       title: "Hello Again!",
@@ -175,8 +170,7 @@ export const translations: Record<Language, AppTranslations> = {
       rightsReservedText: "All rights reserved.",
       quickLinksTitle: "Quick Links",
       aboutMeLink: "About",
-      caseStudiesLink: "Case Studies",
-      miniProjectsLink: "Mini Projects",
+      projectsLink: "Projects",
     },
     projectCard: {
       viewMore: "View More",
@@ -203,8 +197,6 @@ export const translations: Record<Language, AppTranslations> = {
       },
       projectsTitle: "Proyectos",
       viewMoreProjects: "Ver Más Proyectos",
-      caseStudiesTitle: "Casos de Estudio",
-      creativeProjectsTitle: "Mini Proyectos",
     },
     aboutMe: {
       title: "¡Hola de Nuevo!",
@@ -263,8 +255,7 @@ export const translations: Record<Language, AppTranslations> = {
       rightsReservedText: "Todos los derechos reservados.",
       quickLinksTitle: "Enlaces Rápidos",
       aboutMeLink: "Sobre mí",
-      caseStudiesLink: "Casos de estudio",
-      miniProjectsLink: "Mini proyectos",
+      projectsLink: "Proyectos",
     },
     projectCard: {
       viewMore: "Ver más",

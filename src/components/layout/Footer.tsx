@@ -42,18 +42,13 @@ const Footer = () => {
     ? translationsForLanguage.footer.aboutMeLink
     : getInitialServerTranslation(t => t.footer.aboutMeLink) || "Sobre Mí";
 
-  const caseStudiesLinkText = isClientReady
-    ? translationsForLanguage.footer.caseStudiesLink
-    : getInitialServerTranslation(t => t.footer.caseStudiesLink) || "Casos de Estudio";
-
-  const miniProjectsLinkText = isClientReady
-    ? translationsForLanguage.footer.miniProjectsLink
-    : getInitialServerTranslation(t => t.footer.miniProjectsLink) || "Mini Proyectos";
+  const projectsLinkText = isClientReady
+    ? translationsForLanguage.footer.projectsLink
+    : getInitialServerTranslation(t => t.footer.projectsLink) || "Proyectos";
     
   const links = [
       { href: '/about', text: aboutMeLinkText },
-      { href: '/#case-studies', text: caseStudiesLinkText },
-      { href: '/#mini-projects', text: miniProjectsLinkText },
+      { href: '/#projects', text: projectsLinkText },
   ];
 
   return (
