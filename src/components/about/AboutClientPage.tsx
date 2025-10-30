@@ -278,10 +278,3 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
-
-    
-    
-
-    
-
-    
