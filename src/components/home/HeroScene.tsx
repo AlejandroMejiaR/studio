@@ -114,6 +114,7 @@ export default function HeroScene() {
   const [theme, setTheme] = useState('dark');
   const [isMounted, setIsMounted] = useState(false);
   const [initialCameraProps, setInitialCameraProps] = useState<any>(null);
+  const [isSceneVisible, setIsSceneVisible] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -149,12 +150,22 @@ export default function HeroScene() {
   // Determine if we are ready to render the canvas
   const canRenderCanvas = isMounted && initialCameraProps && screenSize !== 'mobile';
   
+  useEffect(() => {
+    if (canRenderCanvas) {
+      // Use a timeout to apply the visible class after the component is in the DOM
+      const timer = setTimeout(() => {
+        setIsSceneVisible(true);
+      }, 100); // A small delay is enough
+      return () => clearTimeout(timer);
+    }
+  }, [canRenderCanvas]);
+
   const bgColor = theme === 'light' ? '#d9d9d9' : '#0d0d0d';
 
   return (
     <div className={cn(
         "w-full h-full pointer-events-auto transition-opacity duration-[2000ms] ease-in-out",
-        canRenderCanvas ? "opacity-100" : "opacity-0"
+        isSceneVisible ? "opacity-100" : "opacity-0"
     )}>
         {canRenderCanvas ? (
             <Canvas camera={initialCameraProps} onCreated={({ camera }) => {
