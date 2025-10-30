@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { LanguageProvider } from '@/contexts/LanguageContext';
@@ -13,6 +14,18 @@ export const metadata: Metadata = {
   description: 'The portfolio of Alejandro Mejia Rojas, a Multimedia Engineer specializing in UX and Game Design.',
 };
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
 
 export default function RootLayout({
   children,
@@ -20,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en" suppressHydrationWarning={true} className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
         <link rel="preload" href="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb" as="fetch" crossOrigin="anonymous" />
         <script
