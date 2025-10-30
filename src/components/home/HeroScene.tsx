@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useRef, useEffect, useState, useCallback }from 'react';
+import { Suspense, useRef, useEffect, useState, useCallback } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { useGLTF, useAnimations, Html } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
@@ -98,23 +98,6 @@ const cameraConfigs: Record<Exclude<ScreenSize, 'mobile'>, { position: [number, 
   },
 };
 
-function CameraSetup() {
-  const { camera } = useThree();
-  const screenSize = useScreenSize();
-
-  useEffect(() => {
-    if (screenSize && screenSize !== 'mobile') {
-      const config = cameraConfigs[screenSize];
-      if (config) {
-        camera.position.set(...config.position);
-        camera.lookAt(...config.target);
-      }
-    }
-  }, [camera, screenSize]);
-
-  return null;
-}
-
 function Loader() {
   return (
     <Html center>
@@ -130,6 +113,7 @@ export default function HeroScene() {
   const screenSize = useScreenSize();
   const [theme, setTheme] = useState('dark');
   const [isMounted, setIsMounted] = useState(false);
+  const [initialCameraProps, setInitialCameraProps] = useState<any>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -150,36 +134,56 @@ export default function HeroScene() {
     return () => observer.disconnect();
   }, []);
   
+  useEffect(() => {
+    if (screenSize && screenSize !== 'mobile') {
+      const config = cameraConfigs[screenSize];
+      setInitialCameraProps({
+        position: config.position,
+        fov: 30,
+        // The lookAt will be handled inside the canvas by the OrbitControls or manual camera adjustments if any.
+        // We set the initial position and fov here.
+      });
+    } else {
+      setInitialCameraProps(null);
+    }
+  }, [screenSize]);
 
-  if (!isMounted || !screenSize || screenSize === 'mobile') {
-    return null; // Don't render on server or on mobile
-  }
+  // Determine if we are ready to render the canvas
+  const canRenderCanvas = isMounted && initialCameraProps && screenSize !== 'mobile';
   
   const bgColor = theme === 'light' ? '#d9d9d9' : '#0d0d0d';
 
   return (
     <div className={cn(
         "w-full h-full pointer-events-auto transition-opacity duration-1000 ease-in",
-        isMounted ? "opacity-100" : "opacity-0"
+        canRenderCanvas ? "opacity-100" : "opacity-0"
     )}>
-        <Canvas camera={{ fov: 30 }}>
-        <color attach="background" args={[bgColor]} />
-        
-        <Suspense fallback={<Loader />}>
-            <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
-        </Suspense>
-        
-        <CameraSetup />
-
-        <EffectComposer>
-            <Bloom 
-            luminanceThreshold={0.3}
-            luminanceSmoothing={0.9}
-            height={300}
-            intensity={0.2}
-            />
-        </EffectComposer>
-        </Canvas>
+        {canRenderCanvas ? (
+            <Canvas camera={initialCameraProps} onCreated={({ camera }) => {
+                const config = cameraConfigs[screenSize as Exclude<ScreenSize, 'mobile'>];
+                if (config) {
+                    camera.lookAt(new THREE.Vector3(...config.target));
+                }
+            }}>
+                <color attach="background" args={[bgColor]} />
+                
+                <Suspense fallback={<Loader />}>
+                    <Model scale={[1, 1, 1]} position={[0, -2, 0]} />
+                </Suspense>
+                
+                <EffectComposer>
+                    <Bloom 
+                    luminanceThreshold={0.3}
+                    luminanceSmoothing={0.9}
+                    height={300}
+                    intensity={0.2}
+                    />
+                </EffectComposer>
+            </Canvas>
+        ) : (
+            // Placeholder to prevent layout shift
+            <div className="w-full h-full" />
+        )}
     </div>
   );
 }
