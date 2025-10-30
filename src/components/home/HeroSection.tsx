@@ -148,21 +148,23 @@ export default function HeroSection() {
     if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
     const lines = fullHeroText.split('\n');
-    if (lines.length < 4) return null; // Or some fallback
+    if (lines.length < 5) return null;
 
     const fontSizes = [
-        'text-4xl md:text-5xl font-medium',
-        'text-5xl md:text-6xl font-medium',
-        'text-5xl md:text-6xl font-medium',
-        'text-2xl md:text-4xl font-light'
+        'text-4xl md:text-5xl font-medium', // ¡Hola!
+        'text-5xl md:text-6xl font-medium', // Soy Alejandro
+        'text-5xl md:text-6xl font-medium', // Desarrollador de Videojuegos
+        'text-5xl md:text-6xl font-medium', // Diseñador UX
+        'text-2xl md:text-4xl font-light'  // Me apasiona...
     ];
     
     return (
         <>
             <div className={cn('text-foreground', fontSizes[0], 'mb-6')}>{renderStyledText(lines[0], language)}</div>
             <div className={cn('text-foreground', fontSizes[1], 'mb-6')}>{renderStyledText(lines[1], language)}</div>
-            <div className={cn('text-foreground', fontSizes[2], 'mb-12')}>{renderStyledText(lines[2], language)}</div>
-            <div className={cn('text-foreground', fontSizes[3])}>{renderStyledText(lines[3], language)}</div>
+            <div className={cn('text-foreground', fontSizes[2], 'mb-6')}>{renderStyledText(lines[2], language)}</div>
+            <div className={cn('text-foreground', fontSizes[3], 'mb-12')}>{renderStyledText(lines[3], language)}</div>
+            <div className={cn('text-foreground', fontSizes[4])}>{renderStyledText(lines[4], language)}</div>
         </>
     );
   };
