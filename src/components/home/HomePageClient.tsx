@@ -35,7 +35,7 @@ const getInitialAnimationState = (): boolean => {
 };
 
 
-export default function HomePageClient({ projects }: HomePageClientProps) {
+export default function HomePageClient({ projects }: { projects: Project[] }) {
   const {
     language,
     translationsForLanguage,
@@ -308,7 +308,7 @@ export default function HomePageClient({ projects }: HomePageClientProps) {
                     className="h-20 w-20 rounded-full border-2 border-accent bg-transparent text-accent animate-bounce-subtle hover:bg-accent hover:text-accent-foreground [&_svg]:size-8"
                     aria-label={viewWorkButtonText}
                   >
-                    <Link href="/#case-studies" onClick={handleSmoothScroll}>
+                    <Link href="/#projects" onClick={handleSmoothScroll}>
                       <ArrowDown />
                     </Link>
                   </Button>
