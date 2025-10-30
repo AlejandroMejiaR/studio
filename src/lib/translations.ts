@@ -104,7 +104,7 @@ export const translations: Record<Language, AppTranslations> = {
     home: {
       hero: {
         animatingTitle: ["Transform", "Ideas Into", "Interactive", "Worlds"],
-        subtitle: "Hello!\nI'm Alejandro\nUX & Game Designer\nI'm passionate about shaping the future of digital interaction — powered by AI.",
+        subtitle: "Hello!\nI'm Alejandro\nUX Designer & Game Developer\nI'm passionate about shaping the future of digital interaction — powered by AI.",
       },
       buttons: {
         viewWork: "View My Work",
@@ -189,7 +189,7 @@ export const translations: Record<Language, AppTranslations> = {
     home: {
       hero: {
         animatingTitle: ["Transforma", "Ideas En", "Mundos", "Interactivos"],
-        subtitle: "¡Hola!\nSoy Alejandro\nDiseñador UX y de Videojuegos\nMe apasiona dar forma al futuro de la interacción digital — impulsada por IA.",
+        subtitle: "¡Hola!\nSoy Alejandro\nDiseñador UX y Desarrollador de Videojuegos\nMe apasiona dar forma al futuro de la interacción digital — impulsada por IA.",
       },
       buttons: {
         viewWork: "Ver Mi Trabajo",
