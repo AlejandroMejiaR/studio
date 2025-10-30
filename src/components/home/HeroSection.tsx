@@ -27,7 +27,7 @@ export default function HeroSection() {
     isClientReady,
     getInitialServerTranslation
   } = useLanguage();
-  const { setShouldNavbarContentBeVisible, setShowLanguageHint } = useNavbarVisibility();
+  const { setShouldNavbarContentBeVisible } = useNavbarVisibility();
   const { setIsFooterVisible } = useFooter();
   const pathname = usePathname();
   const screenSize = useScreenSize();
@@ -40,7 +40,8 @@ export default function HeroSection() {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb', true);
   }, []);
 
-  // This effect handles the synchronized fade-in of content
+  // This effect handles the text content's fade-in animation.
+  // It runs independently of the 3D model.
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsContentVisible(true);
@@ -101,7 +102,7 @@ export default function HeroSection() {
     }, 150);
 
     return () => clearTimeout(scrollTimer);
-  }, [isClientReady, pathname, setShowLanguageHint]);
+  }, [isClientReady, pathname]);
   
   const viewWorkButtonText = isClientReady ? translationsForLanguage.home.buttons.viewWork : getInitialServerTranslation(t => t.home.buttons.viewWork) as string || "Ver Mi Trabajo";
   
@@ -200,7 +201,7 @@ export default function HeroSection() {
         <section 
           id="hero"
           className={cn(
-            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px] transition-opacity duration-2000 ease-in-out",
+            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px] transition-opacity duration-1000 ease-in-out",
             isContentVisible ? "opacity-100" : "opacity-0"
           )}
         >
