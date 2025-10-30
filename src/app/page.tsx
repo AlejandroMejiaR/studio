@@ -1,5 +1,5 @@
 
-import { placeholderProjects } from '@/lib/placeholder-data';
+import { getAllProjectsFromFirestore } from '@/lib/firebase';
 import HomePageClient from '@/components/home/HomePageClient';
 import type { Project } from '@/types';
 import ProjectsSection from '@/components/home/ProjectsSection';
@@ -9,8 +9,7 @@ import { SectionContainer } from '@/components/layout/SectionContainer';
 export const revalidate = 0;
 
 export default async function HomePage() {
-  // This now fetches placeholder data.
-  const projects: Project[] = placeholderProjects;
+  const projects: Project[] = await getAllProjectsFromFirestore();
   
   return (
     <>

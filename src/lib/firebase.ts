@@ -56,6 +56,7 @@ const mapDocToProject = (doc: DocumentData): Project => {
     likeCount: data.likeCount || 0,
     en: data.en,
     es: data.es,
+    type: data.type,
   };
 };
 
@@ -85,8 +86,10 @@ export const getProjectBySlugFromFirestore = async (slug: string): Promise<Proje
   }
 
   try {
+    // Firestore uses document ID to fetch, and we are using slug as ID.
     const projectDocRef = doc(db, 'projects', slug);
     const projectSnap = await getDoc(projectDocRef);
+
     if (projectSnap.exists()) {
       return mapDocToProject(projectSnap);
     } else {
@@ -98,6 +101,7 @@ export const getProjectBySlugFromFirestore = async (slug: string): Promise<Proje
     return undefined;
   }
 };
+
 
 export const incrementLikeCount = async (slug: string): Promise<void> => {
   if (!db) return;
