@@ -71,6 +71,20 @@ const AboutClientPage = () => {
         logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
         logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
     },
+    {
+        course: "Fundamentals of Level Design with Unreal Engine",
+        institution: "Epic Games",
+        date: "(2025)",
+        logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
+    },
+    {
+        course: "User Experience in Game Design",
+        institution: "Epic Games",
+        date: "(2025)",
+        logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
+    },
   ];
 
   const skills = {
@@ -254,3 +268,5 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
+
+    
