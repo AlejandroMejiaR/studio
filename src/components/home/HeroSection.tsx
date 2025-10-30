@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, useMemo, useCallback, Fragment, Suspense } from 'react';
+import { useEffect, useMemo, Fragment, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
@@ -9,7 +9,6 @@ import { usePathname } from 'next/navigation';
 import { useNavbarVisibility } from '@/contexts/NavbarVisibilityContext';
 import { useFooter } from '@/contexts/FooterContext';
 import { cn } from '@/lib/utils';
-import StaggeredTextAnimation from '@/components/effects/StaggeredTextAnimation';
 import { ArrowDown } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useScreenSize } from '@/hooks/use-screen-size';
@@ -19,19 +18,6 @@ const HeroScene = dynamic(() => import('@/components/home/HeroScene'), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-transparent" />,
 });
-
-// Function to check sessionStorage safely on the client
-const getInitialAnimationState = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false; // Never animate on the server
-  }
-  try {
-    const hasAnimated = sessionStorage.getItem('portfolio_ace_has_animated');
-    return !hasAnimated;
-  } catch (e) {
-    return false;
-  }
-};
 
 
 export default function HeroSection() {
@@ -47,32 +33,24 @@ export default function HeroSection() {
   const screenSize = useScreenSize();
   const isMobile = screenSize === 'mobile';
 
-  // The single source of truth: Should we animate? Decision is made immediately.
-  const [shouldAnimate, setShouldAnimate] = useState(getInitialAnimationState);
-
   // Preload the model as early as possible on the client
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb', true);
   }, []);
 
 
-  // This effect handles all side-effects related to the animation state.
+  // This effect handles side-effects like scroll and navbar visibility.
   useEffect(() => {
-    if (shouldAnimate) {
-      // Prepare for animation
-      setShouldNavbarContentBeVisible(false);
-      document.body.classList.add('no-scroll');
-    } else {
-      // Ensure everything is visible if not animating
-      setShouldNavbarContentBeVisible(true);
-      document.body.classList.remove('no-scroll');
-    }
+    // Show navbar content immediately since there is no entry animation.
+    setShouldNavbarContentBeVisible(true);
+    // Ensure scroll is enabled.
+    document.body.classList.remove('no-scroll');
 
-    // Cleanup function to ensure scroll is always re-enabled on component unmount
+    // Cleanup function
     return () => {
       document.body.classList.remove('no-scroll');
     };
-  }, [shouldAnimate, setShouldNavbarContentBeVisible]);
+  }, [setShouldNavbarContentBeVisible]);
 
   // Effect to control footer visibility based on hero section
   useEffect(() => {
@@ -173,53 +151,6 @@ export default function HeroSection() {
       return translationsForLanguage.home.hero.subtitle;
   }, [isClientReady, translationsForLanguage, getInitialServerTranslation]);
 
-  const handleAnimationComplete = useCallback(() => {
-    // Animation is done, show controls and re-enable scroll
-    setShouldNavbarContentBeVisible(true);
-    document.body.classList.remove('no-scroll');
-    // Mark as animated in this session
-    sessionStorage.setItem('portfolio_ace_has_animated', 'true');
-    // Update state to render static content and prevent re-animation
-    setShouldAnimate(false);
-  }, [setShouldNavbarContentBeVisible]);
-  
-  const animationItems = useMemo(() => {
-    if (!isClientReady || !fullHeroText) return [];
-
-    const lines = fullHeroText.split('\n');
-    if (lines.length < 4) return [];
-
-    const fontSizes = [
-        'text-4xl md:text-5xl font-medium',         // "Hello!"
-        'text-5xl md:text-6xl font-medium',         // "I'm Alejandro"
-        'text-5xl md:text-6xl font-medium',         // "UX & Game Designer"
-        'text-2xl md:text-4xl font-light'            // "I'm passionate about..."
-    ];
-
-    return [
-        {
-            content: <div className={cn(fontSizes[0])}>{renderStyledText(lines[0], language)}</div>,
-            delayAfter: 800,
-            className: 'text-foreground mb-6'
-        },
-        {
-            content: <div className={cn(fontSizes[1])}>{renderStyledText(lines[1], language)}</div>,
-            delayAfter: 800,
-            className: 'text-foreground mb-6'
-        },
-        {
-            content: <div className={cn(fontSizes[2])}>{renderStyledText(lines[2], language)}</div>,
-            delayAfter: 1200,
-            className: 'text-foreground mb-12'
-        },
-        {
-            content: <div className={cn(fontSizes[3])}>{renderStyledText(lines[3], language)}</div>,
-            delayAfter: 0,
-            className: 'text-foreground'
-        }
-    ];
-  }, [fullHeroText, language, isClientReady]);
-  
   const StaticSubtitle = () => {
     if (!fullHeroText) return <span dangerouslySetInnerHTML={{ __html: '&nbsp;' }} />;
     
@@ -254,10 +185,7 @@ export default function HeroSection() {
     <div>
       <div className="relative">
         <div 
-            className={cn(
-              "absolute top-0 left-0 w-full z-20 pointer-events-none",
-              !shouldAnimate ? "animate-controls-fade-in" : "opacity-0"
-            )}
+            className="absolute top-0 left-0 w-full z-20 pointer-events-none"
             style={{ height: '750px' }}
         >
             <Suspense fallback={<div className="w-full h-full bg-transparent" />}>
@@ -282,25 +210,12 @@ export default function HeroSection() {
                 !isMobile && "md:w-3/5"
               )}>
                 <div className="w-full text-left md:items-start flex flex-col items-center pointer-events-auto">
-                  {shouldAnimate ? (
-                      <StaggeredTextAnimation
-                        key={language}
-                        items={animationItems}
-                        onComplete={handleAnimationComplete}
-                        className="items-start text-left"
-                      />
-                    ) : (
-                      <div className="items-start text-left">
-                        <StaticSubtitle />
-                      </div>
-                    )
-                  }
+                  <div className="items-start text-left">
+                    <StaticSubtitle />
+                  </div>
                 </div>
 
-                <div className={cn(
-                  "flex justify-center w-full pt-16 pointer-events-auto",
-                  !shouldAnimate ? "animate-controls-fade-in" : "opacity-0"
-                )}>
+                <div className="flex justify-center w-full pt-16 pointer-events-auto">
                   <Button
                     size="icon"
                     asChild
