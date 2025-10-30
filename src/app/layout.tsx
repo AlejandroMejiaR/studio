@@ -1,45 +1,18 @@
-
-"use client";
-
-// import type { Metadata } from 'next'; // Metadata cannot be exported from Client Component
+import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
-import ScrollToTopButton from '@/components/layout/ScrollToTopButton';
 import { LanguageProvider } from '@/contexts/LanguageContext';
-import { FooterProvider, useFooter } from '@/contexts/FooterContext';
-import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
-import { Suspense, useEffect } from 'react'; 
+import { FooterProvider } from '@/contexts/FooterContext';
+import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import LayoutClientLogic from '@/components/layout/LayoutClientLogic';
+import { Suspense } from 'react';
 
+export const metadata: Metadata = {
+  title: 'Portfolio Ace',
+  description: 'The portfolio of Alejandro Mejia Rojas, a Multimedia Engineer specializing in UX and Game Design.',
+};
 
-function LayoutClientLogic({ children }: { children: React.ReactNode }) {
-  const { isFooterVisible } = useFooter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    // Scroll to top on every route change
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return (
-    <>
-      <div className="flex flex-col min-h-screen">
-        <Navbar /> {/* Navbar is always rendered; its internal content visibility is managed */}
-        <main className="flex-grow">
-          <Suspense fallback={<div></div>}>
-            {children}
-          </Suspense>
-        </main>
-        {isFooterVisible && <Footer />}
-      </div>
-      <ScrollToTopButton />
-      <Toaster />
-    </>
-  );
-}
 
 export default function RootLayout({
   children,
@@ -75,12 +48,13 @@ export default function RootLayout({
         <LanguageProvider>
           <FooterProvider>
             <NavbarVisibilityProvider>
-              <LayoutClientLogic>
-                {children}
-              </LayoutClientLogic>
+                <LayoutClientLogic>
+                    {children}
+                </LayoutClientLogic>
             </NavbarVisibilityProvider>
           </FooterProvider>
         </LanguageProvider>
+        <Toaster />
       </body>
     </html>
   );
