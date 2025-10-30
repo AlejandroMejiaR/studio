@@ -2,18 +2,20 @@
 "use client";
 
 import Image from 'next/image';
-import Link from 'next/link';
 import type { Project } from '@/types';
-import { Card, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Heart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 interface ProjectCardProps {
   project: Project;
+  onClick: () => void;
+  viewMoreText: string;
 }
 
-const ProjectCard = ({ project }: ProjectCardProps) => {
+const ProjectCard = ({ project, onClick, viewMoreText }: ProjectCardProps) => {
   const { language, isClientReady } = useLanguage();
 
   const currentLangKey = language.toLowerCase() as 'en' | 'es';
@@ -23,49 +25,36 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   const shortDescriptionToDisplay = isClientReady ? langContent.shortDescription : project.es.shortDescription;
 
   return (
-    <Link href={`/projects/${project.slug}`} className="block h-full no-underline text-inherit group">
-      <Card className="flex flex-col h-full bg-background transition-all duration-300 group-hover:scale-105 shadow-accent-glow group-hover:shadow-accent-glow-lg">
-        
-        <div className="p-4 flex-grow flex flex-col">
-            <div className="flex justify-between items-start">
-              <CardTitle className="font-headline text-2xl text-accent">
-                  {titleToDisplay}
-              </CardTitle>
-              <div className="flex items-center gap-1.5 text-accent">
-                <Heart size={20} />
-                <span className="font-semibold">{project.likeCount || 0}</span>
-              </div>
-            </div>
-            <CardDescription className="text-foreground/70 text-base mt-2 flex-grow">
-                {shortDescriptionToDisplay}
-            </CardDescription>
-        </div>
-        
-        <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden">
-          <Image
-            src={project.thumbnailUrl}
-            alt={titleToDisplay}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 ease-in-out"
-          />
-          <div className="absolute bottom-0 left-0 right-0 p-4 flex flex-wrap items-end justify-between gap-2 bg-gradient-to-t from-black/70 to-transparent">
-            {project.category && (
-              <Badge variant="outline" className="px-3 py-1 text-sm border-transparent bg-[#cf8811] text-[#151a28] dark:bg-[#ffa600cc]">
-                {project.category}
-              </Badge>
-            )}
-            <div className="flex flex-wrap items-center gap-1.5 justify-end">
-              {project.technologies.slice(0, 2).map((tech) => (
-                <Badge key={tech} variant="outline" className="px-3 py-1 text-sm border-transparent bg-black/30 text-white backdrop-blur-sm">
-                  {tech}
-                </Badge>
-              ))}
-            </div>
+    <div className="block h-full no-underline text-inherit group cursor-pointer" onClick={onClick}>
+      <Card className="relative aspect-square overflow-hidden rounded-lg shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105 border-0 h-full">
+        <Image
+          src={project.thumbnailUrl}
+          alt={titleToDisplay}
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 ease-in-out"
+          data-ai-hint="portfolio project"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
+          <Badge variant="secondary" className="mb-3 w-fit bg-white/20 text-white border-0">
+            {project.category}
+          </Badge>
+          <h3 className="font-headline text-2xl font-bold mb-2">
+            {titleToDisplay}
+          </h3>
+          <p className="text-white/90 leading-relaxed text-sm flex-grow overflow-hidden max-h-12">
+            {shortDescriptionToDisplay}
+          </p>
+          <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <Button size="lg" className="w-full text-lg bg-accent text-accent-foreground hover:bg-accent/90 pointer-events-none">
+              {viewMoreText}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </Card>
-    </Link>
+    </div>
   );
 };
 
