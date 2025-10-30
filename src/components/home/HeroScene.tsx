@@ -8,6 +8,7 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import React from 'react';
 import * as THREE from 'three';
 import { useScreenSize, type ScreenSize } from '@/hooks/use-screen-size';
+import { cn } from '@/lib/utils';
 
 // This component loads and displays the GLB model and handles its animations.
 function Model(props: JSX.IntrinsicElements['group']) {
@@ -157,7 +158,10 @@ export default function HeroScene() {
   const bgColor = theme === 'light' ? '#d9d9d9' : '#0d0d0d';
 
   return (
-    <div className="w-full h-full pointer-events-auto">
+    <div className={cn(
+        "w-full h-full pointer-events-auto transition-opacity duration-1000 ease-in",
+        isMounted ? "opacity-100" : "opacity-0"
+    )}>
         <Canvas camera={{ fov: 30 }}>
         <color attach="background" args={[bgColor]} />
         
