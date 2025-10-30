@@ -68,15 +68,22 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
 
+  const value = { 
+    language, 
+    setLanguage, 
+    translationsForLanguage: translations[language], // On first render, this is ES for both server/client.
+    isClientReady, 
+    getInitialServerTranslation,
+  };
+
+  // The key={language} is crucial. It tells React that when the language changes,
+  // it should re-render the entire component tree below it. This forces client components
+  // that rely on translations to re-render with the new language content.
   return (
-    <LanguageContext.Provider value={{ 
-        language, 
-        setLanguage, 
-        translationsForLanguage: translations[language], // On first render, this is ES for both server/client.
-        isClientReady, 
-        getInitialServerTranslation,
-      }}>
-      {children}
+    <LanguageContext.Provider value={value}>
+      <div key={language}>
+        {children}
+      </div>
     </LanguageContext.Provider>
   );
 };
@@ -88,3 +95,5 @@ export const useLanguage = (): LanguageContextType => {
   }
   return context;
 };
+
+    
