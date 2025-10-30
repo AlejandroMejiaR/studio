@@ -53,7 +53,7 @@ export default function HomePageClient({ projects }: { projects: Project[] }) {
 
   // Preload the model as early as possible on the client
   useEffect(() => {
-    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb');
+    useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb', true);
   }, []);
 
 
@@ -323,3 +323,5 @@ export default function HomePageClient({ projects }: { projects: Project[] }) {
     </div>
   );
 }
+
+    
