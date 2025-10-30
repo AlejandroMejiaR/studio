@@ -21,7 +21,7 @@ export default function LayoutClientLogic({ children }: { children: React.ReactN
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <main className="flex-grow">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div></div>}>
             {children}
           </Suspense>
         </main>
