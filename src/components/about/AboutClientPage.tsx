@@ -28,7 +28,7 @@ const ThemeSensitiveImage = ({ lightSrc, darkSrc, alt, width, height, className 
     }, []);
 
     if (!isMounted) {
-        // Render a placeholder or the light version SSR to avoid layout shift
+        // Render a placeholder or the light version SSR to avoid layout shift and hydration errors.
         return <Image src={lightSrc} alt={alt} width={width} height={height} className={cn("object-contain", className)} />;
     }
     
@@ -67,7 +67,7 @@ const AboutClientPage = () => {
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
-        date: "(2025)",
+        date: "(2525)",
         logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
         logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
     },
