@@ -140,8 +140,6 @@ export default function HeroScene() {
       setInitialCameraProps({
         position: config.position,
         fov: 30,
-        // The lookAt will be handled inside the canvas by the OrbitControls or manual camera adjustments if any.
-        // We set the initial position and fov here.
       });
     } else {
       setInitialCameraProps(null);
@@ -155,7 +153,7 @@ export default function HeroScene() {
 
   return (
     <div className={cn(
-        "w-full h-full pointer-events-auto transition-opacity duration-1000 ease-in",
+        "w-full h-full pointer-events-auto transition-opacity duration-[2000ms] ease-in-out",
         canRenderCanvas ? "opacity-100" : "opacity-0"
     )}>
         {canRenderCanvas ? (
@@ -181,7 +179,7 @@ export default function HeroScene() {
                 </EffectComposer>
             </Canvas>
         ) : (
-            // Placeholder to prevent layout shift
+            // Placeholder to prevent layout shift while maintaining space.
             <div className="w-full h-full" />
         )}
     </div>
