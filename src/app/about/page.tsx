@@ -148,12 +148,7 @@ const AboutPage = () => {
             <div className="text-left">
               <h4 className="font-semibold text-xl text-accent mb-4">{t.aboutMe.skills.gameDevelopment}</h4>
               <ul className="space-y-1 text-foreground/80">
-                {skills.gameDevelopment.map(skill => {
-                  if (skill === "3D Asset & Animation Implementation") {
-                    return <li key={skill}>3D Asset & Animation <br /> (Implementation)</li>;
-                  }
-                  return <li key={skill}>{skill}</li>;
-                })}
+                {skills.gameDevelopment.map(skill => <li key={skill}>{skill}</li>)}
               </ul>
             </div>
           </div>
@@ -249,6 +244,5 @@ const AboutPage = () => {
 
     </div>
   );
-};
 
-export default AboutPage;
+    
