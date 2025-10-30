@@ -43,9 +43,11 @@ export default function HeroSection() {
   // This effect handles the text content's fade-in animation.
   // It runs independently of the 3D model.
   useEffect(() => {
+    // This timer ensures that the fade-in animation class is applied after
+    // the component has mounted, triggering the CSS transition correctly.
     const timer = setTimeout(() => {
       setIsContentVisible(true);
-    }, 100); // A small delay to ensure CSS transition is triggered
+    }, 100); 
     return () => clearTimeout(timer);
   }, []);
 
