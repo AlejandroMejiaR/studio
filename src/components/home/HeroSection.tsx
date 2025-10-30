@@ -32,25 +32,11 @@ export default function HeroSection() {
   const pathname = usePathname();
   const screenSize = useScreenSize();
   const isMobile = screenSize === 'mobile';
-  const [isContentVisible, setIsContentVisible] = useState(false);
-
-
+  
   // Preload the model as early as possible on the client
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb', true);
   }, []);
-
-  // This effect handles the text content's fade-in animation.
-  // It runs independently of the 3D model.
-  useEffect(() => {
-    // This timer ensures that the fade-in animation class is applied after
-    // the component has mounted, triggering the CSS transition correctly.
-    const timer = setTimeout(() => {
-      setIsContentVisible(true);
-    }, 100); 
-    return () => clearTimeout(timer);
-  }, []);
-
 
   // This effect handles side-effects like scroll and navbar visibility.
   useEffect(() => {
@@ -202,14 +188,12 @@ export default function HeroSection() {
         
         <section 
           id="hero"
-          className={cn(
-            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px] transition-opacity duration-1000 ease-in-out",
-            isContentVisible ? "opacity-100" : "opacity-0"
-          )}
+          className="relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px]"
         >
           <div className="container mx-auto">
             <div className={cn(
               "relative z-30 w-full h-full flex flex-col justify-center",
+              "opacity-0 animate-fadeInNavbarContent", // Apply animation classes directly
               !isMobile && "pointer-events-none" 
             )}>
               {/* Text Container */}
