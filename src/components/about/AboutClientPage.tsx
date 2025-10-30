@@ -171,7 +171,7 @@ const AboutClientPage = () => {
                 </ul>
               </div>
               <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">Game Development</h4>
+                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDevelopment}</h4>
                 <ul className="space-y-1 text-foreground/80">
                   {skills.gameDevelopment.map(skill => {
                     if (skill === "3D Asset & Animation Implementation") {
@@ -185,9 +185,9 @@ const AboutClientPage = () => {
           </div>
 
           {/* Technologies */}
-          <div className="md:ml-auto">
+          <div className="md:ml-auto md:text-right">
             <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center md:text-left">{translationsForLanguage.aboutMe.technologiesTitle}</h3>
-            <div className="flex justify-center md:justify-start gap-8 flex-wrap">
+            <div className="flex justify-center md:justify-end gap-8 flex-wrap">
               <div className="text-left">
                 <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.design}</h4>
                 <ul className="space-y-1 text-foreground/80">
@@ -195,7 +195,7 @@ const AboutClientPage = () => {
                 </ul>
               </div>
               <div className="text-left">
-                <h4 className="fontsemibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.develop}</h4>
+                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.develop}</h4>
                 <ul className="space-y-1 text-foreground/80">
                   {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
                 </ul>

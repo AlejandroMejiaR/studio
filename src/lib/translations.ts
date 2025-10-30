@@ -36,6 +36,7 @@ export interface AppTranslations {
       generativeAI: string;
       englishB2: string;
       coding: string;
+      gameDevelopment: string;
     };
     jobTitle: string;
     jobSpecialization: string;
@@ -128,6 +129,7 @@ export const translations: Record<Language, AppTranslations> = {
         generativeAI: "Generative AI",
         englishB2: "English B2",
         coding: "Coding",
+        gameDevelopment: "Game Development",
       },
       jobTitle: "Multimedia Engineer",
       jobSpecialization: "Game · UX Designer",
@@ -213,6 +215,7 @@ export const translations: Record<Language, AppTranslations> = {
         generativeAI: "IA Generativa",
         englishB2: "Inglés B2",
         coding: "Programación",
+        gameDevelopment: "Desarrollo de Juegos",
       },
       jobTitle: "Ingeniero en Multimedia",
       jobSpecialization: "Game · UX Designer",
