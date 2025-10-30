@@ -152,7 +152,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-5xl mx-auto pb-32">
+      <div className="w-full max-w-4xl mx-auto pb-32">
         {/* Skills */}
         <div className="mb-16">
           <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.skillsTitle}</h3>
@@ -280,6 +280,8 @@ const AboutClientPage = () => {
 export default AboutClientPage;
 
     
+    
+
     
 
     
