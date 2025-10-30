@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useMemo, Fragment, Suspense } from 'react';
+import { useEffect, useMemo, Fragment, Suspense, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
@@ -32,10 +32,20 @@ export default function HeroSection() {
   const pathname = usePathname();
   const screenSize = useScreenSize();
   const isMobile = screenSize === 'mobile';
+  const [isContentVisible, setIsContentVisible] = useState(false);
+
 
   // Preload the model as early as possible on the client
   useEffect(() => {
     useGLTF.preload('https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb', true);
+  }, []);
+
+  // This effect handles the synchronized fade-in of content
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsContentVisible(true);
+    }, 100); // A small delay to ensure CSS transition is triggered
+    return () => clearTimeout(timer);
   }, []);
 
 
@@ -89,13 +99,7 @@ export default function HeroSection() {
         }
       }
     }, 150);
-/*
-    const hintShown = sessionStorage.getItem('portfolio-ace-language-hint-shown');
-    if (!hintShown) {
-        setShowLanguageHint(true);
-        sessionStorage.setItem('portfolio-ace-language-hint-shown', 'true');
-    }
-*/
+
     return () => clearTimeout(scrollTimer);
   }, [isClientReady, pathname, setShowLanguageHint]);
   
@@ -196,7 +200,8 @@ export default function HeroSection() {
         <section 
           id="hero"
           className={cn(
-            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px]"
+            "relative flex flex-col justify-center items-center text-left pt-10 pb-20 h-[750px] transition-opacity duration-2000 ease-in-out",
+            isContentVisible ? "opacity-100" : "opacity-0"
           )}
         >
           <div className="container mx-auto">
