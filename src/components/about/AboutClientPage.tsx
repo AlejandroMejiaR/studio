@@ -153,59 +153,57 @@ const AboutClientPage = () => {
 
       {/* Section 2: Skills and Technologies */}
       <div className="w-full max-w-5xl mx-auto pb-32">
-        <div className="flex flex-col md:flex-row justify-start md:gap-16 lg:gap-24">
-          {/* Skills */}
-          <div className="mb-12 md:mb-0">
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center md:text-left">{translationsForLanguage.aboutMe.skillsTitle}</h3>
-            <div className="flex flex-wrap justify-center md:justify-start gap-8">
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDesign}</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDevelopment}</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {skills.gameDevelopment.map(skill => {
-                    if (skill === "3D Asset & Animation Implementation") {
-                      return <li key={skill}>3D Asset & Animation <br /> (Implementation)</li>;
-                    }
-                    return <li key={skill}>{skill}</li>;
-                  })}
-                </ul>
-              </div>
+        {/* Skills */}
+        <div className="mb-16">
+          <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.skillsTitle}</h3>
+          <div className="flex flex-wrap justify-start gap-x-16 gap-y-8">
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {skills.ux.map(skill => <li key={skill}>{skill}</li>)}
+              </ul>
+            </div>
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDesign}</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
+              </ul>
+            </div>
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDevelopment}</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {skills.gameDevelopment.map(skill => {
+                  if (skill === "3D Asset & Animation Implementation") {
+                    return <li key={skill}>3D Asset & Animation <br /> (Implementation)</li>;
+                  }
+                  return <li key={skill}>{skill}</li>;
+                })}
+              </ul>
             </div>
           </div>
+        </div>
 
-          {/* Technologies */}
-          <div>
-            <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-center md:text-left">{translationsForLanguage.aboutMe.technologiesTitle}</h3>
-            <div className="flex flex-wrap justify-center md:justify-start gap-8">
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.design}</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.develop}</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
-              <div className="text-left">
-                <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.management}</h4>
-                <ul className="space-y-1 text-foreground/80">
-                  {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
-                </ul>
-              </div>
+        {/* Technologies */}
+        <div>
+          <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.technologiesTitle}</h3>
+          <div className="flex flex-wrap justify-start gap-x-16 gap-y-8">
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.design}</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {technologies.design.map(tech => <li key={tech}>{tech}</li>)}
+              </ul>
+            </div>
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.develop}</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {technologies.develop.map(tech => <li key={tech}>{tech}</li>)}
+              </ul>
+            </div>
+            <div className="text-left">
+              <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.management}</h4>
+              <ul className="space-y-1 text-foreground/80">
+                {technologies.management.map(tech => <li key={tech}>{tech}</li>)}
+              </ul>
             </div>
           </div>
         </div>
@@ -280,3 +278,5 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
+
+    
