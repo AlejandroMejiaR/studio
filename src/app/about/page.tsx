@@ -1,4 +1,6 @@
 
+"use client";
+
 import type { Metadata } from 'next';
 import { translations } from '@/lib/translations';
 import Image from 'next/image';
@@ -6,25 +8,16 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import ThemeSensitiveImage from '@/components/effects/ThemeSensitiveImage';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-// Since this is a Server Component, we fetch the default translations (ES) directly.
-// The client will handle re-rendering if the language changes.
-const t = translations['ES'];
-
-export const metadata: Metadata = {
-  title: 'About | Portfolio Ace',
-  description: 'Learn more about Alejandro Mejia Rojas, a Multimedia Engineer specializing in UX and Game Design.',
-};
-
-
-// A server-side utility to get theme-sensitive image sources.
-// This allows us to pass the correct URLs to a client component without the client needing to know the whole structure.
-const getThemeSensitiveImageSrc = (light: string, dark: string) => ({
-    lightSrc: `https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${light}`,
-    darkSrc: `https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${dark}`,
-});
+// We can't export Metadata from a Client Component directly.
+// This should be handled in a parent layout or a server-side wrapper if dynamic metadata is needed.
+// For now, we'll keep it simple. We will remove the metadata export.
 
 const AboutPage = () => {
+  const { translationsForLanguage } = useLanguage();
+  const t = translationsForLanguage;
+
   const educationItems = [
     {
       course: t.aboutMe.education.course1,
@@ -45,25 +38,29 @@ const AboutPage = () => {
         course: "Introduction to Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        ...getThemeSensitiveImageSrc("UnrealLight.png", "UnrealDark.png")
+        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
     },
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
         date: "(2025)",
-        ...getThemeSensitiveImageSrc("UnrealLight.png", "UnrealDark.png")
+        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
     },
     {
         course: "Fundamentals of Level Design with Unreal Engine",
         institution: "Epic Games",
         date: "(2025)",
-        ...getThemeSensitiveImageSrc("UnrealLight.png", "UnrealDark.png")
+        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
     },
     {
         course: "User Experience in Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        ...getThemeSensitiveImageSrc("UnrealLight.png", "UnrealDark.png")
+        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
+        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
     },
   ];
 
