@@ -156,7 +156,7 @@ const AboutClientPage = () => {
         {/* Skills */}
         <div className="mb-16">
           <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.skillsTitle}</h3>
-          <div className="flex flex-wrap justify-start gap-x-16 gap-y-8">
+          <div className="flex flex-col md:flex-row flex-wrap justify-start gap-x-16 gap-y-8">
             <div className="text-left">
               <h4 className="font-semibold text-xl text-accent mb-4">UX</h4>
               <ul className="space-y-1 text-foreground/80">
@@ -186,7 +186,7 @@ const AboutClientPage = () => {
         {/* Technologies */}
         <div>
           <h3 className="font-headline text-4xl font-bold text-primary dark:text-foreground mb-8 text-left">{translationsForLanguage.aboutMe.technologiesTitle}</h3>
-          <div className="flex flex-wrap justify-start gap-x-16 gap-y-8">
+          <div className="flex flex-col md:flex-row flex-wrap justify-start gap-x-16 gap-y-8">
             <div className="text-left">
               <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.tech_areas.design}</h4>
               <ul className="space-y-1 text-foreground/80">
@@ -279,4 +279,5 @@ const AboutClientPage = () => {
 
 export default AboutClientPage;
 
+    
     
