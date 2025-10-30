@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState, useMemo, useCallback, Fragment, Suspense } from 'react';
-import type { Project } from '@/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
@@ -35,7 +34,7 @@ const getInitialAnimationState = (): boolean => {
 };
 
 
-export default function HomePageClient({ projects }: { projects: Project[] }) {
+export default function HeroSection() {
   const {
     language,
     translationsForLanguage,
@@ -323,5 +322,3 @@ export default function HomePageClient({ projects }: { projects: Project[] }) {
     </div>
   );
 }
-
-    
