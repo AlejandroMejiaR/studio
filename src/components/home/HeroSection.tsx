@@ -89,13 +89,13 @@ export default function HeroSection() {
         }
       }
     }, 150);
-
+/*
     const hintShown = sessionStorage.getItem('portfolio-ace-language-hint-shown');
     if (!hintShown) {
         setShowLanguageHint(true);
         sessionStorage.setItem('portfolio-ace-language-hint-shown', 'true');
     }
-
+*/
     return () => clearTimeout(scrollTimer);
   }, [isClientReady, pathname, setShowLanguageHint]);
   
