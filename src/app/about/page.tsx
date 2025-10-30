@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ThemeSensitiveImage from '@/components/effects/ThemeSensitiveImage';
 
 // Since this is a Server Component, we fetch the default translations (ES) directly.
 // The client will handle re-rendering if the language changes.
@@ -22,38 +23,6 @@ const getThemeSensitiveImageSrc = (light: string, dark: string) => ({
     lightSrc: `https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${light}`,
     darkSrc: `https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/${dark}`,
 });
-
-// We need a small client component to react to theme changes.
-const ThemeSensitiveImage = ({ lightSrc, darkSrc, alt, width, height, className }: { lightSrc: string, darkSrc: string, alt: string, width: number, height: number, className?: string }) => {
-    "use client";
-    const [theme, setTheme] = useState('dark');
-    const [isMounted, setIsMounted] = useState(false);
-
-    useEffect(() => {
-        setIsMounted(true);
-        const handleThemeChange = () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            setTheme(isDark ? 'dark' : 'light');
-        };
-
-        handleThemeChange(); // Set initial theme
-
-        const observer = new MutationObserver(handleThemeChange);
-        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-
-        return () => observer.disconnect();
-    }, []);
-
-    if (!isMounted) {
-        // Render the dark version by default to match server-side rendering and avoid flash.
-        return <Image src={darkSrc} alt={alt} width={width} height={height} className={cn("object-contain", className)} />;
-    }
-    
-    const src = theme === 'dark' ? darkSrc : lightSrc;
-
-    return <Image src={src} alt={alt} width={width} height={height} className={cn("object-contain", className)} />;
-};
-
 
 const AboutPage = () => {
   const educationItems = [
@@ -286,5 +255,3 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
-
-    
