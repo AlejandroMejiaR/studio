@@ -19,8 +19,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-inter)', ...fontFamily.sans],
-        headline: ['var(--font-space-grotesk)', ...fontFamily.sans],
+        body: ['Inter', ...fontFamily.sans],
+        headline: ['"Space Grotesk"', ...fontFamily.sans],
         code: ['monospace'],
       },
       colors: {
@@ -144,5 +144,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('@tailwindcss/forms')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/forms'), require('@tailwindcss/typography')],
 } satisfies Config;
