@@ -11,22 +11,8 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { FooterProvider, useFooter } from '@/contexts/FooterContext';
 import { NavbarVisibilityProvider } from '@/contexts/NavbarVisibilityContext'; // Removed useNavbarVisibility
 import { Suspense, useEffect } from 'react'; 
-import { Inter, Space_Grotesk } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-space-grotesk',
-  display: 'swap',
-});
 
 
 function LayoutClientLogic({ children }: { children: React.ReactNode }) {
@@ -63,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <head>
+        <link rel="preload" href="https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Model/Final.glb" as="fetch" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -84,7 +71,7 @@ export default function RootLayout({
         />
         <meta name="google" content="notranslate" />
       </head>
-      <body className={cn("font-body antialiased bg-background text-foreground", inter.variable, spaceGrotesk.variable)} suppressHydrationWarning={true}>
+      <body className={cn("font-body antialiased bg-background text-foreground")} suppressHydrationWarning={true}>
         <LanguageProvider>
           <FooterProvider>
             <NavbarVisibilityProvider>
