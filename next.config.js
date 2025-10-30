@@ -22,11 +22,11 @@ const nextConfig = {
         pathname: '/gmp-prodx-firebase-studio-app-images-us-west1/**',
       },
       {
-        protocol: 'https',
+        protocol: 'https' ,
         hostname: 'xtuifrsvhbydeqtmibbt.supabase.co',
         port: '',
         pathname: '/storage/v1/object/public/**',
-      },
+      }
     ],
   },
 };
