@@ -67,7 +67,7 @@ const AboutClientPage = () => {
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
-        date: "(2525)",
+        date: "(2025)",
         logoLight: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
         logoDark: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png",
     },
@@ -89,7 +89,8 @@ const AboutClientPage = () => {
 
   const skills = {
     ux: ["User Research", "Wireframing", "Prototyping", "Usability Testing"],
-    gameDesign: ["Gameplay Design", "Level Design", "Playtesting"]
+    gameDesign: ["Gameplay Design", "Level Design", "Playtesting"],
+    gameDevelopment: ["Gameplay Programming", "C# (Unity)", "Blueprints (Unreal)", "3D Asset & Animation Implementation"]
   }
 
   const technologies = {
@@ -151,7 +152,7 @@ const AboutClientPage = () => {
       </div>
 
       {/* Section 2: Skills and Technologies */}
-      <div className="w-full max-w-4xl mx-auto pb-32">
+      <div className="w-full max-w-5xl mx-auto pb-32">
         <div className="flex flex-col md:flex-row justify-between">
           {/* Skills */}
           <div className="mb-12 md:mb-0">
@@ -167,6 +168,12 @@ const AboutClientPage = () => {
                 <h4 className="font-semibold text-xl text-accent mb-4">{translationsForLanguage.aboutMe.skills.gameDesign}</h4>
                 <ul className="space-y-1 text-foreground/80">
                   {skills.gameDesign.map(skill => <li key={skill}>{skill}</li>)}
+                </ul>
+              </div>
+              <div className="text-left">
+                <h4 className="font-semibold text-xl text-accent mb-4">Game Development</h4>
+                <ul className="space-y-1 text-foreground/80">
+                  {skills.gameDevelopment.map(skill => <li key={skill}>{skill}</li>)}
                 </ul>
               </div>
             </div>
@@ -268,5 +275,3 @@ const AboutClientPage = () => {
 };
 
 export default AboutClientPage;
-
-    
