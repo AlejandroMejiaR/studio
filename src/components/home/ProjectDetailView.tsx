@@ -10,29 +10,30 @@ import { X, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-// Map technology names to Supabase image URLs
-const getTechIconUrl = (tech: string) => {
+// Map technology name from DB to shields.io params
+const getShieldsIoParams = (tech: string): { displayName: string, logoName: string, bgColor?: string, logoColor?: string } => {
     const lowerCaseTech = tech.toLowerCase();
-    const baseUrl = "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/";
+    const defaultParams = { logoName: lowerCaseTech, displayName: tech, bgColor: '1E1E1E', logoColor: 'white' };
 
     switch (lowerCaseTech) {
-        case 'next.js': return `${baseUrl}next-js.png`;
-        case 'react': return `${baseUrl}React.png`;
-        case 'tailwindcss': return `${baseUrl}Tailwind.png`;
-        case 'firebase': return `${baseUrl}Firebase.png`;
-        case 'vercel': return `${baseUrl}Vercel.png`;
-        case 'unity': return `${baseUrl}UnityClaro.png`;
-        case 'figma': return `${baseUrl}Figma.png`;
-        case 'p5.js': return `${baseUrl}p5js.png`;
-        case 'javascript': return `${baseUrl}javascript.png`;
-        case 'c#': return `${baseUrl}c-sharp.png`;
-        case 'blender': return `${baseUrl}Blender.png`;
-        default: return null; // Fallback for unmapped tech
+        case 'next.js': return { ...defaultParams, logoName: 'nextdotjs' };
+        case 'c#': return { ...defaultParams, logoName: 'csharp' };
+        case 'p5.js': return { ...defaultParams, logoName: 'p5dotjs' };
+        case 'vercel': return { ...defaultParams, logoColor: 'black' }; // Vercel logo is black, text should be white
+        case 'react': return { ...defaultParams, logoColor: '61DAFB' };
+        case 'firebase': return { ...defaultParams, logoColor: 'FFCA28' };
+        case 'unity': return { ...defaultParams, bgColor: '000000' };
+        default: return defaultParams;
     }
+};
+
+const getTechBadgeUrl = (tech: string) => {
+    const params = getShieldsIoParams(tech);
+    const { displayName, logoName, bgColor, logoColor } = params;
+    return `https://img.shields.io/badge/${encodeURIComponent(displayName)}-${bgColor}?style=flat-square&logo=${logoName}&logoColor=${logoColor}`;
 };
 
 const ImageCarouselModal = ({ images, initialIndex, altText, onClose }: { images: string[], initialIndex: number, altText: string, onClose: () => void }) => {
@@ -131,26 +132,18 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
 
                                 <div className="mt-6">
                                     <h4 className="font-semibold text-primary/90 dark:text-foreground/90 mb-3">{translationsForLanguage.projectDetails.technologies}:</h4>
-                                    <div className="flex flex-wrap gap-3">
-                                        <TooltipProvider>
-                                            {project.technologies.map(tech => {
-                                                const iconUrl = getTechIconUrl(tech);
-                                                if (!iconUrl) return null;
-
-                                                return (
-                                                    <Tooltip key={tech}>
-                                                        <TooltipTrigger asChild>
-                                                            <div className="p-2 rounded-md bg-muted/50 border border-border/50 h-10 w-10 flex items-center justify-center">
-                                                                <Image src={iconUrl} alt={tech} width={24} height={24} className="object-contain" />
-                                                            </div>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>{tech}</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                );
-                                            })}
-                                        </TooltipProvider>
+                                    <div className="flex flex-wrap gap-2">
+                                        {project.technologies.map(tech => (
+                                            <Image 
+                                                key={tech}
+                                                src={getTechBadgeUrl(tech)} 
+                                                alt={`${tech} logo`} 
+                                                width={90} // Approximate width, can be adjusted
+                                                height={20} // Standard height for shields.io badges
+                                                className="object-contain"
+                                                unoptimized // Recommended for SVGs/external images that are already optimized
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             </CardContent>
