@@ -53,22 +53,7 @@ export default function HeroSection() {
 
   // Effect to control footer visibility based on hero section
   useEffect(() => {
-    const heroSection = document.getElementById('hero');
-    if (!heroSection) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // When hero is NOT intersecting (i.e., scrolled out of view), show footer.
-        setIsFooterVisible(!entry.isIntersecting);
-      },
-      { threshold: 0.1 } // Adjust threshold as needed
-    );
-
-    observer.observe(heroSection);
-
-    return () => {
-      observer.disconnect();
-    };
+    setIsFooterVisible(true);
   }, [setIsFooterVisible]);
 
 
