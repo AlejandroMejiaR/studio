@@ -23,7 +23,7 @@ const AboutPage = () => {
       course: t.aboutMe.education.course1,
       institution: "Universidad Militar Nueva Granada",
       date: "(2020 - Present)",
-      logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UMNG.webp",
+      logo: "/images/about/UMNG.webp",
     },
   ];
 
@@ -32,35 +32,35 @@ const AboutPage = () => {
         course: "UX Design Professional Certificate",
         institution: "Google",
         date: "(2025)",
-        logo: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/Google.webp",
+        logo: "/images/about/Google.webp",
     },
     {
         course: "Introduction to Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
-        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
+        lightSrc: "/images/about/UnrealLight.png",
+        darkSrc: "/images/about/UnrealDark.png"
     },
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
         date: "(2025)",
-        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
-        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
+        lightSrc: "/images/about/UnrealLight.png",
+        darkSrc: "/images/about/UnrealDark.png"
     },
     {
         course: "Fundamentals of Level Design with Unreal Engine",
         institution: "Epic Games",
         date: "(2025)",
-        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
-        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
+        lightSrc: "/images/about/UnrealLight.png",
+        darkSrc: "/images/about/UnrealDark.png"
     },
     {
         course: "User Experience in Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        lightSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealLight.png",
-        darkSrc: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents/Logos/UnrealDark.png"
+        lightSrc: "/images/about/UnrealLight.png",
+        darkSrc: "/images/about/UnrealDark.png"
     },
   ];
 
@@ -77,7 +77,7 @@ const AboutPage = () => {
   }
 
   const profileImage = {
-    src: "https://xtuifrsvhbydeqtmibbt.supabase.co/storage/v1/object/public/documents//MeS.webp",
+    src: "/images/about/MeS.webp",
     alt: "Alejandro Mejia Rojas Portrait",
     rotation: "-rotate-1",
     hint: "professional portrait"
