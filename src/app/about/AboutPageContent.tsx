@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ThemeSensitiveImage from '@/components/effects/ThemeSensitiveImage';
 
 // This is a Server Component. It renders on the server and sends plain HTML to the client.
 // It receives the translation object 't' as a prop from its parent client component.
@@ -29,25 +30,29 @@ const AboutPageContent = ({ t }: { t: AppTranslations }) => {
         course: "Introduction to Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logoLight: "/images/about/UnrealLight.png",
+        logoDark: "/images/about/UnrealDark.png",
     },
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logoLight: "/images/about/UnrealLight.png",
+        logoDark: "/images/about/UnrealDark.png",
     },
     {
         course: "Fundamentals of Level Design with Unreal Engine",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logoLight: "/images/about/UnrealLight.png",
+        logoDark: "/images/about/UnrealDark.png",
     },
     {
         course: "User Experience in Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logoLight: "/images/about/UnrealLight.png",
+        logoDark: "/images/about/UnrealDark.png",
     },
   ];
 
@@ -200,13 +205,24 @@ const AboutPageContent = ({ t }: { t: AppTranslations }) => {
           {coursesItems.map((item, index) => (
             <div key={index} className="flex items-center w-full text-left border-b py-4 gap-4">
               <div className="flex-shrink-0 h-10 w-10 relative flex items-center justify-center">
-                <Image
-                    src={item.logo}
-                    alt={`${item.institution} logo`}
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                />
+                {item.logo ? (
+                    <Image
+                        src={item.logo}
+                        alt={`${item.institution} logo`}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                    />
+                ) : item.logoLight && item.logoDark ? (
+                    <ThemeSensitiveImage
+                        lightSrc={item.logoLight}
+                        darkSrc={item.logoDark}
+                        alt={`${item.institution} logo`}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                    />
+                ) : null}
               </div>
               <div className="flex-grow flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <span className="font-semibold text-lg">{item.course}</span>
