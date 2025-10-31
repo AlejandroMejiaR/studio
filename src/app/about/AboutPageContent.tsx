@@ -1,3 +1,4 @@
+
 import type { AppTranslations } from '@/lib/translations';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -28,25 +29,25 @@ const AboutPageContent = ({ t }: { t: AppTranslations }) => {
         course: "Introduction to Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.webp"
+        logo: "/images/about/Unreal.png"
     },
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.webp"
+        logo: "/images/about/Unreal.png"
     },
     {
         course: "Fundamentals of Level Design with Unreal Engine",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.webp"
+        logo: "/images/about/Unreal.png"
     },
     {
         course: "User Experience in Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.webp"
+        logo: "/images/about/Unreal.png"
     },
   ];
 
