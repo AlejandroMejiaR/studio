@@ -28,25 +28,25 @@ const AboutPageContent = ({ t }: { t: AppTranslations }) => {
         course: "Introduction to Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logo: "/images/about/Unreal.webp"
     },
     {
         course: "Unreal Engine Fundamentals",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logo: "/images/about/Unreal.webp"
     },
     {
         course: "Fundamentals of Level Design with Unreal Engine",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logo: "/images/about/Unreal.webp"
     },
     {
         course: "User Experience in Game Design",
         institution: "Epic Games",
         date: "(2025)",
-        logo: "/images/about/Unreal.png"
+        logo: "/images/about/Unreal.webp"
     },
   ];
 
