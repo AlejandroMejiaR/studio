@@ -21,7 +21,6 @@ export interface ProjectTranslationDetails {
 export interface Project {
   id: string;
   slug: string;
-  type: 'case-study' | 'creative';
   category: string;
   date: string;
   technologies: string[];

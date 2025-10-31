@@ -56,7 +56,6 @@ const mapDocToProject = (doc: DocumentData): Project => {
     likeCount: data.likeCount || 0,
     en: data.en,
     es: data.es,
-    type: data.type,
   };
 };
 
