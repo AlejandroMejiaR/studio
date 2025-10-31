@@ -157,14 +157,11 @@ export default async function ProjectPage({ params }: { params: { slug: string }
                         <strong className="font-semibold text-primary dark:text-foreground mb-2 block">{t.technologies}: </strong>
                         <div className="flex flex-wrap gap-2">
                            {project.technologies.map(tech => (
-                                <Image 
+                                <img
                                     key={tech}
-                                    src={getTechBadgeUrl(tech)} 
-                                    alt={`${tech} logo`} 
-                                    width={90} // Approximate width, can be adjusted
-                                    height={20} // Standard height for shields.io badges
-                                    className="object-contain"
-                                    unoptimized // Recommended for SVGs/external images that are already optimized
+                                    src={getTechBadgeUrl(tech)}
+                                    alt={`${tech} logo`}
+                                    className="h-[20px]"
                                 />
                             ))}
                         </div>

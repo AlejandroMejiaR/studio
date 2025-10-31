@@ -134,14 +134,11 @@ const ProjectDetailView = ({ project, onClose }: { project: Project; onClose: ()
                                     <h4 className="font-semibold text-primary/90 dark:text-foreground/90 mb-3">{translationsForLanguage.projectDetails.technologies}:</h4>
                                     <div className="flex flex-wrap gap-2">
                                         {project.technologies.map(tech => (
-                                            <Image 
+                                            <img
                                                 key={tech}
-                                                src={getTechBadgeUrl(tech)} 
-                                                alt={`${tech} logo`} 
-                                                width={90} // Approximate width, can be adjusted
-                                                height={20} // Standard height for shields.io badges
-                                                className="object-contain"
-                                                unoptimized // Recommended for SVGs/external images that are already optimized
+                                                src={getTechBadgeUrl(tech)}
+                                                alt={`${tech} logo`}
+                                                className="h-[20px]"
                                             />
                                         ))}
                                     </div>
