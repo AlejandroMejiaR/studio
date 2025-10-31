@@ -25,7 +25,6 @@ export interface Project {
   date: string;
   technologies: string[];
   thumbnailUrl: string;
-  bannerUrl: string;
   galleryImages?: string[];
   reflectionImageUrl?: string;
   liveUrl?: string;

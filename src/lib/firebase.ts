@@ -47,7 +47,6 @@ const mapDocToProject = (doc: DocumentData): Project => {
     date: data.date,
     technologies: data.technologies,
     thumbnailUrl: data.thumbnailUrl,
-    bannerUrl: data.bannerUrl,
     galleryImages: data.galleryImages || [],
     reflectionImageUrl: data.reflectionImageUrl,
     liveUrl: data.liveUrl,
