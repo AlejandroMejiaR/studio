@@ -11,8 +11,11 @@ import LayoutClientLogic from '@/components/layout/LayoutClientLogic';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Portfolio Ace',
-  description: 'The portfolio of Alejandro Mejia Rojas, a Multimedia Engineer specializing in UX and Game Design.',
+  title: 'Alejandro Mejia',
+  description: 'Multimedia Engineer specializing in UX and App development.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 const inter = Inter({

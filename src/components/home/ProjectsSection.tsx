@@ -37,7 +37,7 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
   };
 
   return (
-    <div id="projects" className="scroll-mt-16 mb-[100px]" ref={sectionRef}>
+    <div id="projects" className="scroll-mt-20 mb-[100px]" ref={sectionRef}>
         <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary dark:text-foreground text-left mb-12">
             {translationsForLanguage.home.projectsTitle}
         </h2>
