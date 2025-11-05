@@ -1,9 +1,9 @@
 
-<h1><a href="https://alejandro-mejia.vercel.app/" style="color: #00A3FF;">Personal Portfolio</a> | Built with an AI Co-Pilot</h1>
+<h1><a href="https://alejandro-mejia.vercel.app/" style="color: #00A3FF;">Personal Portfolio</a></h1>
 
 Welcome to my portfolio. More than just a gallery of projects, this site is the result of an experiment: **Is it possible to build a modern and complex web application from scratch by delegating a significant portion of the coding to an AI assistant?**
 
-## 🚀 The Experiment: Human-AI Collaboration
+## The Experiment: Human-AI Collaboration
 
 This project explored a new development workflow, partnering with an AI to accelerate creation. The process was a constant dialogue between my development decisions and the AI's code generation.
 
@@ -11,7 +11,7 @@ This project explored a new development workflow, partnering with an AI to accel
 *   **AI Assistant:** **Gemini 2.5**, used as a co-pilot to translate my high-level instructions into code.
 *   **Methodology:** **"Vibe Coding"** — A rapid, conversational approach where I described the desired features and then refined the AI's output.
 
-## 🧠 Key Takeaways
+## Key Takeaways
 
 This experiment confirmed AI's power to accelerate development, while highlighting that the developer's expertise is more crucial than ever.
 
@@ -25,7 +25,7 @@ This experiment confirmed AI's power to accelerate development, while highlighti
 *   **Expert Oversight is Essential:** The developer's role shifts from coder to architect—guiding, debugging, and refactoring the AI's output.
 *   **Clarity is Key:** The quality of the result is directly proportional to the clarity and specificity of the prompts.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 #### Frontend
 *   **[Next.js](https://nextjs.org/)**: React framework for server-side rendering.
