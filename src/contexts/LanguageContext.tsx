@@ -29,15 +29,15 @@ const getInitialLanguage = (): Language => {
       return 'ES'; // Spanish if browser is Spanish
     }
   }
-  // 3. Default to Spanish if detection fails or not 'es'
-  return 'ES';
+  // 3. Default to English if detection fails or not 'es'
+  return 'EN';
 };
 
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Always initialize with a static default ('ES') to prevent mismatch.
-  // The server will render 'ES', and the client's first render will also be 'ES'.
-  const [language, setLanguageState] = useState<Language>('ES');
+  // Always initialize with a static default ('EN') to prevent mismatch.
+  // The server will render 'EN', and the client's first render will also be 'EN'.
+  const [language, setLanguageState] = useState<Language>('EN');
   const [isClientReady, setIsClientReady] = useState(false);
 
   useEffect(() => {
@@ -60,8 +60,8 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   
   const getInitialServerTranslation = useCallback(<T,>(keyPath: (translations: AppTranslations) => T) => {
-    if (translations['ES']) {
-      const value = keyPath(translations['ES']);
+    if (translations['EN']) {
+      const value = keyPath(translations['EN']);
       return value;
     }
     return undefined; 
@@ -71,7 +71,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const value = { 
     language, 
     setLanguage, 
-    translationsForLanguage: translations[language], // On first render, this is ES for both server/client.
+    translationsForLanguage: translations[language], // On first render, this is EN for both server/client.
     isClientReady, 
     getInitialServerTranslation,
   };
